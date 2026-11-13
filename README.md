@@ -1,6 +1,6 @@
 # brain-engine
 
-The code behind a second brain: plain Markdown notes in a folder of your own, and the tools that add, find and sort them. The notes live in a separate folder with its own git. This repo holds only code and holds no personal data.
+The code behind a second brain project: plain Markdown notes in a folder of your own, and the tools that add, find and sort them. The notes live in a separate folder with its own git.
 
 ## Start on a Mac
 
