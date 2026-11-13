@@ -1,0 +1,10 @@
+.report-summary {
+  display: grid;
+  gap: var(--s2);
+  padding-bottom: var(--s3);
+}
+
+.report-note {
+  color: var(--muted);
+  font-size: var(--t-sm);
+}

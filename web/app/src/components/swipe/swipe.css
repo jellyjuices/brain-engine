@@ -1,0 +1,80 @@
+.swipe {
+  position: relative;
+  overflow: hidden;
+  transition:
+    height var(--slow) var(--ease),
+    opacity var(--fast) var(--ease);
+}
+
+.swipe.is-gone {
+  opacity: 0;
+}
+
+.list > .swipe.is-gone:not(:first-child) {
+  border-top-color: transparent;
+}
+
+.swipe-bg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--s3);
+  font-weight: 600;
+  font-size: var(--t-sm);
+  color: var(--accent-ink);
+  visibility: hidden;
+}
+
+.swipe[data-dir] .swipe-bg {
+  visibility: visible;
+}
+
+.swipe[data-dir="right"] .swipe-bg {
+  background: var(--accent);
+}
+
+.swipe[data-dir="left"] .swipe-bg {
+  background: var(--ink);
+  color: var(--bg);
+  justify-content: flex-end;
+}
+
+.swipe-bg-right,
+.swipe-bg-left {
+  display: none;
+  align-items: center;
+  gap: var(--s1);
+}
+
+.swipe-bg svg {
+  width: var(--icon);
+  height: var(--icon);
+}
+
+.swipe[data-dir="right"] .swipe-bg-right,
+.swipe[data-dir="left"] .swipe-bg-left {
+  display: inline-flex;
+}
+
+.swipe[data-armed] .swipe-bg {
+  filter: brightness(1.08);
+}
+
+.swipe-main {
+  position: relative;
+  background: var(--surface);
+  touch-action: pan-y;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.swipe-main.is-settling {
+  transition: transform var(--slow) var(--ease);
+}
+
+.swipe-main > .row:active {
+  background: color-mix(in srgb, var(--surface) 92%, var(--ink));
+}

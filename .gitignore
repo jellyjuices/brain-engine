@@ -1,0 +1,16 @@
+node_modules/
+dist/
+storybook-static/
+.DS_Store
+.dev.vars
+web/worker/.wrangler/
+web/worker/wrangler.toml
+.code-review-graph/
+.claude/settings.local.json
+CLAUDE.local.md
+web.env
+*.env
+.env*
+.wrangler/
+.claude/*.local.json
+*.local.*

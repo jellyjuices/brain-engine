@@ -1,0 +1,95 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-control);
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-leading-snug);
+  white-space: nowrap;
+}
+
+.chip-label,
+.chip-remove {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2xs) var(--space-sm);
+  border: 0;
+  background: none;
+  border-radius: var(--radius-control);
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+button.chip-label,
+.chip-remove {
+  cursor: pointer;
+  transition: background-color var(--motion-fast) var(--motion-easing);
+}
+
+.chip-remove {
+  padding-left: 0;
+}
+
+.chip-label {
+  gap: var(--space-xs);
+}
+
+.chip-dots {
+  display: inline-flex;
+}
+
+.chip-dot {
+  width: var(--size-dot);
+  height: var(--size-dot);
+  border-radius: var(--radius-control);
+  box-shadow: 0 0 0 var(--size-hair) var(--background-secondary);
+}
+
+.chip-dot + .chip-dot {
+  margin-left: calc(var(--size-dot) / -3);
+}
+
+.chip-remove svg {
+  width: var(--font-size-body-xs);
+  height: var(--font-size-body-xs);
+}
+
+.chip--tag {
+  background: var(--background-tag);
+  color: var(--text-tag);
+}
+
+.chip--check {
+  background: var(--background-check);
+  color: var(--status-check);
+}
+
+.chip--accent {
+  background: var(--background-accent-soft);
+  color: var(--text-accent);
+}
+
+button.chip-label:active,
+.chip-remove:active {
+  background: var(--background-pressed);
+}
+
+.chip.is-disabled {
+  background: var(--background-disabled);
+  color: var(--text-disabled);
+}
+
+.chip.is-disabled button {
+  cursor: not-allowed;
+}
+
+@media (hover: hover) {
+  button.chip-label:hover,
+  .chip-remove:hover {
+    background: var(--background-hover);
+  }
+
+  .chip--accent button.chip-label:hover {
+    background: var(--background-accent-soft-hover);
+  }
+}

@@ -1,0 +1,17 @@
+export const settings = {
+  title: "Settings",
+  unsent: "Not synced",
+  unsentOffline: "You're offline. These sync when you reconnect.",
+  unsentHint: "Changes on this phone that haven't reached your Mac",
+  syncNow: "Sync now",
+  app: "App",
+  version: "Version",
+  update: "Update",
+  fingerprint: "Fingerprint",
+  fingerprintHint: "Unlock with your fingerprint. You'll still need your password sometimes.",
+  fingerprintOffTitle: "Turn off fingerprint?",
+  fingerprintOffBody: "You'll need your password to open Brain.",
+  turnOff: "Turn off",
+  keepOn: "Keep on",
+  fingerprintOn: "Fingerprint is on",
+};

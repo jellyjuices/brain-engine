@@ -1,0 +1,27 @@
+# Allowed tags. Add a tag here before you use it in a note.
+# `brain check` reports any tag that is not on this list.
+tags:
+  # Life areas (one per note in areas/)
+  - client-work
+  - business-admin
+  - money
+  - home
+  - health
+  - fitness
+  - career
+  - relationships
+  - love-life
+  - personal-projects
+  - life-admin
+  - rest-and-fun
+  # Kinds of work
+  - design
+  - dev
+  - brand
+  - copy
+  - intake
+  # Kinds of note (use with type: Note)
+  - decision
+  - meeting
+  - reference
+  - idea

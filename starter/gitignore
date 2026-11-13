@@ -1,0 +1,10 @@
+.brain/*
+!.brain/*.md
+.reports/
+.backup/
+.DS_Store
+.tmp-*
+.code-review-graph/
+.claude/settings.local.json
+CLAUDE.local.md
+node_modules/

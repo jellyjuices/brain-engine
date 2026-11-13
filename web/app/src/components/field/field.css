@@ -1,0 +1,124 @@
+.field {
+  display: flex;
+  flex: 1 1 var(--field-min);
+  flex-direction: column;
+  gap: var(--s1);
+  min-width: 0;
+}
+
+.field .section-label {
+  margin: 0;
+}
+
+.input {
+  width: 100%;
+  min-height: var(--row);
+  padding: var(--s1-5) var(--s2);
+  border: var(--hair) solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: inherit;
+  font: inherit;
+  font-size: var(--t-md);
+  resize: none;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color var(--fast) var(--ease);
+}
+
+.sheet .input {
+  background: var(--bg);
+}
+
+.input:focus-visible {
+  border-color: var(--accent);
+  outline-offset: 0;
+}
+
+.input::placeholder {
+  color: var(--muted);
+}
+
+.search,
+.pick {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search > svg {
+  position: absolute;
+  left: var(--s2);
+  width: var(--icon);
+  height: var(--icon);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.search-input {
+  padding-right: var(--touch);
+  padding-left: calc(var(--s2) + var(--icon) + var(--s1-5));
+}
+
+.search-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.search-clear {
+  position: absolute;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: var(--touch);
+  height: var(--touch);
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+}
+
+.search-clear svg {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+}
+
+.pick-button {
+  display: flex;
+  align-items: center;
+  gap: var(--s1-5);
+  padding-right: var(--touch);
+  text-align: left;
+}
+
+.pick-button svg {
+  flex: none;
+  width: var(--icon);
+  height: var(--icon);
+  color: var(--accent);
+}
+
+.pick-button.is-empty {
+  color: var(--muted);
+}
+
+.composer {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  padding: var(--s1) 0 var(--s2);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--t-lg);
+  line-height: 1.5;
+  resize: none;
+  overflow-y: auto;
+}
+
+.composer::placeholder {
+  color: var(--muted);
+}
+
+.composer:focus-visible {
+  outline: none;
+}

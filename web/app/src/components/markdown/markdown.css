@@ -1,0 +1,129 @@
+.md {
+  overflow-wrap: anywhere;
+  font-size: var(--t-md);
+  line-height: 1.55;
+}
+
+.md p,
+.md ul,
+.md ol,
+.md blockquote,
+.md pre {
+  margin: 0 0 var(--s1);
+}
+
+.md ul,
+.md ol {
+  padding-left: var(--s3);
+}
+
+.md li {
+  margin: var(--s0) 0;
+}
+
+.md-h {
+  margin: var(--s3) 0 var(--s1);
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 48;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+h2.md-h {
+  margin-top: var(--s4);
+  padding-top: var(--s2);
+  border-top: var(--hair) solid var(--line);
+  font-size: var(--t-xl);
+}
+
+h3.md-h {
+  margin-top: var(--s3);
+  font-size: var(--t-lg);
+}
+
+h4.md-h,
+h5.md-h {
+  font-family: var(--font-body);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.md-note-link,
+.md a {
+  color: var(--accent);
+  text-decoration-thickness: var(--hair);
+  text-underline-offset: var(--underline-offset);
+}
+
+.md code {
+  padding: var(--hair) var(--s0);
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  font-size: 0.92em;
+}
+
+.md pre {
+  padding: var(--s2);
+  overflow-x: auto;
+  border: var(--hair) solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.md pre code {
+  padding: 0;
+  background: none;
+}
+
+.md blockquote {
+  padding-left: var(--s2);
+  border-left: var(--bar) solid var(--line);
+  color: var(--muted);
+}
+
+.md hr {
+  margin: var(--s2) 0;
+  border: 0;
+  border-top: var(--hair) solid var(--line);
+}
+
+.md-list {
+  margin: 0 0 var(--s1);
+}
+
+.md-check {
+  display: flex;
+  align-items: center;
+  gap: var(--s1-5);
+  min-height: var(--row);
+  padding: var(--s1-5) var(--s2);
+}
+
+.md-box {
+  flex: none;
+  width: var(--icon);
+  height: var(--icon);
+  margin-top: var(--s0);
+  border: var(--ring) solid var(--muted);
+  border-radius: var(--radius-sm);
+}
+
+.md-box.is-on {
+  border-color: var(--accent);
+  background: var(--accent) center / var(--icon-xs) no-repeat
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256' fill='white'%3E%3Cpath d='M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z'/%3E%3C/svg%3E");
+}
+
+.md-check.is-done .md-check-text {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.md p {
+  text-wrap: pretty;
+}
+
+.md > h2.md-h:first-child {
+  margin-top: var(--s1);
+}

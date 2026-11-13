@@ -1,0 +1,14 @@
+.todo-main .row-sub {
+  display: flex;
+}
+
+.todo-main .row-end.is-overdue {
+  color: var(--danger);
+}
+
+.todo-link {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: var(--hair);
+  text-underline-offset: var(--underline-offset);
+}

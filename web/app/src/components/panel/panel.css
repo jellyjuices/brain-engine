@@ -1,0 +1,13 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  padding: var(--s2);
+  border: var(--hair) solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.sheet .panel {
+  background: var(--bg);
+}

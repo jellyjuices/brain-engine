@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(brain find *)",
+      "Bash(brain list *)",
+      "Bash(brain show *)",
+      "Bash(brain area *)",
+      "Bash(brain recent)",
+      "Bash(brain recent *)",
+      "Bash(brain today *)",
+      "Bash(brain weekly *)",
+      "Bash(brain loops *)",
+      "Bash(brain check)",
+      "Bash(brain index)",
+      "Bash(brain help)",
+      "Bash(brain intake *)",
+      "Bash(brain thread *)",
+      "Bash(brain log)",
+      "Bash(brain log *)"
+    ],
+    "deny": [
+      "Edit(./sources/**)",
+      "Write(./sources/**)",
+      "Edit(./.claude/hooks/**)",
+      "Write(./.claude/hooks/**)",
+      "Bash(rm)",
+      "Bash(rm *)",
+      "Bash(git clean)",
+      "Bash(git clean *)",
+      "Bash(git reset --hard)",
+      "Bash(git reset --hard *)",
+      "Bash(npm run deploy)",
+      "Bash(npm run deploy *)",
+      "Bash(npx wrangler deploy)",
+      "Bash(npx wrangler deploy *)",
+      "Bash(wrangler deploy)",
+      "Bash(wrangler deploy *)",
+      "Read(./**/.env)",
+      "Read(./**/.env.*)",
+      "Read(./**/.dev.vars)",
+      "mcp__Claude_Browser"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/index-on-edit.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/check-on-stop.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

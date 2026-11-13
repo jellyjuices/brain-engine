@@ -1,0 +1,50 @@
+.chip {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--s1);
+  min-height: var(--s4);
+  padding: 0 var(--s1-5);
+  border: var(--hair) solid transparent;
+  border-radius: var(--pill);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.chip svg {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+}
+
+.chip--secondary {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.chip--outlined {
+  border-color: var(--line);
+  color: var(--muted);
+}
+
+.chip--sm {
+  gap: var(--s0);
+  min-height: var(--s3);
+  padding: 0 var(--s1);
+  font-size: var(--t-xs);
+}
+
+.chip--button {
+  min-height: var(--s5);
+  cursor: pointer;
+}
+
+.chip--button:active {
+  filter: brightness(0.95);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s1);
+}

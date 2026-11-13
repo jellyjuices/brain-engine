@@ -1,0 +1,102 @@
+:root {
+  color-scheme: light dark;
+
+  --bg: #f6f3ee;
+  --surface: #fffdf9;
+  --ink: #1e1b18;
+  --muted: #6f6860;
+  --line: #e6e0d6;
+  --accent: #2f6b4f;
+  --accent-ink: #fffdf9;
+  --accent-soft: rgb(47 107 79 / 0.1);
+  --danger: #b4442f;
+  --danger-soft: #f6e1dc;
+  --warn: #8a5a0b;
+  --warn-soft: #f5e8cc;
+  --scrim: rgb(30 27 24 / 0.4);
+  --shadow: 0 1px 2px rgb(30 27 24 / 0.06), 0 8px 24px rgb(30 27 24 / 0.08);
+
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --font-serif: "Newsreader Variable", "Iowan Old Style", Georgia, serif;
+
+  --t-xs: 13px;
+  --t-sm: 14px;
+  --t-md: 17px;
+  --t-lg: 20px;
+  --t-xl: 24px;
+  --t-2xl: 34px;
+  --t-display: 56px;
+  --text: var(--t-md);
+  --leading: 1.45;
+
+  --s0: 4px;
+  --s1: 8px;
+  --s1-5: 12px;
+  --s2: 16px;
+  --s3: 24px;
+  --s4: 32px;
+  --s5: 40px;
+  --s6: 48px;
+
+  --radius-sm: 6px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --pill: 999px;
+  --touch: 48px;
+  --row: 56px;
+  --icon-sm: 16px;
+  --icon: 20px;
+  --icon-lg: 24px;
+  --icon-xl: 48px;
+  --tabbar: 64px;
+  --tile: 64px;
+  --badge: 18px;
+  --control-sm: 36px;
+  --control: 44px;
+  --icon-xs: 14px;
+  --dot: 10px;
+  --handle-w: 36px;
+  --handle-h: 5px;
+  --hair: 1px;
+  --ring: 2px;
+  --bar: 3px;
+  --underline-offset: 3px;
+  --shake: 10px;
+  --field-min: 200px;
+  --w-xs: 260px;
+  --w-sm: 360px;
+  --w-md: 480px;
+  --w-lg: 560px;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --fast: 160ms;
+  --slow: 220ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14120f;
+    --surface: #1d1a16;
+    --ink: #f2ede6;
+    --muted: #a39b90;
+    --line: #2e2a24;
+    --accent: #6fbf95;
+    --accent-ink: #14120f;
+    --accent-soft: rgb(111 191 149 / 0.14);
+    --danger: #e0806b;
+    --danger-soft: #3a211b;
+    --warn: #e5b562;
+    --warn-soft: #362a15;
+    --scrim: rgb(0 0 0 / 0.55);
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --fast: 0ms;
+    --slow: 0ms;
+  }
+}

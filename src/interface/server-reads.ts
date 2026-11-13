@@ -1,0 +1,133 @@
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { saveItem } from "../capture/pull.ts";
+import { buildCard, matchSubject } from "../reports/card.ts";
+import { summary } from "../core/notes.ts";
+import { loadAll, notePaths } from "../core/files.ts";
+import { areaBrief, areaMarkdown, todayMarkdown, todayReport, weeklyMarkdown, weeklyReport } from "../reports/reports.ts";
+import { list, search } from "../core/search.ts";
+import { dayList, ref } from "../todos/day-list.ts";
+import { lensPrivacy } from "../intake/lenses.ts";
+import { saveLensAnswer } from "../intake/lens-answers.ts";
+import { listThreads, updateThread } from "../intake/threads.ts";
+import { HttpError, MAX_CAPTURE } from "./server-auth.ts";
+import { afterWrite, type Ctx, existingNote, fullNoteJson, noteJson, safeNotePath, text } from "./server-context.ts";
+import { OWNER_BY, ownerWriters } from "../core/owner.ts";
+
+export function health(root: string) {
+  const pkg = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "..", "package.json"), "utf8")) as { version: string };
+  return { ok: true, version: pkg.version, note_count: notePaths(root).length };
+}
+
+export function notesSince(c: Ctx) {
+  const raw = c.url.searchParams.get("since");
+  const since = raw ? Date.parse(raw) : 0;
+  if (Number.isNaN(since)) throw new HttpError(400, `"since" must be an ISO date or time.`);
+  const notes = loadAll(c.root).filter((n) => n.mtime >= since);
+  return { now: new Date().toISOString(), notes: notes.map((n) => noteJson(c.root, n)) };
+}
+
+export function oneNote(c: Ctx, rawPath: string) {
+  const note = existingNote(c.root, safeNotePath(rawPath, false));
+  return fullNoteJson(c.root, loadAll(c.root), note);
+}
+
+export function searchRoute(c: Ctx) {
+  const params = c.url.searchParams;
+  const limit = params.get("limit") ? Number(params.get("limit")) : undefined;
+  return search(c.root, params.get("q") ?? "", { type: params.get("type") ?? undefined, tag: params.get("tag") ?? undefined, area: params.get("area") ?? undefined, status: params.get("status") ?? undefined, limit });
+}
+
+/** Same JSON as `brain find --json`: the card and hits, or just hits when no subject matches. */
+export function cardRoute(c: Ctx) {
+  const query = c.url.searchParams.get("q") ?? "";
+  if (!query.trim()) throw new HttpError(400, `Missing "q".`);
+  const hits = search(c.root, query);
+  const notes = loadAll(c.root);
+  const subject = matchSubject(notes, query);
+  const card = subject && buildCard(c.root, notes, subject);
+  return card ? { card, hits } : hits;
+}
+
+export function report(c: Ctx, name: string) {
+  if (name === "today") {
+    const r = todayReport(c.root);
+    return { ...r, markdown: todayMarkdown(r) };
+  }
+  if (name === "weekly") {
+    const r = weeklyReport(c.root);
+    return { ...r, markdown: weeklyMarkdown(r) };
+  }
+  const area = /^area\/([a-z0-9-]+)$/.exec(name)?.[1];
+  if (!area) throw new HttpError(404, `No report named ${name}.`);
+  const brief = areaBrief(c.root, area);
+  return { ...brief, note: brief.note && summary(brief.note), markdown: areaMarkdown(brief) };
+}
+
+const intakeWriters = () => [...ownerWriters(), "gemini-nano"];
+
+export function intakeNext(c: Ctx) {
+  const threads = listThreads(c.root, { status: "open" })
+    .slice(0, 10)
+    .map((t) => ({ question: t.question, lens: t.lens, privacy: lensPrivacy(c.root, t.lens) }))
+    .filter((t) => t.privacy !== "skip");
+  return { threads };
+}
+
+export function intakeSave(c: Ctx) {
+  const lens = text(c.body.lens, "lens")!.trim();
+  const question = text(c.body.question, "question")!.trim();
+  const line = text(c.body.line, "line")!.trim();
+  if (!line) throw new HttpError(400, `Missing "line".`);
+  const by = text(c.body.by, "by", false) ?? OWNER_BY;
+  if (!intakeWriters().includes(by)) throw new HttpError(400, `"by" must be one of: ${intakeWriters().join(", ")}.`);
+  const raw = text(c.body.raw, "raw", false)?.trim();
+  try {
+    const keepRaw = lensPrivacy(c.root, lens) === "full";
+    const note = afterWrite(c.root, () => {
+      const saved = saveLensAnswer(c.root, lens, line, { question, raw: keepRaw ? raw : undefined, by });
+      updateThread(c.root, question, { status: "talked", by });
+      return saved;
+    });
+    return { path: note.path };
+  } catch (e) {
+    throw new HttpError(400, (e as Error).message);
+  }
+}
+
+export function intakeSkip(c: Ctx) {
+  const question = text(c.body.question, "question")!.trim();
+  try {
+    afterWrite(c.root, () => updateThread(c.root, question, { status: "parked", by: OWNER_BY }));
+    return { ok: true };
+  } catch (e) {
+    throw new HttpError(400, (e as Error).message);
+  }
+}
+
+export function todayRoute(c: Ctx) {
+  const items = dayList(c.root, { save: false }).map((x) => ({ ...x, ref: x.kind === "event" ? x.path : ref(x.path, x.text) }));
+  return { date: new Date().toLocaleDateString("en-CA"), items };
+}
+
+export function listRoute(c: Ctx) {
+  const params = c.url.searchParams;
+  const limit = params.get("limit") ? Number(params.get("limit")) : undefined;
+  return list(c.root, { type: params.get("type") ?? undefined, tag: params.get("tag") ?? undefined, area: params.get("area") ?? undefined, status: params.get("status") ?? undefined, limit });
+}
+
+export function inbox(c: Ctx) {
+  const t = text(c.body.text, "text")!.trim();
+  if (!t) throw new HttpError(400, `Missing "text".`);
+  if (Buffer.byteLength(t) > MAX_CAPTURE) throw new HttpError(413, "A capture can be 64 KB at most.");
+  const clientId = text(c.body.client_id, "client_id")!;
+  const tags = c.body.tags;
+  if (tags !== undefined && !(Array.isArray(tags) && tags.every((x) => typeof x === "string"))) throw new HttpError(400, `"tags" must be a list of text.`);
+  const created = text(c.body.created_at, "created_at", false);
+  // `into` is "+ Add here" in the app. The local app sends it here; the Worker keeps it for `brain pull`. Same filing.
+  const into = text(c.body.into, "into", false);
+  const item = { client_id: clientId, text: t, tags: tags as string[] | undefined, created_at: created, into };
+  const { saved, path } = afterWrite(c.root, () => saveItem(c.root, item));
+  return { path, client_id: clientId, saved };
+}

@@ -1,0 +1,17 @@
+export const nav = {
+  main: "Main",
+  today: "Today",
+  find: "Find",
+  add: "Add",
+  journal: "Journal",
+  brain: "Brain",
+  note: "Note",
+  settings: "Settings",
+  inbox: "Inbox",
+  intake: "Intake",
+  report: "Report",
+  pullToRefresh: "Pull to refresh",
+  releaseToRefresh: "Release to refresh",
+  syncing: "Syncing",
+  inboxCount: (count: number) => `Inbox, ${count} items`,
+};

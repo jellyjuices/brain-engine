@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Template. setup.sh fills in the __WORDS__ and installs it. Loopback only: 127.0.0.1:8787. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.brain.serve</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>__NODE__</string>
+    <string>--disable-warning=ExperimentalWarning</string>
+    <string>__ENGINE__/bin/brain.ts</string>
+    <string>serve</string>
+    <string>--foreground</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>BRAIN_HOME</key><string>__BRAIN_HOME__</string>
+    <key>PATH</key><string>__NODE_DIR__:/usr/bin:/bin</string>
+  </dict>
+  <key>KeepAlive</key><true/>
+  <key>RunAtLoad</key><true/>
+  <key>ThrottleInterval</key><integer>10</integer>
+  <key>StandardOutPath</key><string>__LOGS__/serve.log</string>
+  <key>StandardErrorPath</key><string>__LOGS__/serve.log</string>
+</dict>
+</plist>

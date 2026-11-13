@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Template. setup.sh fills in the __WORDS__ and installs it. Runs at 07:00, or on wake if the Mac was asleep. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.brain.daily</string>
+  <key>ProgramArguments</key>
+  <array><string>/bin/bash</string><string>__ENGINE__/daily.sh</string></array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>BRAIN_HOME</key><string>__BRAIN_HOME__</string>
+    <key>BRAIN_ENGINE</key><string>__ENGINE__</string>
+    <key>NODE</key><string>__NODE__</string>
+    <key>PATH</key><string>__NODE_DIR__:__GIT_DIR__:/usr/bin:/bin</string>
+  </dict>
+  <key>StartCalendarInterval</key>
+  <dict><key>Hour</key><integer>7</integer><key>Minute</key><integer>0</integer></dict>
+  <key>StandardOutPath</key><string>__LOGS__/daily.log</string>
+  <key>StandardErrorPath</key><string>__LOGS__/daily.log</string>
+</dict>
+</plist>

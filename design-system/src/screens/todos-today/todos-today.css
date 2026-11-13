@@ -1,0 +1,39 @@
+.todos-today {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  max-width: var(--size-max-width);
+  margin: 0 auto;
+  background: var(--background-primary);
+}
+
+.todos-today-main {
+  flex: 1;
+  padding-bottom: var(--space-3xl);
+}
+
+.todos-today-banner {
+  padding: var(--space-lg) var(--space-lg) 0;
+}
+
+.todos-today-list {
+  margin: 0;
+  padding: 0;
+}
+
+.todos-today-list > li + li {
+  border-top: var(--size-hair) solid var(--border-primary);
+}
+
+.todos-today-more {
+  padding: var(--space-md) var(--space-sm);
+}
+
+.todos-today-tabs {
+  position: sticky;
+  bottom: 0;
+}
+
+.todos-today-actions {
+  display: flex;
+}

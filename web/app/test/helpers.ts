@@ -1,0 +1,67 @@
+import type { StoredNote } from "@/lib/notes/model.ts";
+
+export function note(
+  path: string,
+  body: string,
+  o: Partial<StoredNote> & { meta?: Record<string, unknown> } = {},
+): StoredNote {
+  const title = o.title ?? path.slice(path.lastIndexOf("/") + 1, -3);
+  return {
+    path,
+    title,
+    description: "",
+    tags: [],
+    status: "stable",
+    modified: "2026-11-01",
+    hash: `h-${path}`,
+    type: undefined,
+    meta: {},
+    body,
+    ...o,
+  } as StoredNote;
+}
+
+export const NOW = "2026-11-05";
+
+export function fixture(): StoredNote[] {
+  return [
+    note(
+      "areas/fitness.md",
+      "# To-dos\n\n- [ ] Make a gym schedule · due 2026-11-05 · today\n- [ ] Buy a mat · due 2026-11-09\n- [x] Book a trainer · done 2026-11-05\n- [x] Skip the pool · done 2026-11-05 · dropped\n\n# Notes\n\n- 2026-11-01 · Started again.\n",
+      { type: "Area", title: "Fitness", description: "Moving more." },
+    ),
+    note(
+      "people/aisha.md",
+      "# To-dos\n\n- [ ] Follow up on the invoice · due 2026-11-03\n- [ ] Hear back about the quote · waiting\n- [ ] Call back · today · with [Aisha](aisha.md)\n\n# People\n\n- [Em](em.md) · sister · since 2020\n",
+      {
+        type: "Person",
+        title: "Aisha",
+        description: "Co-founder at Atlas.",
+        meta: { type: "Person" },
+      },
+    ),
+    note("people/em.md", "# Notes\n\n- 2026-11-02 · Likes tea.\n", {
+      type: "Person",
+      title: "Em",
+      description: "Sister.",
+    }),
+    note("events/checkup.md", "# Prep\n", {
+      type: "Event",
+      title: "Checkup",
+      status: "upcoming",
+      meta: { type: "Event", date: "2026-11-05", status: "upcoming" },
+    }),
+    note("events/old-visit.md", "# Prep\n", {
+      type: "Event",
+      title: "Old visit",
+      status: "done",
+      meta: { type: "Event", date: "2026-11-05", status: "done" },
+    }),
+    note(".archive/old.md", "- [ ] Ghost · due 2026-11-01\n", { title: "Old" }),
+  ];
+}
+
+export async function unlockTestVault(): Promise<void> {
+  const { unlockWithPassword } = await import("@/lib/lock/vault.ts");
+  await unlockWithPassword("test password");
+}

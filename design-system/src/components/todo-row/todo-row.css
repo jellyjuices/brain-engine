@@ -1,0 +1,188 @@
+.todo-row {
+  position: relative;
+  overflow: hidden;
+  list-style: none;
+  background: var(--background-primary);
+}
+
+.todo-row-actions {
+  position: absolute;
+  inset: 0 0 0 auto;
+  display: flex;
+}
+
+.todo-row-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  width: var(--size-action);
+  border: 0;
+  color: var(--action-ink);
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.todo-row-action svg {
+  width: var(--size-icon);
+  height: var(--size-icon);
+}
+
+.todo-row-action--sort {
+  background: var(--action-sort);
+}
+
+.todo-row-action--drop {
+  background: var(--action-drop);
+}
+
+.todo-row-action:focus-visible {
+  outline-color: var(--action-ink);
+  outline-offset: calc(var(--size-focus) * -2);
+}
+
+.todo-row-content {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--background-primary);
+  touch-action: pan-y;
+  transition: transform var(--motion-slow) var(--motion-easing);
+}
+
+.todo-row.is-dragging .todo-row-content {
+  transition: none;
+  user-select: none;
+}
+
+.todo-row-content:has(.todo-row-tick:active) {
+  background:
+    linear-gradient(var(--background-pressed), var(--background-pressed)),
+    var(--background-primary);
+}
+
+.todo-row-tick {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--size-tick);
+  height: var(--size-tick);
+  margin-top: var(--space-2xs);
+  padding: 0;
+  border: var(--size-focus) solid var(--border-strong);
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--text-on-accent);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast) var(--motion-easing),
+    border-color var(--motion-fast) var(--motion-easing),
+    scale var(--motion-fast) var(--motion-easing);
+}
+
+.todo-row-tick:active:not(:disabled) {
+  scale: 0.9;
+}
+
+.todo-row-tick[data-state='checked'] {
+  border-color: var(--status-done);
+  background: var(--status-done);
+}
+
+.todo-row-mark {
+  display: grid;
+  place-items: center;
+  animation: todo-row-pop var(--motion-pop) var(--motion-easing) 1;
+}
+
+.todo-row-mark svg {
+  width: var(--font-size-body-xs);
+  height: var(--font-size-body-xs);
+}
+
+.todo-row-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.todo-row-title {
+  display: block;
+  font-size: var(--font-size-body-md);
+  line-height: var(--font-leading-snug);
+  cursor: pointer;
+}
+
+.todo-row.is-done .todo-row-title {
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+
+.todo-row-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+  font-size: var(--font-size-body-xs);
+  color: var(--text-secondary);
+}
+
+.todo-row-date.is-late {
+  color: var(--status-late);
+  font-weight: var(--font-weight-semibold);
+}
+
+.todo-row.is-disabled .todo-row-content {
+  background: var(--background-primary);
+}
+
+.todo-row.is-disabled .todo-row-tick {
+  border-style: dashed;
+  border-color: var(--text-disabled);
+  background: var(--background-disabled);
+  cursor: not-allowed;
+}
+
+.todo-row.is-disabled .todo-row-title,
+.todo-row.is-disabled .todo-row-date {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+@keyframes todo-row-pop {
+  0% {
+    scale: 0.4;
+  }
+  60% {
+    scale: 1.15;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .todo-row-mark {
+    animation: none;
+  }
+
+  .todo-row-tick:active:not(:disabled) {
+    scale: 1;
+  }
+}
+
+@media (hover: hover) {
+  .todo-row-content:hover {
+    background:
+      linear-gradient(var(--background-hover), var(--background-hover)),
+      var(--background-primary);
+  }
+
+  .todo-row-tick:hover:not(:disabled) {
+    border-color: var(--status-done);
+  }
+}

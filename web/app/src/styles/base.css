@@ -1,0 +1,109 @@
+@import "@fontsource-variable/newsreader/opsz.css";
+@import "@fontsource/instrument-serif/400.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font: var(--text) / var(--leading) var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  text-size-adjust: 100%;
+  overscroll-behavior: none;
+}
+
+#app {
+  position: fixed;
+  top: var(--vvt, 0);
+  left: 0;
+  right: 0;
+  height: var(--vvh, 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: var(--ring) solid var(--accent);
+  outline-offset: var(--ring);
+}
+
+.serif {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 72;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.sr-only {
+  position: absolute;
+  width: var(--hair);
+  height: var(--hair);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0ms !important;
+    transition-duration: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+h1.serif {
+  font-family: var(--font-display);
+  font-variation-settings: normal;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+[hidden] {
+  display: none !important;
+}

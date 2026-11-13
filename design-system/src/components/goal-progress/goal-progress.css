@@ -1,0 +1,133 @@
+.goal-progress {
+  display: grid;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border: var(--size-hair) solid var(--border-primary);
+  border-radius: var(--radius-card);
+  background: var(--background-secondary);
+}
+
+.goal-progress.has-areas {
+  position: relative;
+  isolation: isolate;
+}
+
+.goal-progress.has-areas::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-image: var(--texture-noise);
+  opacity: var(--opacity-noise-text);
+  pointer-events: none;
+}
+
+.goal-progress.has-areas .goal-progress-number {
+  color: var(--text-primary);
+}
+
+.goal-progress--hero {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.goal-progress-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.goal-progress-text {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.goal-progress-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-display-md);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-leading-snug);
+}
+
+.goal-progress--hero .goal-progress-title {
+  font-size: var(--font-size-display-lg);
+}
+
+.goal-progress-number {
+  margin: 0;
+  font-family: var(--font-number);
+  font-size: var(--font-size-number-xl);
+  line-height: var(--font-leading-tight);
+  letter-spacing: var(--font-tracking-tight);
+  color: var(--text-number);
+}
+
+.goal-progress-unit {
+  font-size: var(--font-size-number-sm);
+}
+
+.goal-progress-note {
+  margin: 0;
+  font-size: var(--font-size-body-sm);
+  color: var(--text-secondary);
+}
+
+.goal-progress-dial {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--size-ring);
+  height: var(--size-ring);
+}
+
+.goal-progress-dial .goal-progress-number {
+  position: absolute;
+  font-size: var(--font-size-number-lg);
+}
+
+.goal-progress-ring {
+  width: 100%;
+  height: 100%;
+  rotate: -90deg;
+}
+
+.goal-progress-ring-track,
+.goal-progress-ring-fill {
+  fill: none;
+  stroke-width: var(--size-ring-stroke);
+}
+
+.goal-progress-ring-track {
+  stroke: var(--progress-track);
+}
+
+.goal-progress-ring-fill {
+  stroke-linecap: round;
+  transition: stroke-dasharray var(--motion-slow) var(--motion-easing);
+}
+
+.goal-progress-stop-start {
+  stop-color: var(--progress-fill-start);
+}
+
+.goal-progress-stop-end {
+  stop-color: var(--progress-fill-end);
+}
+
+.goal-progress-track {
+  height: var(--size-bar);
+  overflow: hidden;
+  border-radius: var(--radius-control);
+  background: var(--progress-track);
+}
+
+.goal-progress-fill {
+  height: 100%;
+  border-radius: var(--radius-control);
+  background: var(--gradient-progress);
+  transition: width var(--motion-slow) var(--motion-easing);
+}

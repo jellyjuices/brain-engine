@@ -1,0 +1,30 @@
+.today-done {
+  font-variant-numeric: tabular-nums;
+}
+
+.inbox-btn {
+  position: relative;
+  flex: none;
+}
+
+.inbox-btn .icon-btn {
+  color: var(--ink);
+}
+
+.inbox-badge {
+  position: absolute;
+  top: calc(var(--s0) / 2);
+  right: calc(var(--s0) / 2);
+  min-width: var(--badge);
+  height: var(--badge);
+  padding: 0 var(--s0);
+  border-radius: var(--pill);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  line-height: var(--badge);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}

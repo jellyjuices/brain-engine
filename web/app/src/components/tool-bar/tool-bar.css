@@ -1,0 +1,52 @@
+.tool-bar {
+  flex: none;
+  margin: 0 calc(-1 * (var(--s2) + env(safe-area-inset-right))) 0
+    calc(-1 * (var(--s2) + env(safe-area-inset-left)));
+  padding: var(--s1) calc(var(--s2) + env(safe-area-inset-right)) var(--s1)
+    calc(var(--s2) + env(safe-area-inset-left));
+  border-top: var(--hair) solid var(--line);
+  background: var(--surface);
+}
+
+.tool-bar-tools {
+  display: flex;
+}
+
+.tool {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s0);
+  min-width: 0;
+  min-height: var(--touch);
+  padding: var(--s0) 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--muted);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  transition: color var(--fast) var(--ease);
+}
+
+.tool svg {
+  width: var(--icon);
+  height: var(--icon);
+  color: var(--accent);
+}
+
+.tool:hover {
+  color: var(--ink);
+}
+
+@media (hover: none) {
+  .tool:hover {
+    color: var(--muted);
+  }
+}
+
+.tool:active {
+  background: var(--accent-soft);
+}

@@ -1,0 +1,27 @@
+name = "brain"
+main = "src/index.ts"
+compatibility_date = "2025-11-01"
+
+# Made by write-config.sh from ~/.config/brain/web.env. Do not edit wrangler.toml by hand.
+routes = [{ pattern = "__APP_HOST__", custom_domain = true }]
+
+# Run `wrangler d1 create brain_inbox`, then put the id in D1_ID.
+[[d1_databases]]
+binding = "DB"
+database_name = "brain_inbox"
+database_id = "__D1_ID__"
+
+# The phone app (built by web/app). The Worker runs first only for the API and relay.
+[assets]
+directory = "../app/dist"
+run_worker_first = ["/api/*", "/relay/*"]
+not_found_handling = "single-page-application"
+
+# The Mac tunnel hostname. Not a secret.
+[vars]
+MAC_ORIGIN = "https://__MAC_HOST__"
+
+# wrangler dev keeps localhost as the request host, so dev-only switches can tell they are local.
+[dev]
+port = 8788
+host = "localhost"

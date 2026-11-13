@@ -1,0 +1,32 @@
+# Each note type and the folder it lives in once it is filed.
+# Group is a company, client, family or team. Place is a city, home or clinic. Thing is something the owner has. Topic is a subject that grows.
+# Event is one dated visit, appointment or meeting. It shows in Today on its `date` until its status is done.
+# Note covers decisions, meetings, references and ideas. Tag it to say which.
+# "inbox" means the note stays in inbox/ until someone changes its type.
+types:
+  Capture: inbox
+  Project: projects
+  Area: areas
+  Person: people
+  Group: groups
+  Place: places
+  Thing: things
+  Topic: topics
+  Event: events
+  Note: resources
+  Daily: journal
+  Lens: me
+
+# Fields that only some values are allowed for.
+status: [draft, stable, deprecated]
+event_status: [upcoming, done, cancelled]
+outcome: [today, date, someday, waiting, keep, drop]
+
+# Intake: thread states (threads are lines in lens notes), how much to write down per lens, and the lens names.
+thread_status: [open, talked, parked, closed]
+privacy: [full, headline, skip]
+lenses: [now, day, people, values, wellbeing, story, identity, future, profile]
+
+# A filed note (anywhere but inbox/) must have these fields.
+filed_required: [title, description]
+description_max: 150

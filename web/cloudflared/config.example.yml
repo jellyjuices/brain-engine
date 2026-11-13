@@ -1,0 +1,10 @@
+# Copy to ~/.cloudflared/config.yml and replace the two <...> values.
+# <TUNNEL-ID> is the id printed by `cloudflared tunnel create brain`.
+# <domain> is your domain on Cloudflare.
+tunnel: brain
+credentials-file: /Users/<you>/.cloudflared/<TUNNEL-ID>.json
+
+ingress:
+  - hostname: brain-mac.<domain>
+    service: http://127.0.0.1:8787
+  - service: http_status:404

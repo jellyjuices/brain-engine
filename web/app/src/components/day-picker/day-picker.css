@@ -1,0 +1,90 @@
+.dp {
+  border: var(--hair) solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--s1);
+}
+
+.dp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--s0);
+}
+
+.dp-title {
+  flex: 1;
+  font-weight: 600;
+  text-align: center;
+}
+
+.dp-nav {
+  display: grid;
+  place-items: center;
+  width: var(--control);
+  height: var(--control);
+  border: 0;
+  border-radius: var(--pill);
+  background: transparent;
+  color: var(--ink);
+}
+
+.dp-nav svg {
+  width: var(--icon);
+  height: var(--icon);
+}
+
+.dp-nav:disabled {
+  opacity: 0.3;
+}
+
+.dp-week,
+.dp-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+.dp-week span {
+  color: var(--muted);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  padding: var(--s0) 0;
+}
+
+.dp-day {
+  height: var(--control);
+  border: 0;
+  border-radius: var(--pill);
+  background: transparent;
+  color: var(--ink);
+  font-size: var(--t-md);
+}
+
+.dp-day:active {
+  background: var(--accent-soft);
+}
+
+.dp-day:disabled {
+  color: var(--muted);
+  opacity: 0.4;
+}
+
+.dp-day.is-today {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.dp-day.is-picked {
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.dp-year {
+  width: calc(var(--control) + var(--s1));
+}
+
+.dp-year svg {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+}

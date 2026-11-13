@@ -1,0 +1,124 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  min-height: var(--size-control);
+  padding: 0 var(--space-xl);
+  border: 0;
+  border-radius: var(--radius-control);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast) var(--motion-easing),
+    scale var(--motion-fast) var(--motion-easing);
+}
+
+.button:active:not(:disabled) {
+  scale: 0.97;
+}
+
+.button.is-block {
+  width: 100%;
+}
+
+.button.is-icon {
+  width: var(--size-control);
+  padding: 0;
+}
+
+.button svg {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+}
+
+.button--sm {
+  min-height: calc(var(--size-control) - var(--space-md));
+  padding: 0 var(--space-lg);
+  font-size: var(--font-size-body-sm);
+}
+
+.button--md {
+  font-size: var(--font-size-body-md);
+}
+
+.button--lg {
+  min-height: calc(var(--size-control) + var(--space-sm));
+  font-size: var(--font-size-body-lg);
+}
+
+.button--primary {
+  background: var(--background-accent);
+  color: var(--text-on-accent);
+}
+
+.button--primary:active:not(:disabled) {
+  background:
+    linear-gradient(
+      var(--background-accent-pressed),
+      var(--background-accent-pressed)
+    ),
+    var(--background-accent);
+}
+
+.button--secondary {
+  background: var(--background-accent-soft);
+  color: var(--text-accent);
+}
+
+.button--secondary:active:not(:disabled) {
+  background:
+    linear-gradient(var(--background-pressed), var(--background-pressed)),
+    var(--background-accent-soft);
+}
+
+.button--ghost {
+  background: transparent;
+  color: var(--text-accent);
+}
+
+.button--ghost:active:not(:disabled) {
+  background: var(--background-pressed);
+}
+
+.button:disabled {
+  background: var(--background-disabled);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+  box-shadow: inset 0 0 0 var(--size-hair) var(--border-primary);
+}
+
+.button--ghost:disabled {
+  background: transparent;
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button:active:not(:disabled) {
+    scale: 1;
+  }
+}
+
+@media (hover: hover) {
+  .button--primary:hover:not(:disabled) {
+    background:
+      linear-gradient(
+        var(--background-accent-hover),
+        var(--background-accent-hover)
+      ),
+      var(--background-accent);
+  }
+
+  .button--secondary:hover:not(:disabled) {
+    background:
+      linear-gradient(
+        var(--background-accent-soft-hover),
+        var(--background-accent-soft-hover)
+      ),
+      var(--background-accent-soft);
+  }
+
+  .button--ghost:hover:not(:disabled) {
+    background: var(--background-hover);
+  }
+}

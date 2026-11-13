@@ -1,0 +1,21 @@
+{
+  "rules": {
+    "color-no-hex": true,
+    "declaration-property-value-disallowed-list": {
+      "text-transform": ["uppercase"]
+    },
+    "block-no-empty": true,
+    "declaration-block-no-duplicate-properties": true,
+    "no-duplicate-selectors": true,
+    "unit-disallowed-list": ["px"]
+  },
+  "overrides": [
+    {
+      "files": ["src/styles/tokens.css"],
+      "rules": {
+        "color-no-hex": null,
+        "unit-disallowed-list": null
+      }
+    }
+  ]
+}
