@@ -48,15 +48,17 @@
 
 .add-blob {
   position: fixed;
+  --add-blob-w: var(--add-blob);
+  --add-blob-h: var(--add-blob);
   top: calc(
     var(--vvt, 0px) + var(--vvh, 100dvh) - var(--tabbar) / 2 - env(safe-area-inset-bottom) -
-      var(--add-blob) / 2
+      var(--add-blob-h) / 2
   );
   left: 50%;
   z-index: 2;
-  width: var(--add-blob);
-  height: var(--add-blob);
-  margin-left: calc(var(--add-blob) / -2);
+  width: var(--add-blob-w);
+  height: var(--add-blob-h);
+  margin-left: calc(var(--add-blob-w) / -2);
   transition: top var(--slow) var(--ease);
   animation: add-inflate var(--pop) var(--ease) both;
 }
@@ -91,8 +93,18 @@
   clip-path: var(--shape-kind-todo);
 }
 
+.add-blob--journal {
+  --add-blob-w: 160vw;
+  --add-blob-h: calc(var(--vvh, 100dvh) * 1.6);
+}
+
 .add-blob--journal::before {
   clip-path: var(--shape-kind-journal);
+  animation: none;
+}
+
+.add-blob--journal .add-box {
+  inset: 18% 30% 54%;
 }
 
 @keyframes add-morph {
