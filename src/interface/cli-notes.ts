@@ -6,6 +6,7 @@ import { summary } from "../core/notes.ts";
 import { loadAll } from "../core/files.ts";
 import { log, readLog } from "../core/log.ts";
 import { buildCard, cardLines, isSubject, matchSubject } from "../reports/card.ts";
+import { kindView } from "../reports/goal-lines.ts";
 import { areaBrief, areaMarkdown } from "../reports/reports.ts";
 import { backlinks, findNote } from "../reports/find.ts";
 import { find, list } from "../core/search.ts";
@@ -75,8 +76,12 @@ export async function showCommand(c: CliContext): Promise<number> {
   if (!note) return fail(`No note matches "${args.join(" ")}".`);
   const links = backlinks(notes, note.path);
   const card = isSubject(note) ? buildCard(root, notes, note) : undefined;
-  if (flags.json) json({ ...summary(note), meta: note.meta, body: note.body, backlinks: links, ...(card && { card }) });
-  else if (card) {
+  const kind = kindView(notes, note);
+  if (flags.json) json({ ...summary(note), meta: note.meta, body: note.body, backlinks: links, ...(card && { card }), ...(kind && { view: kind.view }) });
+  else if (kind) {
+    out(kind.lines.join("\n"));
+    out(`\n${pc.dim("Full note:")} ${note.path}`);
+  } else if (card) {
     out(cardLines(card).join("\n"));
     out(`\n${pc.dim("Full note:")} ${note.path}`);
   } else {
