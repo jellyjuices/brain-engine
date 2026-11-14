@@ -37,36 +37,6 @@
   font-weight: 600;
 }
 
-.tab--add {
-  color: var(--accent-ink);
-}
-
-.tab--add .tab-disc {
-  display: grid;
-  place-items: center;
-  width: var(--row);
-  height: var(--row);
-  margin-top: calc(var(--icon) * -1);
-  border-radius: var(--pill);
-  background: var(--accent);
-  color: var(--accent-ink);
-  box-shadow: var(--shadow);
-  transition: transform var(--fast) var(--ease);
-}
-
-.tab--add:active .tab-disc {
-  transform: scale(0.94);
-}
-
-.tab--add span.label {
-  color: var(--muted);
-}
-
-.tab--add[aria-current="page"] span.label {
-  color: var(--accent);
-  font-weight: 600;
-}
-
-[data-keyboard] .tabbar {
+[data-keyboard] .tabbar:not(:has(.add-panel.is-todo, .add-panel.is-journal)) {
   display: none;
 }

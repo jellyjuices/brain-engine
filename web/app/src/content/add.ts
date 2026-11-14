@@ -45,4 +45,5 @@ export const add = {
   aboutEmpty: "A person or event",
   birthdayOf: (name: string) => `${name}'s birthday`,
   addHere: "Add here",
+  other: "Other",
 };

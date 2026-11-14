@@ -3,11 +3,13 @@ import { CaretRightIcon, CircleNotchIcon, type Icon as PhosphorIcon } from "@pho
 import type { MouseEvent, ReactNode } from "react";
 import clsx from "clsx";
 import { Icon } from "@/components/icon/icon.tsx";
+import { Shape, type ShapeName } from "@/components/shape/shape.tsx";
 
 export interface RowProps {
   title: ReactNode;
   sub?: ReactNode;
   icon?: PhosphorIcon;
+  shape?: Exclude<ShapeName, "add">;
   end?: ReactNode;
   variant?: "default" | "primary" | "danger";
   chevron?: boolean;
@@ -23,6 +25,7 @@ export function Row({
   title,
   sub,
   icon,
+  shape,
   end,
   variant = "default",
   chevron,
@@ -36,7 +39,8 @@ export function Row({
   const className = clsx("row", variant !== "default" && `row--${variant}`, busy && "is-busy");
   const inner = (
     <>
-      {icon && (
+      {icon && shape && <Shape name={shape} icon={icon} />}
+      {icon && !shape && (
         <span className="row-icon">
           <Icon icon={icon} />
         </span>

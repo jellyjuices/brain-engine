@@ -42,6 +42,7 @@
   --radius-sm: 6px;
   --radius: 14px;
   --radius-lg: 20px;
+  --radius-xl: 56px;
   --pill: 999px;
   --touch: 48px;
   --row: 56px;
@@ -51,6 +52,9 @@
   --icon-xl: 48px;
   --tabbar: 64px;
   --tile: 64px;
+  --shape-lg: 52px;
+  --add-arc: 92px;
+  --add-box: 220px;
   --badge: 18px;
   --control-sm: 36px;
   --control: 44px;

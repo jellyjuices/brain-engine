@@ -1,0 +1,41 @@
+.shape {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--control-sm);
+  height: var(--control-sm);
+  color: var(--ink);
+}
+
+.shape--lg {
+  width: var(--shape-lg);
+  height: var(--shape-lg);
+}
+
+.shape-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: var(--accent-soft);
+}
+
+.shape > svg:not(.shape-bg) {
+  position: relative;
+  width: var(--icon);
+  height: var(--icon);
+}
+
+.shape--lg > svg:not(.shape-bg) {
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+}
+
+.shape--primary {
+  color: var(--accent-ink);
+}
+
+.shape--primary .shape-bg {
+  fill: var(--accent);
+}
