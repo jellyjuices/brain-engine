@@ -8,6 +8,7 @@ export interface Env {
   SERVER_TOKEN: string;
   MAC_ORIGIN: string;
   NO_PASSWORD?: string;
+  CAL_TOKEN?: string;
 }
 
 const LOOPBACK = new Set(["localhost", "127.0.0.1", "[::1]"]);

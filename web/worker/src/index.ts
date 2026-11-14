@@ -1,5 +1,6 @@
 import { hasValidSession, requireRelayToken, type Env } from "./auth.ts";
 import { json, jsonError, withHeaders } from "./headers.ts";
+import { calendarFeed } from "./calendar.ts";
 import { proxyToMac } from "./proxy.ts";
 import { ack, addToInbox, pending } from "./relay.ts";
 import { lock, unlock, unlockStatus } from "./unlock.ts";
@@ -20,6 +21,8 @@ async function route(request: Request, env: Env): Promise<Response> {
       return method === "POST" ? ack(env, request) : methodNotAllowed();
     return jsonError("Not found", 404);
   }
+
+  if (pathname.startsWith("/cal/")) return calendarFeed(request, env);
 
   if (!pathname.startsWith("/api/")) return jsonError("Not found", 404);
 

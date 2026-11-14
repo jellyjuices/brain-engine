@@ -11,9 +11,21 @@ import { createServer as httpServer, type IncomingMessage, type Server, type Ser
 import { addFile, addJournal, addPerson, addSubject, doneRoute, dropRoute, editNote, inboxDrop, moveRoute, setBirthday, sortRoute, undoRoute } from "./server-writes.ts";
 import { cardRoute, health, inbox, intakeNext, intakeSave, intakeSkip, listRoute, notesSince, oneNote, report, searchRoute, todayRoute } from "./server-reads.ts";
 import { type Ctx, readBody } from "./server-context.ts";
+import { calendarFeed } from "../todos/calendar.ts";
 import { DEFAULT_PORT, HttpError, isAuthorized, isLocalApp, loadToken, serveApp, tokenPath } from "./server-auth.ts";
 
 type Handler = (c: Ctx, rest: string) => unknown;
+
+class TextBody {
+  readonly text: string;
+  readonly type: string;
+  constructor(text: string, type: string) {
+    this.text = text;
+    this.type = type;
+  }
+}
+
+const calendarRoute: Handler = (c) => new TextBody(calendarFeed(c.root), "text/calendar; charset=utf-8");
 
 const EXACT: Record<string, Handler> = {
   "GET /api/notes": notesSince,
@@ -21,6 +33,7 @@ const EXACT: Record<string, Handler> = {
   "GET /api/card": cardRoute,
   "GET /api/today": todayRoute,
   "GET /api/list": listRoute,
+  "GET /api/cal.ics": calendarRoute,
   "POST /api/inbox": inbox,
   "POST /api/people": addPerson,
   "POST /api/journal": addJournal,
@@ -53,8 +66,9 @@ function findHandler(method: string, pathname: string): { handler: Handler; rest
 }
 
 export function send(res: ServerResponse, status: number, body: unknown): void {
-  const data = JSON.stringify(body);
-  res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", "Content-Length": Buffer.byteLength(data) });
+  const isText = body instanceof TextBody;
+  const data = isText ? body.text : JSON.stringify(body);
+  res.writeHead(status, { "Content-Type": isText ? body.type : "application/json; charset=utf-8", "Cache-Control": "no-store", "Content-Length": Buffer.byteLength(data) });
   res.end(data);
 }
 

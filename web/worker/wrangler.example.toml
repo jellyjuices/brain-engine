@@ -14,7 +14,7 @@ database_id = "__D1_ID__"
 # The phone app (built by web/app). The Worker runs first only for the API and relay.
 [assets]
 directory = "../app/dist"
-run_worker_first = ["/api/*", "/relay/*"]
+run_worker_first = ["/api/*", "/relay/*", "/cal/*"]
 not_found_handling = "single-page-application"
 
 # The Mac tunnel hostname. Not a secret.
