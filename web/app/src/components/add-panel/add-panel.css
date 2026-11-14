@@ -121,7 +121,7 @@
 }
 
 .add-blob--journal .add-box {
-  inset: 30% 18% calc(20% + var(--tabbar));
+  inset-block: 30% calc(20% + var(--tabbar));
   mask-image: linear-gradient(
     transparent,
     black var(--add-fade-top),
@@ -196,7 +196,8 @@
 
 .add-box {
   position: absolute;
-  inset: 22% 28% 58%;
+  inset-block: 22% 58%;
+  inset-inline: calc((var(--add-blob-w) - 100vw) / 2 + var(--s3));
   overflow-y: auto;
   color: var(--accent-ink);
   font-size: var(--text);
