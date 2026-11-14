@@ -49,6 +49,10 @@ export function newNote(root: string, type: string, title: string, extra: Meta =
   const at = nowStamp();
   const filled: Meta = { ...meta, type, title, ...extra };
   if (!filled.description) filled.description = "";
+  if (Array.isArray(meta.areas) && extra.area) {
+    filled.areas = [String(extra.area)];
+    delete filled.area;
+  }
   const rel = uniquePath(root, folder, slugify(title));
   writeAtomic(join(root, rel), dump(filled, body.replaceAll("{{title}}", title).replaceAll("{{date}}", at)));
   log(root, `created ${rel}`);

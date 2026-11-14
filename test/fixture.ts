@@ -23,6 +23,6 @@ export function makeBrain(): string {
   const root = mkdtempSync(join(tmpdir(), "brain-test-"));
   for (const d of [".schema", ".templates"]) cpSync(join(STARTER, d), join(root, d), { recursive: true });
   blankAreas(STARTER, root);
-  for (const d of ["inbox", "projects", "people", "groups", "places", "things", "topics", "events", "resources", "journal", ".archive", ".reports"]) mkdirSync(join(root, d), { recursive: true });
+  for (const d of ["inbox", "projects", "people", "groups", "places", "things", "topics", "events", "resources", "journal", "goals", "decisions", ".archive", ".reports"]) mkdirSync(join(root, d), { recursive: true });
   return root;
 }

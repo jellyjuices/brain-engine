@@ -9,7 +9,7 @@
 import { extractLinks, type Note } from "./notes.ts";
 import { sectionRange } from "../../shared/line/index.ts";
 
-export const RELATION_HEADINGS = ["# People", "# Groups", "# Projects", "# Places", "# Things", "# Topics", "# Related"];
+export const RELATION_HEADINGS = ["# People", "# Groups", "# Projects", "# Places", "# Things", "# Topics", "# Goals", "# Decisions", "# Related"];
 
 export interface Relation {
   from: string;
