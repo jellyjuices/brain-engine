@@ -5,6 +5,7 @@ export const STORE = {
   notes: "notes",
   meta: "meta",
   keys: "keys",
+  vectors: "vectors",
 } as const;
 
 export const META = {
@@ -12,6 +13,10 @@ export const META = {
   recentSearches: "recent",
   conflicts: "conflicts",
   draft: "draft:",
+} as const;
+
+export const VECTORS = {
+  modelRow: "#model",
 } as const;
 
 export const SESSION = {
