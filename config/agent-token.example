@@ -1,0 +1,9 @@
+# The agent token: helpers send it as `Authorization: Bearer <token>` to brain serve.
+# It lives at ~/.config/brain/agent-token (or $BRAIN_AGENT_TOKEN_FILE), mode 600. Never commit the real file.
+#
+# Make or change it: POST /api/agent-token with the owner token. The answer shows the new token once.
+# Revoke it: DELETE /api/agent-token with the owner token. Helpers get 401 from the next call.
+# You can also put one long random line below this comment by hand. The server reads the file on each call.
+#
+# Lines that start with # are skipped. With no token line, every helper call gets 401.
+# A helper may make 120 calls a minute. Past that it gets 429 and a Retry-After.

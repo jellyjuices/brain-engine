@@ -23,7 +23,7 @@ export async function moveCommand(c: CliContext): Promise<number> {
   try {
     const remove = cmd === "delete" || cmd === "drop";
     const ask = remove && !flags.json && process.stdin.isTTY && process.stdout.isTTY;
-    const result = cmd === "undo" ? (await import("../todos/undo.ts")).undo(root) : remove ? (ask ? await (await import("../todos/wrapup.ts")).dropInTerminal(root, args.join(" ")) : verbs.drop(root, args.join(" "))) : verbs.move(root, args[0] ?? "", args.slice(1).join(" "));
+    const result = cmd === "undo" ? (await import("../core/log.ts")).undoLast(root) : remove ? (ask ? await (await import("../todos/wrapup.ts")).dropInTerminal(root, args.join(" ")) : verbs.drop(root, args.join(" "))) : verbs.move(root, args[0] ?? "", args.slice(1).join(" "));
     report(result, result.line);
     return 0;
   } catch (err) {
