@@ -91,7 +91,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .add-blob::before {
+  .add-blob::before,
+  .add-pick .shape-bg {
     animation: none;
   }
 }
@@ -172,6 +173,7 @@
 }
 
 .add-pick .shape-bg {
+  animation: add-spin var(--spin) linear infinite;
   background: var(--surface);
 }
 
@@ -254,8 +256,4 @@
     --add-fade-top: var(--s3);
     --add-fade-bottom: 0;
   }
-}
-
-.add-panel.is-closed .add-main .shape-bg {
-  animation: none;
 }
