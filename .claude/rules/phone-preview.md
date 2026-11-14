@@ -24,7 +24,7 @@ Use this mode when the owner says they are on their phone (a Pixel), or when the
 4. Publish it with the Artifact tool. First publish: pass `icon`. Every later publish: the same `file_path`, so the link stays the same. The page is private to the owner.
 5. Give the owner the link. Say what to tap.
 6. To check it yourself, take a phone-size screenshot with Playwright (`devices["iPhone 13"]`) of the same page. Read it before you send it. Send screenshots with `SendUserFile`.
-7. Commit and push the code change. Never commit the built page.
+7. Commit and push the code change to your own branch, never to `main`. Never commit the built page.
 
 ## What the preview cannot show
 

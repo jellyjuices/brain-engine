@@ -1,7 +1,7 @@
 [
   {
     "name": "add",
-    "description": "Add a thought. With a tag, person or subject it is filed at once; else it waits in the inbox. Use for any new thought or to-do.",
+    "description": "Add a thought. A tag, person or subject files it at once; journal keeps it whole in the day note. Use for any new thought or to-do.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -46,6 +46,14 @@
         },
         "draft_id": {
           "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "todo",
+            "journal"
+          ],
+          "description": "journal keeps the text whole in the day note, to sort later."
         }
       },
       "required": [
@@ -320,13 +328,13 @@
   },
   {
     "name": "sort",
-    "description": "Sort a capture into one or more subjects. The capture is deleted. Use on a capture from unsorted.",
+    "description": "Sort a capture or journal entry into subjects. A capture is deleted; an entry stays whole. Use on an item from unsorted.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "path": {
           "type": "string",
-          "description": "A capture path from unsorted."
+          "description": "A path from unsorted: a capture, or a journal entry like journal/2026-05-04.md#0930."
         },
         "into": {
           "type": "string",
@@ -365,6 +373,19 @@
                   "type": "string"
                 },
                 "description": "Note paths."
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "to-do",
+                  "fact",
+                  "feeling",
+                  "decision"
+                ]
+              },
+              "about": {
+                "type": "string",
+                "description": "What it is about, in the owner's words. A feeling needs it."
               }
             },
             "required": [
@@ -393,7 +414,7 @@
   },
   {
     "name": "unsorted",
-    "description": "How many captures wait, and which. Use before you sort.",
+    "description": "How many captures and journal entries wait, and which. Use before you sort.",
     "inputSchema": {
       "type": "object",
       "additionalProperties": false
@@ -825,6 +846,14 @@
         },
         "draft_id": {
           "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "todo",
+            "journal"
+          ],
+          "description": "journal keeps the text whole in the day note, to sort later."
         }
       },
       "required": [
@@ -869,7 +898,7 @@
   },
   {
     "name": "add_journal",
-    "description": "Make a journal note for a day. Use for a dated journal entry.",
+    "description": "Add a journal entry, whole, to the day note. It waits to be sorted. Use for a dated journal entry.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -886,6 +915,10 @@
         },
         "title": {
           "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "description": "ISO time. Its HH:MM heads the entry."
         }
       },
       "required": [

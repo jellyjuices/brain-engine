@@ -10,7 +10,7 @@ interface NotePath { path: string }
 interface DraftId { id: string }
 interface EditNote { path: string; body: string; base: string; tags?: string[] }
 interface Person { name: string; birthday?: string; description?: string }
-interface Journal { date: string; text: string; about?: string; title?: string }
+interface Journal { date: string; text: string; about?: string; title?: string; created_at?: string }
 interface Subject { type: string; name: string }
 interface TextFile { title: string; text: string }
 interface Birthday { path: string; birthday: string }
@@ -32,9 +32,18 @@ const add = obj<AddRequest>({
   tags: strs(),
   by: str(BY),
   draft_id: str(),
+  kind: oneOf(["todo", "journal"], "journal keeps the text whole in the day note, to sort later."),
 });
 
-const bit = shape<SortBitRequest>({ into: req(str(PATH)), when: req(str(WHEN)), text: str(), with: strs("Person note paths."), re: strs(PATHS) });
+const bit = shape<SortBitRequest>({
+  into: req(str(PATH)),
+  when: req(str(WHEN)),
+  text: str(),
+  with: strs("Person note paths."),
+  re: strs(PATHS),
+  kind: oneOf(["to-do", "fact", "feeling", "decision"]),
+  about: str("What it is about, in the owner's words. A feeling needs it."),
+});
 
 const filters = { type: str("A note type."), tag: str(), area: str(), status: str(), limit: int() };
 const notePath = (rest: boolean) => obj<NotePath>({ path: req(str(PATH)) }, rest ? "path" : undefined);
@@ -55,7 +64,7 @@ export const INPUTS: Record<string, Input> = {
   goal: obj<NotePath>({ path: req(str("A goal slug or path, like goals/run-far.md.")) }, "path"),
   decision: obj<NotePath>({ path: req(str("A decision slug or path, like decisions/move-city.md.")) }, "path"),
   sort: obj<SortRequest>({
-    path: req(str("A capture path from unsorted.")),
+    path: req(str("A path from unsorted: a capture, or a journal entry like journal/2026-05-04.md#0930.")),
     into: str(PATH),
     when: str(WHEN),
     bits: { type: "array", items: bit, minItems: 1, description: "Instead of into and when, one entry per line." },
@@ -78,7 +87,7 @@ export const INPUTS: Record<string, Input> = {
   calendar: NONE,
   report: obj<{ name: string }>({ name: req(str("today, weekly or area/<slug>.")) }, "name"),
   add_person: obj<Person>({ name: req(str()), birthday: str("Like 1990-05-04."), description: str() }),
-  add_journal: obj<Journal>({ date: req(str("Like 2026-05-04.")), text: req(str()), about: str(PATH), title: str() }),
+  add_journal: obj<Journal>({ date: req(str("Like 2026-05-04.")), text: req(str()), about: str(PATH), title: str(), created_at: str("ISO time. Its HH:MM heads the entry.") }),
   add_subject: obj<Subject>({ type: req(oneOf(["Place", "Thing"])), name: req(str()) }),
   drop_capture: notePath(false),
   add_file: obj<TextFile>({ title: req(str()), text: req(str()) }),

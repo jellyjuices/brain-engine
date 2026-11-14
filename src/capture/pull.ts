@@ -88,7 +88,7 @@ function homeFromText(notes: Note[], input: string): Note | undefined {
   return filedNote(notes, bestHome(notes, text).into);
 }
 
-const phoneMark =(id: string) => `(phone ${id})`;
+export const phoneMark = (id: string) => `(phone ${id})`;
 
 /** File one phone item in its note. A When prefix picks to-do or date; with none it is a dated note line. */
 function fileOnNote(root: string, notes: Note[], target: Note, item: PendingItem, picked: { with: string[]; re: string[] }): void {
@@ -104,7 +104,7 @@ function fileOnNote(root: string, notes: Note[], target: Note, item: PendingItem
   });
 }
 
-const alreadyFiled = (root: string, id: string) => readLog(root).some((e) => e.msg.endsWith(phoneMark(id)));
+export const alreadyFiled = (root: string, id: string) => readLog(root).some((e) => e.msg.endsWith(phoneMark(id)));
 
 /** Save one app item: on its note when `into` names a filed note, else in the inbox. "skipped" = already saved. */
 export function saveItem(root: string, item: PendingItem): { saved: "filed" | "inbox" | "skipped"; path?: string } {
