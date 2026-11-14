@@ -2,13 +2,14 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { DIRS, eventDue, titleOf, today } from "../core/notes.ts";
 import { loadAll, readNote, writeAtomic } from "../core/files.ts";
+import { decideByLoops } from "./decide-by.ts";
 import { allLoops } from "./todos.ts";
 
 export type Group = "overdue" | "today" | "waiting";
 export interface Item {
   n: number;
   group: Group;
-  kind: "todo" | "event";
+  kind: "todo" | "event" | "decision";
   text: string;
   path: string;
   subject: string;
@@ -33,6 +34,10 @@ export function dayList(root: string, opts: { save?: boolean } = {}): Item[] {
   for (const todo of allLoops(notes, { done: false })) {
     const group = groupOf(todo.due, todo.outcome, now);
     if (group) raw.push({ group, kind: "todo", text: todo.text, path: todo.path, subject: todo.noteTitle, ...(todo.due && { due: todo.due }) });
+  }
+  for (const todo of decideByLoops(notes)) {
+    const group = groupOf(todo.due, undefined, now);
+    if (group) raw.push({ group, kind: "decision", text: todo.text, path: todo.path, subject: todo.noteTitle, due: todo.due });
   }
   for (const note of notes) {
     const due = eventDue(note);
@@ -104,7 +109,7 @@ export function listLines(items: Item[]): string[] {
     if (!xs.length) continue;
     if (out.length) out.push("");
     out.push(HEAD[group]);
-    for (const item of xs) out.push(`${String(item.n).padStart(3)}. ${item.text}${item.kind === "todo" ? ` · ${item.subject}` : ""}${group === "overdue" && item.due ? ` · due ${item.due}` : ""}`);
+    for (const item of xs) out.push(`${String(item.n).padStart(3)}. ${item.text}${item.kind !== "event" ?` · ${item.subject}` : ""}${group === "overdue" && item.due ? ` · due ${item.due}` : ""}`);
   }
   return out;
 }

@@ -6,6 +6,7 @@ import { readLog } from "../../core/log.ts";
 import { search } from "../../core/search.ts";
 import { buildCard, matchSubject } from "../../reports/card.ts";
 import { ref } from "../../todos/day-list.ts";
+import { decideByLoops } from "../../todos/decide-by.ts";
 import { allLoops, type Loop } from "../../todos/todos.ts";
 import { type FindResponse, type LogResponse, TODO_VIEWS, type TodosResponse, type TodoView } from "../api-types.ts";
 import { HttpError } from "../server-auth.ts";
@@ -39,7 +40,8 @@ export function todosRoute(c: Ctx): TodosResponse {
   const view = (c.url.searchParams.get("view") ?? "today") as TodoView;
   if (!TODO_VIEWS.includes(view)) throw new HttpError(400, `"view" must be one of: ${TODO_VIEWS.join(", ")}.`);
   const now = today();
-  const items = allLoops(loadAll(c.root), { done: false })
+  const notes = loadAll(c.root);
+  const items = [...allLoops(notes, { done: false }), ...decideByLoops(notes)]
     .filter((l) => !l.dropped && VIEW[view](l, now))
     .sort((a, b) => (a.due ?? "9999").localeCompare(b.due ?? "9999") || a.text.localeCompare(b.text))
     .map((l) => ({ ...l, ref: ref(l.path, l.text) }));

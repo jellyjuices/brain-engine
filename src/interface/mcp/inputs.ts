@@ -51,6 +51,9 @@ export const INPUTS: Record<string, Input> = {
   todos: obj<{ view?: TodoView }>({ view: oneOf(TODO_VIEWS) }),
   today: NONE,
   read_note: notePath(true),
+  goals: NONE,
+  goal: obj<NotePath>({ path: req(str("A goal slug or path, like goals/run-far.md.")) }, "path"),
+  decision: obj<NotePath>({ path: req(str("A decision slug or path, like decisions/move-city.md.")) }, "path"),
   sort: obj<SortRequest>({
     path: req(str("A capture path from unsorted.")),
     into: str(PATH),

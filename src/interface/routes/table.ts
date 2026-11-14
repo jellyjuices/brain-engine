@@ -9,6 +9,7 @@ import { addFile, addJournal, addPerson, addSubject, doneRoute, dropRoute, editN
 import { cardRoute, intakeNext, intakeSave, intakeSkip, listRoute, notesSince, oneNote, report, searchRoute, todayRoute } from "../server-reads.ts";
 import { newAgentToken, revokeAgent } from "./agent.ts";
 import { addRoute, sortRoute, unsortedRoute } from "./capture.ts";
+import { decisionRoute, goalRoute, goalsRoute } from "./goals.ts";
 import { dropDraft, listDrafts, oneDraft, saveDraft } from "./drafts.ts";
 import { addRelation, deleteNote, makeNote, relationsRoute } from "./notes.ts";
 import { findRoute, logRoute, todosRoute } from "./reads.ts";
@@ -42,6 +43,9 @@ export const ROUTES: Route[] = [
   r("GET", "/api/todos", "todos", "One to-do view: today, soon, no-date, on-hold, by-goal or all.", "Use to get to-do refs.", todosRoute),
   r("GET", "/api/today", "today", "Today: overdue and due to-dos and events.", "Use to plan the day.", todayRoute),
   r("GET", "/api/notes/", "read_note", "Read one note with its backlinks and card.", "Use after find, with the note path.", oneNote, { prefix: true }),
+  r("GET", "/api/goals", "goals", "Every goal with its percent. A subgoal counts toward its parent.", "Use to see goal progress.", goalsRoute),
+  r("GET", "/api/goals/", "goal", "One goal: percent, targets, to-dos toward it, wins, subgoals and decisions.", "Use with a goal slug or path from goals.", goalRoute, { prefix: true }),
+  r("GET", "/api/decisions/", "decision", "One decision: status, decide-by to-do, goals and what was decided.", "Use with a decision slug or path.", decisionRoute, { prefix: true }),
   r("POST", "/api/sort", "sort", "Sort a capture into one or more subjects. The capture is deleted.", "Use on a capture from unsorted.", sortRoute),
   r("GET", "/api/unsorted", "unsorted", "How many captures wait, and which.", "Use before you sort.", unsortedRoute),
   r("POST", "/api/notes", "make_note", "Make a note from a type and a title.", "Use for a new goal, decision or project.", makeNote),

@@ -249,6 +249,63 @@
     }
   },
   {
+    "name": "goals",
+    "description": "Every goal with its percent. A subgoal counts toward its parent. Use to see goal progress.",
+    "inputSchema": {
+      "type": "object",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "goal",
+    "description": "One goal: percent, targets, to-dos toward it, wins, subgoals and decisions. Use with a goal slug or path from goals.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "A goal slug or path, like goals/run-far.md."
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "decision",
+    "description": "One decision: status, decide-by to-do, goals and what was decided. Use with a decision slug or path.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "A decision slug or path, like decisions/move-city.md."
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "sort",
     "description": "Sort a capture into one or more subjects. The capture is deleted. Use on a capture from unsorted.",
     "inputSchema": {

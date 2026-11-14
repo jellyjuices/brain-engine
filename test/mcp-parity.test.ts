@@ -3,7 +3,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { join } from "node:path";
-import { mkdtempSync } from "node:fs";
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { addThread } from "../src/intake/threads.ts";
 import { issueAgentToken } from "../src/interface/server-agent.ts";
@@ -32,6 +32,9 @@ const STEPS: Step[] = [
   ["calendar", () => ({})],
   ["report", () => ({ name: "today" })],
   ["intake_next", () => ({})],
+  ["goals", () => ({})],
+  ["goal", () => ({ path: "goals/run-far.md" })],
+  ["decision", () => ({ path: "decisions/pick-shoes.md" })],
   ["add", () => ({ client_id: "c1", text: "call the roofer about tiles" })],
   ["inbox", () => ({ client_id: "c2", text: "a stray made-up thought" })],
   ["sort", (s) => ({ path: s.add.path, into: SHED, when: "tomorrow" })],
@@ -76,6 +79,13 @@ async function viaTool(name: string, args: Record<string, unknown>, root: string
   }
 }
 
+function seedGoals(root: string) {
+  mkdirSync(join(root, "goals"), { recursive: true });
+  mkdirSync(join(root, "decisions"), { recursive: true });
+  writeFileSync(join(root, "goals/run-far.md"), "---\ntype: Goal\ntitle: Run far\nstatus: active\nareas: [health]\n---\n\n# Why\n\n# Targets\n\n- [x] Run 5 km · done 2026-03-05\n- [ ] Run 10 km\n\n# Wins\n\n# Notes\n");
+  writeFileSync(join(root, "decisions/pick-shoes.md"), `---\ntype: Decision\ntitle: Pick shoes?\nstatus: open\ndecide_by: ${now}\nareas: [health]\n---\n\n# Rants\n\n# Buckets\n\n# Options\n\n# Decided\n\n# Goals\n\n- [Run far](../goals/run-far.md)\n`);
+}
+
 test("T4: the steps cover every tool once", () => {
   assert.deepEqual(STEPS.map(([n]) => n).sort(), TOOLS.map((t) => t.def.name).sort());
 });
@@ -85,6 +95,7 @@ test("T4: each tool gives the same result as its route", async () => {
   const agent = issueAgentToken(api.agentFile);
   const root = apiBrain();
   for (const r of [api.root, root]) for (const question of ["What fills your week?", "What made-up place calms you?"]) addThread(r, { question, lens: "now" });
+  for (const r of [api.root, root]) seedGoals(r);
   const toolAgentFile = join(mkdtempSync(join(tmpdir(), "brain-agent-")), "agent-token");
   const seenHttp: Seen = {};
   const seenTool: Seen = {};
@@ -107,7 +118,7 @@ test("T4: each tool gives the same result as its route", async () => {
   }
 });
 
-const REST: Record<string, string> = { "/api/notes/": "path", "/api/drafts/": "id", "/api/reports/": "name" };
+const REST: Record<string, string> = { "/api/notes/": "path", "/api/drafts/": "id", "/api/reports/": "name", "/api/goals/": "path", "/api/decisions/": "path" };
 
 async function callRoute(base: string, token: string, method: string, path: string, prefix: boolean | undefined, args: Record<string, unknown>) {
   const fields = { ...args };
