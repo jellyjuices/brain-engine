@@ -40,10 +40,11 @@ export function pendingEntries(db: DatabaseSync, model: string): Pending[] {
 }
 
 export function storeVectors(db: DatabaseSync, model: string, items: Pending[], vectors: ArrayLike<number>[]) {
-  const put = db.prepare("INSERT OR REPLACE INTO vectors (id, hash, model, vec) VALUES (?,?,?,?)");
+  const put = db.prepare("INSERT OR REPLACE INTO vectors (id, hash, model, vec, at) VALUES (?,?,?,?,?)");
+  const at = Date.now();
   items.forEach((item, i) => {
     const vector = vectors[i];
-    if (vector) put.run(item.id, item.hash, model, new Uint8Array(toInt8(vector).buffer));
+    if (vector) put.run(item.id, item.hash, model, new Uint8Array(toInt8(vector).buffer), at);
   });
 }
 

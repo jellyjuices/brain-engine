@@ -5,7 +5,8 @@ import { buildCard, matchSubject } from "../reports/card.ts";
 import { summary } from "../core/notes.ts";
 import { loadAll, notePaths } from "../core/files.ts";
 import { areaBrief, areaMarkdown, todayMarkdown, todayReport, weeklyMarkdown, weeklyReport } from "../reports/reports.ts";
-import { list, search } from "../core/search.ts";
+import { changedVectors, feedModel, list, search } from "../core/search.ts";
+import type { NotesSinceResponse } from "./api-types.ts";
 import { dayList, ref } from "../todos/day-list.ts";
 import { lensPrivacy } from "../intake/lenses.ts";
 import { saveLensAnswer } from "../intake/lens-answers.ts";
@@ -19,23 +20,19 @@ export function health(root: string) {
   return { ok: true, version: pkg.version, note_count: notePaths(root).length };
 }
 
-export function notesSince(c: Ctx) {
+export function notesSince(c: Ctx): NotesSinceResponse {
   const raw = c.url.searchParams.get("since");
   const since = raw ? Date.parse(raw) : 0;
   if (Number.isNaN(since)) throw new HttpError(400, `"since" must be an ISO date or time.`);
+  const now = new Date().toISOString();
   const notes = loadAll(c.root).filter((n) => n.mtime >= since);
-  return { now: new Date().toISOString(), notes: notes.map((n) => noteJson(c.root, n)) };
+  const model = feedModel();
+  return { now, notes: notes.map((n) => noteJson(c.root, n)), model, vectors: changedVectors(c.root, since, model) };
 }
 
 export function oneNote(c: Ctx, rawPath: string) {
   const note = existingNote(c.root, safeNotePath(rawPath, false));
   return fullNoteJson(c.root, loadAll(c.root), note);
-}
-
-export function searchRoute(c: Ctx) {
-  const params = c.url.searchParams;
-  const limit = params.get("limit") ? Number(params.get("limit")) : undefined;
-  return search(c.root, params.get("q") ?? "", { type: params.get("type") ?? undefined, tag: params.get("tag") ?? undefined, area: params.get("area") ?? undefined, status: params.get("status") ?? undefined, limit });
 }
 
 /** Same JSON as `brain find --json`: the card and hits, or just hits when no subject matches. */

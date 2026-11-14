@@ -8,6 +8,7 @@ import { areasOf, descOf, type Note, summary, type Summary, tagsOf, titleOf, typ
 import { loadAll, notePaths, readNote, statMtime } from "./files.ts";
 import { type Embedder, MODEL, queryVector } from "./embed.ts";
 import { dropEntries, syncEntries, type EntryChanges } from "./search/entries.ts";
+import { feedVectors, type FeedVector } from "./search/feed.ts";
 import { recentNotes, type Filters } from "./search/filters.ts";
 import { findIn, type FindOptions, type FindResult, type NoteHit } from "./search/fused.ts";
 import { openIndex, prepareIndex } from "./search/schema.ts";
@@ -16,7 +17,11 @@ export { openIndex } from "./search/schema.ts";
 export { ftsQuery } from "./search/lists.ts";
 export { nameTier } from "../../shared/search/index.ts";
 export type { Filters } from "./search/filters.ts";
-export type { FindResult } from "./search/fused.ts";
+export type { FindResult, Meaning } from "./search/fused.ts";
+export { findHits, shortAnswer, type FindHit } from "./search/hits.ts";
+export { feedModel, routeEmbedder, useEmbedder } from "./search/query.ts";
+export type { FeedVector } from "./search/feed.ts";
+export type { AnswerCard } from "../../shared/search/index.ts";
 
 export type Hit = NoteHit;
 
@@ -101,6 +106,16 @@ export function findEntries(root: string, q: string, f: Filters = {}, opts: Part
 export async function find(root: string, q: string, f: Filters = {}, embedder: Embedder | null = null): Promise<FindResult> {
   const vector = await queryVector(embedder, q);
   return findEntries(root, q, f, { model: embedder?.model, queryVector: vector });
+}
+
+export function changedVectors(root: string, since: number, model: string): FeedVector[] {
+  updateIndex(root);
+  const db = openIndex(root);
+  try {
+    return feedVectors(db, model, since);
+  } finally {
+    db.close();
+  }
 }
 
 export function search(root: string, q: string, f: Filters = {}): Hit[] {

@@ -1,8 +1,10 @@
 import type { DatabaseSync } from "node:sqlite";
 import { fold, isJapanese } from "../../../shared/search/index.ts";
+import { closeness, typoWords } from "./typo.ts";
 
 const LIST_SIZE = 200;
 const MIN_TRIGRAM_SHARE = 0.5;
+const SHORT_SHARE = 0.75;
 
 export interface WordHit {
   id: string;
@@ -44,19 +46,28 @@ function isShortJapanese(q: string): boolean {
   return chars.length > 0 && chars.length < 3 && HAS_JAPANESE.test(q) && chars.every((c) => isJapanese(c) || /\s/.test(c));
 }
 
+function minShare(grams: number): number {
+  if (grams <= 2) return 1;
+  return grams <= 4 ? SHORT_SHARE : MIN_TRIGRAM_SHARE;
+}
+
 export function stringList(db: DatabaseSync, q: string): string[] {
   if (isShortJapanese(q)) return likeList(db, q);
   const grams = trigrams(q);
   if (!grams.length) return [];
   const match = grams.map((gram) => `"${gram}"`).join(" OR ");
   const rows = db.prepare("SELECT id, text FROM strings WHERE strings MATCH ? ORDER BY rank LIMIT ?").all(match, LIST_SIZE * 2) as { id: string; text: string }[];
+  const queryWords = typoWords(fold(q));
+  const need = minShare(grams.length);
   return rows
     .map((row, order) => {
       const text = fold(row.text);
-      return { id: row.id, order, share: grams.filter((gram) => text.includes(gram)).length / grams.length };
+      const share = grams.filter((gram) => text.includes(gram)).length / grams.length;
+      const close = closeness(queryWords, text);
+      return { id: row.id, order, share, fits: share >= need || !!close?.fits, score: share + (close?.near ?? share) };
     })
-    .filter((row) => row.share >= MIN_TRIGRAM_SHARE)
-    .sort((a, b) => b.share - a.share || a.order - b.order)
+    .filter((row) => row.share > 0 && row.fits)
+    .sort((a, b) => b.score - a.score || a.order - b.order)
     .slice(0, LIST_SIZE)
     .map((row) => row.id);
 }

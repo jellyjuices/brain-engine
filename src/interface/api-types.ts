@@ -1,13 +1,13 @@
 // Request and response shapes for every `brain serve` route. The MCP layer imports these: one tool per route.
 
-import type { Hit } from "../core/search.ts";
+import type { AnswerCard, FeedVector, FindHit, Meaning } from "../core/search.ts";
 import type { Issue } from "../core/schema.ts";
 import type { Relation } from "../core/relations.ts";
 import type { Card } from "../reports/card.ts";
 import type { DecisionView } from "../reports/decisions.ts";
 import type { GoalRef, GoalView } from "../reports/goals.ts";
 import type { Loop } from "../todos/todos.ts";
-import type { fullNoteJson } from "./server-context.ts";
+import type { fullNoteJson, noteJson } from "./server-context.ts";
 
 export type Caller = "owner" | "agent";
 
@@ -101,9 +101,20 @@ export interface UnsortedResponse {
   items: UnsortedItem[];
 }
 
+/** One hit per note, best first. `answer` is the top line, cited by path. `meaning` says how the meaning list ran. */
 export interface FindResponse {
   card?: Card;
-  hits: Hit[];
+  answer: AnswerCard | null;
+  meaning: Meaning;
+  hits: FindHit[];
+}
+
+/** The changes feed. `vectors` holds only entries embedded since `since`, int8 in base64; a new `model` means fetch all again. */
+export interface NotesSinceResponse {
+  now: string;
+  notes: ReturnType<typeof noteJson>[];
+  model: string;
+  vectors: FeedVector[];
 }
 
 export const TODO_VIEWS = ["today", "soon", "no-date", "on-hold", "by-goal", "all"] as const;
