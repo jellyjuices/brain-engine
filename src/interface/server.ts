@@ -12,6 +12,7 @@ import { DEFAULT_PORT, HttpError, loadToken, serveApp, tokenPath } from "./serve
 import { AGENT_RATE, agentTokenPath, callerOf, RateLimit } from "./server-agent.ts";
 import { snapshot, withCheck } from "./server-check.ts";
 import { matchRoute } from "./routes/table.ts";
+import { handleMcp, isMcp } from "./mcp/http.ts";
 
 export interface ServerOptions {
   agentTokenFile?: string;
@@ -52,6 +53,7 @@ export function createServer(root: string, token: string, opts: ServerOptions = 
   const agentFile = opts.agentTokenFile ?? agentTokenPath();
   const limit = new RateLimit(opts.agentRate ?? AGENT_RATE);
   return httpServer((req, res) => {
+    if (isMcp(req.url)) return void handleMcp(req, res, { root, agentFile, limit }).catch(() => send(res, 500, { error: "Something went wrong." }));
     if (!(req.url ?? "/").startsWith("/api/")) {
       try {
         return serveApp(req, res, token);

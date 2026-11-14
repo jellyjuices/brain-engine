@@ -23,6 +23,7 @@ export interface Api {
   close: () => void;
   root: string;
   agentFile: string;
+  base: string;
 }
 
 export async function startApi(opts: ServerOptions = {}, root = apiBrain()): Promise<Api> {
@@ -35,7 +36,7 @@ export async function startApi(opts: ServerOptions = {}, root = apiBrain()): Pro
     const res = await fetch(base + path, { method, headers: { ...(auth ? { Authorization: `Bearer ${auth}` } : {}), "Content-Type": "application/json" }, body: body === undefined ? undefined : JSON.stringify(body) });
     return { status: res.status, data: await res.json(), headers: res.headers };
   };
-  return { call, close: () => server.close(), root, agentFile };
+  return { call, close: () => server.close(), root, agentFile, base };
 }
 
 export async function withApi(fn: (api: Api) => Promise<void>, opts: ServerOptions = {}): Promise<void> {
