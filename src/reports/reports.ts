@@ -5,7 +5,7 @@ import { join, posix } from "node:path";
 import { addDays, descOf, DIRS, folderOf, type Note, str, summary, type Summary, tagsOf, titleOf, today, typeOf } from "../core/notes.ts";
 import { loadAll, writeAtomic } from "../core/files.ts";
 import { type Issue, loadSchema, validate } from "../core/schema.ts";
-import { allLoops, loopSummary, whenWord } from "../todos/loops.ts";
+import { allLoops, loopSummary, whenWord } from "../todos/todos.ts";
 import { MAX_WARN_LINES, mentionedTwice, unlinkedMentions } from "./mentions.ts";
 import { isOwnerWriter } from "../core/owner.ts";
 

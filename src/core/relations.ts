@@ -7,7 +7,7 @@
 // The index stores each line once; the other side is found by looking up `to`.
 
 import { extractLinks, type Note } from "./notes.ts";
-import { sectionRange } from "../todos/loops.ts";
+import { sectionRange } from "../../shared/line/index.ts";
 
 export const RELATION_HEADINGS = ["# People", "# Groups", "# Projects", "# Places", "# Things", "# Topics", "# Related"];
 

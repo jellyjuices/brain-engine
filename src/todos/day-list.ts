@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { DIRS, eventDue, titleOf, today } from "../core/notes.ts";
 import { loadAll, readNote, writeAtomic } from "../core/files.ts";
-import { allLoops } from "./loops.ts";
+import { allLoops } from "./todos.ts";
 
 export type Group = "overdue" | "today" | "waiting";
 export interface Item {

@@ -3,8 +3,11 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { applyTriage, capture } from "../src/capture/actions.ts";
-import { addLoop, allLoops, appendToSection, completeLoop, formatLoop, parseLoopLine } from "../src/todos/loops.ts";
-import { nextDue, parseEvery } from "../src/todos/repeat.ts";
+import { addLoop, allLoops, completeLoop } from "../src/todos/todos.ts";
+import { nextDue } from "../src/todos/repeat.ts";
+import { appendToSection, fieldsOf, formatTodoLine, parseEvery, parseTodoLine } from "../shared/line/index.ts";
+
+const fieldsFor = (line: string) => fieldsOf(parseTodoLine(line)!);
 import { absorb, newSubject, planAbsorb, suggestTarget } from "../src/todos/absorb.ts";
 import { dump } from "../src/core/notes.ts";
 import { loadAll, readNote } from "../src/core/files.ts";
@@ -20,11 +23,9 @@ const sorted = (root: string, text: string, d: { outcome: "today" | "date" | "so
 };
 
 test("loop lines parse and format both ways", () => {
-  const l = parseLoopLine("- [ ] File Toronto expenses · due 2026-11-08")!;
-  assert.deepEqual(l, { text: "File Toronto expenses", done: false, due: "2026-11-08" });
-  assert.equal(formatLoop(l), "- [ ] File Toronto expenses · due 2026-11-08");
-  assert.deepEqual(parseLoopLine("- [x] Book a dentist · done 2026-11-10"), { text: "Book a dentist", done: true, doneAt: "2026-11-10" });
-  assert.equal(parseLoopLine("- Just a bullet"), null);
+  assert.deepEqual(fieldsFor("- [ ] File Toronto expenses · due 2026-11-08"), { text: "File Toronto expenses", done: false, due: "2026-11-08" });
+  assert.deepEqual(fieldsFor("- [x] Book a dentist · done 2026-11-10"), { text: "Book a dentist", done: true, doneAt: "2026-11-10" });
+  assert.equal(parseTodoLine("- Just a bullet"), null);
 });
 
 test("appendToSection adds under the heading, or makes the heading", () => {
@@ -96,9 +97,9 @@ test("the inbox count leaves out sorted notes", () => {
 });
 
 test("repeat rules parse, and the next due date steps forward", () => {
-  const l = parseLoopLine("- [ ] Pay rent · due 2026-12-01 · every month")!;
-  assert.deepEqual(l, { text: "Pay rent", done: false, due: "2026-12-01", every: "month" });
-  assert.equal(formatLoop(l), "- [ ] Pay rent · due 2026-12-01 · every month");
+  const line = "- [ ] Pay rent · due 2026-12-01 · every month";
+  assert.deepEqual(fieldsFor(line), { text: "Pay rent", done: false, due: "2026-12-01", every: "month" });
+  assert.equal(formatTodoLine(parseTodoLine(line)!), line);
   assert.equal(parseEvery("every fortnight"), null);
   assert.equal(parseEvery("every 0 days"), null);
   assert.equal(nextDue("2 weeks", "2026-11-05", "2026-11-05"), "2026-11-19");
@@ -114,7 +115,7 @@ test("repeat rules parse, and the next due date steps forward", () => {
   assert.equal(nextDue("week when done", "2026-10-02", "2026-11-05"), "2026-11-12"); // counts from today
   assert.equal(parseEvery("every week on the 3rd"), null);
   assert.equal(parseEvery("every month on the 32nd"), null);
-  assert.equal(parseLoopLine("- [ ] Water plants · due 2026-11-06 · every 3 days when done")!.every, "3 days when done");
+  assert.equal(fieldsFor("- [ ] Water plants · due 2026-11-06 · every 3 days when done").every, "3 days when done");
 });
 
 test("done on a repeating loop ticks it and adds the next one", () => {
@@ -130,8 +131,8 @@ test("done on a repeating loop ticks it and adds the next one", () => {
 });
 
 test("old When words and the old heading still read as the new words", () => {
-  assert.equal(parseLoopLine("- [ ] Chase the MRI · do-now")!.outcome, "today");
-  assert.equal(parseLoopLine("- [ ] Hear back · hand-off")!.outcome, "waiting");
-  assert.equal(parseLoopLine("- [ ] Learn Japanese · park")!.outcome, "someday");
-  assert.deepEqual(parseLoopLine("- [ ] File expenses · due 2026-11-08 · schedule"), { text: "File expenses", done: false, due: "2026-11-08" });
+  assert.equal(fieldsFor("- [ ] Chase the MRI · do-now").outcome, "today");
+  assert.equal(fieldsFor("- [ ] Hear back · hand-off").outcome, "waiting");
+  assert.equal(fieldsFor("- [ ] Learn Japanese · park").outcome, "someday");
+  assert.deepEqual(fieldsFor("- [ ] File expenses · due 2026-11-08 · schedule"), { text: "File expenses", done: false, due: "2026-11-08" });
 });

@@ -1,0 +1,20 @@
+[
+  {"line":"- [ ] Water the fern","parsed":{"done":false,"text":"Water the fern","tokens":[]}},
+  {"line":"- [ ] File the lamp receipts · due 2026-11-08","parsed":{"done":false,"text":"File the lamp receipts","tokens":[{"key":"due","value":"2026-11-08"}]}},
+  {"line":"- [x] Return the library book · done 2026-11-10","parsed":{"done":true,"text":"Return the library book","tokens":[{"key":"done","value":"2026-11-10"}]}},
+  {"line":"- [ ] Pay the studio rent · due 2026-12-01 · every month","parsed":{"done":false,"text":"Pay the studio rent","tokens":[{"key":"due","value":"2026-12-01"},{"key":"every","value":"month"}]}},
+  {"line":"- [ ] Rinse the filter · due 2026-11-06 · every 3 days when done","parsed":{"done":false,"text":"Rinse the filter","tokens":[{"key":"due","value":"2026-11-06"},{"key":"every","value":"3 days when done"}]}},
+  {"line":"- [ ] Sketch the garden plan · someday","parsed":{"done":false,"text":"Sketch the garden plan","tokens":[{"key":"someday"}]}},
+  {"line":"- [ ] Hear back on the quote · waiting · with [Pat Doe](../people/pat-doe.md)","parsed":{"done":false,"text":"Hear back on the quote","tokens":[{"key":"waiting"},{"key":"with","value":"[Pat Doe](../people/pat-doe.md)"}]}},
+  {"line":"- [ ] Ask about the paint · with [Pat Doe](../people/pat-doe.md) · re [Paint](../topics/paint.md) · due 2026-11-20","parsed":{"done":false,"text":"Ask about the paint","tokens":[{"key":"with","value":"[Pat Doe](../people/pat-doe.md)"},{"key":"re","value":"[Paint](../topics/paint.md)"},{"key":"due","value":"2026-11-20"}]}},
+  {"line":"- [ ] Draft the zine outline · toward [Print a zine](../goals/print-a-zine.md)","parsed":{"done":false,"text":"Draft the zine outline","tokens":[{"key":"toward","value":"[Print a zine](../goals/print-a-zine.md)"}]}},
+  {"line":"- [ ] Call the bike shop · check","parsed":{"done":false,"text":"Call the bike shop","tokens":[{"key":"check"}]}},
+  {"line":"- [ ] Tidy the shed · about the weekend","parsed":{"done":false,"text":"Tidy the shed","tokens":[{"key":"about","value":"the weekend"}]}},
+  {"line":"- [ ] Bake rye bread · energy low · due 2026-11-15","parsed":{"done":false,"text":"Bake rye bread","tokens":[{"raw":"energy low"},{"key":"due","value":"2026-11-15"}]}},
+  {"line":"- [ ] Mend the fence · check · due 2026-11-18 · spot by the gate","parsed":{"done":false,"text":"Mend the fence","tokens":[{"key":"check"},{"key":"due","value":"2026-11-18"},{"raw":"spot by the gate"}]}},
+  {"line":"- [x] Old kettle · done 2026-11-02 · dropped","parsed":{"done":true,"text":"Old kettle","tokens":[{"key":"done","value":"2026-11-02"},{"key":"dropped"}]}},
+  {"line":"- [ ] Paint the door · due soon","parsed":{"done":false,"text":"Paint the door","tokens":[{"raw":"due soon"}]}},
+  {"line":"- [ ] Fold the maps · every fortnight","parsed":{"done":false,"text":"Fold the maps","tokens":[{"raw":"every fortnight"}]}},
+  {"line":"- [ ] Clean the gutters · today · due 2026-11-14","parsed":{"done":false,"text":"Clean the gutters","tokens":[{"key":"today"},{"key":"due","value":"2026-11-14"}]}},
+  {"line":"- [ ] Read the manual · re not a link","parsed":{"done":false,"text":"Read the manual","tokens":[{"raw":"re not a link"}]}}
+]

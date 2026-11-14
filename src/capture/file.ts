@@ -11,7 +11,7 @@ import { posix } from "node:path";
 import { DIRS, folderOf, type Meta, type Note, str, titleOf, today, typeOf } from "../core/notes.ts";
 import { moveNote, readNote, slugify, uniquePath } from "../core/files.ts";
 import { log } from "../core/log.ts";
-import { addLoop, addNoteLine } from "../todos/loops.ts";
+import { addLoop, addNoteLine } from "../todos/todos.ts";
 import { captureText, suggestTarget } from "../todos/absorb.ts";
 import { change } from "../todos/undo.ts";
 import { parseWhen } from "../todos/when-words.ts";

@@ -7,7 +7,7 @@
 // (like the health history) show on the person's card.
 
 import { DIRS, eventDue, extractLinks, folderOf, summary, titleOf, today, typeOf, type Note, type Summary } from "../core/notes.ts";
-import { loopsIn, type Loop } from "../todos/loops.ts";
+import { loopsIn, type Loop } from "../todos/todos.ts";
 import { relationsOf, todosNaming } from "../core/index-links.ts";
 
 export const SUBJECT_TYPES = ["Area", "Project", "Person", "Group", "Place", "Thing", "Topic", "Event", "Note", "Lens"];

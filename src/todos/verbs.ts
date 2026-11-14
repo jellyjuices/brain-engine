@@ -14,23 +14,23 @@ import { type Note, titleOf, today, typeOf } from "../core/notes.ts";
 import { loadAll, readNote, writeNote } from "../core/files.ts";
 import { log, type UndoStep } from "../core/log.ts";
 import { newNote } from "../capture/actions.ts";
-import { addNoteLine, formatLoop, parseLoopLine } from "./loops.ts";
+import { addNoteLine } from "./todos.ts";
+import { dropTodo, fieldsOf, formatTodoLine, parseTodoLine, tickTodo, type TodoLine, updateTodo } from "../../shared/line/index.ts";
 import { nextDue } from "./repeat.ts";
 import { parseWhen, personNamed, subjectTitled } from "./when-words.ts";
 import { change, diffLines } from "./undo.ts";
 import { type Item, resolve } from "./day-list.ts";
 
 /** Rewrite the open to-do line with this text in a note. fn returns the new lines for it. */
-type Line = NonNullable<ReturnType<typeof parseLoopLine>>;
-function editTodo(root: string, item: Item, fn: (l: Line) => string[]): void {
+function editTodo(root: string, item: Item, fn: (l: TodoLine) => string[]): void {
   const note = readNote(root, item.path);
   const lines = note.body.split("\n");
   const i = lines.findIndex((line) => {
-    const todo = parseLoopLine(line);
+    const todo = parseTodoLine(line);
     return todo && !todo.done && todo.text === item.text;
   });
   if (i === -1) throw new Error(`"${item.text}" is no longer open in ${item.path}. Run brain to see the list again.`);
-  lines.splice(i, 1, ...fn(parseLoopLine(lines[i])!));
+  lines.splice(i, 1, ...fn(parseTodoLine(lines[i])!));
   writeNote(root, item.path, note.meta, lines.join("\n"));
 }
 
@@ -71,11 +71,12 @@ export function done(root: string, ref: string, extra: Extra = {}): { item: Item
       return extra.also?.();
     }
     editTodo(root, item, (l) => {
-      const ticked = formatLoop({ ...l, done: true, doneAt: today(), every: undefined });
+      const ticked = formatTodoLine(tickTodo(l, today()));
       const note = noteLineFor(extra.note);
-      if (!l.every) return [ticked, ...(note ? [note] : [])];
-      next = nextDue(l.every, l.due ?? today());
-      return [ticked, ...(note ? [note] : []), formatLoop({ text: l.text, due: next, every: l.every, outcome: l.outcome, with: l.with, re: l.re })];
+      const { every, due } = fieldsOf(l);
+      if (!every) return [ticked, ...(note ? [note] : [])];
+      next = nextDue(every, due ?? today());
+      return [ticked, ...(note ? [note] : []), formatTodoLine(updateTodo(l, { due: next }))];
     });
     extra.also?.();
   });
@@ -112,7 +113,8 @@ export function move(root: string, ref: string, when: string, opts: { who?: stri
     editTodo(root, item, (l) => {
       const link = subject && `[${titleOf(subject)}](${posix.relative(posix.dirname(item.path), subject.path)})`;
       const add = (xs: string[] | undefined) => (link && !(xs ?? []).includes(link) ? [...(xs ?? []), link] : xs);
-      return [formatLoop({ ...l, due: w.due, outcome: w.outcome, with: who ? add(l.with) : l.with, re: what ? add(l.re) : l.re })];
+      const fields = fieldsOf(l);
+      return [formatTodoLine(updateTodo(l, { due: w.due, outcome: w.outcome, with: who ? add(fields.with) : fields.with, re: what ? add(fields.re) : fields.re }))];
     });
   });
   return { item, line: `Moved: ${item.text}${where(item)} → ${label} · brain undo` };
@@ -127,7 +129,7 @@ export function drop(root: string, ref: string, extra: Extra = {}): { item: Item
     }
     editTodo(root, item, (l) => {
       const note = noteLineFor(extra.note);
-      return [formatLoop({ ...l, done: true, doneAt: today(), every: undefined, dropped: true }), ...(note ? [note] : [])];
+      return [formatTodoLine(dropTodo(l, today())), ...(note ? [note] : [])];
     });
   });
   return { item, line: `Deleted: ${item.text}${where(item)} · brain undo` };
@@ -143,7 +145,7 @@ export function moveMany(root: string, items: Item[], when: string, now = today(
     if (item.kind === "event" && !w.due) { skipped.push(item); continue; }
     const before = readFileSync(join(root, item.path), "utf8");
     if (item.kind === "event") editEvent(root, item, { date: w.due! });
-    else editTodo(root, item, (l) => [formatLoop({ ...l, due: w.due, outcome: w.outcome })]);
+    else editTodo(root, item, (l) => [formatTodoLine(updateTodo(l, { due: w.due, outcome: w.outcome }))]);
     steps.push(diffLines(item.path, before, readFileSync(join(root, item.path), "utf8")));
     moved.push(item);
   }

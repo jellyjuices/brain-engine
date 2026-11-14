@@ -4,7 +4,7 @@
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { loopsIn } from "../todos/loops.ts";
+import { loopsIn } from "../todos/todos.ts";
 import { relationsIn } from "./relations.ts";
 import { descOf, type Note, str, summary, type Summary, tagsOf, titleOf, typeOf } from "./notes.ts";
 import { loadAll, notePaths, readNote, statMtime } from "./files.ts";

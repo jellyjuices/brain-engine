@@ -3,7 +3,8 @@ import { DIRS, folderOf, type Meta, type Note, str, titleOf, today, typeOf } fro
 import { loadAll, moveNote, readNote, slugify, uniquePath, writeNote } from "../core/files.ts";
 import { log } from "../core/log.ts";
 import { existsSync } from "node:fs";
-import { addLoop, addNoteLine, live, toOutcome } from "./loops.ts";
+import { addLoop, addNoteLine, live } from "./todos.ts";
+import { toOutcome } from "../../shared/line/index.ts";
 
 export interface AbsorbPlan {
   capture: string;

@@ -2,7 +2,7 @@ import type { Card } from "../reports/card.ts";
 import { addDays, DIRS, eventDue, folderOf, type Note, titleOf, today, typeOf } from "../core/notes.ts";
 import { loadAll } from "../core/files.ts";
 import { readLog } from "../core/log.ts";
-import { allLoops } from "../todos/loops.ts";
+import { allLoops } from "../todos/todos.ts";
 import { dayList, type Item } from "../todos/day-list.ts";
 import type { When } from "../capture/file.ts";
 

@@ -1,27 +1,5 @@
 import { today } from "../core/notes.ts";
-
-const DAYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
-type Base = { n: number; unit: "day" | "week" | "month" | "year"; dayOfMonth?: number } | { weekday: number } | { workday: true };
-type Rule = Base & { whenDone?: boolean };
-
-/** Read "every 2 weeks", "every mon", "every weekday", "every month on the 1st", "... when done". Null when it is not a rule. */
-export function parseEvery(t: string): Rule | null {
-  let s = t.trim().toLowerCase().replace(/\s+/g, " ");
-  const whenDone = s.endsWith(" when done");
-  if (whenDone) s = s.slice(0, -10);
-  const base = ((): Base | null => {
-    if (s === "every weekday") return { workday: true };
-    const m = s.match(/^every (?:(\d+) )?(day|week|month|year)s?(?: on the (\d{1,2})(?:st|nd|rd|th))?$/);
-    if (m) {
-      const count = Number(m[1] ?? 1), dom = m[3] ? Number(m[3]) : undefined;
-      if (count < 1 || (dom !== undefined && (m[2] !== "month" || dom < 1 || dom > 31))) return null;
-      return { n: count, unit: m[2] as "day", dayOfMonth: dom };
-    }
-    const match = s.match(/^every (sun|mon|tue|wed|thu|fri|sat)[a-z]*$/);
-    return match ? { weekday: DAYS.indexOf(match[1]) } : null;
-  })();
-  return base && { ...base, whenDone };
-}
+import { type EveryRule as Rule, parseEvery } from "../../shared/line/index.ts";
 
 const iso = (d: Date) => d.toISOString().slice(0, 10);
 const utc = (s: string) => new Date(`${s}T00:00:00Z`);

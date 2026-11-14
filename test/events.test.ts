@@ -5,7 +5,7 @@ import { writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { newNote } from "../src/capture/actions.ts";
 import { loadAll, readNote } from "../src/core/files.ts";
-import { allLoops } from "../src/todos/loops.ts";
+import { allLoops } from "../src/todos/todos.ts";
 import { areaBrief, check, todayReport } from "../src/reports/reports.ts";
 import { makeBrain as fixture } from "./fixture.ts";
 

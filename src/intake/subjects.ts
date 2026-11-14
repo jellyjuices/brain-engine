@@ -9,7 +9,8 @@
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, join, posix } from "node:path";
 import { newNote } from "../capture/actions.ts";
-import { addNoteLine, appendToSection } from "../todos/loops.ts";
+import { addNoteLine } from "../todos/todos.ts";
+import { appendToSection } from "../../shared/line/index.ts";
 import { subjectsNamed } from "../capture/file.ts";
 import { type Note, nowStamp, titleOf, today, typeOf } from "../core/notes.ts";
 import { loadAll, readNote, writeAtomic, writeNote } from "../core/files.ts";

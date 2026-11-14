@@ -2,7 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { formatLoop, loopsIn, parseLoopLine } from "../src/todos/loops.ts";
+import { loopsIn } from "../src/todos/todos.ts";
+import { fieldsOf, formatTodoLine, parseTodoLine, tickTodo } from "../shared/line/index.ts";
 import { readNote } from "../src/core/files.ts";
 import { parseRelationLine, relationsIn } from "../src/core/relations.ts";
 import { search } from "../src/core/search.ts";
@@ -31,12 +32,13 @@ test("relations are read only under relation headings", () => {
 
 test("with and re parts are parsed and kept when a line is rewritten", () => {
   const line = "- [ ] Ask about Advil · with [Dr Lee](../people/dr-lee.md) · re [Advil](../topics/advil.md) · due 2026-11-20";
-  const l = parseLoopLine(line)!;
-  assert.equal(l.text, "Ask about Advil");
-  assert.deepEqual(l.with, ["[Dr Lee](../people/dr-lee.md)"]);
-  assert.deepEqual(l.re, ["[Advil](../topics/advil.md)"]);
-  assert.equal(formatLoop(l), line);
-  const done = formatLoop({ ...l, done: true, doneAt: "2026-11-21" });
+  const l = parseTodoLine(line)!;
+  const fields = fieldsOf(l);
+  assert.equal(fields.text, "Ask about Advil");
+  assert.deepEqual(fields.with, ["[Dr Lee](../people/dr-lee.md)"]);
+  assert.deepEqual(fields.re, ["[Advil](../topics/advil.md)"]);
+  assert.equal(formatTodoLine(l), line);
+  const done = formatTodoLine(tickTodo(l, "2026-11-21"));
   assert.match(done, /^- \[x\] Ask about Advil · with \[Dr Lee\]\(\.\.\/people\/dr-lee\.md\) · re \[Advil\]/);
 });
 
