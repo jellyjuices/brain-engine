@@ -17,7 +17,7 @@
     "size": "node size-check.mjs src bin",
     "check": "npm run typecheck && npm run size",
     "privacy": "node privacy-check.mjs",
-    "gates": "f=0; npm test || f=1; npm run check || f=1; npm run privacy || f=1; for d in web/app web/worker design-system; do npm --prefix $d run typecheck || f=1; done; npm --prefix web/app test || f=1; npm --prefix web/app run lint || f=1; npm --prefix web/worker test || f=1; npm --prefix web/worker run lint || f=1; exit $f"
+    "gates": "f=0; npm test || f=1; npm run check || f=1; npm run privacy || f=1; for d in web/app web/worker design-system; do npm --prefix $d run typecheck || f=1; done; npm --prefix web/app test || f=1; npm --prefix web/app run lint || f=1; npm --prefix web/app run format:check || f=1; npm --prefix web/app run size || f=1; npm --prefix web/app run build || f=1; npm --prefix web/worker test || f=1; npm --prefix web/worker run lint || f=1; npm --prefix web/worker run size || f=1; exit $f"
   },
   "dependencies": {
     "@clack/prompts": "^1.8.1",

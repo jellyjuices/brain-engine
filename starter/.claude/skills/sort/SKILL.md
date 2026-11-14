@@ -35,4 +35,4 @@ After the owner says yes to all rows, or the rows they name, write each line in 
 
 ## 5. Close
 
-Run `brain check`. Fix what it reports, then run it again. Then run `brain log "sorted N journal entries"`. Tell the owner in one line what went where.
+The Stop hook runs `brain check`. Fix what it reports. Then run `brain log "sorted N journal entries"`. Tell the owner in one line what went where.

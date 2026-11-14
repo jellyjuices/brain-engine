@@ -49,7 +49,7 @@ Read the file for the area you work in. Claude Code loads it on its own.
 
 ## Reading and writing the brain
 
-Use the brain's MCP tools when they are there. Until then, use the terminal `brain` command. It is legacy and answers from the index, which costs far fewer tokens than opening notes. `brain help` lists every command.
+Use the `brain` command. It answers from the index, which costs far fewer tokens than opening notes. `brain help` lists every command.
 
 | To | Run |
 | --- | --- |
@@ -62,7 +62,7 @@ Use the brain's MCP tools when they are there. Until then, use the terminal `bra
 
 ## Words the owner sees
 
-Use only these words with the owner: **add, done, move, delete, find, to-do, note, subject, goal, decision, sort, view, journal, intake, When, About what.** Never say absorb, triage, loop or outcome. You may still run commands that use them.
+Use only these words with the owner: **add, done, move, delete, find, to-do, note, subject, goal, decision, sort, view, journal, intake, When, About what.** Never say absorb, triage, loop, outcome, drop, park or schedule. You may still run commands that use them.
 
 When you sort, ask **About what?** first, then **When?**. The tokens each answer writes are in [notes.md](.claude/rules/notes.md).
 

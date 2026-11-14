@@ -7,8 +7,8 @@ This repo is the code for a second brain. The notes live in a separate brain fol
 | Part | Where | Notes |
 | --- | --- | --- |
 | `brain` command | `bin/brain.ts`, `src/` | Legacy terminal CLI. It stays until the MCP server covers what agents need. Rules: [brain-cli.md](.claude/rules/brain-cli.md) |
-| `brain serve` | `src/interface/server*.ts` | HTTP server for the app and the menu bar. The MCP server for agents lives here, at `/mcp` |
-| Phone app | `web/app/` | Rules: [web.md](.claude/rules/web.md), [web-ui.md](.claude/rules/web-ui.md), [web-tests.md](.claude/rules/web-tests.md). On the phone: [phone-preview.md](.claude/rules/phone-preview.md) |
+| `brain serve` | `src/interface/server*.ts` | HTTP server for the app and the menu bar. The MCP server for agents is built at `/mcp` inside `brain serve`. It is not running yet |
+| Phone app | `web/app/` | Rules: [web.md](.claude/rules/web.md), [web-ui.md](.claude/rules/web-ui.md), [web-tests.md](.claude/rules/web-tests.md). On the phone, loaded for web UI work: [phone-preview.md](.claude/rules/phone-preview.md) |
 | Worker | `web/worker/` | Deploy values come from `~/.config/brain/web.env`. See [docs/phone-setup.md](docs/phone-setup.md) |
 | Design system | `design-system/` | Tokens and Storybook |
 | Jobs | `launchd/*.plist`, `daily.sh`, `swiftbar/` | Templates; `setup.sh` fills the `__WORDS__` |
@@ -29,6 +29,7 @@ Intent for every part: [docs/intent/README.md](docs/intent/README.md). When the 
 ## Hard rules
 
 - **Never deploy.** Do not run `npm run deploy`, `wrangler deploy` or `web/go-live.sh`. Reason: a deploy is public. The owner does it. `refuse-under-agent.mjs` and `.claude/settings.json` block it too.
+- **Commit by path. Never push.** The owner pushes.
 - **Never edit a brain folder from here** except through `setup.sh` or the `brain` command.
 - Never run a dev server or Storybook. Verify with typecheck, lint, tests and build.
 
@@ -48,4 +49,4 @@ Intent for every part: [docs/intent/README.md](docs/intent/README.md). When the 
 
 ## Words the owner sees
 
-Use only these words in any screen, menu, help text or agent doc: **add, done, move, delete, find, to-do, note, subject, goal, decision, sort, view, journal, intake, When, About what.** Never absorb, triage, loop or outcome. Code names may still use them. The list comes from [docs/intent/README.md](docs/intent/README.md).
+Use only these words in any screen, menu, help text or agent doc: **add, done, move, delete, find, to-do, note, subject, goal, decision, sort, view, journal, intake, When, About what.** Never say absorb, triage, loop, outcome, drop, park or schedule. Code names may still use them. The list comes from [docs/intent/README.md](docs/intent/README.md).
