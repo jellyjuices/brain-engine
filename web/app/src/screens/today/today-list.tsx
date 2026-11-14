@@ -1,7 +1,7 @@
 import "./today.css";
 import { List } from "@/components/row/list.tsx";
 import { TodoRow } from "@/components/todo-row/todo-row.tsx";
-import { makeTodo } from "@/lib/notes/loops.ts";
+import { makeTodo } from "@/lib/notes/todos.ts";
 import { GROUPS, type TodayData } from "@/lib/notes/today.ts";
 import { Empty } from "@/components/empty/empty.tsx";
 import { copy } from "@/content/index.ts";

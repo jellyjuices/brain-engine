@@ -1,4 +1,4 @@
-import { allLoops, todoRef } from "./loops.ts";
+import { allLoops, todoRef } from "./todos.ts";
 import { eventDue, isArchived, type StoredNote } from "./model.ts";
 import { copy } from "@/content/index.ts";
 

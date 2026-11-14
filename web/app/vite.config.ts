@@ -48,9 +48,22 @@ function serviceWorker(): Plugin {
 
 export default defineConfig({
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
-  resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "@shared": fileURLToPath(new URL("../../shared", import.meta.url)),
+    },
+  },
   plugins: [react(), serviceWorker()],
-  server: { proxy: { "/api": "http://127.0.0.1:8788" } },
+  server: {
+    proxy: { "/api": "http://127.0.0.1:8788" },
+    fs: {
+      allow: [
+        fileURLToPath(new URL(".", import.meta.url)),
+        fileURLToPath(new URL("../../shared", import.meta.url)),
+      ],
+    },
+  },
   build: { outDir: "dist", emptyOutDir: true, target: "es2022", assetsInlineLimit: 0 },
   test: {
     environment: "happy-dom",

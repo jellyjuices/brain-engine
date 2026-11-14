@@ -1,5 +1,5 @@
 import type { Card, CardLine, CardRelation, CardSummary, CardTodo } from "./card-types.ts";
-import { loopsIn, todoRef } from "./loops.ts";
+import { loopsIn, todoRef } from "./todos.ts";
 import { relationsIn } from "./relations.ts";
 import {
   eventDue,

@@ -1,9 +1,10 @@
+import type { Outcome } from "@shared/line/index.ts";
 import { copy } from "@/content/index.ts";
 export interface WhenPreview {
   kind: string;
   label: string;
   due?: string;
-  outcome?: string;
+  outcome?: Outcome;
 }
 
 const DAYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];

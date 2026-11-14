@@ -1,4 +1,4 @@
-import { loopsIn } from "./loops.ts";
+import { loopsIn } from "./todos.ts";
 import { isArchived, slugOf, type StoredNote } from "./model.ts";
 
 export interface FolderRow {

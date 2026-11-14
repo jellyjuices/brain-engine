@@ -1,4 +1,4 @@
-import { appendToSection } from "@/lib/notes/loops.ts";
+import { appendToSection } from "@shared/line/index.ts";
 import type { StoredNote } from "@/lib/notes/model.ts";
 import { getNote, putNotes } from "@/lib/storage/store.ts";
 import { queueBirthday, queueEdit } from "@/lib/sync/writes.ts";

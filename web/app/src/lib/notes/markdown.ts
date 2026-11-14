@@ -1,4 +1,4 @@
-import { LOOPS_HEADING } from "./loops.ts";
+import { LOOPS_HEADING } from "@shared/line/index.ts";
 import { noteHref, resolveLink } from "./model.ts";
 
 export interface ListItem {

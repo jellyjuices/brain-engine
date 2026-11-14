@@ -12,7 +12,8 @@
     "isolatedModules": true,
     "types": ["vite/client"],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@shared/*": ["../../shared/*"]
     },
     "jsx": "react-jsx",
     "resolveJsonModule": true

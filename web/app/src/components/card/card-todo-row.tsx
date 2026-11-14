@@ -1,5 +1,5 @@
 import { TodoRow } from "@/components/todo-row/todo-row.tsx";
-import { makeTodo } from "@/lib/notes/loops.ts";
+import { makeTodo } from "@/lib/notes/todos.ts";
 import { todayIso } from "@/lib/notes/model.ts";
 import type { CardTodo } from "@/lib/notes/card-types.ts";
 
