@@ -58,17 +58,16 @@ test("brain add without a prefix or a match goes to the inbox with a guess", () 
   assert.match(read(root, "people/omar.md"), new RegExp(`- ${today()} · Omar moved to Vancouver`));
 });
 
-test("one-step sort writes the line with · with, and archives the capture with absorbed_into, no outcome", () => {
+test("one-step sort writes the line with · with, and deletes the capture, with nothing left in the archive", () => {
   const root = brain();
   const cap = capture(root, { text: "Ask Dr about Advil with Omar" });
   const notes = loadAll(root);
   assert.deepEqual(subjectsNamed(notes, "Ask Dr about Advil with Omar").map((n) => n.path), ["people/family-doctor.md", "people/omar.md", "topics/advil.md"]);
   const r = sortCapture(root, notes, cap.path, "people/family-doctor.md", { kind: "waiting" }, { with: ["people/omar.md"] });
   assert.match(read(root, "people/family-doctor.md"), /- \[ \] Ask Dr about Advil with Omar · with \[Omar\]\(omar\.md\) · waiting/);
+  assert.equal(r.deleted, cap.path);
   assert.ok(!existsSync(join(root, cap.path)));
-  const archived = read(root, r.archived);
-  assert.match(archived, /absorbed_into: people\/family-doctor\.md/);
-  assert.doesNotMatch(archived, /outcome/);
+  assert.deepEqual(readdirSync(join(root, ".archive")), []);
 });
 
 test('"Not a to-do" writes a dated note line', () => {
