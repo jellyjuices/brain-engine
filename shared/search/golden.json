@@ -1,0 +1,21 @@
+{
+  "notes": [
+    {"path":"people/pat-doe.md","text":"---\ntype: Person\ntitle: \"Pat Doe\"\ndescription: \"Friend from the pottery class.\"\naliases: [Patty]\n---\n\n# Pat Doe\n\n## Facts\n\n- 2026-03-14 · Birthday party at the lake house · with [Pat Doe](pat-doe.md)\nLikes [green tea](../topics/tea.md) and **long walks**.\n\n## To-dos\n\n- [ ] Buy a gift for Pat · due 2026-03-10\n- [x] Send the party invite · done 2026-02-20\n"},
+    {"path":"journal/2026-11-02.md","text":"---\ntype: Journal\n---\n\n# 2026-11-02\n\nWent to the dentist today. 歯医者は東京駅の近く。\n\n- [ ] Book the next cleaning · due 2027-05-02\n"},
+    {"path":"areas/health.md","text":"---\ntype: Area\ntitle: Health\ndescription: \"Checkups and care.\"\naliases:\n  - Salud\n---\n\n# What this covers\n\nLa cita es en la clínica del centro.\n\n# To-dos\n\n- [ ] Cita con el médico · due 2026-11-20 · re [Health](health.md)\n- [ ] Refill the vitamins · someday\n"}
+  ],
+  "entries": [
+    {"id":"17ba78957523d2","hash":"1a6bbaa65a5dea","kind":"card","subject":"people/pat-doe.md","title":"Pat Doe","names":["pat doe","Patty"],"date":null,"done":null,"text":"Pat Doe\nFriend from the pottery class.","embedText":"Pat Doe\nFriend from the pottery class.","line":1},
+    {"id":"1bcf089f1ceb8c","hash":"1b0df5a8fd16ab","kind":"section","subject":"people/pat-doe.md","title":"Pat Doe","names":[],"date":null,"done":null,"text":"## Facts\nLikes [green tea](../topics/tea.md) and **long walks**.","embedText":"Facts\nLikes green tea and long walks.","line":10},
+    {"id":"04a308fd2febf3","hash":"076ecb61463509","kind":"dated","subject":"people/pat-doe.md","title":"Pat Doe","names":[],"date":"2026-03-14","done":null,"text":"- 2026-03-14 · Birthday party at the lake house · with [Pat Doe](pat-doe.md)","embedText":"Birthday party at the lake house","line":12},
+    {"id":"1c332bff77ead3","hash":"1926573203f764","kind":"todo","subject":"people/pat-doe.md","title":"Pat Doe","names":[],"date":"2026-03-10","done":false,"text":"- [ ] Buy a gift for Pat · due 2026-03-10","embedText":"Buy a gift for Pat","line":17},
+    {"id":"1837f93e561180","hash":"1f5f9e3d709569","kind":"todo","subject":"people/pat-doe.md","title":"Pat Doe","names":[],"date":"2026-02-20","done":true,"text":"- [x] Send the party invite · done 2026-02-20","embedText":"Send the party invite","line":18},
+    {"id":"1db5eb926348ca","hash":"0f8559c5e05e9f","kind":"card","subject":"journal/2026-11-02.md","title":"2026-11-02","names":["2026 11 02"],"date":"2026-11-02","done":null,"text":"2026-11-02","embedText":"2026-11-02","line":1},
+    {"id":"07d53a69a0f5d0","hash":"0ceebea36d0a58","kind":"section","subject":"journal/2026-11-02.md","title":"2026-11-02","names":[],"date":"2026-11-02","done":null,"text":"# 2026-11-02\nWent to the dentist today. 歯医者は東京駅の近く。","embedText":"2026-11-02\nWent to the dentist today. 歯医者は東京駅の近く。","line":5},
+    {"id":"0541b78dd5e67d","hash":"13ac36c2a0e6c6","kind":"todo","subject":"journal/2026-11-02.md","title":"2026-11-02","names":[],"date":"2027-05-02","done":false,"text":"- [ ] Book the next cleaning · due 2027-05-02","embedText":"Book the next cleaning","line":9},
+    {"id":"17d471d58f74c1","hash":"0fbd9d2bb21344","kind":"card","subject":"areas/health.md","title":"Health","names":["health","Salud"],"date":null,"done":null,"text":"Health\nCheckups and care.","embedText":"Health\nCheckups and care.","line":1},
+    {"id":"1765bc0835ed42","hash":"1947e97580b3ed","kind":"section","subject":"areas/health.md","title":"Health","names":[],"date":null,"done":null,"text":"# What this covers\nLa cita es en la clínica del centro.","embedText":"What this covers\nLa cita es en la clínica del centro.","line":9},
+    {"id":"1f390236a518bd","hash":"1f6b5ad4a5c604","kind":"todo","subject":"areas/health.md","title":"Health","names":[],"date":"2026-11-20","done":false,"text":"- [ ] Cita con el médico · due 2026-11-20 · re [Health](health.md)","embedText":"Cita con el médico","line":15},
+    {"id":"06a56ee4335b20","hash":"06ad37e444247f","kind":"todo","subject":"areas/health.md","title":"Health","names":[],"date":null,"done":false,"text":"- [ ] Refill the vitamins · someday","embedText":"Refill the vitamins","line":16}
+  ]
+}
