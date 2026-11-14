@@ -17,7 +17,7 @@ Lenses (`me/`) are about who the owner is and how they feel. Areas (`areas/`) ar
 | day | Patterns of a real day | Schedules and to-dos |
 | people | The map of people and how they affect their energy | Things to do with family and friends: `areas/relationships.md`. Dating and romance: `areas/love-life.md`. One note per person: `people/` |
 | wellbeing | How their body and head feel, how they cope | Appointments: `events/`. Health facts: `resources/health-history.md`. Providers: `people/`. Training: `areas/fitness.md` |
-| future | The picture in 1 and 5 years, and what blocks it | Career steps: `areas/career.md`. Projects: `projects/` |
+| future | The picture in 1 and 5 years, and what blocks it | Goals: `goals/`. Career steps: `areas/career.md`. Projects: `projects/` |
 | values, story, identity | Lens only | Nothing |
 | profile | A short summary that links out | Nothing |
 

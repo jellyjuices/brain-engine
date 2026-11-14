@@ -26,7 +26,7 @@ Before the first question, read `.claude/rules/notes.md` and `.claude/rules/lens
 
 Keep going from branch to branch and stage to stage without asking. Mark a finished stage with `brain intake done <stage>`. Stop only on their words:
 - **stop** (or "pass", "next", their stop word in `me/settings.yaml`): save what is pending, then run End.
-- **skip:** drop this question. Save nothing for it.
+- **skip:** pass on this question. Save nothing for it.
 - **redact:** ask which words if not clear, run `brain intake redact "words"`, and say what got removed.
 
 ## Subjects and to-dos
@@ -37,7 +37,7 @@ After each answer run `brain intake ask "<their words>" --json`.
 - **Second mention:** it offers "Sam came up again. Make a note?" On yes, ask the kind (who, where, have, know) and one line, then `brain intake subject "Name" --type <kind> --description "…"`.
 - **Known name:** `brain intake save` links it. A fact about a subject goes to its note (`--fact "<note>::<fact>"` or `brain intake fact <note> "fact"`), not the lens.
 - **Fix a role:** `brain intake role <subject> --about <note> --role "…"`.
-- **To-dos:** ask When? and About what?, then `brain intake todo "text" --when today|tomorrow|<date>|someday|waiting|note --about <note>`. Never the inbox.
+- **To-dos:** ask About what? and When?, then `brain intake todo "text" --when today|tomorrow|<date>|someday|waiting|note --about <note>`. Never `inbox/`.
 - **Undo:** `brain undo` puts back the last edit.
 
 ## Care

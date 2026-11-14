@@ -6,7 +6,7 @@ The rules for this folder are in AGENTS.md, imported below. This file adds Claud
 
 ## Skills and subagents
 
-- Intake: run the `intake` skill. Sorting the inbox: `sort-inbox`.
+- Intake: run the `intake` skill. Splitting waiting journal entries: `sort`.
 - For wide questions across many notes, use the `brain-search` subagent. It returns paths and one-line answers, so the main chat stays small.
 - Rule files in `.claude/rules/` load on their own when you touch their paths. A skill that writes notes reads `notes.md` first.
 - The `brain` code lives in the brain engine, not here. Change code there.
