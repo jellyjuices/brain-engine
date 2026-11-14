@@ -3,14 +3,17 @@
 //   2. Labels: drop `generated` when the owner wrote it, one time stamp (`created`), no client_id from local adds,
 //      no self-`verified`, no capture title that only repeats the text. Lists are written on one line.
 // It never touches note text, only labels, and it prints what it changed.
-// Run: node --disable-warning=ExperimentalWarning scripts/migrations/2026-11-05-roll-up.ts [--dry-run]
+// Run: node --disable-warning=ExperimentalWarning migrations/2026-11-05-roll-up.ts [--dry-run]
 
 import { existsSync, readdirSync, rmdirSync, unlinkSync } from "node:fs";
 import { join } from "node:path";
-import { appendToSection } from "../src/todos/loops.ts";
+import { appendToSection } from "../shared/line/index.ts";
 import { isOwnerWriter } from "../src/core/owner.ts";
-import { ensureLens, formatThread, LENSES, THREADS_HEADING } from "../src/intake/lenses.ts";
-import { brainHome, loadAll, log, parse, readNote, str, writeNote, type Meta } from "../src/core/notes.ts";
+import { ensureLens, LENSES } from "../src/intake/lenses.ts";
+import { formatThread, THREADS_HEADING } from "../src/intake/threads.ts";
+import { loadAll, readNote, writeNote } from "../src/core/files.ts";
+import { log } from "../src/core/log.ts";
+import { brainHome, parse, str, type Meta } from "../src/core/notes.ts";
 import { readFileSync } from "node:fs";
 
 const root = brainHome();
