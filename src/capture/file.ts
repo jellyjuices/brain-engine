@@ -13,6 +13,7 @@ import { DIRS, folderOf, type Note, str, titleOf, today, typeOf } from "../core/
 import { readNote } from "../core/files.ts";
 import { changeFiles } from "../core/log.ts";
 import { addLoop, addNoteLine } from "../todos/todos.ts";
+import { SEP } from "../../shared/line/index.ts";
 import { captureText, suggestTarget } from "../todos/absorb.ts";
 import { change } from "../todos/undo.ts";
 import { parseWhen } from "../todos/when-words.ts";
@@ -76,26 +77,43 @@ export function splitPrefix(input: string, now = today()): { when?: When; text: 
 const linkFrom = (from: string, to: Note) => `[${titleOf(to).split(",")[0]}](${posix.relative(posix.dirname(from), to.path)})`;
 
 /** Write the text into a subject note as a to-do or a note line. */
-export function fileInto(root: string, notes: Note[], into: string, text: string, when: When, opts: { with?: string[]; re?: string[]; date?: string } = {}): string {
+export interface FileOpts {
+  with?: string[];
+  re?: string[];
+  date?: string;
+  /** What a feeling or a to-do is about, in the owner's words. */
+  about?: string;
+  feeling?: boolean;
+  /** A link back to the journal entry the line came from. */
+  from?: string;
+}
+
+export function fileInto(root: string, notes: Note[], into: string, text: string, when: When, opts: FileOpts = {}): string {
+  const about = opts.about?.trim() || undefined;
   if (when.kind === "note") {
-    addNoteLine(root, into, text, opts.date ?? today());
+    const parts = [opts.feeling && "feeling", text, about && `about ${about}`, opts.from && `from ${opts.from}`];
+    addNoteLine(root, into, parts.filter(Boolean).join(SEP), opts.date ?? today());
     return "note";
   }
   const byPath = new Map(notes.map((n) => [n.path, n]));
   const links = (paths: string[] = []) => paths.filter((p) => p !== into && byPath.has(p)).map((p) => linkFrom(into, byPath.get(p)!));
   const [w, re] = [links(opts.with), links(opts.re)];
   const outcome = when.kind === "date" ? undefined : when.kind;
-  addLoop(root, into, { text, due: when.kind === "someday" || when.kind === "waiting" ? undefined : when.due, outcome, ...(w.length && { with: w }), ...(re.length && { re }) });
+  addLoop(root, into, { text, due: when.kind === "someday" || when.kind === "waiting" ? undefined : when.due, outcome, ...(w.length && { with: w }), ...(re.length && { re }), ...(about && { about }), ...(opts.from && { from: opts.from }) });
   return "to-do";
 }
 
-/** One line a sort writes. With no `text`, the line is the whole capture. */
+export const BIT_KINDS = ["to-do", "fact", "feeling", "decision"] as const;
+
+/** One line a sort writes. With no `text`, the line is the whole capture. A feeling keeps `· about <words>`. */
 export interface SortBit {
   into: string;
   when: When;
   text?: string;
   with?: string[];
   re?: string[];
+  kind?: (typeof BIT_KINDS)[number];
+  about?: string;
 }
 
 /**
@@ -109,7 +127,7 @@ export function sortBits(root: string, notes: Note[], capturePath: string, bits:
   const date = String(cap.meta.created ?? today()).slice(0, 10);
   const into = [...new Set(bits.map((b) => b.into))];
   changeFiles(root, [...into, capturePath], `sorted ${capturePath} into ${into.join(", ")}`, () => {
-    for (const b of bits) fileInto(root, notes, b.into, b.text?.trim() || captureText(cap), b.when, { with: b.with, re: b.re, date });
+    for (const b of bits) fileInto(root, notes, b.into, b.text?.trim() || captureText(cap), b.when, { with: b.with, re: b.re, date, about: b.about, feeling: b.kind === "feeling" });
     unlinkSync(join(root, capturePath));
   });
   return { into, deleted: capturePath };

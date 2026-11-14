@@ -32,26 +32,6 @@ export function addPerson(c: Ctx) {
   return { path: note.path, created: true };
 }
 
-/** A longer note (type Daily) in journal/. It is tied to a date, and to an event or person when `about` is set. The same title and text returns that note, so a retry makes no copy. */
-export function addJournal(c: Ctx) {
-  const date = text(c.body.date, "date")!.trim();
-  if (!BIRTHDAY.test(date) || Number.isNaN(Date.parse(date))) throw new HttpError(400, `"date" must look like 2026-11-05.`);
-  const body = text(c.body.text, "text")!;
-  if (!body.trim()) throw new HttpError(400, `Missing "text".`);
-  if (Buffer.byteLength(body) > MAX_FILE) throw new HttpError(413, "A journal note can be 60 KB at most.");
-  const aboutPath = text(c.body.about, "about", false);
-  const about = aboutPath ? existingNote(c.root, safeNotePath(aboutPath, true)) : undefined;
-  const title = (text(c.body.title, "title", false)?.trim().replace(/\s+/g, " ") || `Journal ${date}`).slice(0, 120);
-  const same = loadAll(c.root).find((n) => n.meta.type === "Daily" && String(n.meta.title ?? "") === title && n.body.includes(body.trim()));
-  if (same) return { path: same.path, created: false };
-  const made = afterWrite(c.root, () => {
-    const note = newNote(c.root, "Daily", title, { description: `Journal note for ${date}.`, date });
-    const related = about ? `\n# Related\n\n- [${String(about.meta.title ?? about.path)}](../${about.path}) · about\n` : "";
-    return writeNote(c.root, note.path, note.meta, `${body.trimEnd()}\n${related}`);
-  });
-  return { path: made.path, created: true };
-}
-
 const SUBJECT_TYPES = ["Place", "Thing"];
 
 /** A new Place or Thing note from the phone. A name that already exists for that type returns that note. */

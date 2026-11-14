@@ -290,10 +290,9 @@ test("journal: a longer note tied to a date and a person, no copy on retry", () 
   const body = { title: "Session notes", text: "We talked about sleep.\nHomework: walk daily.", date: "2026-11-05", about: person.data.path };
   const made = await a.call("POST", "/api/journal", body);
   assert.equal(made.status, 200);
-  assert.match(made.data.path, /^journal\//);
+  assert.equal(made.data.path, "journal/2026-11-05.md");
   const note = await a.call("GET", `/api/notes/${made.data.path}`);
-  assert.match(note.data.body, /# Related\n\n- \[Elena Lam\]\(\.\.\/people\/.*· about/);
-  assert.match(note.data.body, /Homework: walk daily\./);
+  assert.match(note.data.body, /About what: \[Elena Lam\]\(\.\.\/people\/elena-lam\.md\)\n\nSession notes\nWe talked about sleep\.\nHomework: walk daily\./);
   const again = await a.call("POST", "/api/journal", body);
   assert.equal(again.data.created, false);
   assert.equal((await a.call("POST", "/api/journal", { ...body, date: "today" })).status, 400);

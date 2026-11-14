@@ -16,5 +16,8 @@
   {"line":"- [ ] Paint the door · due soon","parsed":{"done":false,"text":"Paint the door","tokens":[{"raw":"due soon"}]}},
   {"line":"- [ ] Fold the maps · every fortnight","parsed":{"done":false,"text":"Fold the maps","tokens":[{"raw":"every fortnight"}]}},
   {"line":"- [ ] Clean the gutters · today · due 2026-11-14","parsed":{"done":false,"text":"Clean the gutters","tokens":[{"key":"today"},{"key":"due","value":"2026-11-14"}]}},
-  {"line":"- [ ] Read the manual · re not a link","parsed":{"done":false,"text":"Read the manual","tokens":[{"raw":"re not a link"}]}}
+  {"line":"- [ ] Read the manual · re not a link","parsed":{"done":false,"text":"Read the manual","tokens":[{"raw":"re not a link"}]}},
+  {"line":"- [ ] Oil the bike chain · from [2026-11-14 09:30](../journal/2026-11-14.md#0930)","parsed":{"done":false,"text":"Oil the bike chain","tokens":[{"key":"from","value":"[2026-11-14 09:30](../journal/2026-11-14.md#0930)"}]}},
+  {"line":"- [x] Mail the postcard · due 2026-11-16 · done 2026-11-16 · from [2026-11-14 21:05](../journal/2026-11-14.md#2105-2)","parsed":{"done":true,"text":"Mail the postcard","tokens":[{"key":"due","value":"2026-11-16"},{"key":"done","value":"2026-11-16"},{"key":"from","value":"[2026-11-14 21:05](../journal/2026-11-14.md#2105-2)"}]}},
+  {"line":"- [ ] Rake the leaves · from the old list","parsed":{"done":false,"text":"Rake the leaves","tokens":[{"raw":"from the old list"}]}}
 ]
