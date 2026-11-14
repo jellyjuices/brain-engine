@@ -105,6 +105,7 @@
   --fast: 160ms;
   --slow: 220ms;
   --pop: 460ms;
+  --spin: 40s;
 }
 
 @media (prefers-color-scheme: dark) {

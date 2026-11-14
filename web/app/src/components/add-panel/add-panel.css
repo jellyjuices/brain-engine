@@ -63,6 +63,19 @@
   inset: 0;
   background: var(--accent);
   clip-path: var(--shape-kind-add);
+  animation: add-spin var(--spin) linear infinite;
+}
+
+@keyframes add-spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .add-blob::before {
+    animation: none;
+  }
 }
 
 .add-blob--todo,
