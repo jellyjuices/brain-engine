@@ -28,12 +28,12 @@ The owner, when they feel flat or stuck and wants to see why the small things ma
 
 - Goals are a tab of their own.
 - A goal page has its own layout, not the subject page layout.
-- A goal belongs to 1 to 3 life areas. Its colour is the mix of their key colours.
+- A goal belongs to 1 or more life areas. Its colour is the mix of their key colours.
 - No live data feeds and no dashboard of outside data. An import now and then can cross off targets, with the owner's yes.
 - A goal is not a project. A project ends when the work is done. A goal can have no end.
 - A goal never shows on Today. Today holds real dates only.
 - Type **Goal** in `goals/`, one note per goal. Made with the Goal builder on +.
-- Fields: `title`, `description`, `why`, `when` (loose, optional), `status` (active, later, done), `areas` (1 to 3), `parent` (optional; set means subgoal).
+- Fields: `title`, `description`, `why`, `when` (loose, optional), `status` (active, later, done), `areas` (1 or more), `parent` (optional; set means subgoal).
 - Body: `# Why`, `# Targets` (checklist lines), `# Wins`, `# Notes`, plus relation sections like any note (`# People`, `# Groups`, `# Topics`, `# Related`).
 - A helper may suggest goals from the Future lens. The owner approves each one.
 

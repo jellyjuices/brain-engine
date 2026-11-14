@@ -29,6 +29,6 @@ for (const mode of ['dark', 'light'] as const) {
     }
   }
 }
-console.log(`\nMixes: ${mixChecks} checks (1 to 3 areas, worst point of each oklch gradient, with text-zone noise), lowest ${mixWorst.toFixed(2)}:1`)
+console.log(`\nMixes: ${mixChecks} checks (mixes of 1 to 3 areas, worst point of each oklch gradient, with text-zone noise), lowest ${mixWorst.toFixed(2)}:1`)
 console.log(failed ? `\n${failed} failed` : `\nAll ${contrastPairs.length * 2} pairs and ${mixChecks} mix checks pass WCAG 2.1 AA`)
 process.exit(failed ? 1 : 0)
