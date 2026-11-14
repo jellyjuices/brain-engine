@@ -5,11 +5,12 @@
 import { calendarFeed } from "../../todos/calendar.ts";
 import { HttpError } from "../server-auth.ts";
 import { type Ctx, TextBody } from "../server-context.ts";
-import { addFile, addJournal, addPerson, addSubject, doneRoute, dropRoute, editNote, inboxDrop, moveRoute, setBirthday, undoRoute } from "../server-writes.ts";
+import { addFile, addPerson, addSubject, doneRoute, dropRoute, editNote, inboxDrop, moveRoute, setBirthday, undoRoute } from "../server-writes.ts";
 import { cardRoute, intakeNext, intakeSave, intakeSkip, listRoute, notesSince, oneNote, report, todayRoute } from "../server-reads.ts";
 import { newAgentToken, revokeAgent } from "./agent.ts";
 import { addRoute, sortRoute, unsortedRoute } from "./capture.ts";
 import { decisionRoute, goalRoute, goalsRoute } from "./goals.ts";
+import { addJournal } from "./journal.ts";
 import { dropDraft, listDrafts, oneDraft, saveDraft } from "./drafts.ts";
 import { addRelation, deleteNote, makeNote, relationsRoute } from "./notes.ts";
 import { findRoute, logRoute, todosRoute } from "./reads.ts";
@@ -34,7 +35,7 @@ export interface Route {
 const r = (method: Method, path: string, tool: string, summary: string, use: string, handler: Handler, extra: Partial<Route> = {}): Route => ({ method, path, tool, summary, ...(use && { use }), handler, ...extra });
 
 export const ROUTES: Route[] = [
-  r("POST", "/api/add", "add", "Add a thought. With a tag, person or subject it is filed at once; else it waits in the inbox.", "Use for any new thought or to-do.", addRoute),
+  r("POST", "/api/add", "add", "Add a thought. A tag, person or subject files it at once; journal keeps it whole in the day note.", "Use for any new thought or to-do.", addRoute),
   r("POST", "/api/done", "done", "Tick a to-do, with an optional note and follow-up.", "Use when a to-do is finished.", doneRoute),
   r("POST", "/api/move", "move", "Give a to-do a new When.", "Use to put a to-do off, or on hold.", moveRoute),
   r("POST", "/api/drop", "delete_todo", "Delete a to-do. It stays on the timeline as dropped.", "Use when a to-do no longer matters.", dropRoute),
@@ -46,8 +47,8 @@ export const ROUTES: Route[] = [
   r("GET", "/api/goals", "goals", "Every goal with its percent. A subgoal counts toward its parent.", "Use to see goal progress.", goalsRoute),
   r("GET", "/api/goals/", "goal", "One goal: percent, targets, to-dos toward it, wins, subgoals and decisions.", "Use with a goal slug or path from goals.", goalRoute, { prefix: true }),
   r("GET", "/api/decisions/", "decision", "One decision: status, decide-by to-do, goals and what was decided.", "Use with a decision slug or path.", decisionRoute, { prefix: true }),
-  r("POST", "/api/sort", "sort", "Sort a capture into one or more subjects. The capture is deleted.", "Use on a capture from unsorted.", sortRoute),
-  r("GET", "/api/unsorted", "unsorted", "How many captures wait, and which.", "Use before you sort.", unsortedRoute),
+  r("POST", "/api/sort", "sort", "Sort a capture or journal entry into subjects. A capture is deleted; an entry stays whole.", "Use on an item from unsorted.", sortRoute),
+  r("GET", "/api/unsorted", "unsorted", "How many captures and journal entries wait, and which.", "Use before you sort.", unsortedRoute),
   r("POST", "/api/notes", "make_note", "Make a note from a type and a title.", "Use for a new goal, decision or project.", makeNote),
   r("DELETE", "/api/notes/", "delete_note", "Delete a note. It moves to the archive.", "Use only when asked.", deleteNote, { prefix: true }),
   r("PUT", "/api/notes/", "edit_note", "Save an edited note body. Needs the hash it was read at.", "Read the note first.", editNote, { prefix: true }),
@@ -67,7 +68,7 @@ export const ROUTES: Route[] = [
   r("GET", "/api/reports/", "report", "A report: today, weekly or area/<slug>.", "Use for a Markdown summary.", report, { prefix: true }),
   r("POST", "/api/inbox", "inbox", "The app's add. Same as /api/add.", "Prefer add.", addRoute),
   r("POST", "/api/people", "add_person", "Make a Person note.", "Use when someone new comes up.", addPerson),
-  r("POST", "/api/journal", "add_journal", "Make a journal note for a day.", "Use for a dated journal entry.", addJournal),
+  r("POST", "/api/journal", "add_journal", "Add a journal entry, whole, to the day note. It waits to be sorted.", "Use for a dated journal entry.", addJournal),
   r("POST", "/api/subjects", "add_subject", "Make a Place or Thing note.", "Use for a new place or thing.", addSubject),
   r("POST", "/api/inbox-drop", "drop_capture", "Take a capture out of the inbox into the archive.", "Use for a capture not worth keeping.", inboxDrop),
   r("POST", "/api/files", "add_file", "A text file becomes a note.", "Use to keep pasted text whole.", addFile),

@@ -11,6 +11,7 @@ export interface TodoFields {
   dropped?: boolean;
   check?: boolean;
   about?: string;
+  from?: string;
   with?: string[];
   re?: string[];
   toward?: string[];
@@ -21,7 +22,7 @@ export type TodoPatch = Partial<Omit<TodoFields, "unknown">>;
 type PatchKey = Exclude<keyof TodoPatch, "text" | "done">;
 
 const RANKED: PatchKey[] = ["with", "re", "toward", "due", "every", "outcome", "doneAt", "dropped"];
-const PATCH_ORDER: PatchKey[] = [...RANKED, "about", "check"];
+const PATCH_ORDER: PatchKey[] = [...RANKED, "about", "check", "from"];
 
 function addField(fields: TodoFields, token: Token): void {
   if ("raw" in token) {
@@ -37,6 +38,7 @@ function addField(fields: TodoFields, token: Token): void {
     case "due":
     case "every":
     case "about":
+    case "from":
       fields[token.key] = token.value;
       return;
     case "done":

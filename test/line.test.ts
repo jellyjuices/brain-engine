@@ -1,12 +1,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { fieldsOf, formatTodoLine, parseTodoLine, SEP, tickTodo, updateTodo } from "../shared/line/index.ts";
+import { fieldsOf, formatTodoLine, newTodoLine, parseTodoLine, SEP, tickTodo, updateTodo } from "../shared/line/index.ts";
 
 type Golden = { line: string; parsed: unknown };
 const golden: Golden[] = JSON.parse(readFileSync(new URL("../shared/line/golden.json", import.meta.url), "utf8"));
 
-const FUZZ_TOKENS = ["due 2026-11-20", "check", "energy low", "with [Pat Doe](../people/pat-doe.md)", "about the weekend", "someday", "spot by the gate", "toward [Print a zine](../goals/print-a-zine.md)", "every week"];
+const FUZZ_TOKENS = ["due 2026-11-20", "check", "energy low", "with [Pat Doe](../people/pat-doe.md)", "about the weekend", "someday", "spot by the gate", "toward [Print a zine](../goals/print-a-zine.md)", "every week", "from [2026-11-14 09:30](../journal/2026-11-14.md#0930)"];
 
 function seeded(seed: number) {
   let state = seed;
@@ -46,6 +46,16 @@ test("ticking a to-do keeps check and unknown tokens in place", () => {
 test("a moved to-do keeps its tokens and changes only its When", () => {
   const todo = parseTodoLine("- [ ] Bake rye bread · energy low · due 2026-11-15 · check")!;
   assert.equal(formatTodoLine(updateTodo(todo, { due: undefined, outcome: "someday" })), "- [ ] Bake rye bread · energy low · check · someday");
+});
+
+const FROM = "from [2026-11-14 09:30](../journal/2026-11-14.md#0930)";
+
+test("the · from link-back survives a tick and a move, and a new line puts it last", () => {
+  const todo = parseTodoLine(`- [ ] Oil the bike chain · due 2026-11-15 · ${FROM}`)!;
+  assert.equal(fieldsOf(todo).from, FROM.slice(5));
+  assert.equal(formatTodoLine(tickTodo(todo, "2026-11-15")), `- [x] Oil the bike chain · due 2026-11-15 · ${FROM} · done 2026-11-15`);
+  assert.equal(formatTodoLine(updateTodo(todo, { due: undefined, outcome: "someday" })), `- [ ] Oil the bike chain · ${FROM} · someday`);
+  assert.equal(newTodoLine({ text: "Oil the bike chain", due: "2026-11-15", check: true, from: FROM.slice(5) }), `- [ ] Oil the bike chain · due 2026-11-15 · check · ${FROM}`);
 });
 
 test("T2 fuzz: shuffled tokens round trip in the order written", () => {
