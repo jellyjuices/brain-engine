@@ -1,0 +1,1040 @@
+[
+  {
+    "name": "add",
+    "description": "Add a thought. With a tag, person or subject it is filed at once; else it waits in the inbox. Use for any new thought or to-do.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "type": "string",
+          "description": "Any unique id. A retry with the same id makes no copy."
+        },
+        "text": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "description": "ISO time."
+        },
+        "into": {
+          "type": "string",
+          "description": "A note path to file it in."
+        },
+        "about": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Note paths."
+        },
+        "people": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Person note paths."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "by": {
+          "type": "string",
+          "description": "Your name. It goes on the generated label."
+        },
+        "draft_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "client_id",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "done",
+    "description": "Tick a to-do, with an optional note and follow-up. Use when a to-do is finished.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "description": "A to-do ref from todos or today."
+        },
+        "happened": {
+          "type": "string",
+          "description": "What happened."
+        },
+        "follow_up": {
+          "type": "string",
+          "description": "The next to-do."
+        }
+      },
+      "required": [
+        "ref"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "move",
+    "description": "Give a to-do a new When. Use to put a to-do off, or on hold.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "description": "A to-do ref from todos or today."
+        },
+        "when": {
+          "type": "string",
+          "description": "today, tomorrow, someday, waiting, note, or a date like 2026-05-04."
+        },
+        "who": {
+          "type": "string",
+          "description": "Who it waits on."
+        },
+        "what": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ref",
+        "when"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "delete_todo",
+    "description": "Delete a to-do. It stays on the timeline as dropped. Use when a to-do no longer matters.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "description": "A to-do ref from todos or today."
+        },
+        "why": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ref"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "undo",
+    "description": "Undo the last change. A whole sort is one change. Use right after a wrong write.",
+    "inputSchema": {
+      "type": "object",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "find",
+    "description": "Find notes by words, with the subject card when the words name one. Use first to look anything up.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string"
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "q"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "todos",
+    "description": "One to-do view: today, soon, no-date, on-hold, by-goal or all. Use to get to-do refs.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "view": {
+          "type": "string",
+          "enum": [
+            "today",
+            "soon",
+            "no-date",
+            "on-hold",
+            "by-goal",
+            "all"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "today",
+    "description": "Today: overdue and due to-dos and events. Use to plan the day.",
+    "inputSchema": {
+      "type": "object",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "read_note",
+    "description": "Read one note with its backlinks and card. Use after find, with the note path.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "A note path, like people/dana-cole.md."
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "sort",
+    "description": "Sort a capture into one or more subjects. The capture is deleted. Use on a capture from unsorted.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "A capture path from unsorted."
+        },
+        "into": {
+          "type": "string",
+          "description": "A note path, like people/dana-cole.md."
+        },
+        "when": {
+          "type": "string",
+          "description": "today, tomorrow, someday, waiting, note, or a date like 2026-05-04."
+        },
+        "bits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "into": {
+                "type": "string",
+                "description": "A note path, like people/dana-cole.md."
+              },
+              "when": {
+                "type": "string",
+                "description": "today, tomorrow, someday, waiting, note, or a date like 2026-05-04."
+              },
+              "text": {
+                "type": "string"
+              },
+              "with": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Person note paths."
+              },
+              "re": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Note paths."
+              }
+            },
+            "required": [
+              "into",
+              "when"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "description": "Instead of into and when, one entry per line."
+        },
+        "draft_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "unsorted",
+    "description": "How many captures wait, and which. Use before you sort.",
+    "inputSchema": {
+      "type": "object",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "make_note",
+    "description": "Make a note from a type and a title. Use for a new goal, decision or project.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "A note type, like Goal, Decision or Project."
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "draft_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "title"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "delete_note",
+    "description": "Delete a note. It moves to the archive. Use only when asked.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "A note path, like people/dana-cole.md."
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "edit_note",
+    "description": "Save an edited note body. Needs the hash it was read at. Read the note first.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "A note path, like people/dana-cole.md."
+        },
+        "body": {
+          "type": "string"
+        },
+        "base": {
+          "type": "string",
+          "description": "The hash from read_note."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "path",
+        "body",
+        "base"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "relations",
+    "description": "The relations of one note, both ways. Use to see who or what a note links to.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "A note path, like people/dana-cole.md."
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "add_relation",
+    "description": "Link two notes, with an optional role and time. Use when the owner names a tie between two notes.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "A note path, like people/dana-cole.md."
+        },
+        "to": {
+          "type": "string",
+          "description": "A note path, like people/dana-cole.md."
+        },
+        "role": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "from",
+        "to"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "log",
+    "description": "The last changes, newest first, and which can be undone. Use before undo.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "n": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "How many, up to 200."
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "drafts",
+    "description": "Saved adds, sorts and builders that were cut off. Use to pick a flow back up.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "add",
+            "sort",
+            "builder"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "save_draft",
+    "description": "Save a step of an add, sort or builder so it can resume. Use during a long flow.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "add",
+            "sort",
+            "builder"
+          ]
+        },
+        "step": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "read_draft",
+    "description": "One saved draft. Use with an id from drafts.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "delete_draft",
+    "description": "Delete a saved draft. Use once a draft is not needed.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "notes_since",
+    "description": "Notes changed since a time, for the app's copy. Prefer find.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "since": {
+          "type": "string",
+          "description": "ISO time."
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "search",
+    "description": "Search hits only. Use to filter by type, tag, area or status.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "description": "A note type."
+        },
+        "tag": {
+          "type": "string"
+        },
+        "area": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "card",
+    "description": "The subject card for some words. Use for all about one person or subject.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "q"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "list",
+    "description": "List notes by type, tag, area or status. Use to browse.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "A note type."
+        },
+        "tag": {
+          "type": "string"
+        },
+        "area": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "calendar",
+    "description": "The calendar feed. Use for dated items as iCalendar text.",
+    "inputSchema": {
+      "type": "object",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "report",
+    "description": "A report: today, weekly or area/<slug>. Use for a Markdown summary.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "today, weekly or area/<slug>."
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "inbox",
+    "description": "The app's add. Same as /api/add. Prefer add.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "type": "string",
+          "description": "Any unique id. A retry with the same id makes no copy."
+        },
+        "text": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "description": "ISO time."
+        },
+        "into": {
+          "type": "string",
+          "description": "A note path to file it in."
+        },
+        "about": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Note paths."
+        },
+        "people": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Person note paths."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "by": {
+          "type": "string",
+          "description": "Your name. It goes on the generated label."
+        },
+        "draft_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "client_id",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "add_person",
+    "description": "Make a Person note. Use when someone new comes up.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "birthday": {
+          "type": "string",
+          "description": "Like 1990-05-04."
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "add_journal",
+    "description": "Make a journal note for a day. Use for a dated journal entry.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "description": "Like 2026-05-04."
+        },
+        "text": {
+          "type": "string"
+        },
+        "about": {
+          "type": "string",
+          "description": "A note path, like people/dana-cole.md."
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "date",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "add_subject",
+    "description": "Make a Place or Thing note. Use for a new place or thing.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Place",
+            "Thing"
+          ]
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "drop_capture",
+    "description": "Take a capture out of the inbox into the archive. Use for a capture not worth keeping.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "A note path, like people/dana-cole.md."
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "add_file",
+    "description": "A text file becomes a note. Use to keep pasted text whole.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "set_birthday",
+    "description": "Set a person's birthday. Use with the Person note path.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "A note path, like people/dana-cole.md."
+        },
+        "birthday": {
+          "type": "string",
+          "description": "Like 1990-05-04."
+        }
+      },
+      "required": [
+        "path",
+        "birthday"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "intake_next",
+    "description": "Open intake questions. Use to start an intake.",
+    "inputSchema": {
+      "type": "object",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "intake_save",
+    "description": "Save an intake answer. Use after the owner answers.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "lens": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "line": {
+          "type": "string"
+        },
+        "by": {
+          "type": "string"
+        },
+        "raw": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "lens",
+        "question",
+        "line"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "intake_skip",
+    "description": "Park an intake question. Use when the owner passes.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "question": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "question"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  }
+]
