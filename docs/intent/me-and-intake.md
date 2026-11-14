@@ -30,7 +30,7 @@ The owner, when they have the energy to reflect. Never on a schedule.
 - Never diagnose, label or explain the owner to themselves. Record only links they make.
 - No daily prompts or nags.
 - Feelings about the owner themselves go in a lens.
-- A feeling that names a subject goes in that subject only, in the owner's phrases, grouped by side (see [brain.md](brain.md)).
+- A feeling that names a subject goes in that subject only, in the owner's phrases, grouped by what it is about (see [brain.md](brain.md)).
 - If the owner mentions self-harm, stop and share 9-8-8.
 
 ## Open questions
