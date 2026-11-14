@@ -255,3 +255,7 @@
     --add-fade-bottom: 0;
   }
 }
+
+.add-panel.is-closed .add-main .shape-bg {
+  animation: none;
+}
