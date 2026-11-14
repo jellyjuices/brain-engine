@@ -19,13 +19,7 @@ After a web app change, use the `web-reviewer` subagent. It runs the gates and r
 
 Reason: big tool output stays in the chat and is read again on every call.
 
-- Start with the `crg-brain-engine` MCP tools (code-review-graph): where a symbol lives, who calls it, what a change breaks. Pass `detail_level: "minimal"` and a result cap on every call. Run `get_impact_radius_tool` before you edit anything exported.
+- For who imports a file or export, use the `fallow` MCP tools: `trace_file`, `trace_export`, `symbol_impact` before you edit anything exported. Run `audit` on changed files before you finish.
 - Read one file at a time. Use `offset` and `limit` for files over 200 lines.
 - Every `grep` names a path and ends in `| head -30`.
 - Pipe long output (`npm test`, `vitest`, `lint`, `git diff`) through `| tail -20`.
-
-## Hooks
-
-- After an edit, a hook updates the code graph.
-- When a session starts, a hook prints the code graph status.
-- Before `Grep`, `Glob`, `grep` or `rg`, a hook may remind you that the code graph exists. It is a reminder, not a block.
