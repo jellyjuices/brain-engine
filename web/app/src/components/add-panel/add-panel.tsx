@@ -111,7 +111,7 @@ export function AddPanel() {
               onOther={other}
             />
           )}
-          {editing && <AddBox ref={box} kind={mode} full={full} onEnter={() => void save()} />}
+          {editing && <AddBox ref={box} kind={mode} full={full} />}
         </div>
       )}
       {mode === "journal" && !closing && <AddFull full={full} onToggle={toggleFull} />}

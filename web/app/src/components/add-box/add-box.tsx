@@ -7,10 +7,9 @@ export interface AddBoxProps {
   ref: Ref<HTMLDivElement>;
   kind: "todo" | "journal";
   full: boolean;
-  onEnter: () => void;
 }
 
-export function AddBox({ ref, kind, full, onEnter }: AddBoxProps) {
+export function AddBox({ ref, kind, full }: AddBoxProps) {
   const todo = kind === "todo";
   return (
     <div
@@ -23,12 +22,6 @@ export function AddBox({ ref, kind, full, onEnter }: AddBoxProps) {
       data-placeholder={todo ? copy.add.todoHint : copy.add.writePlaceholder}
       contentEditable="plaintext-only"
       suppressContentEditableWarning
-      onKeyDown={(e) => {
-        if (todo && e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          onEnter();
-        }
-      }}
     />
   );
 }
