@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { unlinkSync, utimesSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { embedPending, type Embedder } from "../src/core/embed.ts";
+import { embedPending, loadEmbedder, type Embedder } from "../src/core/embed.ts";
 import { find, findEntries, list, search, updateIndex } from "../src/core/search.ts";
 import { makeBrain } from "./fixture.ts";
 
@@ -128,6 +128,13 @@ test("the name tier stays on top with meaning in play", async () => {
   await embedPending(root, fake);
   assert.equal((await find(root, "Omar", {}, fake)).notes[0]?.path, "people/omar-haddad.md");
   assert.equal((await find(root, "haddad", {}, fake)).notes[0]?.path, "people/omar-haddad.md");
+});
+
+test("the embedder is null when the package cannot be imported or the model cannot load", async () => {
+  assert.equal(await loadEmbedder(async () => { throw new Error("Cannot find package"); }), null);
+  const offline = { env: { cacheDir: null, allowRemoteModels: true }, pipeline: async () => { throw new Error("offline"); } };
+  assert.equal(await loadEmbedder(async () => offline), null);
+  assert.equal(offline.env.allowRemoteModels, process.env.BRAIN_MODEL_FETCH === "1");
 });
 
 test("a note with several areas is found by each area", () => {

@@ -18,18 +18,29 @@ interface Extractor {
   (texts: string[], options: { pooling: "cls"; normalize: boolean }): Promise<{ tolist(): number[][] }>;
 }
 
+export interface Transformers {
+  env: { cacheDir: string | null; allowRemoteModels: boolean };
+  pipeline(task: "feature-extraction", model: string, options: { dtype: "q8" }): Promise<unknown>;
+}
+
+const TRANSFORMERS = "@huggingface/transformers";
+
+export type LoadTransformers = () => Promise<Transformers>;
+
+const importTransformers: LoadTransformers = async () => (await import(TRANSFORMERS)) as Transformers;
+
 function modelDir(): string {
   const base = process.env.XDG_CACHE_HOME || join(homedir(), ".cache");
   return join(base, "brain", "models");
 }
 
-export async function loadEmbedder(): Promise<Embedder | null> {
+export async function loadEmbedder(load: LoadTransformers = importTransformers): Promise<Embedder | null> {
   if (process.env.BRAIN_EMBED === "off") return null;
   try {
-    const lib = await import("@huggingface/transformers");
+    const lib = await load();
     lib.env.cacheDir = modelDir();
     lib.env.allowRemoteModels = process.env.BRAIN_MODEL_FETCH === "1";
-    const extractor = (await lib.pipeline("feature-extraction", MODEL, { dtype: "q8" })) as unknown as Extractor;
+    const extractor = (await lib.pipeline("feature-extraction", MODEL, { dtype: "q8" })) as Extractor;
     return {
       model: MODEL,
       async embed(texts, kind) {
