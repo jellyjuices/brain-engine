@@ -33,7 +33,12 @@ export async function indexCommand(c: CliContext): Promise<number> {
   const { root, flags, report } = c;
   const result = updateIndex(root, flags.full);
   writeIndexMd(root);
-  report(result, `${pc.green("Index up to date.")} ${result.total} notes (${result.added} added, ${result.updated} changed, ${result.removed} removed). .reports/index.md rebuilt.`);
+  const { embedPending, loadEmbedder, meaningReady, pendingCount } = await import("../core/embed.ts");
+  const embedder = pendingCount(root) > 0 ? await loadEmbedder() : null;
+  const embedded = embedder ? await embedPending(root, embedder).catch(() => null) : 0;
+  const meaning = (embedder !== null && embedded !== null) || meaningReady(root) ? "on" : "off";
+  const offLine = meaning === "off" ? `\n${pc.dim("Meaning search is off. Find still works on words. To turn it on, run: BRAIN_MODEL_FETCH=1 brain index")}` : "";
+  report({ ...result, meaning, embedded }, `${pc.green("Index up to date.")} ${result.total} notes (${result.added} added, ${result.updated} changed, ${result.removed} removed). .reports/index.md rebuilt.${offLine}`);
   return 0;
 }
 

@@ -8,7 +8,7 @@ import { log, readLog } from "../core/log.ts";
 import { buildCard, cardLines, isSubject, matchSubject } from "../reports/card.ts";
 import { areaBrief, areaMarkdown } from "../reports/reports.ts";
 import { backlinks, findNote } from "../reports/find.ts";
-import { list, search } from "../core/search.ts";
+import { find, list } from "../core/search.ts";
 import { type CliContext, fail, out, printHits, writeReport } from "./cli-shared.ts";
 
 export async function addCommand(c: CliContext): Promise<number> {
@@ -47,7 +47,9 @@ export async function newCommand(c: CliContext): Promise<number> {
 export async function findCommand(c: CliContext): Promise<number> {
   const { root, args, flags, tag, limit, json } = c;
   const query = args.join(" ");
-  const hits = search(root, query, { type: flags.type, tag, area: flags.area, status: flags.status, limit, all: flags.all });
+  const { meaningEmbedder } = await import("../core/embed.ts");
+  const filters = { type: flags.type, tag, area: flags.area, status: flags.status, limit, all: flags.all };
+  const { notes: hits } = await find(root, query, filters, query.trim() ? await meaningEmbedder(root) : null);
   const notes = loadAll(root);
   const subject = !flags.type && !tag && !flags.area && !flags.status ? matchSubject(notes, query) : undefined;
   const card = subject && buildCard(root, notes, subject);
