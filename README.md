@@ -15,7 +15,9 @@ Setup fills an empty folder from `starter/`, writes `~/.config/brain/env`, puts 
 
 Secrets and machine settings live outside the repo, in `~/.config/brain/`. Templates for each file are in `config/`: `env.example`, `relay.env.example` (phone captures) and `web.env.example` (deploys). For the Worker, copy `web/worker/.dev.vars.example` to `.dev.vars`.
 
-Then type `brain`.
+Then type `brain`. The terminal command is legacy. It stays until the MCP server at `/mcp`, inside `brain serve`, covers what agents need.
+
+The brain is meant to run on one always-on Mac, such as a Mac mini. It holds the one copy of the notes. A laptop and a phone send adds to it.
 
 ## What is here
 
@@ -23,7 +25,7 @@ Then type `brain`.
 | --- | --- |
 | `bin/`, `src/`, `test/` | The `brain` command and `brain serve` (TypeScript on Node, `node:test`) |
 | `web/app/` | The phone and menu bar app (Vite, React) |
-| `web/worker/` | The Cloudflare Worker: relay, phone inbox, Mac proxy |
+| `web/worker/` | The Cloudflare Worker: relay for phone adds, Mac proxy |
 | `design-system/` | Tokens and Storybook for the app |
 | `launchd/`, `daily.sh`, `swiftbar/` | Background jobs and the menu bar plugin |
 | `starter/` | What a new brain folder gets |
@@ -38,9 +40,10 @@ Then type `brain`.
 
 ## Upkeep
 
-- Every day at 07:00 the daily job indexes, tags and checks the notes, writes `.reports/today.md` in the brain folder, and commits the notes. If the Mac is asleep, it runs on wake.
+- Every day at 07:00 the daily job indexes, tags and checks the notes, writes `.reports/today.md` in the brain folder, and commits the notes with `git add -A`. If the Mac is asleep, it runs on wake.
 - `launchd/status.sh` shows which jobs are loaded and whether `brain serve` answers.
 - Logs: `~/Library/Logs/brain/`.
+- The notes' git history is the backup. There are no backup tarballs or backup folders.
 
 ## Licence
 

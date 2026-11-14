@@ -70,7 +70,7 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 
 - Sizes, colours, spacing and radius come from tokens in `src/styles/tokens.css`. Add a token if none fits. No raw `px` or hex outside tokens. Stylelint blocks both outside `tokens.css`.
 - Any group of items is a `List` of rows. Dividers come only from `List` or `Divider`. A row never draws its own border or box.
-- Sheet menus: no line inside a group, a `Divider` between groups. Archive, drop and cancel are last, `variant="danger"`.
+- Sheet menus: no line inside a group, a `Divider` between groups. Archive, delete and cancel are last, `variant="danger"`.
 - A box is one step off what it sits on: `--surface` on a screen, `--bg` in a sheet.
 - Icons: import the Phosphor `…Icon` part and pass it (`<Icon icon={PlusIcon} />`). Type props with `type Icon as PhosphorIcon`. No icon name strings. One meaning, one glyph.
 - A chevron means "opens a next step". Back is an arrow, top left. Close is ×, top right of a sheet. The primary action is last and full width. Other actions are `outlined`.

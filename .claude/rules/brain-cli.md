@@ -8,6 +8,7 @@ paths:
 
 # brain command code
 
+- The terminal CLI is legacy. It stays until the MCP server at `/mcp` covers what agents need. Add new features as `brain serve` routes, not new commands. Keep what jobs and hooks run: index, check, serve, pull, migrate.
 - Gates, run from the repo root: `npm run typecheck`, `npm test` and `npm run size`. All must pass. `npm run check` runs typecheck and size.
 - `npm run size` fails on any file over 200 lines. Split the file. Never raise the limit. Some old files are still over. If you touch one, split it, or at least do not make it longer.
 - Tests never read or copy real notes. Build blank notes with `test/fixture.ts`. Reason: notes are private and other agents change them.

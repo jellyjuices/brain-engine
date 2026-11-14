@@ -19,7 +19,7 @@ After a web app change, use the `web-reviewer` subagent. It runs the gates and r
 
 Reason: big tool output stays in the chat and is read again on every call.
 
-- For who imports a file or export, use the `fallow` MCP tools: `trace_file`, `trace_export`, `symbol_impact` before you edit anything exported. Run `audit` on changed files before you finish.
+- fallow is the code map. For who imports a file or export, use the `fallow` MCP tools: `trace_file`, `trace_export`, `symbol_impact` before you edit anything exported. Run `audit` on changed files before you finish.
 - Read one file at a time. Use `offset` and `limit` for files over 200 lines.
 - Every `grep` names a path and ends in `| head -30`.
 - Pipe long output (`npm test`, `vitest`, `lint`, `git diff`) through `| tail -20`.
