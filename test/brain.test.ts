@@ -223,7 +223,6 @@ test("today lists overdue, due soon, today and active projects", () => {
   delete process.env.BRAIN_TODAY;
   assert.deepEqual(r.overdue.map((s) => s.title), ["Late"]);
   assert.deepEqual(r.dueSoon.map((s) => s.title), ["Soon"]);
-  assert.deepEqual(r.doNow.map((s) => s.title), ["Soon"]);
   assert.deepEqual(r.activeProjects.map((s) => s.title), ["Late", "Later", "Soon"]);
   assert.equal(r.inboxCount, 1);
 });

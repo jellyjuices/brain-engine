@@ -53,14 +53,13 @@ function editLine(body: string, text: string, fn: (l: TodoLine) => string[]): st
 export function dueFor(when: string, now: string): { due?: string; outcome?: Outcome } {
   if (when === "someday") return { outcome: "someday" };
   if (when === "waiting") return { outcome: "waiting" };
-  if (when === "today") return { due: now, outcome: "today" };
-  return { due: when };
+  return { due: when === "today" ? now : when };
 }
 
 function addFollowUp(body: string, text: string, now: string): string {
   const { when, text: t } = splitWhen(text, now);
   if (when?.kind === "note") return appendToSection(body, NOTES_HEADING, `- ${now} · ${t}`);
-  const w = when ?? { due: now, outcome: "today" };
+  const w: { due?: string; outcome?: Outcome } = when ?? { due: now };
   return appendToSection(
     body,
     LOOPS_HEADING,

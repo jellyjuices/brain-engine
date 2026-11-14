@@ -61,7 +61,8 @@ export function loopSummary(l: Loop): Summary {
 
 export function addLoop(root: string, rel: string, l: TodoPatch & { text: string }): Note {
   const note = readNote(root, rel);
-  return writeNote(root, rel, note.meta, appendToSection(note.body, LOOPS_HEADING, newTodoLine(l)));
+  const patch = l.outcome === "today" ? { ...l, due: l.due ?? today(), outcome: undefined } : l;
+  return writeNote(root, rel, note.meta, appendToSection(note.body, LOOPS_HEADING, newTodoLine(patch)));
 }
 
 export function addNoteLine(root: string, rel: string, text: string, date = today()): Note {

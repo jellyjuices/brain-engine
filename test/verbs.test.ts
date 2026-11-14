@@ -70,7 +70,23 @@ test("move sets the due date and token; drop ticks and marks dropped; undo rever
   assert.equal(file(root), before);
   assert.equal(readLog(root).filter((e) => e.undoes).length, 2);
   move(root, "Later", "today");
-  assert.match(file(root), new RegExp(`- \\[ \\] Later thing · due ${now} · today`));
+  assert.match(file(root), new RegExp(`- \\[ \\] Later thing · due ${now}\\n`));
+});
+
+test("moving to today writes due with today's date and clears old marks", () => {
+  const root = brainWithTodos();
+  move(root, "Hear back", "today");
+  assert.match(file(root), new RegExp(`- \\[ \\] Hear back from Omar · due ${now}\\n`));
+  assert.doesNotMatch(file(root), /Hear back from Omar[^\n]*· (today|waiting)/);
+});
+
+test("a line with only the old today mark is not in Today, a due line is", () => {
+  const root = brainWithTodos();
+  writeFileSync(join(root, "projects/extra.md"), `---\ntype: Project\ntitle: Extra\ndescription: Extra.\n---\n\n# To-dos\n\n- [ ] Old mark only · today\n- [ ] Due today line · due ${now}\n- [ ] Overdue line · due ${yesterday}\n`);
+  const texts = dayList(root).map((x) => x.text);
+  assert.ok(!texts.includes("Old mark only"));
+  assert.ok(texts.includes("Due today line"));
+  assert.ok(texts.includes("Overdue line"));
 });
 
 test("undo refuses when the line changed since", () => {
@@ -81,7 +97,7 @@ test("undo refuses when the line changed since", () => {
 });
 
 test("when words map to dates and tokens", () => {
-  assert.deepEqual(parseWhen("today", "2026-11-05"), { due: "2026-11-05", outcome: "today", label: "today" });
+  assert.deepEqual(parseWhen("today", "2026-11-05"), { due: "2026-11-05", label: "today" });
   assert.equal(parseWhen("fri", "2026-11-05").due, "2026-11-06"); // a Thursday
   assert.equal(parseWhen("thu", "2026-11-05").due, "2026-11-12");
   assert.deepEqual(parseWhen("someday"), { outcome: "someday", label: "someday" });
@@ -123,7 +139,7 @@ test("done with a follow-up adds a to-do in the same subject, with the brain add
   assert.match(text, /- \[x\] Ask about Advil/);
   // No prefix means today.
   doneWith(root, "Book the sleep test", { follow_up: "Pick up the results" });
-  assert.match(file(root), new RegExp(`- \\[ \\] Pick up the results · due ${now} · today|- \\[ \\] Pick up the results · today`));
+  assert.match(file(root), new RegExp(`- \\[ \\] Pick up the results · due ${now}\\n`));
   // One undo per done: the tick, the note and the follow-up go together.
   undo(root);
   undo(root);

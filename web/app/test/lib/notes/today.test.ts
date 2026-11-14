@@ -11,7 +11,6 @@ describe("Today from the local copy", () => {
       ["overdue", "Follow up on the invoice"],
       ["today", "Checkup"],
       ["today", "Make a gym schedule"],
-      ["today", "Call back"],
       ["waiting", "Hear back about the quote"],
     ]);
   });
@@ -102,6 +101,17 @@ describe("what a change does to the local copy", () => {
   it("drop ticks it as dropped with the reason", () => {
     const out = applyDecision(area, todo, { kind: "drop", why: "No time" }, NOW)!;
     expect(out.body).toContain("done 2026-11-05 · dropped\n- 2026-11-05 · No time");
+  });
+
+  it("a line with only the old today mark is not in Today", () => {
+    expect(computeToday(fixture(), NOW).items.map((i) => i.text)).not.toContain("Call back");
+  });
+
+  it("moving to today writes due with today's date and no today mark", () => {
+    const later = { ...area, body: "# To-dos\n\n- [ ] Make a gym schedule · due 2026-11-20\n" };
+    const body = applyDecision(later, todo, { kind: "move", when: "today" }, NOW)!.body;
+    expect(body).toContain("- [ ] Make a gym schedule · due 2026-11-05\n");
+    expect(body).not.toContain("· today");
   });
 
   it("the change shows on Today at once", () => {

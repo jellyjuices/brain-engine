@@ -25,7 +25,6 @@ export interface TodayReport {
   date: string;
   overdue: Summary[];
   dueSoon: Summary[];
-  doNow: Summary[];
   activeProjects: Summary[];
   inboxCount: number;
 }
@@ -51,7 +50,6 @@ export function todayReport(root: string, notes = loadAll(root)): TodayReport {
     date: now,
     overdue: withDue.filter((s) => s.due! < now).sort(byDue),
     dueSoon: withDue.filter((s) => s.due! >= now && s.due! <= soon).sort(byDue),
-    doNow: items.filter((s) => s.outcome === "today"),
     activeProjects: open.filter((n) => typeOf(n) === "Project" && folderOf(n) === "projects").map(summary).sort((a, b) => a.title.localeCompare(b.title)),
     inboxCount: untriaged(notes).length,
   };
@@ -64,8 +62,8 @@ export function todayMarkdown(r: TodayReport): string {
     `# Today, ${r.date}\n`,
     `Inbox: ${r.inboxCount} note${r.inboxCount === 1 ? "" : "s"} to sort.\n`,
     section("Overdue", r.overdue.map(dated)),
-    section("Today", r.doNow.map((s) => `- ${link(s)}${s.area ? ` · ${s.area}` : ""}${bullets(s)}`)),
-    section("Due in the next 7 days", r.dueSoon.map(dated)),
+    section("Today", r.dueSoon.filter((s) => s.due === r.date).map((s) => `- ${link(s)}${s.area ? ` · ${s.area}` : ""}${bullets(s)}`)),
+    section("Due in the next 7 days", r.dueSoon.filter((s) => s.due !== r.date).map(dated)),
     section("Active projects", r.activeProjects.map((s) => `- ${link(s)}${s.description ? ` · ${s.description}` : ""}`), "No projects yet."),
   ].join("\n");
 }
