@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { DIRS, eventDue, titleOf } from "../core/notes.ts";
 import { loadAll } from "../core/files.ts";
-import { allLoops } from "./loops.ts";
+import { allLoops } from "./todos.ts";
 
 export interface CalEntry {
   uid: string;
