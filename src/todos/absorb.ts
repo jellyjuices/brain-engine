@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import { DIRS, folderOf, type Meta, type Note, str, titleOf, today, typeOf } from "../core/notes.ts";
+import { areasOf, DIRS, folderOf, type Meta, type Note, str, titleOf, today, typeOf } from "../core/notes.ts";
 import { loadAll, moveNote, readNote, slugify, uniquePath, writeNote } from "../core/files.ts";
 import { log } from "../core/log.ts";
 import { existsSync } from "node:fs";
@@ -29,12 +29,12 @@ const asLoop = (n: Note) => !!toOutcome(str(n.meta.outcome)) || !!n.meta.due;
 export function suggestTarget(notes: Note[], cap: Note): { into?: string; reason: string } {
   const text = captureText(cap);
   const capWords = new Set(words(text));
-  const area = str(cap.meta.area);
+  const area = areasOf(cap)[0];
   let best: { n: Note; score: number } | undefined;
   for (const note of notes.filter((n) => typeOf(n) === "Project" && live(n))) {
     const pw = words(titleOf(note));
     const score = pw.filter((w) => capWords.has(w)).length;
-    const enough = score >= 2 || (score >= 1 && (str(note.meta.area) === area || pw.length === 1));
+    const enough = score >= 2 || (score >= 1 && ((!!area && areasOf(note).includes(area)) || (!area && !areasOf(note).length) || pw.length === 1));
     if (enough && (!best || score > best.score)) best = { n: note, score };
   }
   if (best) return { into: best.n.path, reason: `matches project ${titleOf(best.n)}` };
@@ -71,7 +71,7 @@ export function newSubject(root: string, type: "Project" | "Person", title: stri
   const folder = type === "Project" ? "projects" : "people";
   const rel = uniquePath(root, folder, slugify(title));
   const meta: Meta = { type, title: title.trim(), description: description.trim() };
-  if (area) meta.area = area;
+  if (area) meta.areas = [area];
   const body = type === "Project" ? "# Goal\n\n# Status\n\n# To-dos\n\n# Notes" : "# Who\n\n# To-dos\n\n# Notes";
   writeNote(root, rel, meta, body);
   log(root, `created ${rel}`);

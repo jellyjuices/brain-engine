@@ -24,6 +24,9 @@
     "picocolors": "^1.1.1",
     "yaml": "^2.8.1"
   },
+  "optionalDependencies": {
+    "@huggingface/transformers": "^4.3.2"
+  },
   "devDependencies": {
     "@types/node": "^22.18.0",
     "typescript": "^5.9.3"

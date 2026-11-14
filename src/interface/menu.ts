@@ -3,7 +3,7 @@
 import * as p from "@clack/prompts";
 import pc from "picocolors";
 import { AREA_QUESTIONS, applyTriage, brainDump, newNote } from "../capture/actions.ts";
-import { DIRS, folderOf, type Note, str, titleOf, today, typeOf } from "../core/notes.ts";
+import { areasOf, DIRS, folderOf, type Note, str, titleOf, today, typeOf } from "../core/notes.ts";
 import { loadAll, readNote } from "../core/files.ts";
 import { captureText, newSubject } from "../todos/absorb.ts";
 import { bestHome, sortCapture, subjectsNamed, whenFrom, type When } from "../capture/file.ts";
@@ -167,7 +167,7 @@ export async function triage(root: string, standalone = true): Promise<number> {
       if (answer === BACK) break;
       when = { kind: "date", due: whenFrom(answer)!.due };
     }
-    const into = await aboutWhat(root, text, str(n.meta.area));
+    const into = await aboutWhat(root, text, areasOf(n)[0]);
     if (into === BACK) break;
     let withPeople: string[] = [];
     const notes = loadAll(root);
