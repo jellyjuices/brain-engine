@@ -26,7 +26,8 @@ The owner, on any device. Also the agents that read and write the brain for them
 
 - Local and free. No paid AI. Ollama runs on the home server later.
 - Until Ollama runs, Claude works only in chats the owner starts. No background Claude runs.
-- Embeddings run inside brain with Transformers.js.
+- Embeddings run inside brain with Transformers.js, on the server and in the app, with the same small model (see [find.md](find.md)).
+- The phone is Android with Chrome. The laptop is a MacBook. The home server is a Mac mini.
 - The terminal CLI is not a goal. It can be deprecated once the MCP server covers what agents need.
 - The daily auto-commit of the notes stays.
 - App code lives in the brain engine repo, apart from the notes. The engine holds no personal data, so anyone can fork it.

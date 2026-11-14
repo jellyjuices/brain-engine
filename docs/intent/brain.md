@@ -6,7 +6,7 @@
 
 - What the owner knows about one subject, like a client, is spread across many notes.
 - They cannot tell if something has always been bad or only lately.
-- On flat days they feel they got nothing done, and has no proof otherwise.
+- On flat days they feel they got nothing done, and have no proof otherwise.
 - Related links are shown in several overlapping lists.
 
 ## Outcomes
@@ -34,7 +34,7 @@ The owner, before they meet someone, when they weigh a client, when they want th
 - The description shows once. No section repeats it.
 - Names only, never raw Markdown links.
 - Edit, Move and Archive sit in a ⋯ menu.
-- Feelings about a subject are dated `# Notes` lines marked `feeling`: `- 2026-11-12 · feeling · I think the people are nice but I am concerned about the amount of work and intensity.`
+- Feelings about a subject are dated `# Notes` lines marked `feeling`: `- 2026-11-12 · feeling · I think the people are nice but I am concerned about the amount of work and intensity · about the work`
 - A helper groups feeling quotes by what they are about. The owner drags a quote to fix it. A helper never labels their mood.
 - Feelings about the owner themselves live in lenses (see [me-and-intake.md](me-and-intake.md)).
 - Lines from other notes that link here show through backlinks. Nothing is copied.

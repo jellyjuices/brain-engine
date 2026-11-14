@@ -11,7 +11,7 @@
 ## Outcomes
 
 1. A quick to-do or capture is sorted within minutes, with no AI: rules first, then fuzzy matching, then embeddings.
-2. A journal entry or rant is split into bits in a Claude chat the owner starts. Each bit goes to the right place: a to-do, a fact, a feeling, or a decision bucket.
+2. A journal entry or rant is split into bits in a Claude chat the owner starts. Each bit goes to the right place: a to-do, a fact, a feeling, or a decision bucket. A feeling keeps what it is about as `· about <their words>`.
 3. Leftovers are rare. They show as an "Unsorted entries" banner, never a pile.
 4. The Sort screen groups lines by subject.
 5. On the Sort screen, the owner drags a line to move it. They tap a tag to change it, or + to add one.
@@ -19,6 +19,7 @@
 7. The sort learns from the owner's moves. It never asks them to rate it.
 8. Every line a helper writes is marked, and the owner can see when and from what.
 9. With no helper running, everything still works. Entries wait, and the owner can sort by hand.
+10. A capture is deleted once it is sorted. Git history keeps it. This holds for a helper's sort and for the owner's own sort at add, by a tag, person or relation.
 
 ## User
 
@@ -32,7 +33,7 @@ The owner, a moment after they add something, and when they tap the "Unsorted en
 - The sort runs on the home server, inside the brain server.
 - Never invent a fact. When unsure, file to the best guess and add the "check" tag.
 - Never decide for the owner, diagnose them, or label them or their mood.
-- Never delete a note. Move it to `.archive/`.
+- Never delete a note. Move it to `.archive/`. A sorted capture is not a note: once its text is in its subject, delete it.
 - Never edit `sources/`.
 - Never speak first. The owner starts every talk.
 - Every helper write carries `generated`. Only the owner adds `verified`.
