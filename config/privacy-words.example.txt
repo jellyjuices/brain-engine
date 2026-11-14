@@ -1,0 +1,5 @@
+# Copy to ~/.config/brain/privacy-words.txt and use your own words.
+# One word or phrase per line. Case-insensitive. Never commit the real file.
+sample-surname
+sample-street name
+sample-company
