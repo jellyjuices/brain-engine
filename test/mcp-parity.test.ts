@@ -26,7 +26,6 @@ const STEPS: Step[] = [
   ["unsorted", () => ({})],
   ["relations", () => ({ path: "people/dana-cole.md" })],
   ["notes_since", () => ({ since: "2000-01-01" })],
-  ["search", () => ({ q: "shed", limit: 5 })],
   ["card", () => ({ q: "Garden shed" })],
   ["list", () => ({ type: "Project" })],
   ["calendar", () => ({})],

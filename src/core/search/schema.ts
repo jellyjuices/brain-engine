@@ -30,9 +30,14 @@ const TABLES = `
     id UNINDEXED, text, tokenize = 'trigram remove_diacritics 1'
   );
   CREATE TABLE IF NOT EXISTS vectors (
-    id TEXT, hash TEXT, model TEXT, vec BLOB, PRIMARY KEY (id, model)
+    id TEXT, hash TEXT, model TEXT, vec BLOB, at REAL, PRIMARY KEY (id, model)
   );
 `;
+
+function addVectorTime(db: DatabaseSync) {
+  const columns = db.prepare("PRAGMA table_info(vectors)").all() as { name: string }[];
+  if (!columns.some((column) => column.name === "at")) db.exec("ALTER TABLE vectors ADD COLUMN at REAL");
+}
 
 const CLEAR = ["notes", "relations", "todo_subjects", "entries", "words", "strings", "vectors"].map((table) => `DELETE FROM ${table};`).join(" ");
 
@@ -40,6 +45,7 @@ export function openIndex(root: string): DatabaseSync {
   mkdirSync(join(root, ".brain"), { recursive: true });
   const db = new DatabaseSync(join(root, ".brain", "index.db"));
   db.exec(TABLES);
+  addVectorTime(db);
   return db;
 }
 

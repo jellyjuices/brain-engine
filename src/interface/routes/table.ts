@@ -6,7 +6,7 @@ import { calendarFeed } from "../../todos/calendar.ts";
 import { HttpError } from "../server-auth.ts";
 import { type Ctx, TextBody } from "../server-context.ts";
 import { addFile, addJournal, addPerson, addSubject, doneRoute, dropRoute, editNote, inboxDrop, moveRoute, setBirthday, undoRoute } from "../server-writes.ts";
-import { cardRoute, intakeNext, intakeSave, intakeSkip, listRoute, notesSince, oneNote, report, searchRoute, todayRoute } from "../server-reads.ts";
+import { cardRoute, intakeNext, intakeSave, intakeSkip, listRoute, notesSince, oneNote, report, todayRoute } from "../server-reads.ts";
 import { newAgentToken, revokeAgent } from "./agent.ts";
 import { addRoute, sortRoute, unsortedRoute } from "./capture.ts";
 import { decisionRoute, goalRoute, goalsRoute } from "./goals.ts";
@@ -39,7 +39,7 @@ export const ROUTES: Route[] = [
   r("POST", "/api/move", "move", "Give a to-do a new When.", "Use to put a to-do off, or on hold.", moveRoute),
   r("POST", "/api/drop", "delete_todo", "Delete a to-do. It stays on the timeline as dropped.", "Use when a to-do no longer matters.", dropRoute),
   r("POST", "/api/undo", "undo", "Undo the last change. A whole sort is one change.", "Use right after a wrong write.", undoRoute),
-  r("GET", "/api/find", "find", "Find notes by words, with the subject card when the words name one.", "Use first to look anything up.", findRoute),
+  r("GET", "/api/find", "find", "Find notes by words and meaning, with a short answer line and the subject card.", "Use first to look anything up; filter by type, tag, area or status.", findRoute),
   r("GET", "/api/todos", "todos", "One to-do view: today, soon, no-date, on-hold, by-goal or all.", "Use to get to-do refs.", todosRoute),
   r("GET", "/api/today", "today", "Today: overdue and due to-dos and events.", "Use to plan the day.", todayRoute),
   r("GET", "/api/notes/", "read_note", "Read one note with its backlinks and card.", "Use after find, with the note path.", oneNote, { prefix: true }),
@@ -60,8 +60,7 @@ export const ROUTES: Route[] = [
   r("DELETE", "/api/drafts/", "delete_draft", "Delete a saved draft.", "Use once a draft is not needed.", dropDraft, { prefix: true }),
   r("POST", "/api/agent-token", "agent_token", "Make a new agent token. Owner only.", "", newAgentToken, { owner: true }),
   r("DELETE", "/api/agent-token", "revoke_agent_token", "Revoke the agent token. Owner only.", "", revokeAgent, { owner: true }),
-  r("GET", "/api/notes", "notes_since", "Notes changed since a time, for the app's copy.", "Prefer find.", notesSince),
-  r("GET", "/api/search", "search", "Search hits only.", "Use to filter by type, tag, area or status.", searchRoute),
+  r("GET", "/api/notes", "notes_since", "Notes changed since a time, with their meaning vectors, for the app's copy.", "Prefer find.", notesSince),
   r("GET", "/api/card", "card", "The subject card for some words.", "Use for all about one person or subject.", cardRoute),
   r("GET", "/api/list", "list", "List notes by type, tag, area or status.", "Use to browse.", listRoute),
   r("GET", "/api/cal.ics", "calendar", "The calendar feed.", "Use for dated items as iCalendar text.", (c) => new TextBody(calendarFeed(c.root), "text/calendar; charset=utf-8")),

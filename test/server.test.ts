@@ -59,9 +59,9 @@ test("auth: health is open, other routes need the right token", () => withApi(as
 }));
 
 test("search finds a note by words", () => withApi(async (a) => {
-  const r = await a.call("GET", "/api/search?q=doctor");
+  const r = await a.call("GET", "/api/find?q=doctor&type=Project");
   assert.equal(r.status, 200);
-  assert.ok(r.data.some((h: { path: string }) => h.path === "projects/visit.md"));
+  assert.ok(r.data.hits.some((h: { path: string }) => h.path === "projects/visit.md"));
   const card = await a.call("GET", "/api/card?q=Family%20doctor%20visit");
   assert.equal(card.data.card.subject.path, "projects/visit.md");
 }));

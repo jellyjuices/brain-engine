@@ -164,11 +164,24 @@
   },
   {
     "name": "find",
-    "description": "Find notes by words, with the subject card when the words name one. Use first to look anything up.",
+    "description": "Find notes by words and meaning, with a short answer line and the subject card. Use first to look anything up; filter by type, tag, area or status.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "q": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "description": "A note type."
+        },
+        "tag": {
+          "type": "string"
+        },
+        "area": {
+          "type": "string"
+        },
+        "status": {
           "type": "string"
         },
         "limit": {
@@ -660,48 +673,13 @@
   },
   {
     "name": "notes_since",
-    "description": "Notes changed since a time, for the app's copy. Prefer find.",
+    "description": "Notes changed since a time, with their meaning vectors, for the app's copy. Prefer find.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "since": {
           "type": "string",
           "description": "ISO time."
-        }
-      },
-      "additionalProperties": false
-    },
-    "annotations": {
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "search",
-    "description": "Search hits only. Use to filter by type, tag, area or status.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "q": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string",
-          "description": "A note type."
-        },
-        "tag": {
-          "type": "string"
-        },
-        "area": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string"
-        },
-        "limit": {
-          "type": "integer",
-          "minimum": 1
         }
       },
       "additionalProperties": false

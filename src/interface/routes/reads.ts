@@ -3,7 +3,7 @@
 import { addDays, today } from "../../core/notes.ts";
 import { loadAll } from "../../core/files.ts";
 import { readLog } from "../../core/log.ts";
-import { search } from "../../core/search.ts";
+import { find, findHits, type Filters, routeEmbedder, shortAnswer } from "../../core/search.ts";
 import { buildCard, matchSubject } from "../../reports/card.ts";
 import { ref } from "../../todos/day-list.ts";
 import { decideByLoops } from "../../todos/decide-by.ts";
@@ -15,15 +15,21 @@ import type { Ctx } from "../server-context.ts";
 const SOON_DAYS = 14;
 const MAX_LOG = 200;
 
-/** The subject card when the words name one, and the hits either way. */
-export function findRoute(c: Ctx): FindResponse {
-  const q = c.url.searchParams.get("q") ?? "";
+const FILTERS = ["type", "tag", "area", "status"] as const;
+
+/** Fused words, strings and meaning, with the answer card, and the subject card when the words name one and no filter is set. */
+export async function findRoute(c: Ctx): Promise<FindResponse> {
+  const params = c.url.searchParams;
+  const q = params.get("q") ?? "";
   if (!q.trim()) throw new HttpError(400, `Missing "q".`);
-  const limit = c.url.searchParams.get("limit") ? Number(c.url.searchParams.get("limit")) : undefined;
-  const hits = search(c.root, q, { limit });
+  const filters: Filters = { limit: params.get("limit") ? Number(params.get("limit")) : undefined };
+  for (const key of FILTERS) filters[key] = params.get(key) ?? undefined;
+  const result = await find(c.root, q, filters, await routeEmbedder(c.root));
+  const found = { answer: shortAnswer(result.answer), meaning: result.meaning, hits: findHits(result) };
+  if (FILTERS.some((key) => filters[key])) return found;
   const notes = loadAll(c.root);
   const subject = matchSubject(notes, q);
-  return subject ? { card: buildCard(c.root, notes, subject), hits } : { hits };
+  return subject ? { card: buildCard(c.root, notes, subject), ...found } : found;
 }
 
 const VIEW: Record<TodoView, (l: Loop, now: string) => boolean> = {
