@@ -94,7 +94,7 @@
 }
 
 .add-blob--journal {
-  --add-blob-w: calc(100vw - 2 * var(--s2));
+  --add-blob-w: 100vw;
   --add-blob-h: min(
     calc(var(--add-blob-w) * 1.5),
     calc(var(--vvh, 100dvh) - var(--tabbar) / 2 - var(--s5))
@@ -112,7 +112,7 @@
 }
 
 .add-blob--journal .add-box {
-  inset: 32% 10% 20%;
+  inset: 20% 10% 20%;
 }
 
 @keyframes add-morph {
