@@ -46,4 +46,6 @@ export const add = {
   birthdayOf: (name: string) => `${name}'s birthday`,
   addHere: "Add here",
   other: "Other",
+  fullScreen: "Full screen",
+  smaller: "Smaller",
 };

@@ -1,14 +1,11 @@
 import "./add-panel.css";
-import {
-  BookOpenIcon,
-  CheckIcon,
-  CheckSquareIcon,
-  DotsThreeIcon,
-  PlusIcon,
-} from "@phosphor-icons/react";
+import { CheckIcon, PlusIcon } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { Shape } from "@/components/shape/shape.tsx";
+import { AddArc } from "@/components/add-arc/add-arc.tsx";
+import { AddBox } from "@/components/add-box/add-box.tsx";
+import { AddFull } from "./add-full.tsx";
 import { saveJournal } from "@/flows/new-flow.ts";
 import { saveFlow } from "@/flows/save-flow.ts";
 import { todayIso } from "@/lib/notes/model.ts";
@@ -22,6 +19,7 @@ export function AddPanel() {
   const [mode, setMode] = useState<Mode>("closed");
   const [busy, setBusy] = useState(false);
   const [closing, setClosing] = useState(false);
+  const [full, setFull] = useState(false);
   const box = useRef<HTMLDivElement>(null);
   const editing = mode === "todo" || mode === "journal";
 
@@ -64,6 +62,7 @@ export function AddPanel() {
 
   function closed() {
     setClosing(false);
+    setFull(false);
     setMode("closed");
   }
 
@@ -93,63 +92,22 @@ export function AddPanel() {
       )}
       {mode !== "closed" && (
         <div
-          className={clsx("add-blob", `add-blob--${mode}`)}
+          className={clsx("add-blob", `add-blob--${mode}`, full && "is-full")}
           onAnimationEnd={(e) => {
             if (e.animationName === "add-deflate") closed();
           }}
         >
           {mode === "open" && (
-            <div className="add-arc" role="menu" aria-label={copy.add.newTitle}>
-              <button
-                type="button"
-                role="menuitem"
-                className="add-pick add-pick--1"
-                onClick={() => setMode("todo")}
-              >
-                <Shape name="todo" icon={CheckSquareIcon} size="lg" />
-                <span>{copy.add.todo}</span>
-              </button>
-              <button
-                type="button"
-                role="menuitem"
-                className="add-pick add-pick--2"
-                onClick={() => setMode("journal")}
-              >
-                <Shape name="journal" icon={BookOpenIcon} size="lg" />
-                <span>{copy.add.journal}</span>
-              </button>
-              <button
-                type="button"
-                role="menuitem"
-                className="add-pick add-pick--3"
-                onClick={other}
-              >
-                <Shape name="other" icon={DotsThreeIcon} size="lg" />
-                <span>{copy.add.other}</span>
-              </button>
-            </div>
-          )}
-          {editing && (
-            <div
-              ref={box}
-              className="add-box"
-              role="textbox"
-              tabIndex={0}
-              aria-multiline="true"
-              aria-label={mode === "todo" ? copy.add.todo : copy.add.journal}
-              data-placeholder={mode === "todo" ? copy.add.todoHint : copy.add.writePlaceholder}
-              contentEditable="plaintext-only"
-              suppressContentEditableWarning
-              onKeyDown={(e) => {
-                if (mode === "todo" && e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  void save();
-                }
-              }}
+            <AddArc
+              onTodo={() => setMode("todo")}
+              onJournal={() => setMode("journal")}
+              onOther={other}
             />
           )}
+          {editing && <AddBox ref={box} kind={mode} full={full} onEnter={() => void save()} />}
         </div>
       )}
+      {mode === "journal" && !closing && <AddFull full={full} onToggle={() => setFull(!full)} />}
       <button
         type="button"
         className="add-main"

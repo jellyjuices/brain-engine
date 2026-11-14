@@ -31,7 +31,8 @@ function read(ext) {
     .join("\n");
 }
 const js = read(".js").replaceAll("</script>", "<\\/script>");
-const page = `<title>Brain Preview</title>
+const page = `<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Brain Preview</title>
 <style>
 html, body { height: 100%; }
 body { background: var(--bg); }

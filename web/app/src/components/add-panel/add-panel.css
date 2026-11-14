@@ -1,15 +1,3 @@
-@property --add-fade-top {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0;
-}
-
-@property --add-fade-bottom {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0;
-}
-
 .add-panel {
   position: relative;
   display: flex;
@@ -71,7 +59,11 @@
   width: var(--add-blob-w);
   height: var(--add-blob-h);
   margin-left: calc(var(--add-blob-w) / -2);
-  transition: top var(--slow) var(--ease);
+  transition:
+    top var(--slow) var(--ease),
+    width var(--slow) var(--ease),
+    height var(--slow) var(--ease),
+    margin-left var(--slow) var(--ease);
   animation: add-inflate var(--pop) var(--ease) both;
 }
 
@@ -91,8 +83,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .add-blob::before,
-  .add-pick .shape-bg {
+  .add-blob::before {
     animation: none;
   }
 }
@@ -116,21 +107,28 @@
   transform-origin: 50% 80%;
 }
 
+.add-blob--journal.is-full {
+  --add-blob-w: calc(max(var(--vvh, 100dvh), 100vw) * 2);
+  --add-blob-h: var(--add-blob-w);
+  top: calc(var(--vvt, 0) - var(--add-blob-h) * 0.3);
+}
+
+.add-full {
+  position: fixed;
+  top: calc(
+    var(--vvt, 0) + var(--vvh, 100dvh) - var(--tabbar) - env(safe-area-inset-bottom) -
+      var(--control-sm) - var(--s2)
+  );
+  right: calc(var(--s3) + env(safe-area-inset-right));
+  z-index: 3;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
 .add-blob--journal::before {
   clip-path: var(--shape-kind-journal);
   animation: none;
-}
-
-.add-blob--journal .add-box {
-  inset-block: 30% calc(20% + var(--tabbar));
-  mask-image: linear-gradient(
-    transparent,
-    black var(--add-fade-top),
-    black calc(100% - var(--add-fade-bottom)),
-    transparent
-  );
-  animation: add-edges linear both;
-  animation-timeline: scroll(self);
 }
 
 @keyframes add-morph {
@@ -143,74 +141,6 @@
   from {
     transform: scale(0.15);
   }
-}
-
-.add-arc {
-  position: absolute;
-  bottom: 50%;
-  left: 50%;
-}
-.add-pick {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--s0);
-  border: 0;
-  background: transparent;
-  color: var(--accent-ink);
-  font: inherit;
-  font-size: var(--t-xs);
-  font-weight: 600;
-  translate: -50% 0;
-  animation: add-pop var(--fast) var(--ease) both;
-}
-
-.add-pick .shape {
-  color: var(--accent);
-}
-
-.add-pick .shape-bg {
-  animation: add-spin var(--spin) linear infinite;
-  background: var(--surface);
-}
-
-.add-pick--1 {
-  transform: translate(calc(var(--add-arc) * -0.87), calc(var(--add-arc) * -0.5));
-}
-
-.add-pick--2 {
-  transform: translate(0, calc(var(--add-arc) * -1));
-}
-
-.add-pick--3 {
-  transform: translate(calc(var(--add-arc) * 0.87), calc(var(--add-arc) * -0.5));
-}
-
-@keyframes add-pop {
-  from {
-    opacity: 0;
-    scale: 0.4;
-  }
-}
-
-.add-box {
-  position: absolute;
-  inset-block: 22% 58%;
-  inset-inline: calc((var(--add-blob-w) - 100vw) / 2 + var(--s3));
-  overflow-y: auto;
-  color: var(--accent-ink);
-  font-size: var(--text);
-  line-height: var(--leading);
-  white-space: pre-wrap;
-  outline: none;
-}
-
-.add-box:empty::before {
-  content: attr(data-placeholder);
-  opacity: 0.7;
 }
 
 .add-panel:not(.is-closed) .add-main .label {
@@ -239,21 +169,5 @@
 @keyframes add-fade {
   to {
     opacity: 0;
-  }
-}
-
-@keyframes add-edges {
-  0% {
-    --add-fade-top: 0;
-    --add-fade-bottom: var(--s3);
-  }
-  8%,
-  92% {
-    --add-fade-top: var(--s3);
-    --add-fade-bottom: var(--s3);
-  }
-  100% {
-    --add-fade-top: var(--s3);
-    --add-fade-bottom: 0;
   }
 }
