@@ -64,7 +64,7 @@
   flex: none;
   width: var(--s5);
   height: var(--s5);
-  border-radius: var(--pill);
+  border-radius: var(--radius);
   background: var(--accent-soft);
   color: var(--accent);
 }

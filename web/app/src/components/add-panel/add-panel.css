@@ -27,7 +27,7 @@
   transition: transform var(--fast) var(--ease);
 }
 
-.add-main .shape > svg:not(.shape-bg) {
+.add-main .shape > svg {
   transition: transform var(--fast) var(--ease);
 }
 
@@ -39,7 +39,7 @@
   transform: scale(1.15);
 }
 
-.add-panel.is-open .add-main .shape > svg:not(.shape-bg) {
+.add-panel.is-open .add-main .shape > svg {
   transform: rotate(45deg);
 }
 
@@ -81,7 +81,7 @@
 }
 
 .add-pick .shape-bg {
-  fill: var(--surface);
+  background: var(--surface);
 }
 
 .add-pick--1 {

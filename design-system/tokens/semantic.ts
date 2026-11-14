@@ -98,6 +98,14 @@ export const shared: Record<string, string> = {
   'shape-toast-warning': 'shape-triad',
   'shape-toast-info': 'shape-blossom',
   'shape-toast-neutral': 'shape-squircle',
+  'shape-kind-todo': 'shape-scallop',
+  'shape-kind-journal': 'shape-pebble',
+  'shape-kind-person': 'shape-flower',
+  'shape-kind-place': 'shape-clover',
+  'shape-kind-thing': 'shape-puff',
+  'shape-kind-file': 'shape-hexagon',
+  'shape-kind-intake': 'shape-pentagon',
+  'shape-kind-other': 'shape-circle',
 }
 
 export const composed: Record<string, string> = {

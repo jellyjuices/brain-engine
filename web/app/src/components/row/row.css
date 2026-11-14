@@ -61,7 +61,7 @@
   flex: none;
   width: var(--control-sm);
   height: var(--control-sm);
-  border-radius: var(--pill);
+  border-radius: var(--radius-sm);
   background: var(--bg);
   color: var(--ink);
 }
