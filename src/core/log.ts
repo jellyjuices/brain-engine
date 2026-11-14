@@ -65,15 +65,17 @@ function changedSince(step: UndoStep): string {
   return `${step.path} changed since. Undo it by hand:\n  now: ${step.added.join("\n       ")}\n  was: ${step.removed.join("\n       ")}`;
 }
 
-function planStep(root: string, step: UndoStep): () => void {
+function planStep(root: string, step: UndoStep, pending: Map<string, string | null>): () => void {
   const full = join(root, step.path);
-  const now = readOrNull(root, step.path);
+  const now = pending.has(step.path) ? pending.get(step.path)! : readOrNull(root, step.path);
   if (step.file === "made") {
     if (now !== step.added.join("\n")) throw new Error(changedSince(step));
+    pending.set(step.path, null);
     return () => unlinkSync(full);
   }
   if (step.file === "gone") {
     if (now !== null) throw new Error(`${step.path} is back already. Nothing changed.`);
+    pending.set(step.path, step.removed.join("\n"));
     return () => writeAtomic(full, step.removed.join("\n"));
   }
   if (now === null) throw new Error(changedSince(step));
@@ -82,6 +84,7 @@ function planStep(root: string, step: UndoStep): () => void {
   lines.splice(step.line, step.added.length, ...step.removed);
   const text = lines.join("\n");
   if (parse(text).error) throw new Error(`Undo would break ${step.path}. Nothing changed.`);
+  pending.set(step.path, text);
   return () => writeAtomic(full, text);
 }
 
@@ -91,7 +94,8 @@ export function undoLast(root: string): { msg: string; line: string } {
   const undone = new Set(entries.flatMap((e) => (e.undoes ? [e.undoes] : [])));
   const last = entries.find((e) => e.id && e.undo && !undone.has(e.id));
   if (!last) throw new Error("Nothing to undo.");
-  const plans = last.undo!.map((step) => planStep(root, step));
+  const pending = new Map<string, string | null>();
+  const plans = last.undo!.map((step) => planStep(root, step, pending));
   for (const apply of plans) apply();
   log(root, `undo: ${last.msg}`, { undoes: last.id });
   return { msg: last.msg, line: `Undone: ${last.msg}` };
