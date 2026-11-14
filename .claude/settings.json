@@ -6,7 +6,9 @@
       "Bash(npm run typecheck)",
       "Bash(npm run size)",
       "Bash(npm run lint)",
-      "Bash(npm run check)"
+      "Bash(npm run check)",
+      "Edit(./**)",
+      "Write(./**)"
     ],
     "deny": [
       "Bash(rm)",
