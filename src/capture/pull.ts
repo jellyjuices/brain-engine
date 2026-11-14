@@ -5,6 +5,7 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 import { capture } from "./actions.ts";
 import { bestHome, fileInto, namesAPerson, splitPrefix, subjectsNamed } from "./file.ts";
+import { pickedHome } from "./picked.ts";
 import { DIRS, folderOf, type Note, typeOf } from "../core/notes.ts";
 import { loadAll } from "../core/files.ts";
 import { readLog } from "../core/log.ts";
@@ -22,6 +23,12 @@ export interface PendingItem {
   tags?: string[];
   /** A note path from "+ Add here" on the phone. */
   into?: string;
+  /** Note paths the owner picked under About what? */
+  about?: string[];
+  /** Person note paths the owner picked. */
+  people?: string[];
+  /** Who wrote it, when it was not the owner. */
+  by?: string;
 }
 
 export interface PullResult {
@@ -84,13 +91,13 @@ function homeFromText(notes: Note[], input: string): Note | undefined {
 const phoneMark =(id: string) => `(phone ${id})`;
 
 /** File one phone item in its note. A When prefix picks to-do or date; with none it is a dated note line. */
-function fileOnNote(root: string, notes: Note[], target: Note, item: PendingItem): void {
+function fileOnNote(root: string, notes: Note[], target: Note, item: PendingItem, picked: { with: string[]; re: string[] }): void {
   const { when, text } = splitPrefix(item.text);
   // DECISION: with no When prefix, a note the phone chose gets a dated note line (a fact), not a guessed to-do.
   const w = when ?? { kind: "note" as const };
   const hits = subjectsNamed(notes, text).filter((n) => n.path !== target.path);
-  const people = hits.filter((n) => typeOf(n) === "Person").map((n) => n.path);
-  const re = hits.filter((n) => typeOf(n) !== "Person").map((n) => n.path);
+  const people = [...new Set([...picked.with, ...hits.filter((n) => typeOf(n) === "Person").map((n) => n.path)])].filter((p) => p !== target.path);
+  const re = [...new Set([...picked.re, ...hits.filter((n) => typeOf(n) !== "Person").map((n) => n.path)])].filter((p) => p !== target.path);
   const date = (item.created_at ?? "").slice(0, 10) || undefined;
   change(root, target.path, `added to ${target.path}: ${text} ${phoneMark(item.client_id)}`, () => {
     fileInto(root, notes, target.path, text, w, { with: people, re, date });
@@ -105,12 +112,13 @@ export function saveItem(root: string, item: PendingItem): { saved: "filed" | "i
   const existing = notes.find((n) => n.meta.client_id === item.client_id);
   if (existing) return { saved: "skipped", path: existing.path };
   if (alreadyFiled(root, item.client_id)) return { saved: "skipped" };
-  const target = filedNote(notes, item.into) ?? homeFromText(notes, item.text);
+  const picked = pickedHome(notes, item);
+  const target = filedNote(notes, item.into) ?? picked.target ?? homeFromText(notes, item.text);
   if (target) {
-    fileOnNote(root, notes, target, item);
+    fileOnNote(root, notes, target, item, picked);
     return { saved: "filed", path: target.path };
   }
-  const note = capture(root, { text: item.text, tags: item.tags, clientId: item.client_id, createdAt: item.created_at });
+  const note = capture(root, { text: item.text, tags: item.tags, clientId: item.client_id, createdAt: item.created_at, by: item.by });
   return { saved: "inbox", path: note.path };
 }
 

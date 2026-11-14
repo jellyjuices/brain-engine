@@ -7,10 +7,11 @@
 // DECISION: `brain add` skips the inbox only with a When prefix and a match. Without a prefix,
 // "is this a to-do or a fact?" is a guess, so it goes to the inbox with the best match shown.
 
-import { posix } from "node:path";
-import { DIRS, folderOf, type Meta, type Note, str, titleOf, today, typeOf } from "../core/notes.ts";
-import { moveNote, readNote, slugify, uniquePath } from "../core/files.ts";
-import { log } from "../core/log.ts";
+import { unlinkSync } from "node:fs";
+import { join, posix } from "node:path";
+import { DIRS, folderOf, type Note, str, titleOf, today, typeOf } from "../core/notes.ts";
+import { readNote } from "../core/files.ts";
+import { changeFiles } from "../core/log.ts";
 import { addLoop, addNoteLine } from "../todos/todos.ts";
 import { captureText, suggestTarget } from "../todos/absorb.ts";
 import { change } from "../todos/undo.ts";
@@ -88,17 +89,35 @@ export function fileInto(root: string, notes: Note[], into: string, text: string
   return "to-do";
 }
 
-/** File one inbox capture in one step: write its line in the subject note, then archive it with absorbed_into. */
-export function sortCapture(root: string, notes: Note[], capturePath: string, into: string, when: When, opts: { with?: string[] } = {}): { into: string; archived: string } {
+/** One line a sort writes. With no `text`, the line is the whole capture. */
+export interface SortBit {
+  into: string;
+  when: When;
+  text?: string;
+  with?: string[];
+  re?: string[];
+}
+
+/**
+ * Sort one capture into one or more subjects, then delete the capture. Git keeps it.
+ * DECISION: the lines and the delete are one log entry, so one undo puts the capture back and takes every line out.
+ */
+export function sortBits(root: string, notes: Note[], capturePath: string, bits: SortBit[]): { into: string[]; deleted: string } {
   const cap = readNote(root, capturePath);
   if (typeOf(cap) !== "Capture") throw new Error(`${capturePath} is not a capture.`);
-  const text = captureText(cap);
-  fileInto(root, notes, into, text, when, { ...opts, date: String(cap.meta.created ?? today()).slice(0, 10) });
-  const archived = uniquePath(root, DIRS.archive, slugify(text, 50));
-  const meta: Meta = { ...cap.meta, absorbed_into: into };
-  moveNote(root, capturePath, archived, meta, cap.body);
-  log(root, `sorted ${capturePath} into ${into}`);
-  return { into, archived };
+  if (!bits.length) throw new Error("Say where the capture goes.");
+  const date = String(cap.meta.created ?? today()).slice(0, 10);
+  const into = [...new Set(bits.map((b) => b.into))];
+  changeFiles(root, [...into, capturePath], `sorted ${capturePath} into ${into.join(", ")}`, () => {
+    for (const b of bits) fileInto(root, notes, b.into, b.text?.trim() || captureText(cap), b.when, { with: b.with, re: b.re, date });
+    unlinkSync(join(root, capturePath));
+  });
+  return { into, deleted: capturePath };
+}
+
+/** File one inbox capture in one step: write its line in the subject note, then delete the capture. */
+export function sortCapture(root: string, notes: Note[], capturePath: string, into: string, when: When, opts: { with?: string[] } = {}): { into: string; deleted: string } {
+  return { into, deleted: sortBits(root, notes, capturePath, [{ into, when, with: opts.with }]).deleted };
 }
 
 /** `brain add`: with a When prefix and a named subject, file it there. Otherwise save to the inbox. */

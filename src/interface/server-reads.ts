@@ -1,7 +1,6 @@
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { saveItem } from "../capture/pull.ts";
 import { buildCard, matchSubject } from "../reports/card.ts";
 import { summary } from "../core/notes.ts";
 import { loadAll, notePaths } from "../core/files.ts";
@@ -11,7 +10,7 @@ import { dayList, ref } from "../todos/day-list.ts";
 import { lensPrivacy } from "../intake/lenses.ts";
 import { saveLensAnswer } from "../intake/lens-answers.ts";
 import { listThreads, updateThread } from "../intake/threads.ts";
-import { HttpError, MAX_CAPTURE } from "./server-auth.ts";
+import { HttpError } from "./server-auth.ts";
 import { afterWrite, type Ctx, existingNote, fullNoteJson, noteJson, safeNotePath, text } from "./server-context.ts";
 import { OWNER_BY, ownerWriters } from "../core/owner.ts";
 
@@ -115,19 +114,4 @@ export function listRoute(c: Ctx) {
   const params = c.url.searchParams;
   const limit = params.get("limit") ? Number(params.get("limit")) : undefined;
   return list(c.root, { type: params.get("type") ?? undefined, tag: params.get("tag") ?? undefined, area: params.get("area") ?? undefined, status: params.get("status") ?? undefined, limit });
-}
-
-export function inbox(c: Ctx) {
-  const t = text(c.body.text, "text")!.trim();
-  if (!t) throw new HttpError(400, `Missing "text".`);
-  if (Buffer.byteLength(t) > MAX_CAPTURE) throw new HttpError(413, "A capture can be 64 KB at most.");
-  const clientId = text(c.body.client_id, "client_id")!;
-  const tags = c.body.tags;
-  if (tags !== undefined && !(Array.isArray(tags) && tags.every((x) => typeof x === "string"))) throw new HttpError(400, `"tags" must be a list of text.`);
-  const created = text(c.body.created_at, "created_at", false);
-  // `into` is "+ Add here" in the app. The local app sends it here; the Worker keeps it for `brain pull`. Same filing.
-  const into = text(c.body.into, "into", false);
-  const item = { client_id: clientId, text: t, tags: tags as string[] | undefined, created_at: created, into };
-  const { saved, path } = afterWrite(c.root, () => saveItem(c.root, item));
-  return { path, client_id: clientId, saved };
 }
