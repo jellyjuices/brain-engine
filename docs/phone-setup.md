@@ -18,6 +18,17 @@ Put these in `~/.config/brain/web.env`. The engine never holds them.
 
 Set with `npx wrangler secret put <NAME>` in `web/worker`: `RELAY_TOKEN`, `SERVER_TOKEN`, `SESSION_SECRET` and `PASSWORD`. For `wrangler dev`, put them in `web/worker/.dev.vars` (gitignored).
 
+## Calendar feed (optional)
+
+The Worker can serve your to-dos with a due date, and your events, as a calendar feed. Each one shows as an all-day entry.
+
+1. Make a long random secret: `openssl rand -hex 32`.
+2. Set it: `npx wrangler secret put CAL_TOKEN` in `web/worker`. It must be 32 characters or more, or the feed stays off.
+3. Run `web/worker/write-config.sh` again, so `wrangler.toml` sends `/cal/*` to the Worker. Then deploy.
+4. In Google Calendar, open Other calendars, then From URL. Paste `https://<your app host>/cal/<secret>.ics`.
+
+Anyone with the URL can read your to-do titles. Keep it private. To turn it off, change or delete `CAL_TOKEN`. Google checks the feed only every few hours, and the Mac must be on when it does. The feed is read only: marking an entry done in Google does not change your brain.
+
 ## This Mac
 
 1. `~/.config/brain/relay.env` holds `RELAY_URL=https://<APP_HOST>` and `RELAY_TOKEN=<the same token>`. With it, `setup.sh` loads the 5-minute pull job.
