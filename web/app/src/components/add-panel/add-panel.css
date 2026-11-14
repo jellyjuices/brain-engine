@@ -176,3 +176,28 @@
 .add-panel:not(.is-closed) .add-main .label {
   visibility: hidden;
 }
+
+.add-panel.is-closing .add-blob {
+  animation: add-deflate var(--pop) var(--ease-in) both;
+}
+
+.add-panel.is-closing .add-scrim {
+  animation: add-fade var(--pop) var(--ease-in) both;
+}
+
+.add-panel.is-closing .add-main .shape > svg {
+  transform: none;
+}
+
+@keyframes add-deflate {
+  to {
+    opacity: 0;
+    transform: scale(0.15);
+  }
+}
+
+@keyframes add-fade {
+  to {
+    opacity: 0;
+  }
+}

@@ -21,6 +21,7 @@ type Mode = "closed" | "open" | "todo" | "journal";
 export function AddPanel() {
   const [mode, setMode] = useState<Mode>("closed");
   const [busy, setBusy] = useState(false);
+  const [closing, setClosing] = useState(false);
   const box = useRef<HTMLDivElement>(null);
   const editing = mode === "todo" || mode === "journal";
 
@@ -31,7 +32,7 @@ export function AddPanel() {
   useEffect(() => {
     if (mode === "closed") return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setMode("closed");
+      if (e.key === "Escape") close();
     }
     addEventListener("keydown", onKey);
     return () => removeEventListener("keydown", onKey);
@@ -40,7 +41,7 @@ export function AddPanel() {
   async function save() {
     const text = box.current?.innerText.trim() ?? "";
     if (!text) {
-      setMode("closed");
+      close();
       return;
     }
     setBusy(true);
@@ -49,37 +50,54 @@ export function AddPanel() {
         mode === "todo"
           ? await saveFlow(() => queueInbox(text), copy.save.saved)
           : await saveJournal({ title: "", text, date: todayIso() });
-      if (ok) setMode("closed");
+      if (ok) close();
     } finally {
       setBusy(false);
     }
   }
 
+  function close() {
+    if (mode === "closed") return;
+    box.current?.blur();
+    setClosing(true);
+  }
+
+  function closed() {
+    setClosing(false);
+    setMode("closed");
+  }
+
   function main() {
     if (busy) return;
     if (editing) void save();
-    else setMode(mode === "open" ? "closed" : "open");
+    else if (mode === "open") close();
+    else setMode("open");
   }
 
   function other() {
-    setMode("closed");
+    close();
     go("/new");
   }
 
   const label = editing ? copy.common.save : mode === "open" ? copy.common.close : copy.nav.add;
 
   return (
-    <div className={clsx("add-panel", `is-${mode}`)}>
+    <div className={clsx("add-panel", `is-${mode}`, closing && "is-closing")}>
       {mode !== "closed" && (
         <button
           type="button"
           className="add-scrim"
           aria-label={copy.common.close}
-          onClick={() => setMode("closed")}
+          onClick={() => close()}
         />
       )}
       {mode !== "closed" && (
-        <div className={clsx("add-blob", `add-blob--${mode}`)}>
+        <div
+          className={clsx("add-blob", `add-blob--${mode}`)}
+          onAnimationEnd={(e) => {
+            if (e.animationName === "add-deflate") closed();
+          }}
+        >
           {mode === "open" && (
             <div className="add-arc" role="menu" aria-label={copy.add.newTitle}>
               <button
