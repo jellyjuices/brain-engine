@@ -33,6 +33,7 @@ Intent for every part: [docs/intent/README.md](docs/intent/README.md). When the 
 ## Working alongside other agents
 
 - Re-read a file right before you write it.
+- Change files with the Edit and Write tools. Do not edit files with sed, heredocs, Python or Bash scripts.
 - Stage only your own files, by path. Never `git add -A` or `git commit -a`. Never stash, reset or check out over files you did not change.
 - A failing gate in a file you did not touch is likely another agent's work. Say so in one line.
 
