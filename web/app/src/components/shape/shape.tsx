@@ -15,7 +15,14 @@ export interface ShapeProps {
 
 export function Shape({ name, icon, size = "md", variant = "default" }: ShapeProps) {
   return (
-    <span className={clsx("shape", `shape--${size}`, variant !== "default" && `shape--${variant}`)}>
+    <span
+      className={clsx(
+        "shape",
+        `shape--${name}`,
+        `shape--${size}`,
+        variant !== "default" && `shape--${variant}`,
+      )}
+    >
       <span className="shape-bg" style={{ clipPath: `var(--shape-kind-${name})` }} />
       {icon && <Icon icon={icon} />}
     </span>

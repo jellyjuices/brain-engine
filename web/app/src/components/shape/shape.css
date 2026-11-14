@@ -31,6 +31,11 @@
   height: var(--icon-lg);
 }
 
+.shape--journal .shape-bg {
+  translate: 0 -7%;
+  transform-origin: 50% 57%;
+}
+
 .shape--primary {
   color: var(--accent-ink);
 }
