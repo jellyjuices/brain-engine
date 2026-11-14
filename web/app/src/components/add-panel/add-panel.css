@@ -1,3 +1,15 @@
+@property --add-fade-top {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --add-fade-bottom {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
 .add-panel {
   position: relative;
   display: flex;
@@ -51,7 +63,7 @@
   --add-blob-w: var(--add-blob);
   --add-blob-h: var(--add-blob);
   top: calc(
-    var(--vvt, 0px) + var(--vvh, 100dvh) - var(--tabbar) / 2 - env(safe-area-inset-bottom) -
+    var(--vvt, 0) + var(--vvh, 100dvh) - var(--tabbar) / 2 - env(safe-area-inset-bottom) -
       var(--add-blob-h) / 2
   );
   left: 50%;
@@ -97,7 +109,7 @@
   --add-blob-w: 100vw;
   --add-blob-h: 100vw;
   top: calc(
-    var(--vvt, 0px) + var(--vvh, 100dvh) - var(--tabbar) / 2 - env(safe-area-inset-bottom) -
+    var(--vvt, 0) + var(--vvh, 100dvh) - var(--tabbar) / 2 - env(safe-area-inset-bottom) -
       var(--add-blob-h) * 0.8
   );
   transform-origin: 50% 80%;
@@ -112,10 +124,12 @@
   inset: 24% 10% calc(20% + var(--tabbar));
   mask-image: linear-gradient(
     transparent,
-    black var(--s3),
-    black calc(100% - var(--s3)),
+    black var(--add-fade-top),
+    black calc(100% - var(--add-fade-bottom)),
     transparent
   );
+  animation: add-edges linear both;
+  animation-timeline: scroll(self);
 }
 
 @keyframes add-morph {
@@ -222,5 +236,21 @@
 @keyframes add-fade {
   to {
     opacity: 0;
+  }
+}
+
+@keyframes add-edges {
+  0% {
+    --add-fade-top: 0;
+    --add-fade-bottom: var(--s3);
+  }
+  8%,
+  92% {
+    --add-fade-top: var(--s3);
+    --add-fade-bottom: var(--s3);
+  }
+  100% {
+    --add-fade-top: var(--s3);
+    --add-fade-bottom: 0;
   }
 }
