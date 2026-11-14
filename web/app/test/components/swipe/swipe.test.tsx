@@ -10,7 +10,7 @@ function setup() {
   render(
     <Swipe
       right={{ label: "Sort", onSwipe: right }}
-      left={{ label: "Archive", onSwipe: left }}
+      left={{ label: "Delete", onSwipe: left }}
       onTap={onTap}
     >
       <button type="button">Call the dentist</button>

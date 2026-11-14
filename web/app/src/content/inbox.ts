@@ -5,7 +5,7 @@ export const inbox = {
   sortTitle: "Sort",
   sort: "Sort",
   getDetails: "Get details",
-  archive: "Archive",
+  archive: "Delete",
   when: "When?",
   aboutWhat: "About what?",
   skipAbout: "Skip",
