@@ -106,8 +106,8 @@
 }
 
 .add-blob--journal {
-  --add-blob-w: 100vw;
-  --add-blob-h: 100vw;
+  --add-blob-w: 120vw;
+  --add-blob-h: 120vw;
   top: calc(
     var(--vvt, 0) + var(--vvh, 100dvh) - var(--tabbar) / 2 - env(safe-area-inset-bottom) -
       var(--add-blob-h) * 0.8
@@ -121,7 +121,7 @@
 }
 
 .add-blob--journal .add-box {
-  inset: 24% 10% calc(20% + var(--tabbar));
+  inset: 30% 18% calc(20% + var(--tabbar));
   mask-image: linear-gradient(
     transparent,
     black var(--add-fade-top),
