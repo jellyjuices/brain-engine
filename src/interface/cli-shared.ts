@@ -53,6 +53,7 @@ export function parseCli(rest: string[]) {
       auto: { type: "boolean" },
       foreground: { type: "boolean" },
       "dry-run": { type: "boolean" },
+      write: { type: "boolean" },
       single: { type: "boolean" },
       into: { type: "string" },
       yes: { type: "boolean", short: "y" },

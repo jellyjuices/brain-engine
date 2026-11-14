@@ -4,7 +4,7 @@ import type { DatabaseSync } from "node:sqlite";
 import { chunkNote } from "../../shared/search/index.ts";
 import { loopsIn } from "../todos/todos.ts";
 import { relationsIn } from "./relations.ts";
-import { descOf, type Note, str, summary, type Summary, tagsOf, titleOf, typeOf } from "./notes.ts";
+import { areasOf, descOf, type Note, summary, type Summary, tagsOf, titleOf, typeOf } from "./notes.ts";
 import { loadAll, notePaths, readNote, statMtime } from "./files.ts";
 import { type Embedder, MODEL, queryVector } from "./embed.ts";
 import { dropEntries, syncEntries, type EntryChanges } from "./search/entries.ts";
@@ -43,7 +43,7 @@ function put(db: DatabaseSync, root: string, n: Note): EntryChanges {
   }
   db.prepare(
     "INSERT INTO notes (path, mtime, type, title, description, tags, area, status, folder, summary) VALUES (?,?,?,?,?,?,?,?,?,?)",
-  ).run(n.path, n.mtime, typeOf(n) ?? null, titleOf(n), descOf(n), ` ${tagsOf(n).join(" ")} `, str(n.meta.area) ?? null, noteSummary.status, n.path.split("/")[0], JSON.stringify(noteSummary));
+  ).run(n.path, n.mtime, typeOf(n) ?? null, titleOf(n), descOf(n), ` ${tagsOf(n).join(" ")} `, areasOf(n).length ? ` ${areasOf(n).join(" ")} ` : null, noteSummary.status, n.path.split("/")[0], JSON.stringify(noteSummary));
   return syncEntries(db, n.path, chunkNote(n.path, readFileSync(join(root, n.path), "utf8")), tagsOf(n));
 }
 
@@ -112,7 +112,7 @@ export function list(root: string, f: Filters = {}): Summary[] {
     .map(summary)
     .filter((s) => !f.type || s.type?.toLowerCase() === f.type.toLowerCase())
     .filter((s) => !f.tag || s.tags.includes(f.tag))
-    .filter((s) => !f.area || s.area === f.area || s.tags.includes(f.area) || s.path === `areas/${f.area}.md`)
+    .filter((s) => !f.area || s.area === f.area || !!s.areas?.includes(f.area) || s.tags.includes(f.area) || s.path === `areas/${f.area}.md`)
     .filter((s) => !f.status || s.status === f.status)
     .filter((s) => !f.folder || s.path.startsWith(f.folder + "/"))
     .sort((a, b) => b.modified.localeCompare(a.modified) || a.title.localeCompare(b.title))

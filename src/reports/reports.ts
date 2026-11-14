@@ -2,11 +2,11 @@
 
 import { existsSync } from "node:fs";
 import { join, posix } from "node:path";
-import { addDays, descOf, DIRS, folderOf, type Note, str, summary, type Summary, tagsOf, titleOf, today, typeOf } from "../core/notes.ts";
+import { addDays, areasOf, descOf, DIRS, folderOf, type Note, str, summary, type Summary, tagsOf, titleOf, today, typeOf } from "../core/notes.ts";
 import { loadAll, writeAtomic } from "../core/files.ts";
 import { type Issue, loadSchema, validate } from "../core/schema.ts";
 import { goalTreeIssues } from "../core/schema-kinds.ts";
-import { allLoops, loopSummary, whenWord } from "../todos/todos.ts";
+import { allLoops, inArea as loopInArea, loopSummary, whenWord } from "../todos/todos.ts";
 import { MAX_WARN_LINES, mentionedTwice, unlinkedMentions } from "./mentions.ts";
 import { isOwnerWriter } from "../core/owner.ts";
 
@@ -118,14 +118,14 @@ export interface AreaBrief {
 export function areaBrief(root: string, area: string, notes = loadAll(root)): AreaBrief {
   const now = today();
   const self = notes.find((n) => n.path === `areas/${area}.md`);
-  const inArea = notes.filter((n) => n !== self && live(n) && (n.meta.area === area || tagsOf(n).includes(area)));
+  const inArea = notes.filter((n) => n !== self && live(n) && (areasOf(n).includes(area) || tagsOf(n).includes(area)));
   return {
     area,
     note: self ? { ...self, title: titleOf(self) } : undefined,
     projects: inArea.filter((n) => typeOf(n) === "Project").map(summary),
     open: [
       ...inArea.filter((n) => ["today", "date", "waiting"].includes(String(n.meta.outcome)) || summary(n).due).map(summary),
-      ...allLoops(self ? [self, ...inArea] : inArea, { done: false }).filter((l) => l.area === area || l.path === self?.path).map(loopSummary),
+      ...allLoops(self ? [self, ...inArea] : inArea, { done: false }).filter((l) => loopInArea(l, area) || l.path === self?.path).map(loopSummary),
     ],
     recent: inArea.filter((n) => ageDays(n, now) <= 14).map(summary).sort((a, b) => b.modified.localeCompare(a.modified)),
     related: inArea.map(summary),

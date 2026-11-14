@@ -21,7 +21,7 @@ function where(f: Filters, alias = "n"): { sql: string; args: (string | number)[
   const args: (string | number)[] = [];
   if (f.type) { parts.push(`lower(${alias}.type) = lower(?)`); args.push(f.type); }
   if (f.tag) { parts.push(`${alias}.tags LIKE ?`); args.push(`% ${f.tag} %`); }
-  if (f.area) { parts.push(`(${alias}.area = ? OR ${alias}.tags LIKE ? OR ${alias}.path = ?)`); args.push(f.area, `% ${f.area} %`, `areas/${f.area}.md`); }
+  if (f.area) { parts.push(`(${alias}.area = ? OR ${alias}.area LIKE ? OR ${alias}.tags LIKE ? OR ${alias}.path = ?)`); args.push(f.area, `% ${f.area} %`, `% ${f.area} %`, `areas/${f.area}.md`); }
   if (f.status) { parts.push(`${alias}.status = ?`); args.push(f.status); }
   if (f.folder) { parts.push(`${alias}.folder = ?`); args.push(f.folder); }
   if (!f.all && f.folder !== ".archive") parts.push(`NOT (${alias}.folder = '.archive' AND ${alias}.type = 'Capture')`);

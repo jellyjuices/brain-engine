@@ -9,6 +9,7 @@ import { readNote } from "../core/files.ts";
 import { backlinks } from "../reports/find.ts";
 import { updateIndex } from "../core/search.ts";
 import { HttpError, MAX_BODY } from "./server-auth.ts";
+import type { Caller } from "./api-types.ts";
 
 export const hash = (text: string) => createHash("sha256").update(text).digest("hex");
 export const fileText = (root: string, path: string) => readFileSync(join(root, path), "utf8");
@@ -48,6 +49,23 @@ export interface Ctx {
   root: string;
   url: URL;
   body: Record<string, unknown>;
+  caller?: Caller;
+  agentFile?: string;
+}
+
+export class TextBody {
+  readonly text: string;
+  readonly type: string;
+  constructor(text: string, type: string) {
+    this.text = text;
+    this.type = type;
+  }
+}
+
+export function textList(v: unknown, name: string): string[] | undefined {
+  if (v === undefined || v === null) return undefined;
+  if (!Array.isArray(v) || !v.every((x) => typeof x === "string")) throw new HttpError(400, `"${name}" must be a list of text.`);
+  return v;
 }
 
 export const text = (v: unknown, name: string, required = true): string | undefined => {

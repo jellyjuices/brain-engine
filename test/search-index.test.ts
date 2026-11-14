@@ -4,7 +4,7 @@ import { unlinkSync, utimesSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { embedPending, type Embedder } from "../src/core/embed.ts";
-import { find, findEntries, search, updateIndex } from "../src/core/search.ts";
+import { find, findEntries, list, search, updateIndex } from "../src/core/search.ts";
 import { makeBrain } from "./fixture.ts";
 
 const CONCEPTS: Record<string, number> = {
@@ -128,6 +128,16 @@ test("the name tier stays on top with meaning in play", async () => {
   await embedPending(root, fake);
   assert.equal((await find(root, "Omar", {}, fake)).notes[0]?.path, "people/omar-haddad.md");
   assert.equal((await find(root, "haddad", {}, fake)).notes[0]?.path, "people/omar-haddad.md");
+});
+
+test("a note with several areas is found by each area", () => {
+  const root = brain();
+  write(root, "resources/shared.md", "Shared plan", "# Notes\n\nPlan the shared garden.", "areas: [home, health]\n");
+  for (const area of ["home", "health"]) {
+    assert.ok(paths(search(root, "garden", { area })).includes("resources/shared.md"), `search --area ${area}`);
+    assert.ok(paths(list(root, { area })).includes("resources/shared.md"), `list --area ${area}`);
+  }
+  assert.ok(!paths(search(root, "garden", { area: "money" })).includes("resources/shared.md"));
 });
 
 test("an old index rebuilds itself once, and --full rebuilds all", () => {

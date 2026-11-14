@@ -1,89 +1,56 @@
-// `brain serve`: the Mac side of the phone app. JSON over node:http on loopback only.
+// `brain serve`: the one way in for the app, the menu bar and helpers. JSON over node:http on loopback only.
 //
-// Every /api/ route except /api/health needs `Authorization: Bearer <token>`. The Worker adds it; the
-// phone never holds it. Writes call the same functions as the `brain` command, so they log to
-// .log.jsonl and `brain undo` can reverse them.
-//
-// DECISION: a to-do ref is the stable `path::text` string (an event's ref is its note path). List
-// numbers are only for the terminal, because they change between two reads.
+// Every /api/ route except /api/health needs `Authorization: Bearer <token>`. The Worker sends the owner token; the
+// phone never holds it. Helpers send the agent token (server-agent.ts). Writes call the same functions as the
+// `brain` command, so they log to .log.jsonl and undo can reverse them. Every write re-indexes and checks the notes
+// it changed (server-check.ts). The routes and their shapes: routes/table.ts and api-types.ts.
 
 import { createServer as httpServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
-import { addFile, addJournal, addPerson, addSubject, doneRoute, dropRoute, editNote, inboxDrop, moveRoute, setBirthday, sortRoute, undoRoute } from "./server-writes.ts";
-import { cardRoute, health, inbox, intakeNext, intakeSave, intakeSkip, listRoute, notesSince, oneNote, report, searchRoute, todayRoute } from "./server-reads.ts";
-import { type Ctx, readBody } from "./server-context.ts";
-import { calendarFeed } from "../todos/calendar.ts";
-import { DEFAULT_PORT, HttpError, isAuthorized, isLocalApp, loadToken, serveApp, tokenPath } from "./server-auth.ts";
+import { health } from "./server-reads.ts";
+import { readBody, TextBody } from "./server-context.ts";
+import { DEFAULT_PORT, HttpError, loadToken, serveApp, tokenPath } from "./server-auth.ts";
+import { AGENT_RATE, agentTokenPath, callerOf, RateLimit } from "./server-agent.ts";
+import { snapshot, withCheck } from "./server-check.ts";
+import { matchRoute } from "./routes/table.ts";
 
-type Handler = (c: Ctx, rest: string) => unknown;
-
-class TextBody {
-  readonly text: string;
-  readonly type: string;
-  constructor(text: string, type: string) {
-    this.text = text;
-    this.type = type;
-  }
+export interface ServerOptions {
+  agentTokenFile?: string;
+  agentRate?: number;
 }
 
-const calendarRoute: Handler = (c) => new TextBody(calendarFeed(c.root), "text/calendar; charset=utf-8");
-
-const EXACT: Record<string, Handler> = {
-  "GET /api/notes": notesSince,
-  "GET /api/search": searchRoute,
-  "GET /api/card": cardRoute,
-  "GET /api/today": todayRoute,
-  "GET /api/list": listRoute,
-  "GET /api/cal.ics": calendarRoute,
-  "POST /api/inbox": inbox,
-  "POST /api/people": addPerson,
-  "POST /api/journal": addJournal,
-  "POST /api/subjects": addSubject,
-  "POST /api/sort": sortRoute,
-  "POST /api/inbox-drop": inboxDrop,
-  "POST /api/files": addFile,
-  "POST /api/birthday": setBirthday,
-  "POST /api/done": doneRoute,
-  "POST /api/move": moveRoute,
-  "POST /api/drop": dropRoute,
-  "POST /api/undo": undoRoute,
-  "GET /api/intake/next": intakeNext,
-  "POST /api/intake/save": intakeSave,
-  "POST /api/intake/skip": intakeSkip,
-};
-
-const PREFIX: [string, string, Handler][] = [
-  ["GET", "/api/notes/", oneNote],
-  ["PUT", "/api/notes/", editNote],
-  ["GET", "/api/reports/", report],
-];
-
-function findHandler(method: string, pathname: string): { handler: Handler; rest: string } {
-  const exact = EXACT[`${method} ${pathname}`];
-  if (exact) return { handler: exact, rest: "" };
-  for (const [m, prefix, handler] of PREFIX) if (m === method && pathname.startsWith(prefix)) return { handler, rest: pathname.slice(prefix.length) };
-  const known = Object.keys(EXACT).some((k) => k.endsWith(` ${pathname}`)) || PREFIX.some(([, p]) => pathname.startsWith(p));
-  throw new HttpError(known ? 405 : 404, known ? "Method not allowed." : "Not found.");
-}
-
-export function send(res: ServerResponse, status: number, body: unknown): void {
+export function send(res: ServerResponse, status: number, body: unknown, headers: Record<string, string> = {}): void {
   const isText = body instanceof TextBody;
   const data = isText ? body.text : JSON.stringify(body);
-  res.writeHead(status, { "Content-Type": isText ? body.type : "application/json; charset=utf-8", "Cache-Control": "no-store", "Content-Length": Buffer.byteLength(data) });
+  res.writeHead(status, { "Content-Type": isText ? body.type : "application/json; charset=utf-8", "Cache-Control": "no-store", "Content-Length": Buffer.byteLength(data), ...headers });
   res.end(data);
 }
 
-async function handle(root: string, token: string, req: IncomingMessage): Promise<unknown> {
+const WRITES = new Set(["POST", "PUT", "DELETE"]);
+
+async function handle(root: string, token: string, req: IncomingMessage, agentFile: string, limit: RateLimit): Promise<unknown> {
   const url = new URL(req.url ?? "/", "http://localhost");
   if (!url.pathname.startsWith("/api/")) throw new HttpError(404, "Not found.");
   if (url.pathname === "/api/health") return health(root);
-  if (!isAuthorized(req, token) && !isLocalApp(req, token)) throw new HttpError(401, "A token is needed.");
-  const { handler, rest } = findHandler(req.method ?? "GET", url.pathname);
-  const hasBody = req.method === "POST" || req.method === "PUT";
-  return handler({ root, url, body: hasBody ? await readBody(req) : {} }, rest);
+  const caller = callerOf(req, token, agentFile);
+  if (!caller) throw new HttpError(401, "A token is needed.");
+  if (caller === "agent") {
+    const wait = limit.take();
+    if (wait) throw new HttpError(429, "Too many calls. Wait a little and try again.", { retry_after: wait });
+  }
+  const method = req.method ?? "GET";
+  const { route, rest } = matchRoute(method, url.pathname);
+  if (route.owner && caller !== "owner") throw new HttpError(403, "Only the owner can do that.");
+  const isWrite = WRITES.has(method);
+  const body = method === "POST" || method === "PUT" ? await readBody(req) : {};
+  const before = isWrite ? snapshot(root) : undefined;
+  const result = await route.handler({ root, url, body, caller, agentFile }, rest);
+  return before ? withCheck(root, before, result) : result;
 }
 
-/** The server, not yet listening. Tests call this with a temp brain and a test token. */
-export function createServer(root: string, token: string): Server {
+/** The server, not yet listening. Tests call this with a temp brain, a test token and a temp agent token file. */
+export function createServer(root: string, token: string, opts: ServerOptions = {}): Server {
+  const agentFile = opts.agentTokenFile ?? agentTokenPath();
+  const limit = new RateLimit(opts.agentRate ?? AGENT_RATE);
   return httpServer((req, res) => {
     if (!(req.url ?? "/").startsWith("/api/")) {
       try {
@@ -92,10 +59,10 @@ export function createServer(root: string, token: string): Server {
         return send(res, 400, { error: (e as Error).message || "Bad request." });
       }
     }
-    handle(root, token, req).then(
+    handle(root, token, req, agentFile, limit).then(
       (body) => send(res, 200, body),
       (e: unknown) => {
-        if (e instanceof HttpError) return send(res, e.status, { error: e.message, ...e.extra });
+        if (e instanceof HttpError) return send(res, e.status, { error: e.message, ...e.extra }, e.status === 429 ? { "Retry-After": String(e.extra.retry_after) } : {});
         send(res, 500, { error: (e as Error).message || "Something went wrong." });
       },
     );
