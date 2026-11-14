@@ -14,7 +14,7 @@ export const DIRS = {
 export const LOG_FILE = ".log.jsonl";
 
 // Folders that hold notes. sources/, scripts/ and the hidden folders above (except .archive) do not.
-export const NOTE_DIRS = ["inbox", "projects", "areas", "people", "groups", "places", "things", "topics", "events", "resources", "journal", "me", "threads", DIRS.archive];
+export const NOTE_DIRS = ["inbox", "projects", "areas", "people", "groups", "places", "things", "topics", "events", "resources", "journal", "me", "threads", "goals", "decisions", DIRS.archive];
 
 const LINK_RE = /\[[^\]]*\]\(([^)\s]+)\)/g;
 
@@ -112,6 +112,13 @@ export function tagsOf(n: Note): string[] {
   if (Array.isArray(tags)) return tags.map(String);
   return tags ? [String(tags)] : [];
 }
+export function areasOf(n: Note): string[] {
+  const areas = n.meta.areas;
+  if (Array.isArray(areas)) return areas.map(String).filter(Boolean);
+  if (areas !== undefined && areas !== null && areas !== "") return [String(areas)];
+  const area = str(n.meta.area);
+  return area ? [area] : [];
+}
 
 export interface Summary {
   path: string;
@@ -120,6 +127,7 @@ export interface Summary {
   description: string;
   tags: string[];
   area?: string;
+  areas?: string[];
   status: string;
   due?: string;
   outcome?: string;
@@ -142,7 +150,8 @@ export function summary(n: Note): Summary {
     title: titleOf(n),
     description: descOf(n),
     tags: tagsOf(n),
-    area: str(n.meta.area),
+    area: areasOf(n)[0],
+    ...(Array.isArray(n.meta.areas) && { areas: areasOf(n) }),
     status: str(n.meta.status) ?? "stable",
     due: str(n.meta.due) ?? eventDue(n),
     outcome: str(n.meta.outcome),

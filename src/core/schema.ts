@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import YAML from "yaml";
 import { DIRS, folderOf, tagsOf, typeOf, type Note } from "./notes.ts";
+import { kindIssues, statusesFor } from "./schema-kinds.ts";
 
 export interface Rule {
   match: string[];
@@ -22,6 +23,8 @@ export interface Schema {
   privacy: string[];
   lenses: string[];
   eventStatus: string[];
+  goalStatus: string[];
+  decisionStatus: string[];
 }
 
 export type Issue = { level: "error" | "warn"; message: string };
@@ -55,6 +58,8 @@ export function loadSchema(root: string): Schema {
     privacy: list(types.privacy ?? ["full", "headline", "skip"]),
     lenses: list(types.lenses),
     eventStatus: list(types.event_status ?? ["upcoming", "done", "cancelled"]),
+    goalStatus: list(types.goal_status ?? ["active", "later", "done"]),
+    decisionStatus: list(types.decision_status ?? ["open", "decided", "dropped"]),
   };
 }
 
@@ -81,7 +86,7 @@ export function validate(note: Note, schema: Schema): Issue[] {
     if (expected && expected !== "inbox" && expected !== folder) warn(`type \`${type}\` belongs in ${expected}/, not ${folder}/`);
   }
   if (meta.description && String(meta.description).length > schema.descriptionMax) warn(`description is over ${schema.descriptionMax} characters`);
-  const statuses = type === "Thread" ? schema.threadStatus : type === "Event" ? schema.eventStatus : schema.status;
+  const statuses = statusesFor(type, schema);
   if (meta.status && !statuses.includes(String(meta.status))) err(`unknown status \`${meta.status}\``);
   if (meta.privacy && !schema.privacy.includes(String(meta.privacy))) err(`unknown privacy \`${meta.privacy}\` (use ${schema.privacy.join(", ")})`);
   if ((type === "Thread" || type === "Lens") && schema.lenses.length) {
@@ -96,7 +101,8 @@ export function validate(note: Note, schema: Schema): Issue[] {
     if (meta.due) warn("an Event uses `date`, not `due`");
   }
   for (const f of ["due", "stale_after", "date"]) if (meta[f] && !isDate(meta[f])) err(`\`${f}\` is not a date (use YYYY-MM-DD)`);
-  if (meta.area && !/^[a-z0-9-]+$/.test(String(meta.area))) warn("`area` should be the slug of a note in areas/");
+  if (meta.area && meta.areas === undefined && !/^[a-z0-9-]+$/.test(String(meta.area))) warn("`area` should be the slug of a note in areas/");
+  out.push(...kindIssues(note));
   return out;
 }
 
