@@ -6,6 +6,7 @@ import { Shape } from "@/components/shape/shape.tsx";
 import { AddArc } from "@/components/add-arc/add-arc.tsx";
 import { AddBox } from "@/components/add-box/add-box.tsx";
 import { AddFull } from "./add-full.tsx";
+import { keepCaretInView } from "@/lib/platform/caret.ts";
 import { saveJournal } from "@/flows/new-flow.ts";
 import { saveFlow } from "@/flows/save-flow.ts";
 import { todayIso } from "@/lib/notes/model.ts";
@@ -60,6 +61,12 @@ export function AddPanel() {
     setClosing(true);
   }
 
+  function toggleFull() {
+    setFull(!full);
+    const area = box.current;
+    area?.addEventListener("transitionend", () => keepCaretInView(area), { once: true });
+  }
+
   function closed() {
     setClosing(false);
     setFull(false);
@@ -107,7 +114,7 @@ export function AddPanel() {
           {editing && <AddBox ref={box} kind={mode} full={full} onEnter={() => void save()} />}
         </div>
       )}
-      {mode === "journal" && !closing && <AddFull full={full} onToggle={() => setFull(!full)} />}
+      {mode === "journal" && !closing && <AddFull full={full} onToggle={toggleFull} />}
       <button
         type="button"
         className="add-main"

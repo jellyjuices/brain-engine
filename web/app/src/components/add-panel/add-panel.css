@@ -108,7 +108,7 @@
 }
 
 .add-blob--journal.is-full {
-  --add-blob-w: calc(max(var(--vvh, 100dvh), 100vw) * 2);
+  --add-blob-w: max(calc(var(--vvh, 100dvh) / 0.7), 100vw);
   --add-blob-h: var(--add-blob-w);
   top: calc(var(--vvt, 0) - var(--add-blob-h) * 0.3);
 }
