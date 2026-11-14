@@ -44,10 +44,9 @@ test("today lists an upcoming event on its date, and drops it once done", () => 
   delete process.env.BRAIN_TODAY;
   assert.deepEqual(r.dueSoon.filter((s) => s.type === "Event").map((s) => s.title), ["Family doctor"]);
   assert.deepEqual(r.overdue.filter((s) => s.type === "Event").map((s) => s.title), ["Missed"]);
-  const events = [...r.overdue, ...r.dueSoon, ...r.doNow].filter((s) => s.type === "Event").map((s) => s.title);
+  const events = [...r.overdue, ...r.dueSoon].filter((s) => s.type === "Event").map((s) => s.title);
   assert.ok(!events.includes("Old visit"), "a done event is not listed");
-  // Follow-ups left open inside a done event still show.
-  assert.ok(r.doNow.some((s) => s.title === "Ask about Old visit"));
+  assert.ok(![...r.overdue, ...r.dueSoon].some((s) => s.title === "Ask about Old visit"), "an old today mark is not due");
 });
 
 test("loops inside an event count as open loops, with the event's area", () => {
@@ -70,7 +69,7 @@ test("loops inside an upcoming event fold into the event as bullets", () => {
   writeFileSync(join(root, "events/soon.md"), event("Family doctor", "date: 2026-11-06\nstatus: upcoming\n"));
   const r = todayReport(root);
   delete process.env.BRAIN_TODAY;
-  const all = [...r.overdue, ...r.dueSoon, ...r.doNow];
+  const all = [...r.overdue, ...r.dueSoon];
   assert.ok(!all.some((s) => s.type === "Loop" && s.path === "events/soon.md"), "no separate loop items");
   assert.deepEqual(r.dueSoon.find((s) => s.title === "Family doctor")?.subitems, ["Ask about Family doctor"]);
 });

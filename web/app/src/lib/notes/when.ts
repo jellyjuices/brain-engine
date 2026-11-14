@@ -37,7 +37,7 @@ function niceDate(isoDate: string) {
 function whenFrom(word: string, now: string): WhenPreview | undefined {
   const w = word.trim().toLowerCase();
   if (w === "note") return { kind: "note", label: copy.common.note };
-  if (w === "today") return { kind: "today", label: copy.common.today, due: now, outcome: "today" };
+  if (w === "today") return { kind: "today", label: copy.common.today, due: now };
   if (w === "tomorrow")
     return {
       kind: "date",

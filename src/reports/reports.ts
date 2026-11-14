@@ -5,6 +5,7 @@ import { join, posix } from "node:path";
 import { addDays, descOf, DIRS, folderOf, type Note, str, summary, type Summary, tagsOf, titleOf, today, typeOf } from "../core/notes.ts";
 import { loadAll, writeAtomic } from "../core/files.ts";
 import { type Issue, loadSchema, validate } from "../core/schema.ts";
+import { goalTreeIssues } from "../core/schema-kinds.ts";
 import { allLoops, loopSummary, whenWord } from "../todos/todos.ts";
 import { MAX_WARN_LINES, mentionedTwice, unlinkedMentions } from "./mentions.ts";
 import { isOwnerWriter } from "../core/owner.ts";
@@ -25,7 +26,6 @@ export interface TodayReport {
   date: string;
   overdue: Summary[];
   dueSoon: Summary[];
-  doNow: Summary[];
   activeProjects: Summary[];
   inboxCount: number;
 }
@@ -51,7 +51,6 @@ export function todayReport(root: string, notes = loadAll(root)): TodayReport {
     date: now,
     overdue: withDue.filter((s) => s.due! < now).sort(byDue),
     dueSoon: withDue.filter((s) => s.due! >= now && s.due! <= soon).sort(byDue),
-    doNow: items.filter((s) => s.outcome === "today"),
     activeProjects: open.filter((n) => typeOf(n) === "Project" && folderOf(n) === "projects").map(summary).sort((a, b) => a.title.localeCompare(b.title)),
     inboxCount: untriaged(notes).length,
   };
@@ -64,8 +63,8 @@ export function todayMarkdown(r: TodayReport): string {
     `# Today, ${r.date}\n`,
     `Inbox: ${r.inboxCount} note${r.inboxCount === 1 ? "" : "s"} to sort.\n`,
     section("Overdue", r.overdue.map(dated)),
-    section("Today", r.doNow.map((s) => `- ${link(s)}${s.area ? ` · ${s.area}` : ""}${bullets(s)}`)),
-    section("Due in the next 7 days", r.dueSoon.map(dated)),
+    section("Today", r.dueSoon.filter((s) => s.due === r.date).map((s) => `- ${link(s)}${s.area ? ` · ${s.area}` : ""}${bullets(s)}`)),
+    section("Due in the next 7 days", r.dueSoon.filter((s) => s.due !== r.date).map(dated)),
     section("Active projects", r.activeProjects.map((s) => `- ${link(s)}${s.description ? ` · ${s.description}` : ""}`), "No projects yet."),
   ].join("\n");
 }
@@ -184,6 +183,7 @@ export function check(root: string, notes = loadAll(root)): CheckResult[] {
     byTitle.set(title, [...(byTitle.get(title) ?? []), note.path]);
   }
   for (const paths of byTitle.values()) if (paths.length > 1) for (const path of paths) add(path, { level: "warn", message: `same title as ${paths.filter((x) => x !== path).join(", ")}` });
+  for (const [p, issue] of goalTreeIssues(root, notes)) add(p, issue);
   for (const [p, message] of unlinkedMentions(notes)) add(p, { level: "warn", message });
   for (const mention of mentionedTwice(notes).slice(0, MAX_WARN_LINES)) add(mention.notes[0], { level: "warn", message: `${mention.name} shows in ${mention.notes.length} notes, no note. Make ${mention.suggest === "Person" ? "a Person" : "one"}?${mention.suggest === "Person" ? "" : " Who, where, doing, have, or know?"}` });
   return [...results.entries()].map(([path, issues]) => ({ path, issues })).sort((a, b) => a.path.localeCompare(b.path));

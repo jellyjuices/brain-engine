@@ -20,7 +20,7 @@ const ORDER: Group[] = ["overdue", "today", "waiting"];
 
 function groupOf(due: string | undefined, outcome: string | undefined, now: string): Group | undefined {
   if (due && due < now) return "overdue";
-  if (due === now || (!due && outcome === "today")) return "today";
+  if (due === now) return "today";
   if (outcome === "waiting") return "waiting";
   return undefined;
 }

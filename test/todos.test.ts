@@ -53,7 +53,7 @@ test("absorb files a to-do as an open loop and a fact as a note line, then archi
   absorb(root, b, "areas/health.md");
   delete process.env.BRAIN_TODAY;
   const body = readNote(root, "areas/health.md").body;
-  assert.match(body, /# To-dos\n\n- \[ \] Chase the pending MRI · today\n/);
+  assert.match(body, /# To-dos\n\n- \[ \] Chase the pending MRI · due 2026-11-04\n/);
   assert.match(body, /# Notes\n\n- \d{4}-\d{2}-\d{2} · My GP retires next year\n/);
   assert.equal(loadAll(root).filter((n) => n.path.startsWith("inbox/")).length, 0);
   assert.equal(loadAll(root).filter((n) => n.meta.absorbed_into === "areas/health.md").length, 2);
@@ -77,12 +77,11 @@ test("open loops show in today and the area brief, and brain done ticks them off
   absorb(root, sorted(root, "Family doctor appointment", { outcome: "date", area: "health", due: "2026-11-06" }), "areas/health.md");
   absorb(root, sorted(root, "Chase the pending MRI", { outcome: "today", area: "health" }), "areas/health.md");
   const r = todayReport(root);
-  assert.deepEqual(r.dueSoon.map((s) => [s.title, s.path]), [["Family doctor appointment", "areas/health.md"]]);
-  assert.deepEqual(r.doNow.map((s) => s.title), ["Chase the pending MRI"]);
+  assert.deepEqual(r.dueSoon.map((s) => s.title), ["Chase the pending MRI", "Family doctor appointment"]);
   assert.equal(areaBrief(root, "health").open.length, 2);
   const done = completeLoop(root, "mri");
   assert.equal(done.done, true);
-  assert.match(readNote(root, "areas/health.md").body, /- \[x\] Chase the pending MRI · today · done 2026-11-04/);
+  assert.match(readNote(root, "areas/health.md").body, /- \[x\] Chase the pending MRI · due 2026-11-04 · done 2026-11-04/);
   assert.equal(allLoops(loadAll(root), { done: false }).length, 1);
   assert.throws(() => completeLoop(root, "nothing like this"), /No open to-do/);
   delete process.env.BRAIN_TODAY;

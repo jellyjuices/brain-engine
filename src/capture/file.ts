@@ -60,7 +60,7 @@ export function whenFrom(word: string, now = today()): When | undefined {
   if (w === "note") return { kind: "note" };
   try {
     const when = parseWhen(w, now);
-    return { kind: (when.outcome ?? "date") as When["kind"], due: when.due };
+    return { kind: (when.outcome ?? (w === "today" ? "today" : "date")) as When["kind"], due: when.due };
   } catch {
     return undefined;
   }

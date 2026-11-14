@@ -7,7 +7,7 @@ const DAYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 /** Read a When answer: today, tomorrow, a weekday, a date, someday or waiting. */
 export function parseWhen(when: string, now = today()): { due?: string; outcome?: Outcome; label: string } {
   const word = when.trim().toLowerCase();
-  if (word === "today") return { due: now, outcome: "today", label: "today" };
+  if (word === "today") return { due: now, label: "today" };
   if (word === "tomorrow") return { due: addDays(now, 1), label: "tomorrow" };
   if (word === "someday") return { outcome: "someday", label: "someday" };
   if (word === "waiting") return { outcome: "waiting", label: "waiting on someone" };
