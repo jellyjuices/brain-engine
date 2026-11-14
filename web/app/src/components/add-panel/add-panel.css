@@ -1,0 +1,173 @@
+.add-panel {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.add-main {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s0);
+  min-height: var(--touch);
+  padding: var(--s0) 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: var(--t-xs);
+  font-weight: 600;
+}
+
+.add-main .shape {
+  margin-top: calc(var(--icon) * -1);
+  transition: transform var(--fast) var(--ease);
+}
+
+.add-main .shape > svg {
+  transition: transform var(--fast) var(--ease);
+}
+
+.add-main:active .shape {
+  transform: scale(0.94);
+}
+
+.add-panel.is-open .add-main .shape > svg {
+  transform: rotate(45deg);
+}
+
+.add-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  border: 0;
+  background: var(--scrim);
+}
+
+.add-blob {
+  position: fixed;
+  --add-blob-w: var(--add-blob);
+  --add-blob-h: var(--add-blob);
+  top: calc(
+    var(--vvt, 0) + var(--vvh, 100dvh) - var(--tabbar) / 2 - env(safe-area-inset-bottom) -
+      var(--add-blob-h) / 2
+  );
+  left: 50%;
+  z-index: 2;
+  width: var(--add-blob-w);
+  height: var(--add-blob-h);
+  margin-left: calc(var(--add-blob-w) / -2);
+  transition:
+    top var(--slow) var(--ease),
+    width var(--slow) var(--ease),
+    height var(--slow) var(--ease),
+    margin-left var(--slow) var(--ease);
+  animation: add-inflate var(--pop) var(--ease) both;
+}
+
+.add-blob::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  clip-path: var(--shape-kind-add);
+  animation: add-spin var(--spin) linear infinite;
+}
+
+@keyframes add-spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .add-blob::before {
+    animation: none;
+  }
+}
+
+.add-blob--todo,
+.add-blob--journal {
+  animation: add-morph var(--pop) var(--ease) both;
+}
+
+.add-blob--todo::before {
+  clip-path: var(--shape-kind-todo);
+}
+
+.add-blob--journal {
+  --add-blob-w: 120vw;
+  --add-blob-h: 120vw;
+  top: calc(
+    var(--vvt, 0) + var(--vvh, 100dvh) - var(--tabbar) / 2 - env(safe-area-inset-bottom) -
+      var(--add-blob-h) * 0.8
+  );
+  transform-origin: 50% 80%;
+}
+
+.add-blob--journal.is-full {
+  --add-blob-w: max(calc(var(--vvh, 100dvh) / 0.7), 100vw);
+  --add-blob-h: var(--add-blob-w);
+  top: calc(var(--vvt, 0) - var(--add-blob-h) * 0.3);
+}
+
+.add-full {
+  position: fixed;
+  top: calc(
+    var(--vvt, 0) + var(--vvh, 100dvh) - var(--tabbar) - env(safe-area-inset-bottom) -
+      var(--control-sm) - var(--s2)
+  );
+  right: calc(var(--s3) + env(safe-area-inset-right));
+  z-index: 3;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.add-blob--journal::before {
+  clip-path: var(--shape-kind-journal);
+  animation: none;
+}
+
+@keyframes add-morph {
+  from {
+    transform: scale(0.9);
+  }
+}
+
+@keyframes add-inflate {
+  from {
+    transform: scale(0.15);
+  }
+}
+
+.add-panel:not(.is-closed) .add-main .label {
+  visibility: hidden;
+}
+
+.add-panel.is-closing .add-blob {
+  animation: add-deflate var(--fast) var(--ease-in) both;
+}
+
+.add-panel.is-closing .add-scrim {
+  animation: add-fade var(--fast) var(--ease-in) both;
+}
+
+.add-panel.is-closing .add-main .shape > svg {
+  transform: none;
+}
+
+@keyframes add-deflate {
+  to {
+    opacity: 0;
+    transform: scale(0.15);
+  }
+}
+
+@keyframes add-fade {
+  to {
+    opacity: 0;
+  }
+}

@@ -8,7 +8,7 @@ This repo is the code for a second brain. The notes live in a separate brain fol
 | --- | --- | --- |
 | `brain` command | `bin/brain.ts`, `src/` | Legacy terminal CLI. It stays until the MCP server covers what agents need. Rules: [brain-cli.md](.claude/rules/brain-cli.md) |
 | `brain serve` | `src/interface/server*.ts` | HTTP server for the app and the menu bar. The MCP server for agents lives here, at `/mcp` |
-| Phone app | `web/app/` | Rules: [web.md](.claude/rules/web.md), [web-ui.md](.claude/rules/web-ui.md), [web-tests.md](.claude/rules/web-tests.md) |
+| Phone app | `web/app/` | Rules: [web.md](.claude/rules/web.md), [web-ui.md](.claude/rules/web-ui.md), [web-tests.md](.claude/rules/web-tests.md). On the phone: [phone-preview.md](.claude/rules/phone-preview.md) |
 | Worker | `web/worker/` | Deploy values come from `~/.config/brain/web.env`. See [docs/phone-setup.md](docs/phone-setup.md) |
 | Design system | `design-system/` | Tokens and Storybook |
 | Jobs | `launchd/*.plist`, `daily.sh`, `swiftbar/` | Templates; `setup.sh` fills the `__WORDS__` |

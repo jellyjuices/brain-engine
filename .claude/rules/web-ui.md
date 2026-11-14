@@ -25,6 +25,8 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 | Button | `Button` (`variant`, `size`, `icon`, `block`, `busy`) |
 | Icon-only button | `IconButton` (always with `label`) |
 | Icon | `Icon` from `components/icon/` |
+| Kind of thing (to-do, journal, person, place...) | `Shape` (`name`, `icon`) or `Row shape`. One shape per kind. The `add` shape is only for the add button |
+| Add button and its quick add | `AddPanel` in `TabBar` |
 | Tappable line | `Row` (`title`, `sub`, `icon`, `end`, `variant`, `chevron`, `href` or `onClick`) |
 | Group of rows | `List` (`outlined` on a screen, `ghost` in a sheet, `menu` for a sheet menu) |
 | Line between menu groups | `Divider` inside `List variant="menu"` |
