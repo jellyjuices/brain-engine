@@ -100,11 +100,11 @@ export const shared: Record<string, string> = {
   'shape-toast-neutral': 'shape-squircle',
   'shape-kind-todo': 'shape-scallop',
   'shape-kind-journal': 'shape-pebble',
-  'shape-kind-person': 'shape-flower',
+  'shape-kind-person': 'shape-pentagon',
   'shape-kind-place': 'shape-clover',
   'shape-kind-thing': 'shape-puff',
   'shape-kind-file': 'shape-hexagon',
-  'shape-kind-intake': 'shape-pentagon',
+  'shape-kind-intake': 'shape-flower',
   'shape-kind-other': 'shape-circle',
 }
 

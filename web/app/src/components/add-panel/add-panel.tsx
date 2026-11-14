@@ -78,50 +78,59 @@ export function AddPanel() {
           onClick={() => setMode("closed")}
         />
       )}
-      {mode === "open" && (
-        <div className="add-arc" role="menu" aria-label={copy.add.newTitle}>
-          <button
-            type="button"
-            role="menuitem"
-            className="add-pick add-pick--1"
-            onClick={() => setMode("todo")}
-          >
-            <Shape name="todo" icon={CheckSquareIcon} size="lg" />
-            <span>{copy.add.todo}</span>
-          </button>
-          <button
-            type="button"
-            role="menuitem"
-            className="add-pick add-pick--2"
-            onClick={() => setMode("journal")}
-          >
-            <Shape name="journal" icon={BookOpenIcon} size="lg" />
-            <span>{copy.add.journal}</span>
-          </button>
-          <button type="button" role="menuitem" className="add-pick add-pick--3" onClick={other}>
-            <Shape name="other" icon={DotsThreeIcon} size="lg" />
-            <span>{copy.add.other}</span>
-          </button>
+      {mode !== "closed" && (
+        <div className="add-blob">
+          {mode === "open" && (
+            <div className="add-arc" role="menu" aria-label={copy.add.newTitle}>
+              <button
+                type="button"
+                role="menuitem"
+                className="add-pick add-pick--1"
+                onClick={() => setMode("todo")}
+              >
+                <Shape name="todo" icon={CheckSquareIcon} size="lg" />
+                <span>{copy.add.todo}</span>
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                className="add-pick add-pick--2"
+                onClick={() => setMode("journal")}
+              >
+                <Shape name="journal" icon={BookOpenIcon} size="lg" />
+                <span>{copy.add.journal}</span>
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                className="add-pick add-pick--3"
+                onClick={other}
+              >
+                <Shape name="other" icon={DotsThreeIcon} size="lg" />
+                <span>{copy.add.other}</span>
+              </button>
+            </div>
+          )}
+          {editing && (
+            <div
+              ref={box}
+              className="add-box"
+              role="textbox"
+              tabIndex={0}
+              aria-multiline="true"
+              aria-label={mode === "todo" ? copy.add.todo : copy.add.journal}
+              data-placeholder={mode === "todo" ? copy.add.todoHint : copy.add.writePlaceholder}
+              contentEditable="plaintext-only"
+              suppressContentEditableWarning
+              onKeyDown={(e) => {
+                if (mode === "todo" && e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  void save();
+                }
+              }}
+            />
+          )}
         </div>
-      )}
-      {editing && (
-        <div
-          ref={box}
-          className={clsx("add-box", `add-box--${mode}`)}
-          role="textbox"
-          tabIndex={0}
-          aria-multiline="true"
-          aria-label={mode === "todo" ? copy.add.todo : copy.add.journal}
-          data-placeholder={mode === "todo" ? copy.add.todoHint : copy.add.writePlaceholder}
-          contentEditable="plaintext-only"
-          suppressContentEditableWarning
-          onKeyDown={(e) => {
-            if (mode === "todo" && e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              void save();
-            }
-          }}
-        />
       )}
       <button
         type="button"

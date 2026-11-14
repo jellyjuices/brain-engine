@@ -51,13 +51,46 @@
   background: var(--scrim);
 }
 
-.add-arc {
+.add-blob {
   position: absolute;
-  bottom: 100%;
+  bottom: 50%;
   left: 50%;
   z-index: 2;
+  width: var(--add-blob);
+  height: var(--add-blob);
+  margin-left: calc(var(--add-blob) / -2);
+  transform-origin: 50% 100%;
+  animation: add-inflate var(--pop) var(--ease) both;
 }
 
+.add-blob::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  clip-path: var(--shape-kind-add);
+}
+
+@keyframes add-inflate {
+  0% {
+    transform: scale(0.15);
+  }
+  55% {
+    transform: scale(1.08, 0.94);
+  }
+  75% {
+    transform: scale(0.96, 1.04);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.add-arc {
+  position: absolute;
+  bottom: var(--s3);
+  left: 50%;
+}
 .add-pick {
   position: absolute;
   bottom: 0;
@@ -104,42 +137,17 @@
 }
 
 .add-box {
-  position: fixed;
-  right: var(--s2);
-  bottom: calc(var(--tabbar) + var(--s3) + env(safe-area-inset-bottom));
-  left: var(--s2);
-  z-index: 2;
-  min-height: var(--add-box);
-  max-height: 50vh;
+  position: absolute;
+  inset: 24% 20% 30%;
   overflow-y: auto;
-  padding: var(--s3);
-  background: var(--surface);
-  color: var(--ink);
+  color: var(--accent-ink);
   font-size: var(--text);
   line-height: var(--leading);
   white-space: pre-wrap;
   outline: none;
-  box-shadow: var(--shadow);
-  transform-origin: 50% 100%;
-  animation: add-grow var(--fast) var(--ease) both;
-}
-
-.add-box--todo {
-  border-radius: var(--radius-lg);
-}
-
-.add-box--journal {
-  border-radius: var(--radius-xl) var(--radius-sm) var(--radius-xl) var(--radius-sm);
 }
 
 .add-box:empty::before {
   content: attr(data-placeholder);
-  color: var(--muted);
-}
-
-@keyframes add-grow {
-  from {
-    opacity: 0;
-    transform: scale(0.2);
-  }
+  opacity: 0.7;
 }

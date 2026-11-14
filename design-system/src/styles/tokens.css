@@ -299,11 +299,11 @@
   --shape-toast-neutral: var(--shape-squircle);
   --shape-kind-todo: var(--shape-scallop);
   --shape-kind-journal: var(--shape-pebble);
-  --shape-kind-person: var(--shape-flower);
+  --shape-kind-person: var(--shape-pentagon);
   --shape-kind-place: var(--shape-clover);
   --shape-kind-thing: var(--shape-puff);
   --shape-kind-file: var(--shape-hexagon);
-  --shape-kind-intake: var(--shape-pentagon);
+  --shape-kind-intake: var(--shape-flower);
   --shape-kind-other: var(--shape-circle);
   --glow-corner: conic-gradient(from 200deg at 100% 0%, var(--glow-corner-start), var(--glow-corner-end), var(--glow-corner-start));
   --glow-corner-mask: radial-gradient(circle at 100% 0%, #000 0%, rgb(0 0 0 / 0.5) 35%, transparent 70%);
