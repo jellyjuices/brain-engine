@@ -29,7 +29,7 @@ Intent for every part: [docs/intent/README.md](docs/intent/README.md). When the 
 ## Hard rules
 
 - **Never deploy.** Do not run `npm run deploy`, `wrangler deploy` or `web/go-live.sh`. Reason: a deploy is public. The owner does it. `refuse-under-agent.mjs` and `.claude/settings.json` block it too.
-- **Commit by path. Never push.** The owner pushes.
+- **Commit by path. Never push to `main`.** The owner pushes `main`. A push to any other branch is fine.
 - **Never edit a brain folder from here** except through `setup.sh` or the `brain` command.
 - Never run a dev server or Storybook. Verify with typecheck, lint, tests and build.
 
