@@ -94,8 +94,16 @@
 }
 
 .add-blob--journal {
-  --add-blob-w: 160vw;
-  --add-blob-h: calc(var(--vvh, 100dvh) * 1.6);
+  --add-blob-w: calc(100vw - 2 * var(--s2));
+  --add-blob-h: min(
+    calc(var(--add-blob-w) * 1.5),
+    calc(var(--vvh, 100dvh) - var(--tabbar) / 2 - var(--s5))
+  );
+  top: calc(
+    var(--vvt, 0px) + var(--vvh, 100dvh) - var(--tabbar) / 2 - env(safe-area-inset-bottom) -
+      var(--add-blob-h)
+  );
+  transform-origin: 50% 100%;
 }
 
 .add-blob--journal::before {
@@ -104,7 +112,7 @@
 }
 
 .add-blob--journal .add-box {
-  inset: 18% 30% 54%;
+  inset: 32% 10% 20%;
 }
 
 @keyframes add-morph {
@@ -190,11 +198,11 @@
 }
 
 .add-panel.is-closing .add-blob {
-  animation: add-deflate var(--pop) var(--ease-in) both;
+  animation: add-deflate var(--fast) var(--ease-in) both;
 }
 
 .add-panel.is-closing .add-scrim {
-  animation: add-fade var(--pop) var(--ease-in) both;
+  animation: add-fade var(--fast) var(--ease-in) both;
 }
 
 .add-panel.is-closing .add-main .shape > svg {

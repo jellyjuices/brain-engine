@@ -99,7 +99,7 @@ export const shared: Record<string, string> = {
   'shape-toast-info': 'shape-blossom',
   'shape-toast-neutral': 'shape-squircle',
   'shape-kind-todo': 'shape-scallop',
-  'shape-kind-journal': 'shape-pebble',
+  'shape-kind-journal': 'shape-house',
   'shape-kind-person': 'shape-pentagon',
   'shape-kind-place': 'shape-clover',
   'shape-kind-thing': 'shape-puff',
