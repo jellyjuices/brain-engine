@@ -1,10 +1,11 @@
 import { applyTriage, newNote } from "../capture/actions.ts";
-import { sortCapture, whenFrom } from "../capture/file.ts";
 import { dump, type Meta, parse } from "../core/notes.ts";
 import { loadAll, readNote, writeNote } from "../core/files.ts";
+import { undoLast } from "../core/log.ts";
 import { loadSchema } from "../core/schema.ts";
 import { move } from "../todos/verbs.ts";
-import { change, undo } from "../todos/undo.ts";
+import { change } from "../todos/undo.ts";
+import { inboxPath } from "./routes/capture.ts";
 import { doneWith, dropWith } from "../todos/wrapup.ts";
 import { HttpError, MAX_FILE } from "./server-auth.ts";
 import { afterWrite, asUserError, type Ctx, existingNote, fileText, fullNoteJson, hash, safeNotePath, text } from "./server-context.ts";
@@ -82,26 +83,6 @@ export function addFile(c: Ctx) {
   return { path: made.path, created: true };
 }
 
-function inboxPath(raw: unknown, name: string): string {
-  const path = safeNotePath(text(raw, name)!, true);
-  if (!path.startsWith("inbox/")) throw new HttpError(400, "That is not in the inbox.");
-  return path;
-}
-
-/** File one inbox item into a subject note with a When, then archive the item. */
-export const NO_SUBJECT_HOME = "areas/life-admin.md";
-
-export function sortRoute(c: Ctx) {
-  const path = inboxPath(c.body.path, "path");
-  const picked = typeof c.body.into === "string" ? c.body.into.trim() : "";
-  const into = picked ? safeNotePath(picked, true) : NO_SUBJECT_HOME;
-  const when = whenFrom(text(c.body.when, "when")!);
-  if (!when) throw new HttpError(400, `"when" is not a day I know.`);
-  existingNote(c.root, path);
-  existingNote(c.root, into);
-  return afterWrite(c.root, () => asUserError(() => sortCapture(c.root, loadAll(c.root), path, into, when)));
-}
-
 /** Take an inbox item out of the inbox. It moves to .archive/ and is never deleted. */
 export function inboxDrop(c: Ctx) {
   const path = inboxPath(c.body.path, "path");
@@ -127,7 +108,7 @@ export const moveRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => 
 
 export const dropRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => dropWith(c.root, text(c.body.ref, "ref")!, text(c.body.why, "why", false))));
 
-export const undoRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => undo(c.root)));
+export const undoRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => undoLast(c.root)));
 
 /** Save an edited body. `base` must be the hash the phone read, else 409 with the note as it is now. */
 function editTags(root: string, raw: unknown): string[] | undefined {
