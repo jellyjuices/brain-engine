@@ -6,12 +6,7 @@ The rules for this repo are in AGENTS.md, imported below. This file adds Claude 
 
 ## Gates
 
-| Where | Run | All must pass |
-| --- | --- | --- |
-| root | `npm run typecheck`, `npm test`, `npm run size` | yes |
-| `web/app` | `npm run typecheck`, `npm run lint`, `npm run format:check`, `npm run size`, `npx vitest run`, `npm run build` | yes |
-| `web/worker` | `npm run typecheck`, `npm run lint`, `npm test`, `npm run size` | yes |
-| `design-system` | `npm run typecheck` | yes |
+Run `npm run gates` from the root before you finish. It runs every gate in every package and the privacy scan, then fails at the end if any failed.
 
 After a web app change, use the `web-reviewer` subagent. It runs the gates and returns findings only.
 

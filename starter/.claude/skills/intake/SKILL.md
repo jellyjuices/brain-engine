@@ -38,7 +38,7 @@ After each answer run `brain intake ask "<their words>" --json`.
 - **Known name:** `brain intake save` links it. A fact about a subject goes to its note (`--fact "<note>::<fact>"` or `brain intake fact <note> "fact"`), not the lens.
 - **Fix a role:** `brain intake role <subject> --about <note> --role "…"`.
 - **To-dos:** ask About what? and When?, then `brain intake todo "text" --when today|tomorrow|<date>|someday|waiting|note --about <note>`. Never `inbox/`.
-- **Undo:** `brain undo` puts back the last edit.
+- **Fix a mistake:** `brain undo` does not cover intake saves. Use the fix lines that `brain intake end` prints.
 
 ## Care
 
@@ -52,4 +52,4 @@ After each answer run `brain intake ask "<their words>" --json`.
 
 ## End
 
-Run `brain intake end` and read the owner its lines ("New: Sam (person), Sam · co-founder of Acme."), so they can fix or undo them. Give a 3-line summary: what you covered, what got saved, threads opened. Ask "How was that?" Then run `brain check` and `brain log "intake session N: <topic>"`.
+Run `brain intake end` and read the owner its lines ("New: Sam (person), Sam · co-founder of Acme."), so they can fix or undo them. Give a 3-line summary: what you covered, what got saved, threads opened. Ask "How was that?" Then run `brain log "intake session N: <topic>"`. The Stop hook runs `brain check`. Fix what it reports.

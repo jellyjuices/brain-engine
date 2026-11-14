@@ -12,7 +12,7 @@ This folder is the one source for what the brain is. Design, docs and code start
 - Big aims have no home, so small steps feel random.
 - Their life is chaotic. Any tool that needs a fixed habit fails them.
 
-## Outcomes
+## Aims
 
 The brain is working when:
 

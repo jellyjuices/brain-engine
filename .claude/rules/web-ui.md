@@ -58,7 +58,7 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 | Label on a group | `.section-label` |
 | Padded box | `Panel` |
 | Fact on a note | `Fact`, `AddFact` |
-| To-do line | `TodoRow`, with `makeTodo()` from `lib/notes/loops.ts` |
+| To-do line | `TodoRow`, with `makeTodo()` from `lib/notes/todos.ts` |
 | Nothing to show | `Empty` (`title`, `body`, `size`) |
 
 ## Variants
