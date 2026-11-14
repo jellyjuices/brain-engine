@@ -31,7 +31,7 @@ Show one table per entry, one row per bit:
 
 ## 4. File
 
-After the owner says yes to all rows, or the rows they name, write each line in its subject. Then file the capture into the day note with `brain absorb <capture> --into journal/YYYY-MM-DD.md`. A sorted capture is deleted. Git keeps it.
+After the owner says yes to all rows, or the rows they name, write each line in its subject. Then file the capture into the day note with `brain sort <capture> --into journal/YYYY-MM-DD.md`. A sorted capture is deleted. Git keeps it.
 
 ## 5. Close
 
