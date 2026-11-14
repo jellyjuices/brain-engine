@@ -37,3 +37,11 @@
 .shape--primary .shape-bg {
   background: var(--accent);
 }
+
+.shape--secondary {
+  color: var(--accent);
+}
+
+.shape--secondary .shape-bg {
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+}

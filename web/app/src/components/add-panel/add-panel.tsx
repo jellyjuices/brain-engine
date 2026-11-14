@@ -79,7 +79,7 @@ export function AddPanel() {
         />
       )}
       {mode !== "closed" && (
-        <div className="add-blob">
+        <div className={clsx("add-blob", `add-blob--${mode}`)}>
           {mode === "open" && (
             <div className="add-arc" role="menu" aria-label={copy.add.newTitle}>
               <button
@@ -140,7 +140,12 @@ export function AddPanel() {
         aria-busy={busy || undefined}
         onClick={main}
       >
-        <Shape name="add" icon={editing ? CheckIcon : PlusIcon} size="lg" variant="primary" />
+        <Shape
+          name={mode === "closed" ? "add" : "other"}
+          icon={editing ? CheckIcon : PlusIcon}
+          size="lg"
+          variant={mode === "closed" ? "primary" : "secondary"}
+        />
         <span className="label">{copy.nav.add}</span>
       </button>
     </div>

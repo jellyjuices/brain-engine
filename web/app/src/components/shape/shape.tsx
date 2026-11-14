@@ -10,7 +10,7 @@ export interface ShapeProps {
   name: ShapeName;
   icon?: PhosphorIcon;
   size?: "md" | "lg";
-  variant?: "default" | "primary";
+  variant?: "default" | "primary" | "secondary";
 }
 
 export function Shape({ name, icon, size = "md", variant = "default" }: ShapeProps) {

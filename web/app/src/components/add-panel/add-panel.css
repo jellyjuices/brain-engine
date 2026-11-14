@@ -23,7 +23,6 @@
 
 .add-main .shape {
   margin-top: calc(var(--icon) * -1);
-  filter: drop-shadow(var(--shadow-sm));
   transition: transform var(--fast) var(--ease);
 }
 
@@ -33,10 +32,6 @@
 
 .add-main:active .shape {
   transform: scale(0.94);
-}
-
-.add-panel:not(.is-closed) .add-main .shape {
-  transform: scale(1.15);
 }
 
 .add-panel.is-open .add-main .shape > svg {
@@ -52,14 +47,13 @@
 }
 
 .add-blob {
-  position: absolute;
-  bottom: 50%;
+  position: fixed;
+  bottom: calc(var(--tabbar) / 2 + env(safe-area-inset-bottom) - var(--add-blob) / 2);
   left: 50%;
   z-index: 2;
   width: var(--add-blob);
   height: var(--add-blob);
   margin-left: calc(var(--add-blob) / -2);
-  transform-origin: 50% 100%;
   animation: add-inflate var(--pop) var(--ease) both;
 }
 
@@ -69,6 +63,31 @@
   inset: 0;
   background: var(--accent);
   clip-path: var(--shape-kind-add);
+}
+
+.add-blob--todo,
+.add-blob--journal {
+  animation: add-morph var(--pop) var(--ease) both;
+}
+
+.add-blob--todo::before {
+  clip-path: var(--shape-kind-todo);
+}
+
+.add-blob--journal::before {
+  clip-path: var(--shape-kind-journal);
+}
+
+@keyframes add-morph {
+  0% {
+    transform: scale(0.85);
+  }
+  55% {
+    transform: scale(1.05, 0.96);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes add-inflate {
@@ -88,7 +107,7 @@
 
 .add-arc {
   position: absolute;
-  bottom: var(--s3);
+  bottom: calc(50% + var(--s4));
   left: 50%;
 }
 .add-pick {
@@ -138,7 +157,7 @@
 
 .add-box {
   position: absolute;
-  inset: 24% 20% 30%;
+  inset: 22% 28% 58%;
   overflow-y: auto;
   color: var(--accent-ink);
   font-size: var(--text);
@@ -150,4 +169,8 @@
 .add-box:empty::before {
   content: attr(data-placeholder);
   opacity: 0.7;
+}
+
+.add-panel:not(.is-closed) .add-main .label {
+  visibility: hidden;
 }
