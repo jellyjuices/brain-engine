@@ -92,9 +92,9 @@ export async function doneCommand(c: CliContext): Promise<number> {
 
 export async function todosCommand(c: CliContext): Promise<number> {
   const { root, flags, json } = c;
-  const { allLoops } = await import("../todos/todos.ts");
+  const { allLoops, inArea } = await import("../todos/todos.ts");
   const items = allLoops(loadAll(root), { done: flags.all ? undefined : false })
-    .filter((l) => !flags.area || l.area === flags.area)
+    .filter((l) => !flags.area || inArea(l, flags.area))
     .sort((a, b) => (a.due ?? "9999").localeCompare(b.due ?? "9999"));
   if (flags.json) json(items);
   else if (!items.length) out(pc.dim("No open to-dos."));
