@@ -3,6 +3,7 @@ import { ARCHIVE, slugOf, toStored, type StoredNote } from "@/lib/notes/model.ts
 import { flush } from "./outbox.ts";
 import { allNotes, getMeta, putNotes, replaceAll, setMeta } from "@/lib/storage/store.ts";
 import { META } from "@/lib/storage/keys.ts";
+import { applyVectorFeed, type VectorFeed } from "./vector-feed.ts";
 
 export interface SyncState {
   lastSync?: string;
@@ -63,7 +64,9 @@ async function pull(full: boolean): Promise<SyncResult> {
   const since = useFull
     ? ""
     : `?since=${encodeURIComponent(new Date(Date.parse(last!) - OVERLAP).toISOString())}`;
-  const res = await api<{ now: string; notes: Record<string, unknown>[] }>(`/api/notes${since}`);
+  const res = await api<{ now: string; notes: Record<string, unknown>[] } & VectorFeed>(
+    `/api/notes${since}`,
+  );
   if (!res.ok) {
     if (res.offline) state.offline = true;
     return res.offline ? "offline" : "error";
@@ -71,6 +74,7 @@ async function pull(full: boolean): Promise<SyncResult> {
   const notes = res.data.notes.map(toStored);
   if (useFull) await replaceAll(notes);
   else await putNotes(notes, archivedAway(notes, await allNotes()));
+  if ((await applyVectorFeed(res.data, useFull)) === "refetch") return pull(true);
   state.offline = false;
   state.lastSync = res.data.now;
   await setMeta(META.lastSync, res.data.now);
