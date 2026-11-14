@@ -36,6 +36,11 @@
   transform-origin: 50% 57%;
 }
 
+.shape--person .shape-bg {
+  translate: 0 -5%;
+  transform-origin: 50% 55%;
+}
+
 .shape--primary {
   color: var(--accent-ink);
 }
