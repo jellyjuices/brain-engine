@@ -18,6 +18,17 @@ export async function pullCommand(c: CliContext): Promise<number> {
   }
 }
 
+const MIGRATIONS: Record<string, () => Promise<(root: string, write: boolean, say: (s: string) => void) => number>> = {
+  "areas-general": async () => (await import("../../migrations/2026-11-14-areas-general.ts")).runAreasGeneral,
+};
+
+export async function migrateCommand(c: CliContext): Promise<number> {
+  const { root, args, flags } = c;
+  const load = MIGRATIONS[args[0] ?? ""];
+  if (!load) return fail(`Name a migration: ${Object.keys(MIGRATIONS).join(", ")}. Dry run by default; add --write to apply.`);
+  return (await load())(root, !!flags.write, out);
+}
+
 export async function killCommand(c: CliContext): Promise<number> {
   const { flags, json } = c;
   const { stopService } = await import("./service.ts");

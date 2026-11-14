@@ -61,6 +61,7 @@ ${pc.bold("Usage")}
   brain pull                    fetch captures from the phone relay into inbox/   [--json]
   brain serve                   turn phone access on (runs in the background)   [--foreground --port --host]
   brain kill                    turn phone access off, until the next brain serve
+  brain migrate <name>          show what a one-time change to the notes would do   [--write to apply]
   brain swiftbar                print the menu bar icon and inbox count (used by the SwiftBar plugin)
 
 Add ${pc.cyan("--json")} to any query command for machine-readable output.

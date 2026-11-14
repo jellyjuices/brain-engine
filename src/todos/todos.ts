@@ -1,4 +1,4 @@
-import { DIRS, extractLinks, folderOf, type Note, str, type Summary, titleOf, today } from "../core/notes.ts";
+import { areasOf, DIRS, extractLinks, folderOf, type Note, str, type Summary, titleOf, today } from "../core/notes.ts";
 import { loadAll, readNote, writeNote } from "../core/files.ts";
 import { log } from "../core/log.ts";
 import {
@@ -28,10 +28,23 @@ export interface Loop extends TodoFields {
   subjects?: string[];
   noteTitle: string;
   area?: string;
+  areas?: string[];
+}
+
+export function areasOfNote(n: Note): string[] {
+  const areas = areasOf(n);
+  return areas.length ? areas : n.path.startsWith("areas/") ? [n.path.slice(6, -3)] : [];
 }
 
 export function areaOf(n: Note): string | undefined {
-  return str(n.meta.area) ?? (n.path.startsWith("areas/") ? n.path.slice(6, -3) : undefined);
+  return areasOfNote(n)[0];
+}
+
+export const inArea = (l: Loop, area: string) => l.area === area || !!l.areas?.includes(area);
+
+function areaFields(n: Note): Pick<Loop, "area" | "areas"> {
+  const areas = areasOfNote(n);
+  return { area: areas[0], ...(areas.length > 1 && { areas }) };
 }
 
 export function loopsIn(n: Note): Loop[] {
@@ -44,7 +57,7 @@ export function loopsIn(n: Note): Loop[] {
     if (!line) continue;
     const todo = fieldsOf(line);
     const subjects = [...(todo.with ?? []), ...(todo.re ?? [])].flatMap((x) => extractLinks(n.path, x));
-    out.push({ ...todo, ...(subjects.length && { subjects }), path: n.path, noteTitle: titleOf(n), area: areaOf(n) });
+    out.push({ ...todo, ...(subjects.length && { subjects }), path: n.path, noteTitle: titleOf(n), ...areaFields(n) });
   }
   return out;
 }

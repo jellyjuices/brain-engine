@@ -3,7 +3,7 @@
 import { intakeCommand, threadCommand } from "./cli-intake.ts";
 import { addCommand, areaCommand, findCommand, listCommand, logCommand, newCommand, recentCommand, showCommand } from "./cli-notes.ts";
 import { checkCommand, indexCommand, reviewCommand, swiftbarCommand, todayCommand, weeklyCommand } from "./cli-reports.ts";
-import { killCommand, pullCommand, serveCommand } from "./cli-service.ts";
+import { killCommand, migrateCommand, pullCommand, serveCommand } from "./cli-service.ts";
 import { doneCommand, listTodayCommand, moveCommand, sortCommand, tagCommand, todosCommand } from "./cli-todos.ts";
 import { HELP, HELP_ALL } from "./cli-help.ts";
 import { brainHome } from "../core/notes.ts";
@@ -40,6 +40,7 @@ const COMMANDS: Record<string, (c: CliContext) => Promise<number>> = {
   kill: killCommand,
   stop: killCommand,
   serve: serveCommand,
+  migrate: migrateCommand,
 };
 
 const HIDDEN_ALIASES: Record<string, string> = {
