@@ -85,7 +85,7 @@ export function todoActionOptions(subject?: string): Opt[] {
     { value: "tomorrow", label: "Tomorrow" },
     { value: "day", label: "Pick a day" },
     { value: "someday", label: "Someday" },
-    { value: "drop", label: "Drop" },
+    { value: "drop", label: "Delete" },
     ...(subject ? [{ value: "card", label: `Open ${subject}` }] : []),
   ];
 }
@@ -105,12 +105,12 @@ export const INTAKE_OPTIONS: Opt[] = [
 
 export const HELP_LINES = [
   "Esc or Ctrl+C goes back one level. On the list it quits.",
-  "Pick a to-do to mark it done, move it, drop it or open its subject.",
+  "Pick a to-do to mark it done, move it, delete it or open its subject.",
   "Add: type a thought. Start with today:, tomorrow:, fri: or note: and name a subject to file it straight away.",
   "Find: a subject card first, then other matches.",
   "Sort inbox: asks When? and About what? for each thing in the inbox.",
   "Undo shows after a change. Press u on the list to undo it.",
-  "In a terminal you can also type: brain add, brain done, brain move, brain drop, brain find, brain undo.",
+  "In a terminal you can also type: brain add, brain done, brain move, brain delete, brain find, brain undo.",
 ];
 
 /** The newest change `brain undo` could reverse. */

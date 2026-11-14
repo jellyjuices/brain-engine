@@ -60,7 +60,7 @@ test("labels are cut to the width and keep the subject", () => {
 });
 
 test("a to-do offers 5 verbs and its subject; More and Intake are short", () => {
-  assert.deepEqual(todoActionOptions("Fitness").map((x) => x.label), ["Done", "Tomorrow", "Pick a day", "Someday", "Drop", "Open Fitness"]);
+  assert.deepEqual(todoActionOptions("Fitness").map((x) => x.label), ["Done", "Tomorrow", "Pick a day", "Someday", "Delete", "Open Fitness"]);
   assert.equal(todoActionOptions().length, 5);
   assert.deepEqual(MORE_OPTIONS.map((x) => x.label), ["Weekly review", "Intake", "Coming up", "Help"]);
   assert.deepEqual(INTAKE_OPTIONS.map((x) => x.label), ["What to talk about next", "Brain dump", "Open questions"]);

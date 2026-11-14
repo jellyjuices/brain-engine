@@ -86,7 +86,7 @@ export async function askOverdue(root: string, now = today()): Promise<string | 
         { value: "today", label: "Move to today" },
         { value: "date", label: "Move to a date" },
         { value: "someday", label: "Someday" },
-        { value: "drop", label: "Drop" },
+        { value: "drop", label: "Delete" },
       ],
     });
     if (p.isCancel(answer)) break;

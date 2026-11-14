@@ -37,7 +37,7 @@ export function render(md: string) {
     .trim();
 }
 
-// Intake and triage, also used by `brain intake` and `brain triage`.
+// Intake and sort, also used by `brain intake` and `brain sort`.
 
 export async function intakeDump(root: string, standalone = true): Promise<number> {
   if (standalone) p.intro(pc.bgCyan(pc.black(" brain dump ")));
@@ -88,7 +88,7 @@ const WHEN_OPTIONS = [
   { value: "someday", label: "Someday" },
   { value: "waiting", label: "Waiting on someone" },
   { value: "note", label: "Not a to-do", hint: "keep it as a note" },
-  { value: "drop", label: "Drop it" },
+  { value: "drop", label: "Delete it" },
   { value: "skip", label: pc.dim("Skip for now") },
   { value: "stop", label: pc.dim("Stop") },
 ];
@@ -156,7 +156,7 @@ export async function triage(root: string, standalone = true): Promise<number> {
     if (pick === "skip") continue;
     if (pick === "drop") {
       applyTriage(root, n.path, { outcome: "drop" });
-      p.log.info("Dropped. It is in .archive/ if you ever want it.");
+      p.log.info("Deleted. It is in .archive/ if you ever want it.");
       done++;
       continue;
     }

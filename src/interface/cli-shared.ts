@@ -50,6 +50,7 @@ export function parseCli(rest: string[]) {
       status: { type: "string" },
       limit: { type: "string" },
       full: { type: "boolean" },
+      auto: { type: "boolean" },
       foreground: { type: "boolean" },
       "dry-run": { type: "boolean" },
       single: { type: "boolean" },

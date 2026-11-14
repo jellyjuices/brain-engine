@@ -35,4 +35,4 @@ export async function run<T extends { line: string }>(root: string, fn: () => T 
   }
 }
 
-/** One to-do: Done, Tomorrow, Pick a day, Someday, Drop, Open <subject>. True when something changed. */
+/** One to-do: Done, Tomorrow, Pick a day, Someday, Delete, Open <subject>. True when something changed. */

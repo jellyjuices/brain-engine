@@ -4,7 +4,7 @@ import { intakeCommand, threadCommand } from "./cli-intake.ts";
 import { addCommand, areaCommand, findCommand, listCommand, logCommand, newCommand, recentCommand, showCommand } from "./cli-notes.ts";
 import { checkCommand, indexCommand, reviewCommand, swiftbarCommand, todayCommand, weeklyCommand } from "./cli-reports.ts";
 import { killCommand, pullCommand, serveCommand } from "./cli-service.ts";
-import { absorbCommand, doneCommand, listTodayCommand, loopsCommand, moveCommand, sortCommand, tagCommand, triageCommand } from "./cli-todos.ts";
+import { doneCommand, listTodayCommand, moveCommand, sortCommand, tagCommand, todosCommand } from "./cli-todos.ts";
 import { HELP, HELP_ALL } from "./cli-help.ts";
 import { brainHome } from "../core/notes.ts";
 import { fail, out, parseCli, type CliContext } from "./cli-shared.ts";
@@ -12,7 +12,7 @@ import { fail, out, parseCli, type CliContext } from "./cli-shared.ts";
 const COMMANDS: Record<string, (c: CliContext) => Promise<number>> = {
   "list-today": listTodayCommand,
   move: moveCommand,
-  drop: moveCommand,
+  delete: moveCommand,
   undo: moveCommand,
   add: addCommand,
   new: newCommand,
@@ -30,10 +30,8 @@ const COMMANDS: Record<string, (c: CliContext) => Promise<number>> = {
   tag: tagCommand,
   sort: sortCommand,
   intake: intakeCommand,
-  absorb: absorbCommand,
   done: doneCommand,
-  todos: loopsCommand,
-  loops: loopsCommand,
+  todos: todosCommand,
   swiftbar: swiftbarCommand,
   thread: threadCommand,
   threads: threadCommand,
@@ -42,7 +40,13 @@ const COMMANDS: Record<string, (c: CliContext) => Promise<number>> = {
   kill: killCommand,
   stop: killCommand,
   serve: serveCommand,
-  triage: triageCommand,
+};
+
+const HIDDEN_ALIASES: Record<string, string> = {
+  drop: "delete",
+  triage: "sort",
+  absorb: "sort",
+  loops: "todos",
 };
 
 export async function main(argv = process.argv.slice(2)): Promise<number> {
@@ -62,7 +66,7 @@ export async function main(argv = process.argv.slice(2)): Promise<number> {
     out(flags.all ? HELP_ALL : HELP);
     return 0;
   }
-  const command = COMMANDS[cmd];
+  const command = COMMANDS[cmd] ?? COMMANDS[HIDDEN_ALIASES[cmd] ?? ""];
   if (command) return command({ root, cmd, args, flags, interactive, tag, limit, json, report });
   out(HELP);
   return fail(`Unknown command: ${cmd}`);

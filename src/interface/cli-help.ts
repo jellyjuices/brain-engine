@@ -7,7 +7,7 @@ export const HELP = `${pc.bold("brain")}: your second brain
   brain add "text"          save a thought. "fri: call Mom" files it as a to-do
   brain done <n|words>      tick it off
   brain move <n> <when>     today, tomorrow, fri, YYYY-MM-DD, someday or waiting
-  brain drop <n>            let it go
+  brain delete <n>          let it go
   brain find "words"        search, with the subject's card first
   brain undo                put back the last change
 More: ${pc.cyan("brain help --all")}`;
@@ -19,8 +19,8 @@ ${pc.bold("Usage")}
   brain menu                    same as brain
   brain done <n|words>          tick off a to-do (a number from the last list, or words from it)
   brain move <n> <when>         move a to-do: today, tomorrow, a weekday, YYYY-MM-DD, someday or waiting
-  brain drop <n>                drop a to-do (it stays in the note, ticked and marked dropped)
-  brain undo                    reverse the last done, move or drop
+  brain delete <n>              delete a to-do (it stays in the note, ticked, so undo can bring it back)
+  brain undo                    reverse the last done, move or delete
   brain add "text" [--tag t]    save a note to inbox/
   brain new <Type> "Title" -d "…" new note from a template (Person, Group, Place, Thing, Topic, Project, …)
   brain new Event "Title" --date YYYY-MM-DD [--with people/x.md --area a]   a dated visit or meeting
@@ -35,7 +35,10 @@ ${pc.bold("Usage")}
   brain index [--full]          rebuild the search index and .reports/index.md
   brain check                   find broken links and bad labels
   brain tag [--dry-run]         add tags to inbox notes from .schema/rules.yaml
-  brain sort [--dry-run]        file inbox notes that have a type, title and description
+  brain sort                    sort the inbox: When? and About what? for each note (in a terminal)
+  brain sort --json             the suggested subject for each inbox note
+  brain sort <inbox note> --into <note>   move one inbox note into its subject   [--yes files every suggestion]
+  brain sort --auto [--dry-run] file inbox notes that have a type, title and description
   brain intake                  brain dump (one line = one note)
   brain intake <area>           answer the 5 questions for one area
   brain intake status           progress per stage, threads and open to-dos

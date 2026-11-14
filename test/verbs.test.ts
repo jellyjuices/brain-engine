@@ -92,7 +92,7 @@ test("brain help is 10 lines or fewer and names the six verbs", () => {
   const r = spawnSync(process.execPath, ["--disable-warning=ExperimentalWarning", BIN, "help"], { encoding: "utf8", env: { ...process.env, NO_COLOR: "1" } });
   const lines = r.stdout.trimEnd().split("\n");
   assert.ok(lines.length <= 10, `help has ${lines.length} lines`);
-  for (const v of ["add", "done", "move", "drop", "find"]) assert.match(r.stdout, new RegExp(`brain ${v}`));
+  for (const v of ["add", "done", "move", "delete", "find"]) assert.match(r.stdout, new RegExp(`brain ${v}`));
   const all = spawnSync(process.execPath, ["--disable-warning=ExperimentalWarning", BIN, "help", "--all"], { encoding: "utf8" });
   assert.match(all.stdout, /brain menu/);
 });

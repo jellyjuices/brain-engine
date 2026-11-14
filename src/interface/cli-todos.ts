@@ -21,8 +21,9 @@ export async function moveCommand(c: CliContext): Promise<number> {
   const { root, cmd, args, flags, report } = c;
   const verbs = await import("../todos/verbs.ts");
   try {
-    const ask = cmd === "drop" && !flags.json && process.stdin.isTTY && process.stdout.isTTY;
-    const result = cmd === "undo" ? (await import("../todos/undo.ts")).undo(root) : cmd === "drop" ? (ask ? await (await import("../todos/wrapup.ts")).dropInTerminal(root, args.join(" ")) : verbs.drop(root, args.join(" "))) : verbs.move(root, args[0] ?? "", args.slice(1).join(" "));
+    const remove = cmd === "delete" || cmd === "drop";
+    const ask = remove && !flags.json && process.stdin.isTTY && process.stdout.isTTY;
+    const result = cmd === "undo" ? (await import("../todos/undo.ts")).undo(root) : remove ? (ask ? await (await import("../todos/wrapup.ts")).dropInTerminal(root, args.join(" ")) : verbs.drop(root, args.join(" "))) : verbs.move(root, args[0] ?? "", args.slice(1).join(" "));
     report(result, result.line);
     return 0;
   } catch (err) {
@@ -39,7 +40,7 @@ export async function tagCommand(c: CliContext): Promise<number> {
   return 0;
 }
 
-export async function sortCommand(c: CliContext): Promise<number> {
+function autoSort(c: CliContext): number {
   const { root, flags, json } = c;
   const result = sortInbox(root, flags["dry-run"]);
   if (flags.json) json(result);
@@ -51,14 +52,12 @@ export async function sortCommand(c: CliContext): Promise<number> {
   return 0;
 }
 
-export async function absorbCommand(c: CliContext): Promise<number> {
+export async function sortCommand(c: CliContext): Promise<number> {
   const { root, args, flags, json, report } = c;
-  // brain absorb                      → plan for every sorted capture (menu in a terminal, JSON otherwise)
-  // brain absorb --yes                → file every capture that has a suggested home
-  // brain absorb <capture> --into <note>
+  if (flags.auto) return autoSort(c);
   const { absorb, planAbsorb } = await import("../todos/absorb.ts");
   if (args[0]) {
-    if (!flags.into) return fail("Use: brain absorb <capture path> --into <note path>");
+    if (!flags.into) return fail("Use: brain sort <inbox note path> --into <note path>");
     const result = absorb(root, args[0], flags.into);
     report(result, `${pc.green("Filed")} into ${result.into} as ${result.as === "loop" ? "a to-do" : "a note"}.`);
     return 0;
@@ -66,12 +65,12 @@ export async function absorbCommand(c: CliContext): Promise<number> {
   const plan = planAbsorb(root);
   if (flags.yes) {
     const done = plan.filter((x) => x.into).map((x) => ({ ...x, ...absorb(root, x.capture, x.into!) }));
-    report(done, `${pc.green("Filed")} ${done.length} of ${plan.length}. ${plan.length - done.length} need a home: run brain absorb in a terminal.`);
+    report(done, `${pc.green("Filed")} ${done.length} of ${plan.length}. ${plan.length - done.length} need a subject: run brain sort in a terminal.`);
     return 0;
   }
   if (flags.json || flags["dry-run"] || !process.stdin.isTTY) {
     if (flags.json) json(plan);
-    else for (const x of plan) out(`${x.text.slice(0, 60)}  ${pc.dim("→")}  ${x.into ?? pc.yellow("needs a home")}  ${pc.dim(`(${x.as}, ${x.reason})`)}`);
+    else for (const x of plan) out(`${x.text.slice(0, 60)}  ${pc.dim("→")}  ${x.into ?? pc.yellow("needs a subject")}  ${pc.dim(`(${x.as === "loop" ? "to-do" : x.as}, ${x.reason})`)}`);
     return 0;
   }
   const { triage } = await import("./menu.ts");
@@ -91,7 +90,7 @@ export async function doneCommand(c: CliContext): Promise<number> {
   }
 }
 
-export async function loopsCommand(c: CliContext): Promise<number> {
+export async function todosCommand(c: CliContext): Promise<number> {
   const { root, flags, json } = c;
   const { allLoops } = await import("../todos/loops.ts");
   const items = allLoops(loadAll(root), { done: flags.all ? undefined : false })
@@ -101,10 +100,4 @@ export async function loopsCommand(c: CliContext): Promise<number> {
   else if (!items.length) out(pc.dim("No open to-dos."));
   else for (const todo of items) out(`${todo.done ? pc.dim("[x]") : "[ ]"} ${todo.text}${todo.due ? pc.cyan(`  due ${todo.due}`) : ""}${todo.every ? pc.cyan(`  every ${todo.every}`) : ""}${todo.outcome ? pc.dim(`  ${todo.outcome}`) : ""}  ${pc.dim(todo.path)}`);
   return 0;
-}
-
-export async function triageCommand(c: CliContext): Promise<number> {
-  const { root } = c;
-  const { triage } = await import("./menu.ts");
-  return triage(root);
 }

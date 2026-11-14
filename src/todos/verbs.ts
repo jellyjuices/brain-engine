@@ -130,7 +130,7 @@ export function drop(root: string, ref: string, extra: Extra = {}): { item: Item
       return [formatLoop({ ...l, done: true, doneAt: today(), every: undefined, dropped: true }), ...(note ? [note] : [])];
     });
   });
-  return { item, line: `Dropped: ${item.text}${where(item)} · brain undo` };
+  return { item, line: `Deleted: ${item.text}${where(item)} · brain undo` };
 }
 
 /** Move many items in one change, logged as one entry so one `brain undo` reverses all. Events only take a date. */

@@ -94,7 +94,7 @@ export function reviewMarkdown(date: string, steps: ReviewStep[], r: ReviewResul
     `## Found\n\n${open.length ? open.join("\n") : "Nothing needed a look."}\n`,
     `## Done\n\n${list(r.done)}\n`,
     `## Moved\n\n${list(r.moved)}\n`,
-    `## Dropped\n\n${list(r.dropped)}\n`,
+    `## Deleted\n\n${list(r.dropped)}\n`,
     `## Kept\n\n${list(r.kept)}\n`,
     `## New in areas\n\n${list(r.now)}\n`,
   ].join("\n");
@@ -137,8 +137,8 @@ export async function runReview(root: string): Promise<number> {
         message: item.text,
         options:
           step.key === "overdue"
-            ? [{ value: "done", label: "Done" }, { value: "move", label: "Move" }, { value: "drop", label: "Drop" }, { value: "skip", label: "Leave it" }]
-            : [{ value: "keep", label: "Keep" }, { value: "drop", label: "Drop" }],
+            ? [{ value: "done", label: "Done" }, { value: "move", label: "Move" }, { value: "drop", label: "Delete" }, { value: "skip", label: "Leave it" }]
+            : [{ value: "keep", label: "Keep" }, { value: "drop", label: "Delete" }],
       });
       if (stop(verb)) break;
       try {
