@@ -45,3 +45,19 @@
 .shape--secondary .shape-bg {
   background: color-mix(in srgb, var(--accent) 14%, var(--surface));
 }
+
+.shape-bg {
+  animation: shape-spin var(--spin) linear infinite;
+}
+
+@keyframes shape-spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shape-bg {
+    animation: none;
+  }
+}
