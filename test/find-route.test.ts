@@ -1,7 +1,7 @@
 // The find route returns fused hits and the answer card; the changes feed carries vectors for changed entries only.
-import { test } from "node:test";
+import { mock, test, type TestContext } from "node:test";
 import assert from "node:assert/strict";
-import { appendFileSync } from "node:fs";
+import { appendFileSync, utimesSync } from "node:fs";
 import { join } from "node:path";
 import { embedPending } from "../src/core/embed.ts";
 import { updateIndex, useEmbedder } from "../src/core/search.ts";
@@ -56,21 +56,49 @@ test("the changes feed has an empty vector list before any embedding", () => wit
   assert.deepEqual(r.data.vectors, []);
 }));
 
-test("the changes feed carries id, hash and int8 vector for changed entries only, with the model", () => withT9(true, async (a) => {
-  const all = await a.call("GET", "/api/notes");
-  assert.equal(all.data.model, fakeEmbedder.model);
-  assert.ok(all.data.vectors.length > 10);
-  for (const v of all.data.vectors) {
-    assert.match(v.id, /^[0-9a-f]+$/);
-    assert.match(v.hash, /^[0-9a-f]+$/);
-    assert.equal(Buffer.from(v.vec, "base64").length, 4);
-  }
-  assert.deepEqual((await a.call("GET", since(Date.now() + 60_000))).data.vectors, []);
-  const before = Date.now();
-  appendFileSync(join(a.root, "topics/money.md"), "\n- [ ] Ask about the salary review\n");
-  updateIndex(a.root);
-  assert.equal(await embedPending(a.root, fakeEmbedder), 1);
-  const changed = await a.call("GET", since(before));
-  assert.equal(changed.data.vectors.length, 1);
-  assert.ok(changed.data.notes.some((n: { path: string }) => n.path === "topics/money.md"));
+interface Vector { id: string; hash: string; vec: string }
+const HEX = /^[0-9a-f]+$/;
+const FIRST_EMBED = Date.parse("2031-03-04T09:00:00Z");
+const EDIT = Date.parse("2031-03-05T09:00:00Z");
+
+function clockAt(t: TestContext, ms: number) {
+  mock.timers.enable({ apis: ["Date"], now: ms });
+  t.after(() => mock.timers.reset());
+}
+
+test("the changes feed carries id, hash and int8 vector for every embedded entry, with the model", (t) => {
+  clockAt(t, FIRST_EMBED);
+  return withT9(true, async (a) => {
+    const all = await a.call("GET", "/api/notes");
+    assert.equal(all.data.model, fakeEmbedder.model);
+    assert.ok(all.data.vectors.length > 10, `only ${all.data.vectors.length} vectors`);
+    assert.deepEqual(all.data.vectors.filter((v: Vector) => !HEX.test(v.id) || !HEX.test(v.hash) || Buffer.from(v.vec, "base64").length !== 4), []);
+  });
+});
+
+test("the changes feed has no vectors when since is after the last embedding", (t) => {
+  clockAt(t, FIRST_EMBED);
+  return withT9(true, async (a) => {
+    assert.deepEqual((await a.call("GET", since(FIRST_EMBED + 60_000))).data.vectors, []);
+  });
+});
+
+test("the changes feed carries only the note and the vector changed after since", (t) => {
+  clockAt(t, FIRST_EMBED);
+  return withT9(true, async (a) => {
+    mock.timers.setTime(EDIT);
+    appendFileSync(join(a.root, "topics/money.md"), "\n- [ ] Ask about the salary review\n");
+    utimesSync(join(a.root, "topics/money.md"), EDIT / 1000, EDIT / 1000);
+    updateIndex(a.root);
+    assert.equal(await embedPending(a.root, fakeEmbedder), 1);
+    const changed = await a.call("GET", since(EDIT - 60_000));
+    assert.equal(changed.data.vectors.length, 1);
+    assert.deepEqual(changed.data.notes.map((n: { path: string }) => n.path), ["topics/money.md"]);
+  });
+});
+
+test("the changes feed refuses a since that is not a date", () => withT9(false, async (a) => {
+  const r = await a.call("GET", "/api/notes?since=last-tuesday");
+  assert.equal(r.status, 400);
+  assert.equal(r.data.error, `"since" must be an ISO date or time.`);
 }));

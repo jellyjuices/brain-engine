@@ -104,13 +104,17 @@ test("when words map to dates and tokens", () => {
   assert.throws(() => parseWhen("soon"));
 });
 
-test("brain help is 10 lines or fewer and names the six verbs", () => {
-  const r = spawnSync(process.execPath, ["--disable-warning=ExperimentalWarning", BIN, "help"], { encoding: "utf8", env: { ...process.env, NO_COLOR: "1" } });
+const help = (...args: string[]) => spawnSync(process.execPath, ["--disable-warning=ExperimentalWarning", BIN, "help", ...args], { encoding: "utf8", env: { ...process.env, BRAIN_HOME: makeBrain(), NO_COLOR: "1" } });
+
+test("brain help is 10 lines or fewer and names the verbs", () => {
+  const r = help();
   const lines = r.stdout.trimEnd().split("\n");
   assert.ok(lines.length <= 10, `help has ${lines.length} lines`);
-  for (const v of ["add", "done", "move", "delete", "find"]) assert.match(r.stdout, new RegExp(`brain ${v}`));
-  const all = spawnSync(process.execPath, ["--disable-warning=ExperimentalWarning", BIN, "help", "--all"], { encoding: "utf8" });
-  assert.match(all.stdout, /brain menu/);
+  assert.deepEqual(["add", "done", "move", "delete", "find"].filter((verb) => !r.stdout.includes(`brain ${verb}`)), []);
+});
+
+test("brain help --all names the menu", () => {
+  assert.match(help("--all").stdout, /brain menu/);
 });
 
 // ---- R9: what happened, follow-up, why ----

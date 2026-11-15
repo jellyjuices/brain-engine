@@ -4,6 +4,7 @@ import type { ApiResult } from "@/lib/sync/api.ts";
 import { unlockTestVault } from "../../helpers.ts";
 import { count, enqueue, flush, list, registerHandler, remove } from "@/lib/sync/outbox.ts";
 
+const FIRST_ID = "3f0c2a4e-8b1d-4c6f-9a7e-5d2b1c0e4f6a";
 const ok: ApiResult = { ok: true, status: 200, data: {} };
 const offline: ApiResult = { ok: false, offline: true };
 function fail(status: number): ApiResult {
@@ -18,13 +19,12 @@ beforeEach(async () => {
 
 describe("outbox", () => {
   it("stores writes oldest first with id, kind, payload and created_at", async () => {
-    const a = await enqueue("t", { n: 1 });
-    await new Promise((r) => setTimeout(r, 3));
+    const a = await enqueue("t", { n: 1 }, FIRST_ID);
     await enqueue("t", { n: 2 });
     const items = await list();
     expect(items.map((i) => (i.payload as { n: number }).n)).toEqual([1, 2]);
     expect(a).toMatchObject({ kind: "t", payload: { n: 1 } });
-    expect(a.id).toBeTruthy();
+    expect(a.id).toBe(FIRST_ID);
     expect(Date.parse(a.created_at)).not.toBeNaN();
     expect(await count()).toBe(2);
   });
