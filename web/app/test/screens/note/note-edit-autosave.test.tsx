@@ -12,11 +12,15 @@ const FITNESS = { ...fixture()[0]!, body: "Gym three times a week." };
 const EM = { ...fixture()[2]!, body: "Likes tea." };
 
 beforeAll(unlockTestVault);
-afterEach(() => {
+let leaving: string[];
+
+afterEach(async () => {
   vi.useRealTimers();
   cleanup();
+  await vi.waitFor(async () => expect(await sentBodies()).toEqual(leaving));
 });
 beforeEach(async () => {
+  leaving = [];
   vi.stubGlobal(
     "fetch",
     vi.fn(() => Promise.reject(new TypeError("offline"))),
@@ -32,6 +36,7 @@ async function sentBodies() {
 
 async function typeMore(text: string, note = FITNESS, user = userEvent.setup()) {
   const view = render(<NoteEdit note={note} />);
+  leaving.push(note.body + text);
   await user.type(screen.getByRole("textbox", { name: "Edit note" }), text);
   return view;
 }
@@ -73,6 +78,7 @@ describe("note edit autosave", () => {
 
   it("opens with the edit kept on the phone", async () => {
     await storeDraft(FITNESS.path, { text: "Rest day.", tags: [], base: FITNESS.hash });
+    leaving = ["Rest day."];
     render(<NoteEdit note={FITNESS} />);
     expect(await screen.findByDisplayValue("Rest day.")).toBeInTheDocument();
   });

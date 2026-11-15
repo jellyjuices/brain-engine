@@ -1,6 +1,6 @@
 import "fake-indexeddb/auto";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { fixture } from "../../helpers.ts";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { fastPasswordKeys, fixture } from "../../helpers.ts";
 
 type Vault = typeof import("@/lib/lock/vault.ts");
 type Store = typeof import("@/lib/storage/store.ts");
@@ -83,10 +83,14 @@ async function diskDump(): Promise<string> {
   return parts.join("\n");
 }
 
+let derive: ReturnType<typeof fastPasswordKeys>;
+
 beforeEach(async () => {
+  derive = fastPasswordKeys();
   await deleteDb();
   await load();
-}, 30_000);
+});
+afterEach(() => derive.mockRestore());
 
 describe("vault keys", () => {
   it("seals and opens a value, with a fresh iv each time", async () => {
@@ -121,6 +125,7 @@ describe("vault keys", () => {
       wrapped: Uint8Array;
     }[];
     expect(rec).toMatchObject({ id: "password", iterations: 600_000 });
+    expect(derive.mock.calls[0]![0]).toMatchObject({ name: "PBKDF2", iterations: 600_000 });
     expect(rec!.salt).toHaveLength(16);
     expect(rec!.iv).toHaveLength(12);
     expect(rec!.wrapped).toHaveLength(32 + 16);
