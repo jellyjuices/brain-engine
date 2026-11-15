@@ -1,6 +1,6 @@
 # node:test in the root (`test/`)
 
-Run: `npm test` (all) or `node --disable-warning=ExperimentalWarning --test test/<file>.test.ts` (one). Coverage: add `--experimental-test-coverage`. Baseline is about 94% lines, 254 tests, 8 s.
+Run: `node --disable-warning=ExperimentalWarning --test test/<file>.test.ts` for the files you changed. Run all (`npm test`) once at the end. Coverage: add `--experimental-test-coverage`. Baseline is about 94% lines, 254 tests, 8 s.
 
 ## Shape
 
@@ -41,9 +41,24 @@ node:test has no `.each`. Make a `const cases = [...]` table and call `test(\`na
 
 ## Time and async
 
-- Use `mock.timers.enable({ apis: ["Date", "setTimeout"], now })` from `node:test` and `mock.timers.reset()` in `t.after`.
-- Code that takes `today` or a date argument: pass `"2026-11-05"`.
-- Never wait with `setTimeout`. Await the promise the code returns, or poll a condition with a bounded loop in a helper, not in the test.
+- Code that takes `today` or a date argument: pass `"2026-11-05"`. Do not call `today()` in a new test.
+- Code that reads the clock itself: `mock.timers.enable({ apis: ["Date"], now })` from `node:test`, `mock.timers.reset()` in `t.after`, and `mock.timers.setTime(ms)` to move on. See `clockAt()` in `find-route.test.ts`.
+- Never compare `Date.now()` to a file's time. Reason: the two clocks differ by a few ms, and `find-route.test.ts` failed in the cloud for this. Set the file time yourself with `utimesSync(path, seconds, seconds)` and use fixed times.
+- Never wait with `setTimeout`. Await the promise the code returns.
+
+## Running the `brain` command
+
+- Always pass `env: { ...process.env, BRAIN_HOME: makeBrain() }`, also for `help`. Reason: without it the command reads the owner's config, and fails on any other machine.
+- Each run costs about 250 ms. Keep a test to 3 runs or fewer, so it stays under 1 s. One command per test.
+- Test the function in `src/` directly when you can. Run the command only to check the wiring: exit code, `--json`, no prompt when piped.
+
+## Assert the value
+
+- A list holds or lacks items: `assert.deepEqual(wanted.filter((w) => !got.includes(w)), [])`. The failure prints what is missing.
+- Every item passes: `assert.deepEqual(items.filter((i) => !ok(i)), [])`, not `assert.ok(items.every(ok))`.
+- Some item matches: map to the field, then compare: `assert.deepEqual(notes.map((n) => n.path), ["topics/money.md"])`.
+- Text: `assert.match(text, /.../)`, not `assert.ok(text.includes(...))`.
+- A size limit (`<= 10 lines`) may use `assert.ok(n <= 10, \`has ${n} lines\`)`. Always give the message with the number.
 
 ## Layout
 
