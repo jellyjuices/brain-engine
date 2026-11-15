@@ -1,4 +1,5 @@
-import "./field.css";
+import * as s from "./field.styles.ts";
+import clsx from "clsx";
 import { MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
 import type { Ref } from "react";
 import { Icon } from "@/components/icon/icon.tsx";
@@ -22,11 +23,11 @@ export function SearchInput({
   inputRef,
 }: SearchInputProps) {
   return (
-    <div className="search">
+    <div className={s.searchBox}>
       <Icon icon={MagnifyingGlassIcon} />
       <input
         ref={inputRef}
-        className="input search-input"
+        className={clsx(s.input, s.searchInput)}
         type="search"
         placeholder={placeholder}
         aria-label={placeholder}
@@ -41,7 +42,7 @@ export function SearchInput({
       />
       {value && (
         <button
-          className="search-clear"
+          className={s.searchClear}
           type="button"
           aria-label={copy.common.clear}
           onClick={() => onChange("")}

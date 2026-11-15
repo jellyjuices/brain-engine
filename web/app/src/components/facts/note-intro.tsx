@@ -1,4 +1,5 @@
-import "./facts.css";
+import clsx from "clsx";
+import * as s from "./facts.styles.ts";
 import {
   CakeIcon,
   CalendarBlankIcon,
@@ -41,32 +42,32 @@ export function NoteIntro({ note, notes }: { note: StoredNote; notes: StoredNote
   const hasFacts = isPerson || birthday || partner || hasDate || hasDue || withList.length > 0;
 
   return (
-    <div className="note-intro">
+    <div className={s.noteIntro}>
       {!isCapture && (
         <p className="section-label">
           {note.type ?? copy.common.note}
           {note.area && (
             <>
               {" · "}
-              <a className="fact-link" href={noteHref(`areas/${note.area}.md`)}>
+              <a className={s.factLink} href={noteHref(`areas/${note.area}.md`)}>
                 {sentence(note.area.replace(/-/g, " "))}
               </a>
             </>
           )}
         </p>
       )}
-      <h1 className="serif note-title">{title}</h1>
+      <h1 className={clsx("serif", s.noteTitle)}>{title}</h1>
       {(nick || pronouns) && (
-        <p className="note-who">
-          {nick && <span className="note-nick">{nick}</span>}
+        <p className={s.noteWho}>
+          {nick && <span className={s.noteNick}>{nick}</span>}
           {pronouns && <Chip size="sm">{pronouns}</Chip>}
         </p>
       )}
       {note.description && note.description.trim() !== title.trim() && (
-        <p className="note-desc">{note.description}</p>
+        <p className={s.noteDesc}>{note.description}</p>
       )}
       {hasFacts && (
-        <dl className="facts">
+        <dl className={s.facts}>
           {birthday && (
             <Fact icon={CakeIcon} label={copy.notes.birthday} sub={birthday.sub}>
               {birthday.main}
@@ -82,7 +83,7 @@ export function NoteIntro({ note, notes }: { note: StoredNote; notes: StoredNote
           {partner && (
             <Fact icon={HeartIcon} label={sentence(partner.role)}>
               {partner.path ? (
-                <a className="fact-link" href={noteHref(partner.path)}>
+                <a className={s.factLink} href={noteHref(partner.path)}>
                   {partner.name}
                 </a>
               ) : (

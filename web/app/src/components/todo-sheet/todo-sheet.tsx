@@ -1,4 +1,3 @@
-import "./todo-sheet.css";
 import { useState } from "react";
 import { openSheet, type Finish } from "@/components/sheet/open-sheet.tsx";
 import { todayIso } from "@/lib/notes/model.ts";

@@ -1,4 +1,3 @@
-import "./report.css";
 import { Empty } from "@/components/empty/empty.tsx";
 import { Markdown } from "@/components/markdown/markdown.tsx";
 import { ScreenHead } from "@/components/screen-head/screen-head.tsx";

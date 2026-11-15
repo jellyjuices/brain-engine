@@ -1,4 +1,4 @@
-import "./markdown.css";
+import * as s from "./markdown.styles.ts";
 import clsx from "clsx";
 import { InlineText } from "./inline-text.tsx";
 import { inline } from "@/lib/notes/markdown.ts";
@@ -14,13 +14,13 @@ export function PlainCheck({
 }) {
   return (
     <div
-      className={clsx("md-check", checked && "is-done")}
+      className={clsx(s.mdCheck, checked && s.mdCheckDone)}
       role="checkbox"
       aria-checked={checked}
       aria-readonly="true"
     >
-      <span className={clsx("md-box", checked && "is-on")} aria-hidden="true" />
-      <span className="md-check-text">
+      <span className={clsx(s.mdBox, checked && s.mdBoxOn)} aria-hidden="true" />
+      <span className={s.mdCheckText}>
         <InlineText tokens={inline(text, from)} />
       </span>
     </div>

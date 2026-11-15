@@ -1,3 +1,4 @@
+import { hint, step } from "./intake.styles.ts";
 import { Button } from "@ds/components/button/button.tsx";
 import { SheetActions } from "@/components/sheet/sheet-actions.tsx";
 import { TextField } from "@/components/field/text-field.tsx";
@@ -17,9 +18,9 @@ export function IntakeCheck({
   onSave: () => void;
 }) {
   return (
-    <div className="intake-step">
+    <div className={step}>
       <TextField label={copy.intake.line} multiline value={line} onChange={onChange} />
-      <p className="intake-hint">{copy.intake.lineHint}</p>
+      <p className={hint}>{copy.intake.lineHint}</p>
       <SheetActions>
         <Button variant="outlined" disabled={busy} onClick={onBack}>
           {copy.common.back}

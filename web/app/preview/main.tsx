@@ -1,4 +1,5 @@
-import "@/styles/tokens.css";
+import "@ds/styles/base.css";
+import { followSystemTheme } from "@/styles/theme.ts";
 import "@/styles/base.css";
 import "@/styles/app.css";
 import {

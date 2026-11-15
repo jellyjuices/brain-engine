@@ -1,4 +1,4 @@
-import "./note.css";
+import { versionButtons } from "./note.styles.ts";
 import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
 import { Button } from "@ds/components/button/button.tsx";
 import { toast } from "@/components/toast/toast-store.ts";
@@ -34,7 +34,7 @@ export function NoteConflict({ note, conflict }: { note: StoredNote; conflict: C
         sub={modified ? longDate(modified) : undefined}
       />
       <VersionCopy label={copy.notes.yourVersion} text={conflict.mine} />
-      <div className="version-buttons">
+      <div className={versionButtons}>
         <Button variant="outlined" block onClick={() => void keep(false)}>
           {copy.notes.keepMac}
         </Button>

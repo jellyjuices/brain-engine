@@ -1,4 +1,3 @@
-import "./sheet.css";
 
 export interface QuickChipProps {
   label: string;

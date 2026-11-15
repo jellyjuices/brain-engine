@@ -1,5 +1,6 @@
-import "./facts.css";
-import "@/components/tile/tile.css";
+import clsx from "clsx";
+import { tile, tileDashed } from "@/components/tile/tile.tsx";
+import * as s from "./facts.styles.ts";
 import type { ReactNode } from "react";
 import { Icon } from "@/components/icon/icon.tsx";
 import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
@@ -14,15 +15,15 @@ export interface FactProps {
 
 export function Fact({ icon, label, children, sub }: FactProps) {
   return (
-    <div className="tile fact">
-      <span className="fact-icon">
+    <div className={clsx(tile, s.fact)}>
+      <span className={s.factIcon}>
         <Icon icon={icon} />
       </span>
-      <div className="fact-text">
+      <div className={s.factText}>
         <dt className="section-label">{label}</dt>
-        <dd className="fact-main">
+        <dd className={s.factMain}>
           {children}
-          {sub && <span className="fact-sub">{sub}</span>}
+          {sub && <span className={s.factSub}>{sub}</span>}
         </dd>
       </div>
     </div>
@@ -40,17 +41,17 @@ export function AddFact({
 }) {
   return (
     <button
-      className="tile tile--dashed fact"
+      className={clsx(tile, tileDashed, s.fact)}
       type="button"
       aria-label={copy.common.addItem(label.toLowerCase())}
       onClick={onClick}
     >
-      <span className="fact-icon">
+      <span className={s.factIcon}>
         <Icon icon={icon} />
       </span>
-      <span className="fact-text">
+      <span className={s.factText}>
         <span className="section-label">{label}</span>
-        <span className="fact-add-label">{copy.common.add}</span>
+        <span className={s.factAddLabel}>{copy.common.add}</span>
       </span>
     </button>
   );

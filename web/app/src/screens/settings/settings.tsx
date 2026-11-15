@@ -1,4 +1,4 @@
-import "./settings.css";
+import { pendingRow } from "./settings.styles.ts";
 import { ArrowClockwiseIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Button } from "@ds/components/button/button.tsx";
@@ -46,7 +46,7 @@ export function SettingsScreen() {
               }
             />
             {items.map((item) => (
-              <Row key={item.id} title={<span className="pending-row">{pendingText(item)}</span>} />
+              <Row key={item.id} title={<span className={pendingRow}>{pendingText(item)}</span>} />
             ))}
           </>
         )}

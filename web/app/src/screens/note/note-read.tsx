@@ -1,4 +1,5 @@
-import "./note.css";
+import { addHere } from "../add/add.styles.ts";
+import { backlinks, pending } from "./note.styles.ts";
 import { PencilSimpleIcon, PlusIcon } from "@phosphor-icons/react";
 import { useEffect } from "react";
 import { Button } from "@ds/components/button/button.tsx";
@@ -53,10 +54,10 @@ export function NoteRead({ path }: { path: string }) {
         }
       />
       <NoteIntro note={note} notes={notes} />
-      {status.waiting && <p className="pending">{copy.notes.editWaiting}</p>}
+      {status.waiting && <p className={pending}>{copy.notes.editWaiting}</p>}
       {showCard && <SubjectCard card={card} />}
       <NoteBody note={note} hideOpenLoops={showCard} />
-      <div className="add-here">
+      <div className={addHere}>
         <Button
           variant="outlined"
           icon={<PlusIcon aria-hidden />}
@@ -67,7 +68,7 @@ export function NoteRead({ path }: { path: string }) {
         </Button>
       </div>
       {links.length > 0 && (
-        <section className="backlinks">
+        <section className={backlinks}>
           <h2 className="section-label">{copy.notes.linkedFrom}</h2>
           <List>
             {links.map((l) => (
