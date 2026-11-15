@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { Toast as RadixToast } from 'radix-ui'
 import { BellSimpleIcon, CheckIcon, InfoIcon, WarningIcon, XIcon, type Icon } from '@phosphor-icons/react'
 import type { ReactNode } from 'react'
-import './toast.css'
+import * as styles from './toast.styles.ts'
 
 export type ToastVariant = 'success' | 'error' | 'warning' | 'info' | 'neutral'
 
@@ -17,7 +17,7 @@ const icons: Record<ToastVariant, Icon> = {
 export const ToastProvider = ({ children, label = 'Notices' }: { children: ReactNode; label?: string }) => (
   <RadixToast.Provider swipeDirection="right" label={label}>
     {children}
-    <RadixToast.Viewport className="toast-viewport" />
+    <RadixToast.Viewport className={styles.viewport} />
   </RadixToast.Provider>
 )
 
@@ -47,22 +47,22 @@ export const Toast = ({
   const Glyph = icon ?? icons[variant]
   return (
     <RadixToast.Root
-      className={clsx('toast', `toast--${variant}`)}
+      className={clsx(styles.toast, styles.variants[variant])}
       open={open}
       onOpenChange={onOpenChange}
       duration={duration}
       type={variant === 'error' ? 'foreground' : 'background'}
     >
-      <span className="toast-badge" aria-hidden>
-        <span className="toast-shape" />
-        <Glyph weight="regular" className="toast-icon" />
+      <span className={styles.badge} aria-hidden>
+        <span className={styles.shape} />
+        <Glyph weight="regular" className={styles.icon} />
       </span>
-      <div className="toast-text">
-        <RadixToast.Title className="toast-title">{message}</RadixToast.Title>
-        {detail && <RadixToast.Description className="toast-detail">{detail}</RadixToast.Description>}
+      <div className={styles.text}>
+        <RadixToast.Title className={styles.title}>{message}</RadixToast.Title>
+        {detail && <RadixToast.Description className={styles.detail}>{detail}</RadixToast.Description>}
       </div>
       {actionLabel && (
-        <RadixToast.Action className="toast-action" altText={actionLabel} onClick={onAction}>
+        <RadixToast.Action className={styles.action} altText={actionLabel} onClick={onAction}>
           {actionLabel}
         </RadixToast.Action>
       )}

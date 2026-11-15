@@ -11,7 +11,7 @@ import { Toast, ToastProvider, type ToastVariant } from '../../components/toast/
 import { TodoRow } from '../../components/todo-row/todo-row.tsx'
 import { ViewTabs } from '../../components/view-tabs/view-tabs.tsx'
 import { overdue, today, views, type SampleTodo } from './sample.ts'
-import './todos-today.css'
+import * as styles from './todos-today.styles.ts'
 
 export const TodosToday = () => {
   const [view, setView] = useState('today')
@@ -41,7 +41,7 @@ export const TodosToday = () => {
     return (
       <section>
         <SectionHeader title={title} count={open.length} tone={late ? 'late' : 'default'} />
-        <ul className="todos-today-list">
+        <ul className={styles.list}>
           {open.map((t) => (
             <TodoRow
               key={t.id}
@@ -59,12 +59,12 @@ export const TodosToday = () => {
 
   return (
     <ToastProvider>
-      <div className="todos-today">
+      <div className={styles.screen}>
         <PageHeader
           title="To-dos"
           kicker="Friday, Nov 13"
           action={
-            <div className="todos-today-actions">
+            <div className={styles.actions}>
               <IconButton icon={SlidersHorizontalIcon} label="View options" onClick={() => setOptions(true)} />
               <IconButton icon={GearSixIcon} label="Settings" />
             </div>
@@ -72,17 +72,17 @@ export const TodosToday = () => {
         >
           <ViewTabs views={views} value={view} onValueChange={setView} label="To-do views" />
         </PageHeader>
-        <main className="todos-today-main">
-          <div className="todos-today-banner">
+        <main className={styles.main}>
+          <div className={styles.banner}>
             <Banner count={3} message="to sort" actionLabel="Sort" />
           </div>
           {section('Overdue', overdue, true)}
           {section('Due today', today)}
-          <div className="todos-today-more">
+          <div className={styles.more}>
             <Button variant="ghost" size="sm">10 more have no date</Button>
           </div>
         </main>
-        <div className="todos-today-tabs">
+        <div className={styles.tabs}>
           <TabBar active={tab} onSelect={setTab} onAdd={() => {}} />
         </div>
       </div>

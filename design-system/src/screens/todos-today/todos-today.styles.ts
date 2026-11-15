@@ -1,39 +1,41 @@
-.todos-today {
+import { css } from '@linaria/core'
+
+export const screen = css`
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
   max-width: var(--size-max-width);
   margin: 0 auto;
   background: var(--background-primary);
-}
+`
 
-.todos-today-main {
+export const main = css`
   flex: 1;
   padding-bottom: var(--space-3xl);
-}
+`
 
-.todos-today-banner {
+export const banner = css`
   padding: var(--space-lg) var(--space-lg) 0;
-}
+`
 
-.todos-today-list {
+export const list = css`
   margin: 0;
   padding: 0;
-}
 
-.todos-today-list > li + li {
-  border-top: var(--size-hair) solid var(--border-primary);
-}
+  & > li + li {
+    border-top: var(--size-hair) solid var(--border-primary);
+  }
+`
 
-.todos-today-more {
+export const more = css`
   padding: var(--space-md) var(--space-sm);
-}
+`
 
-.todos-today-tabs {
+export const tabs = css`
   position: sticky;
   bottom: 0;
-}
+`
 
-.todos-today-actions {
+export const actions = css`
   display: flex;
-}
+`

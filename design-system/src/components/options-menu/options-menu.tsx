@@ -5,7 +5,7 @@ import { IconButton } from '../icon-button/icon-button.tsx'
 import { Sheet } from '../sheet/sheet.tsx'
 import type { Option } from './types.ts'
 import { useHeight } from './use-height.ts'
-import './options-menu.css'
+import * as styles from './options-menu.styles.ts'
 
 export type { Option } from './types.ts'
 
@@ -49,20 +49,20 @@ export const OptionsMenu = ({ open, onOpenChange, title, options, backLabel = 'B
   }
 
   const header = (
-    <div className="options-menu-head">
+    <div className={styles.head}>
       {current && <IconButton icon={ArrowLeftIcon} label={backLabel} size="sm" onClick={back} />}
-      <span className="options-menu-title" aria-hidden>{current?.label ?? title}</span>
+      <span className={styles.title} aria-hidden>{current?.label ?? title}</span>
     </div>
   )
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange} title={current?.label ?? title} header={header}>
-      <div className="options-menu-frame" style={{ height }}>
+      <div className={styles.frame} style={{ height }}>
         <div ref={inner}>
           <ul
             key={path.map((p) => p.id).join('/') || 'root'}
             ref={list}
-            className={clsx('options-menu-list', `is-${direction}`)}
+            className={clsx(styles.list, styles.directions[direction])}
             onKeyDown={(e) => e.key === 'Backspace' && current && back()}
           >
             {items.map((option) => {
@@ -71,16 +71,16 @@ export const OptionsMenu = ({ open, onOpenChange, title, options, backLabel = 'B
                 <li key={option.id}>
                   <button
                     type="button"
-                    className={clsx('options-menu-item', option.tone === 'danger' && 'is-danger')}
+                    className={clsx(styles.item, option.tone === 'danger' && styles.isDanger)}
                     aria-pressed={option.selected === undefined ? undefined : option.selected}
                     aria-haspopup={option.options ? 'true' : undefined}
                     onClick={() => go(option)}
                   >
-                    {Glyph && <Glyph aria-hidden className="options-menu-icon" />}
-                    <span className="options-menu-label">{option.label}</span>
-                    {option.hint && <span className="options-menu-hint">{option.hint}</span>}
-                    {option.selected && <CheckIcon aria-hidden weight="bold" className="options-menu-check" />}
-                    {option.options && <CaretRightIcon aria-hidden className="options-menu-caret" />}
+                    {Glyph && <Glyph aria-hidden className={styles.icon} />}
+                    <span className={styles.label}>{option.label}</span>
+                    {option.hint && <span className={styles.hint}>{option.hint}</span>}
+                    {option.selected && <CheckIcon aria-hidden weight="bold" className={styles.check} />}
+                    {option.options && <CaretRightIcon aria-hidden className={styles.caret} />}
                   </button>
                 </li>
               )
