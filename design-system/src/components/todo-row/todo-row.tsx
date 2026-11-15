@@ -7,6 +7,7 @@ import { TodoRowMeta, hasMeta } from './todo-row-meta.tsx'
 import { useLongPress } from './use-long-press.ts'
 import { useSwipe } from './use-swipe.ts'
 import './todo-row.css'
+import './todo-row-open.css'
 
 export type TodoRowProps = {
   title: string
