@@ -6,6 +6,7 @@ import { Shape } from "@/components/shape/shape.tsx";
 import { AddArc } from "@/components/add-arc/add-arc.tsx";
 import { AddBox } from "@/components/add-box/add-box.tsx";
 import { AddFull } from "./add-full.tsx";
+import { useHoldToPick } from "./use-hold-to-pick.ts";
 import { keepCaretInView } from "@/lib/platform/caret.ts";
 import { saveJournal } from "@/flows/new-flow.ts";
 import { saveFlow } from "@/flows/save-flow.ts";
@@ -23,6 +24,11 @@ export function AddPanel() {
   const [full, setFull] = useState(false);
   const box = useRef<HTMLDivElement>(null);
   const editing = mode === "todo" || mode === "journal";
+  const hold = useHoldToPick(
+    mode === "closed" && !busy,
+    () => setMode("open"),
+    () => close(),
+  );
 
   useEffect(() => {
     if (editing) requestAnimationFrame(() => box.current?.focus());
@@ -74,7 +80,7 @@ export function AddPanel() {
   }
 
   function main() {
-    if (busy) return;
+    if (busy || hold.takeClick()) return;
     if (editing) void save();
     else if (mode === "open") close();
     else setMode("open");
@@ -122,6 +128,8 @@ export function AddPanel() {
         aria-expanded={mode !== "closed"}
         aria-busy={busy || undefined}
         onClick={main}
+        onPointerDown={hold.onPointerDown}
+        onContextMenu={hold.onContextMenu}
       >
         <Shape
           name={mode === "closed" ? "add" : "other"}
