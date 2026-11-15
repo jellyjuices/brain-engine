@@ -12,6 +12,7 @@
 1. A word search shows matching notes and to-dos in under a second.
 2. Search also finds entries that mean the same thing in other words. Words and meaning work together in one list.
 3. A plain question ("when is Sam's party?") gets a short answer at the top, with links to its sources.
+   When the search names a subject, such as a person, that subject's card comes first. The answer comes below it.
 4. To-do results can be ticked from the result list.
 5. Find works anywhere, offline too, even when the home server cannot be reached.
 6. Before and while the owner types, Find offers smart suggestions: recent items, likely subjects, likely kinds.

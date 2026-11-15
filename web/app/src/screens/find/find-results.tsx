@@ -35,6 +35,7 @@ export function FindResults({ q, notes, remote }: FindResultsProps) {
   if (!card && !others.length) return <Empty size="sm" title={copy.common.nothingFound} />;
   return (
     <>
+      {card && <SubjectCard card={card} heading bare={!cardHasContent(card) && !others.length} />}
       {answer && answerNote && (
         <AnswerRow
           answer={answer}
@@ -42,7 +43,6 @@ export function FindResults({ q, notes, remote }: FindResultsProps) {
           onPick={() => void rememberSearch(q)}
         />
       )}
-      {card && <SubjectCard card={card} heading bare={!cardHasContent(card) && !others.length} />}
       {others.length > 0 && (
         <>
           <p className="section-label">{card ? copy.notes.more : copy.notes.notes}</p>
