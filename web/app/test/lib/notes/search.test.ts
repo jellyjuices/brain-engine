@@ -29,7 +29,7 @@ describe("local search", () => {
   it("needs every word and finds tags and descriptions", () => {
     expect(searchLocal(notes, "gym schedule").map((h) => h.path)).toEqual(["areas/fitness.md"]);
     expect(searchLocal(notes, "lifting basics")[0]!.path).toBe("resources/gym-tips.md");
-    expect(searchLocal(notes, "gym").some((h) => h.path === "topics/fit.md")).toBe(true);
+    expect(searchLocal(notes, "gym").map((h) => h.path)).toContain("topics/fit.md");
     expect(searchLocal(notes, "zzzz")).toEqual([]);
     expect(searchLocal(notes, "   ")).toEqual([]);
   });

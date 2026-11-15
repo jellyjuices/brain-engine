@@ -40,9 +40,7 @@ async function submit(password: string) {
   await user.type(field, password);
   await user.click(screen.getByRole("button", { name: "Unlock" }));
   await vi.waitFor(() =>
-    expect(
-      (document.querySelector(".btn[type=submit]") as HTMLButtonElement | null)?.disabled ?? false,
-    ).toBe(false),
+    expect(screen.queryByRole("button", { name: copy.lock.checking })).toBeNull(),
   );
 }
 function message() {

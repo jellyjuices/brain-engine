@@ -30,7 +30,7 @@ test("brain lists overdue, today, then waiting, numbered, and saves the list", (
     [3, "today", "Pay rent"],
     [4, "waiting", "Hear back from Omar"],
   ]);
-  assert.ok(JSON.parse(readFileSync(join(root, ".brain/last-list.json"), "utf8")).length === 4);
+  assert.equal(JSON.parse(readFileSync(join(root, ".brain/last-list.json"), "utf8")).length, 4);
 });
 
 test("done by number ticks the line, keeps its parts, and undo puts it back", () => {
@@ -84,9 +84,7 @@ test("a line with only the old today mark is not in Today, a due line is", () =>
   const root = brainWithTodos();
   writeFileSync(join(root, "projects/extra.md"), `---\ntype: Project\ntitle: Extra\ndescription: Extra.\n---\n\n# To-dos\n\n- [ ] Old mark only · today\n- [ ] Due today line · due ${now}\n- [ ] Overdue line · due ${yesterday}\n`);
   const texts = dayList(root).map((x) => x.text);
-  assert.ok(!texts.includes("Old mark only"));
-  assert.ok(texts.includes("Due today line"));
-  assert.ok(texts.includes("Overdue line"));
+  assert.deepEqual(["Old mark only", "Due today line", "Overdue line"].filter((text) => texts.includes(text)), ["Due today line", "Overdue line"]);
 });
 
 test("undo refuses when the line changed since", () => {
@@ -156,7 +154,7 @@ test("done with blank answers writes only the tick", () => {
   doneWith(root, "Later thing", { happened: "  ", follow_up: "" });
   const lines = file(root).split("\n");
   assert.equal(lines.filter((l) => l.startsWith("- ")).length, a.split("\n").filter((l) => l.startsWith("- ")).length);
-  assert.ok(lines.includes(`- [x] Later thing · someday · done ${now}`));
+  assert.deepEqual(lines.filter((line) => line.startsWith("- [x] Later thing")), [`- [x] Later thing · someday · done ${now}`]);
 });
 
 test("drop with a reason writes a note line", () => {
@@ -187,7 +185,7 @@ test("with --json nothing is asked and the answers stay empty", () => {
   const root = brainWithTodos();
   const r = spawnSync("node", [BIN, "done", "Later thing", "--json"], { cwd: root, env: { ...process.env, BRAIN_HOME: root }, encoding: "utf8", input: "" });
   assert.equal(r.status, 0, r.stderr);
-  assert.ok(file(root).split("\n").includes(`- [x] Later thing · someday · done ${now}`));
+  assert.deepEqual(file(root).split("\n").filter((line) => line.startsWith("- [x] Later thing")), [`- [x] Later thing · someday · done ${now}`]);
 });
 
 test("done and move accept a stable path::text ref, and fail clearly when it is gone", () => {

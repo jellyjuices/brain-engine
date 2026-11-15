@@ -72,7 +72,7 @@ test("brain dump makes one note per line and strips bullets", () => {
   const root = fixture();
   const notes = brainDump(root, "- Book a dentist\n\n2. Renew passport\n  * Send invoice  \n");
   assert.deepEqual(notes.map((n) => n.body.trim()), ["Book a dentist", "Renew passport", "Send invoice"]);
-  assert.ok(notes.every((n) => (n.meta.tags as string[]).includes("intake")));
+  assert.deepEqual(notes.filter((n) => !(n.meta.tags as string[]).includes("intake")).map((n) => n.path), []);
 });
 
 test("area intake appends the 5 answers under a dated heading", () => {
@@ -116,7 +116,7 @@ test("triage drop moves to archive, never deletes", () => {
   const root = fixture();
   const n = capture(root, { text: "Learn the banjo" });
   const r = applyTriage(root, n.path, { outcome: "drop" });
-  assert.ok(r.to?.startsWith(".archive/"));
+  assert.match(r.to ?? "", /^\.archive\//);
   assert.equal(readNote(root, r.to!).meta.outcome, "drop");
   assert.ok(!existsSync(join(root, n.path)));
 });

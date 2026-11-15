@@ -98,8 +98,8 @@ describe("vault keys", () => {
     const a = await vault.seal({ n: 1, s: SECRET }, "notes/a.md");
     const b = await vault.seal({ n: 1, s: SECRET }, "notes/a.md");
     expect(a.iv).toHaveLength(12);
-    expect(Buffer.from(a.iv).equals(Buffer.from(b.iv))).toBe(false);
-    expect(Buffer.from(a.data).equals(Buffer.from(b.data))).toBe(false);
+    expect(a.iv).not.toEqual(b.iv);
+    expect(a.data).not.toEqual(b.data);
     expect(await vault.open<{ n: number; s: string }>(a, "notes/a.md")).toEqual({
       n: 1,
       s: SECRET,
@@ -160,7 +160,11 @@ describe("vault keys", () => {
     expect(vault.hasKey()).toBe(false);
     await expect(store.allNotes()).rejects.toBeInstanceOf(vault.LockedError);
     expect(await vault.unlockWithPassword(PW)).toBe("ok");
-    expect((await store.allNotes()).length).toBe(fixture().length);
+    expect((await store.allNotes()).map((n) => n.path).sort()).toEqual(
+      fixture()
+        .map((n) => n.path)
+        .sort(),
+    );
   });
 
   it("rewrap moves the key to a new password without touching the data", async () => {
@@ -353,7 +357,7 @@ describe("sealed storage", () => {
   it("lockVault clears the in-memory note cache", async () => {
     await vault.unlockWithPassword(PW);
     await store.putNotes(fixture());
-    expect((await store.allNotes()).length).toBeGreaterThan(0);
+    expect(await store.allNotes()).toHaveLength(fixture().length);
     vault.lockVault();
     await expect(store.getNote("people/aisha.md")).rejects.toBeInstanceOf(vault.LockedError);
     await vault.unlockWithPassword(PW);
