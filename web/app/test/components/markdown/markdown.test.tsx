@@ -1,6 +1,5 @@
-import { render } from "@testing-library/react";
+import { cleanup, render, within } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import { cleanup } from "@testing-library/react";
 import { InlineText } from "@/components/markdown/inline-text.tsx";
 import { Markdown, type MarkdownProps } from "@/components/markdown/markdown.tsx";
 import { inline, parseBlocks } from "@/lib/notes/markdown.ts";
@@ -32,22 +31,29 @@ describe("markdown renderer", () => {
       "# Title\n\nSome **bold**, *soft* and `code`.\n\n- one\n- two\n  - nested\n\n1. first\n2. second",
       { path: "a/b.md" },
     );
-    expect(out.querySelector("h2")?.textContent).toBe("Title");
-    expect(out.querySelector("strong")?.textContent).toBe("bold");
-    expect(out.querySelector("em")?.textContent).toBe("soft");
-    expect(out.querySelector("code")?.textContent).toBe("code");
-    expect(out.querySelectorAll("ul > li").length).toBe(3);
-    expect(out.querySelector("ul ul li")?.textContent).toBe("nested");
-    expect(out.querySelectorAll("ol > li").length).toBe(2);
+    const view = within(out);
+    expect(view.getByRole("heading", { level: 2, name: "Title" })).toBeInTheDocument();
+    expect(view.getByText("bold").tagName).toBe("STRONG");
+    expect(view.getByText("soft").tagName).toBe("EM");
+    expect(view.getByText("code").tagName).toBe("CODE");
+    const [bullets, nested, numbered] = view.getAllByRole("list");
+    expect(within(bullets!).getAllByRole("listitem")).toHaveLength(3);
+    expect(within(nested!).getByRole("listitem").textContent).toBe("nested");
+    expect(within(numbered!).getAllByRole("listitem")).toHaveLength(2);
   });
 
   it("turns links between notes into in-app links, resolved from the note's folder", () => {
-    const a = renderMarkdown("See [Aisha](../people/aisha.md) and [Em](em.md#top).", {
-      path: "areas/fitness.md",
-    }).querySelectorAll("a");
-    expect(a[0]!.getAttribute("href")).toBe("/note/people/aisha.md");
-    expect(a[1]!.getAttribute("href")).toBe("/note/areas/em.md");
-    expect(a[0]!.getAttribute("target")).toBeNull();
+    const out = within(
+      renderMarkdown("See [Aisha](../people/aisha.md) and [Em](em.md#top).", {
+        path: "areas/fitness.md",
+      }),
+    );
+    expect(out.getByRole("link", { name: /Aisha/ })).toHaveAttribute(
+      "href",
+      "/note/people/aisha.md",
+    );
+    expect(out.getByRole("link", { name: "Em" })).toHaveAttribute("href", "/note/areas/em.md");
+    expect(out.getByRole("link", { name: /Aisha/ })).not.toHaveAttribute("target");
   });
 
   it("opens web links outside, safely, and drops script links to plain text", () => {
@@ -55,13 +61,15 @@ describe("markdown renderer", () => {
       "[site](https://example.com) [bad](javascript:alert(1)) [file](notes.txt) [mail](mailto:a@b.ca)",
       { path: "a/b.md" },
     );
-    const [site, bad, file, mail] = [...out.querySelectorAll("a, span")];
-    expect(site!.getAttribute("rel")).toBe("noopener noreferrer");
-    expect(site!.getAttribute("target")).toBe("_blank");
+    const view = within(out);
+    const site = view.getByRole("link", { name: "site" });
+    expect(site).toHaveAttribute("rel", "noopener noreferrer");
+    expect(site).toHaveAttribute("target", "_blank");
     expect(out.innerHTML).not.toContain("javascript:");
-    expect(bad!.tagName).toBe("SPAN");
-    expect(file!.tagName).toBe("SPAN");
-    expect(mail!.getAttribute("href")).toBe("mailto:a@b.ca");
+    expect(view.getByText("bad").tagName).toBe("SPAN");
+    expect(view.getByText("file").tagName).toBe("SPAN");
+    expect(view.getByRole("link", { name: "mail" })).toHaveAttribute("href", "mailto:a@b.ca");
+    expect(view.getAllByRole("link")).toHaveLength(2);
   });
 
   it("reads checkboxes with their section, and lets the caller draw to-do rows", () => {
@@ -78,10 +86,9 @@ describe("markdown renderer", () => {
       path: "a/b.md",
       renderTodo: (i) => (i.checked ? null : <button className="row-test">{i.text}</button>),
     });
-    expect(out.querySelectorAll(".row-test").length).toBe(1);
-    expect(out.querySelector('[role="checkbox"][aria-checked="true"]')?.textContent).toBe(
-      "Book a dentist",
-    );
+    const view = within(out);
+    expect(view.getAllByRole("button", { name: "Chase the MRI" })).toHaveLength(1);
+    expect(view.getByRole("checkbox", { checked: true }).textContent).toBe("Book a dentist");
   });
 
   it("can hide open to-dos (and an emptied To-dos heading) when a card shows them", () => {

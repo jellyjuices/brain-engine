@@ -1,4 +1,4 @@
-import { cleanup, render } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { InlineText } from "@/components/markdown/inline-text.tsx";
 import { inline } from "@/lib/notes/markdown.ts";
@@ -11,10 +11,11 @@ describe("person mention", () => {
       "Call [Aisha](../people/aisha.md) about [Gym](fitness.md)",
       "areas/fitness.md",
     );
-    const { container } = render(<InlineText tokens={tokens} />);
-    const mention = container.querySelector(".mention");
-    expect(mention?.textContent).toBe("@Aisha");
-    expect(mention?.getAttribute("href")).toBe("/note/people/aisha.md");
-    expect(container.querySelectorAll(".mention")).toHaveLength(1);
+    render(<InlineText tokens={tokens} />);
+    const mention = screen.getByRole("link", { name: "@Aisha" });
+    expect(mention).toHaveClass("mention");
+    expect(mention).toHaveAttribute("href", "/note/people/aisha.md");
+    expect(screen.getAllByRole("link", { name: /^@/ })).toHaveLength(1);
+    expect(screen.getAllByRole("link")).toHaveLength(2);
   });
 });
