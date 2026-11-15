@@ -1,6 +1,6 @@
 import "./note.css";
 import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
-import { Button } from "@/components/button/button.tsx";
+import { Button } from "@ds/components/button/button.tsx";
 import { toast } from "@/components/toast/toast-store.ts";
 import { longDate, type StoredNote } from "@/lib/notes/model.ts";
 import { back } from "@/lib/platform/router.ts";

@@ -1,4 +1,4 @@
-import { Button } from "@/components/button/button.tsx";
+import { Button } from "@ds/components/button/button.tsx";
 import { SheetActions } from "@/components/sheet/sheet-actions.tsx";
 import { TextField } from "@/components/field/text-field.tsx";
 import { copy } from "@/content/index.ts";

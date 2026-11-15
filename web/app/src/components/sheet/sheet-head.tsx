@@ -1,7 +1,7 @@
 import "./sheet.css";
 import { CaretLeftIcon } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
-import { IconButton } from "@/components/button/icon-button.tsx";
+import { IconButton } from "@ds/components/icon-button/icon-button.tsx";
 import { copy } from "@/content/index.ts";
 
 export interface SheetHeadProps {

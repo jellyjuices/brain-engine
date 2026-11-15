@@ -1,10 +1,10 @@
-import "./add-panel.css";
 import { CheckIcon, PlusIcon } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { Shape } from "@/components/shape/shape.tsx";
 import { AddArc } from "@/components/add-arc/add-arc.tsx";
 import { AddBox } from "@/components/add-box/add-box.tsx";
+import * as s from "./add-panel.styles.ts";
 import { AddFull } from "./add-full.tsx";
 import { useHoldToPick } from "./use-hold-to-pick.ts";
 import { keepCaretInView } from "@/lib/platform/caret.ts";
@@ -94,18 +94,31 @@ export function AddPanel() {
   const label = editing ? copy.common.save : mode === "open" ? copy.common.close : copy.nav.add;
 
   return (
-    <div className={clsx("add-panel", `is-${mode}`, closing && "is-closing")}>
+    <div className={clsx(
+        s.panel,
+        mode === "open" && s.modeOpen,
+        mode === "todo" && s.modeTodo,
+        mode === "journal" && s.modeJournal,
+        mode !== "closed" && s.notClosed,
+        closing && s.closing,
+      )}>
       {mode !== "closed" && (
         <button
           type="button"
-          className="add-scrim"
+          className={s.scrim}
           aria-label={copy.common.close}
           onClick={() => close()}
         />
       )}
       {mode !== "closed" && (
         <div
-          className={clsx("add-blob", `add-blob--${mode}`, full && "is-full")}
+          data-add-blob
+          className={clsx(
+            s.blob,
+            mode === "todo" && s.blobTodo,
+            mode === "journal" && s.blobJournal,
+            full && s.blobFull,
+          )}
           onAnimationEnd={(e) => {
             if (e.animationName === "add-deflate") closed();
           }}
@@ -123,7 +136,7 @@ export function AddPanel() {
       {mode === "journal" && !closing && <AddFull full={full} onToggle={toggleFull} />}
       <button
         type="button"
-        className="add-main"
+        className={s.main}
         aria-label={label}
         aria-expanded={mode !== "closed"}
         aria-busy={busy || undefined}
@@ -137,7 +150,7 @@ export function AddPanel() {
           size="lg"
           variant={mode === "closed" ? "primary" : "secondary"}
         />
-        <span className="label">{copy.nav.add}</span>
+        <span className={s.label}>{copy.nav.add}</span>
       </button>
     </div>
   );

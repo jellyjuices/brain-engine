@@ -2,7 +2,7 @@ import "./screen-head.css";
 import { CaretLeftIcon } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import clsx from "clsx";
-import { IconButton } from "@/components/button/icon-button.tsx";
+import { IconButton } from "@ds/components/icon-button/icon-button.tsx";
 import { back } from "@/lib/platform/router.ts";
 import { copy } from "@/content/index.ts";
 

@@ -10,6 +10,21 @@ const pkg = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), 
   version: string;
 };
 
+function linariaCssInTests(): Plugin {
+  const prefix = "\0linaria-css:";
+  return {
+    name: "brain-linaria-css-in-tests",
+    enforce: "pre",
+    apply: () => Boolean(process.env.VITEST),
+    resolveId(id) {
+      if (id.endsWith(".wyw-in-js.css")) return prefix + id;
+    },
+    load(id) {
+      if (id.startsWith(prefix)) return "";
+    },
+  };
+}
+
 function serviceWorker(): Plugin {
   return {
     name: "brain-sw",
@@ -50,14 +65,14 @@ function serviceWorker(): Plugin {
 export default defineConfig({
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   resolve: {
-    dedupe: ["react", "react-dom"],
+    dedupe: ["react", "react-dom", "radix-ui", "@phosphor-icons/react", "clsx"],
     alias: {
       "@ds": fileURLToPath(new URL("../../design-system/src", import.meta.url)),
       "@": fileURLToPath(new URL("./src", import.meta.url)),
       "@shared": fileURLToPath(new URL("../../shared", import.meta.url)),
     },
   },
-  plugins: [react(), wyw(), serviceWorker()],
+  plugins: [linariaCssInTests(), react(), wyw(), serviceWorker()],
   server: {
     proxy: { "/api": "http://127.0.0.1:8788" },
     fs: {

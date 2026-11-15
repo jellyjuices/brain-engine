@@ -1,5 +1,5 @@
 import { NoteIcon } from "@phosphor-icons/react";
-import { Button } from "@/components/button/button.tsx";
+import { Button } from "@ds/components/button/button.tsx";
 import { Chip } from "@/components/chip/chip.tsx";
 import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
 import { copy } from "@/content/index.ts";

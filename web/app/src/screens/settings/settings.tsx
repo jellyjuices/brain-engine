@@ -1,7 +1,7 @@
 import "./settings.css";
 import { ArrowClockwiseIcon } from "@phosphor-icons/react";
 import { useState } from "react";
-import { Button } from "@/components/button/button.tsx";
+import { Button } from "@ds/components/button/button.tsx";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
 import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
@@ -60,7 +60,7 @@ export function SettingsScreen() {
             <Button
               variant="outlined"
               size="sm"
-              icon={ArrowClockwiseIcon}
+              icon={<ArrowClockwiseIcon aria-hidden />}
               disabled={updating}
               busy={updating}
               onClick={() => {

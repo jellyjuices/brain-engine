@@ -1,5 +1,5 @@
 import { SparkleIcon } from "@phosphor-icons/react";
-import { Button } from "@/components/button/button.tsx";
+import { Button } from "@ds/components/button/button.tsx";
 import { Markdown } from "@/components/markdown/markdown.tsx";
 import { Panel } from "@/components/panel/panel.tsx";
 import { useSummary } from "@/hooks/use-summary.ts";
@@ -20,7 +20,7 @@ export function ReportSummary({ markdown, path }: { markdown: string; path: stri
   }
   return (
     <div className="report-summary">
-      <Button variant="secondary" icon={SparkleIcon} block busy={busy} onClick={() => void run()}>
+      <Button variant="secondary" icon={<SparkleIcon aria-hidden />} block busy={busy} onClick={() => void run()}>
         {copy.report.summarize}
       </Button>
       {failed && <p className="report-note">{copy.report.summaryFailed}</p>}

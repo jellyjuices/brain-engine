@@ -1,5 +1,5 @@
 import { PlusIcon } from "@phosphor-icons/react";
-import { Button } from "@/components/button/button.tsx";
+import { Button } from "@ds/components/button/button.tsx";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
 import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
@@ -23,7 +23,7 @@ export function FolderView({ folder }: { folder: Folder }) {
         fallback="/brain"
         action={
           add && (
-            <Button variant="outlined" icon={PlusIcon} onClick={() => void add()}>
+            <Button variant="outlined" icon={<PlusIcon aria-hidden />} onClick={() => void add()}>
               {addLabel}
             </Button>
           )

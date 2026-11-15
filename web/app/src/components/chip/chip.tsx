@@ -3,12 +3,12 @@ import { XIcon, type Icon as PhosphorIcon } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import clsx from "clsx";
 import { Icon } from "@/components/icon/icon.tsx";
-import type { Size } from "@/components/button/button.tsx";
+import type { ButtonProps } from "@ds/components/button/button.tsx";
 
 export interface ChipProps {
   children: ReactNode;
   variant?: "secondary" | "outlined";
-  size?: Exclude<Size, "lg">;
+  size?: Exclude<ButtonProps["size"], "lg">;
   icon?: PhosphorIcon;
   label?: string;
   onClick?: () => void;

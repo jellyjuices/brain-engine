@@ -41,14 +41,14 @@ async function submit(password: string) {
   await vi.waitFor(
     () =>
       expect(
-        (document.querySelector(".btn[type=submit]") as HTMLButtonElement | null)?.disabled ??
+        (document.querySelector("button[type=submit]") as HTMLButtonElement | null)?.disabled ??
           false,
       ).toBe(false),
     { timeout: 10_000 },
   );
 }
 function message() {
-  return document.querySelector(".lock-error")?.textContent ?? "";
+  return document.querySelector("[role=alert]")?.textContent ?? "";
 }
 
 beforeEach(async () => {
@@ -71,7 +71,7 @@ describe("lock screen and vault", () => {
     await submit("pw one");
     expect(vault.hasKey()).toBe(true);
     expect(session.isUnlocked()).toBe(true);
-    expect(document.querySelector(".lock")).toBeNull();
+    expect(document.querySelector("form")).toBeNull();
   }, 30_000);
 
   it("a stamp with no key still shows the lock (what a reload looks like)", async () => {

@@ -19,7 +19,7 @@ describe("AddPanel", () => {
     await user.click(screen.getByRole("button", { name: "Add" }));
     expect(screen.getAllByRole("menuitem")).toHaveLength(3);
     await user.click(screen.getByRole("button", { name: "Close", expanded: true }));
-    const blob = document.querySelector(".add-blob");
+    const blob = document.querySelector("[data-add-blob]");
     if (blob) fireEvent.animationEnd(blob, { animationName: "add-deflate" });
     expect(screen.queryByRole("menuitem")).toBeNull();
   });

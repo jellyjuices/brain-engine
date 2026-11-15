@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "@/components/button/button.tsx";
+import { Button } from "@ds/components/button/button.tsx";
 import { DateField } from "@/components/date-field/date-field.tsx";
 import { DayPicker } from "@/components/day-picker/day-picker.tsx";
 import { TextField } from "@/components/field/text-field.tsx";

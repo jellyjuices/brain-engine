@@ -1,11 +1,11 @@
 import "./empty.css";
 import clsx from "clsx";
-import type { Size } from "@/components/button/button.tsx";
+import type { ButtonProps } from "@ds/components/button/button.tsx";
 
 export interface EmptyProps {
   title: string;
   body?: string;
-  size?: Exclude<Size, "lg">;
+  size?: Exclude<ButtonProps["size"], "lg">;
 }
 
 export function Empty({ title, body, size = "md" }: EmptyProps) {

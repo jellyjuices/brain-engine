@@ -1,9 +1,9 @@
 import "./note.css";
 import { PencilSimpleIcon, PlusIcon } from "@phosphor-icons/react";
 import { useEffect } from "react";
-import { Button } from "@/components/button/button.tsx";
+import { Button } from "@ds/components/button/button.tsx";
 import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
-import { IconButton } from "@/components/button/icon-button.tsx";
+import { IconButton } from "@ds/components/icon-button/icon-button.tsx";
 import { SubjectCard } from "@/components/card/subject-card.tsx";
 import { NoteIntro } from "@/components/facts/note-intro.tsx";
 import { List } from "@/components/row/list.tsx";
@@ -59,7 +59,7 @@ export function NoteRead({ path }: { path: string }) {
       <div className="add-here">
         <Button
           variant="outlined"
-          icon={PlusIcon}
+          icon={<PlusIcon aria-hidden />}
           block
           onClick={() => navigate("add", { into: path })}
         >

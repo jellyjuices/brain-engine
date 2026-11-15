@@ -1,4 +1,4 @@
-import { Button } from "@/components/button/button.tsx";
+import { Button } from "@ds/components/button/button.tsx";
 import { DayPicker } from "@/components/day-picker/day-picker.tsx";
 import { SheetActions } from "@/components/sheet/sheet-actions.tsx";
 import { Chip } from "@/components/chip/chip.tsx";
