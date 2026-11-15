@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
+import wyw from "@wyw-in-js/vite";
 import type { Plugin } from "vite";
 import { defineConfig } from "vitest/config";
 
@@ -49,18 +50,21 @@ function serviceWorker(): Plugin {
 export default defineConfig({
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   resolve: {
+    dedupe: ["react", "react-dom"],
     alias: {
+      "@ds": fileURLToPath(new URL("../../design-system/src", import.meta.url)),
       "@": fileURLToPath(new URL("./src", import.meta.url)),
       "@shared": fileURLToPath(new URL("../../shared", import.meta.url)),
     },
   },
-  plugins: [react(), serviceWorker()],
+  plugins: [react(), wyw(), serviceWorker()],
   server: {
     proxy: { "/api": "http://127.0.0.1:8788" },
     fs: {
       allow: [
         fileURLToPath(new URL(".", import.meta.url)),
         fileURLToPath(new URL("../../shared", import.meta.url)),
+        fileURLToPath(new URL("../../design-system", import.meta.url)),
       ],
     },
   },
