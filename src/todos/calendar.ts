@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { DIRS, eventDue, titleOf } from "../core/notes.ts";
 import { loadAll } from "../core/files.ts";
+import { plainLine } from "../../shared/search/index.ts";
 import { allLoops } from "./todos.ts";
 
 export interface CalEntry {
@@ -51,12 +52,12 @@ export function calendarEntries(root: string): CalEntry[] {
   const out: CalEntry[] = [];
   for (const todo of allLoops(notes, { done: false })) {
     if (!isDate(todo.due)) continue;
-    out.push({ uid: uidOf(`todo:${todo.path}::${todo.text}`), date: todo.due, title: todo.text, about: todo.noteTitle });
+    out.push({ uid: uidOf(`todo:${todo.path}::${todo.text}`), date: todo.due, title: plainLine(todo.text), about: plainLine(todo.noteTitle) });
   }
   for (const note of notes) {
     const due = eventDue(note);
     if (!isDate(due) || note.path.startsWith(DIRS.archive)) continue;
-    out.push({ uid: uidOf(`event:${note.path}`), date: due, title: titleOf(note), about: "" });
+    out.push({ uid: uidOf(`event:${note.path}`), date: due, title: plainLine(titleOf(note)), about: "" });
   }
   return out.sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title));
 }

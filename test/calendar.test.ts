@@ -54,3 +54,10 @@ test("brain serve sends the feed at /api/cal.ics with a token only", async () =>
     server.close();
   }
 });
+
+test("a to-do with a Markdown link shows only the name in the feed", () => {
+  const root = brain();
+  writeFileSync(join(root, "areas/general.md"), `---\ntype: Area\ntitle: General\ndescription: To-dos with no subject.\n---\n\n# To-dos\n\n- [ ] Call [Sam Lee](../people/sam-lee.md) about the **shed** · due 2026-11-21\n`);
+  const titles = calendarEntries(root).map((e) => e.title);
+  assert.deepEqual(titles.filter((t) => t.startsWith("Call")), ["Call Sam Lee about the shed"]);
+});
