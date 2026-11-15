@@ -4,7 +4,6 @@ import { areasOf, slugOf, str, typeOf, type Note } from "./notes.ts";
 import type { Issue, Schema } from "./schema.ts";
 
 export const AREAS_MIN = 1;
-export const AREAS_MAX = 3;
 export const AREAS_REQUIRED = ["Goal", "Decision"];
 export const KIND_SECTIONS: Record<string, string[]> = {
   Goal: ["# Why", "# Targets", "# Wins", "# Notes"],
@@ -32,7 +31,7 @@ export function areaIssues(n: Note): Issue[] {
   const areas = areasOf(n);
   const out: Issue[] = [];
   if (hasAreas && !Array.isArray(n.meta.areas)) out.push(warn("`areas` should be a list, like [health]"));
-  if (areas.length < AREAS_MIN || areas.length > AREAS_MAX) out.push(error(`\`areas\` must list ${AREAS_MIN} to ${AREAS_MAX} areas, not ${areas.length}`));
+  if (areas.length < AREAS_MIN) out.push(error(`\`areas\` must list at least ${AREAS_MIN} area`));
   for (const a of areas) if (!SLUG.test(a)) out.push(warn(`area \`${a}\` should be the slug of a note in areas/`));
   return out;
 }

@@ -4,7 +4,7 @@
 # Note covers meetings, references and small ideas. Tag it to say which.
 # Goal is a big aim, with targets and wins. A goal with `parent` is a subgoal, one level deep only.
 # Decision is one big choice, with rants, buckets, options and what was decided.
-# `areas` lists 1 to 3 area slugs, like [health, money]. Goal and Decision need it. The old single `area` still reads.
+# `areas` lists 1 or more area slugs, like [health, money]. Goal and Decision need it. The old single `area` still reads.
 # "inbox" means the note stays in inbox/ until someone changes its type.
 types:
   Capture: inbox

@@ -1,9 +1,8 @@
-import { openDb } from "./db.ts";
+import { runStore as run } from "./db.ts";
 import { hasKey, LockedError, onLock, open, seal, type Sealed } from "@/lib/lock/vault.ts";
 import type { StoredNote } from "@/lib/notes/model.ts";
 import { STORE } from "./keys.ts";
-
-type StoreName = typeof STORE.notes | typeof STORE.meta;
+import { clearVectors } from "./vectors.ts";
 
 let cache: Map<string, StoredNote> | null = null;
 let epoch = 0;
@@ -32,25 +31,6 @@ export function onStoreChange(fn: () => void) {
 }
 function changed() {
   return listeners.forEach((fn) => fn());
-}
-
-async function run<T>(
-  name: StoreName,
-  mode: IDBTransactionMode,
-  fn: (store: IDBObjectStore) => IDBRequest<T> | void,
-): Promise<T | undefined> {
-  const db = await openDb();
-  try {
-    return await new Promise<T | undefined>((resolve, reject) => {
-      const tx = db.transaction(name, mode);
-      const req = fn(tx.objectStore(name));
-      tx.oncomplete = () => resolve(req ? req.result : undefined);
-      tx.onerror = () => reject(tx.error);
-      tx.onabort = () => reject(tx.error);
-    });
-  } finally {
-    db.close();
-  }
 }
 
 async function sealNote(n: StoredNote): Promise<NoteRow> {
@@ -126,5 +106,6 @@ export async function setMeta<T>(key: string, value: T): Promise<void> {
 export async function clearStore(): Promise<void> {
   await run(STORE.notes, "readwrite", (s) => s.clear());
   await run(STORE.meta, "readwrite", (s) => s.clear());
+  await clearVectors();
   forgetCache();
 }
