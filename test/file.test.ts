@@ -55,7 +55,7 @@ test("brain add without a prefix or a match goes to the inbox with a guess", () 
   assert.equal(d.filed, false);
   assert.doesNotMatch(read(root, "people/omar.md"), /call Omar back/);
   const c = smartAdd(root, loadAll(root), "note: Omar moved to Vancouver");
-  assert.ok(c.filed);
+  assert.equal(c.filed, true);
   assert.match(read(root, "people/omar.md"), new RegExp(`- ${today()} · Omar moved to Vancouver`));
 });
 
@@ -67,7 +67,7 @@ test("one-step sort writes the line with · with, and deletes the capture, with 
   const r = sortCapture(root, notes, cap.path, "people/family-doctor.md", { kind: "waiting" }, { with: ["people/omar.md"] });
   assert.match(read(root, "people/family-doctor.md"), /- \[ \] Ask Dr about Advil with Omar · with \[Omar\]\(omar\.md\) · waiting/);
   assert.equal(r.deleted, cap.path);
-  assert.ok(!existsSync(join(root, cap.path)));
+  assert.equal(existsSync(join(root, cap.path)), false);
   assert.deepEqual(readdirSync(join(root, ".archive")), []);
 });
 
@@ -76,11 +76,11 @@ test("brain undo puts a sorted capture back and takes the filed lines out", () =
   const cap = capture(root, { text: "Ask Dr about Advil with Omar" });
   const before = read(root, "people/family-doctor.md");
   sortCapture(root, loadAll(root), cap.path, "people/family-doctor.md", { kind: "waiting" }, { with: ["people/omar.md"] });
-  assert.ok(!existsSync(join(root, cap.path)));
+  assert.equal(existsSync(join(root, cap.path)), false);
   const r = spawnSync("node", [BIN, "undo"], { cwd: root, env: { ...process.env, BRAIN_HOME: root, NO_COLOR: "1" }, encoding: "utf8" });
   assert.equal(r.status, 0, r.stderr);
   assert.match(r.stdout, /Undone: sorted /);
-  assert.ok(existsSync(join(root, cap.path)));
+  assert.equal(existsSync(join(root, cap.path)), true);
   assert.match(read(root, cap.path), /Ask Dr about Advil with Omar/);
   assert.equal(read(root, "people/family-doctor.md"), before);
   assert.doesNotMatch(read(root, "people/omar.md"), /Advil/);

@@ -35,12 +35,12 @@ test("find doctor shows the family doctor's card with the to-do, the visit and t
   assert.equal(c.next?.text, "Family doctor visit");
   assert.deepEqual(c.history.map((h) => h.text), ["First visit."]);
   assert.deepEqual(c.relations.map((r) => [r.direction, r.title, r.role]), [["in", "Sleep", "treats it"]]);
-  assert.ok(c.related.some((s) => s.path === "resources/health-history.md"));
-  assert.ok(!c.todo.some((t) => t.text === "An area to-do"), "area to-dos stay off the card");
+  assert.deepEqual(["resources/health-history.md"].filter((p) => !c.related.map((s) => s.path).includes(p)), []);
+  assert.deepEqual(c.todo.filter((t) => t.text === "An area to-do"), [], "area to-dos stay off the card");
 
   const r = spawnSync(process.execPath, ["--disable-warning=ExperimentalWarning", BIN, "find", "doctor", "--json"], { env: { ...process.env, BRAIN_HOME: root }, encoding: "utf8" });
   const j = JSON.parse(r.stdout);
   assert.equal(j.card.subject.path, "people/family-doctor.md");
-  assert.ok(Array.isArray(j.hits));
+  assert.equal(Array.isArray(j.hits), true);
   assert.match(cardLines(c).join("\n"), /To do\n {2}- Ask about Advil · Family doctor visit/);
 });
