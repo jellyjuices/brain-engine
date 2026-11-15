@@ -237,8 +237,7 @@ describe("a change, its Undo and the local copy", () => {
     );
     await putNotes(fixture());
     const change = await applyChange(todo, { kind: "move", when: "2026-11-20" }, NOW);
-    await new Promise((r) => setTimeout(r, 30));
-    expect(await list()).toHaveLength(0);
+    await vi.waitFor(async () => expect(await list()).toHaveLength(0));
     expect(await undoChange(change)).toBe(true);
     expect((await list()).map((i) => i.kind)).toEqual(["undo"]);
     expect((await getNote(todo.path))!.body).toContain("due 2026-11-05 · today");

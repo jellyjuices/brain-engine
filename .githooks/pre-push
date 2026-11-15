@@ -1,4 +1,12 @@
 #!/bin/sh
 cd "$(git rev-parse --show-toplevel)" || exit 1
-echo "pre-push: running npm run gates. A failed gate stops the push."
-npm run gates
+log=$(mktemp)
+echo "pre-push: running the gates..."
+if npm run gates >"$log" 2>&1; then
+  echo "pre-push: all gates passed."
+  exit 0
+fi
+echo "pre-push: a gate failed. The push is stopped."
+grep -n -E "^✖|^not ok|error TS|Error:|FAIL|✗| failed|over 200 lines|privacy-check:" "$log" | head -40
+echo "Full output: $log"
+exit 1
