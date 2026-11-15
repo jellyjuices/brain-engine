@@ -19,7 +19,7 @@ Read the file for the area you work in. Claude Code loads it on its own.
 
 - `areas/general.md` (General) holds to-dos with no subject.
 - `goals/` holds one Goal note per big aim. `decisions/` holds one Decision note per big choice.
-- `journal/YYYY-MM-DD.md` is the day note. It keeps each journal entry whole and dated. Sorted bits link back to it.
+- `journal/` holds one Journal note per journal entry, kept whole and dated. A day can have many. Sorted bits link back to it.
 - `inbox/` holds captures that wait for a helper. The owner never sorts it. Once sorted, a capture is deleted. Git keeps it.
 - `events/` holds one dated visit, appointment or meeting each, with `date`, `status` (upcoming, done, cancelled) and `with`.
 - `me/` holds one Lens note per lens. `sources/` is raw material, such as the owner's full intake answers.
