@@ -74,7 +74,7 @@ export const TodosToday = () => {
         </PageHeader>
         <main className="todos-today-main">
           <div className="todos-today-banner">
-            <Banner message="3 unsorted entries" actionLabel="Sort" />
+            <Banner count={3} message="to sort" actionLabel="Sort" />
           </div>
           {section('Overdue', overdue, true)}
           {section('Due today', today)}
