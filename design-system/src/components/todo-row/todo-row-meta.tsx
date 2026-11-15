@@ -5,7 +5,8 @@ import { AreaMark } from '../area-mark/area-mark.tsx'
 import { Chip } from '../chip/chip.tsx'
 import { WhenChip } from '../when-chip/when-chip.tsx'
 import type { TodoRowProps } from './todo-row.tsx'
-import './todo-row-meta.css'
+import { visuallyHidden } from '../visually-hidden/visually-hidden.ts'
+import { extra, extraGlyph, meta } from './todo-row-meta.styles.ts'
 
 type MetaProps = Pick<
   TodoRowProps,
@@ -15,9 +16,9 @@ type MetaProps = Pick<
 export const hasMeta = (p: MetaProps) => Boolean(p.tag || p.when || p.people?.length || p.goal || p.check || p.from)
 
 const Extra = ({ glyph: Glyph, mark, hidden, children }: { glyph: Icon; mark?: ReactNode; hidden?: string; children: string }) => (
-  <span className="todo-row-extra">
-    {mark ?? <Glyph aria-hidden className="todo-row-extra-glyph" />}
-    {hidden && <span className="visually-hidden">{hidden} </span>}
+  <span className={extra}>
+    {mark ?? <Glyph aria-hidden className={extraGlyph} />}
+    {hidden && <span className={visuallyHidden}>{hidden} </span>}
     {children}
   </span>
 )
@@ -35,7 +36,7 @@ export const TodoRowMeta = ({
   markLabels,
   disabled,
 }: MetaProps) => (
-  <div className="todo-row-meta">
+  <div className={meta}>
     {tag && <Chip label={tag} areas={areas} disabled={disabled} />}
     {when && <WhenChip {...when} />}
     {people && people.length > 0 && (

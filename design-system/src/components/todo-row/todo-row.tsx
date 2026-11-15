@@ -6,8 +6,9 @@ import type { WhenChipProps } from '../when-chip/when-chip.tsx'
 import { TodoRowMeta, hasMeta } from './todo-row-meta.tsx'
 import { useLongPress } from './use-long-press.ts'
 import { useSwipe } from './use-swipe.ts'
-import './todo-row.css'
-import './todo-row-open.css'
+import { hitArea } from '../hit-area/hit-area.ts'
+import * as styles from './todo-row.styles.ts'
+import * as states from './todo-row-states.styles.ts'
 
 export type TodoRowProps = {
   title: string
@@ -76,12 +77,11 @@ export const TodoRow = (props: TodoRowProps) => {
   return (
     <li
       className={clsx(
-        'todo-row',
-        checked && 'is-done',
-        disabled && 'is-disabled',
-        swipe.dragging && 'is-dragging',
-        (pressed || hold.holding) && 'is-pressed',
-        props.when?.status === 'overdue' && 'is-late',
+        styles.row,
+        checked && states.isDone,
+        disabled && states.isDisabled,
+        swipe.dragging && states.isDragging,
+        (pressed || hold.holding) && states.isPressed,
       )}
       onKeyDown={onKeyDown}
       onContextMenu={(e) => {
@@ -91,41 +91,41 @@ export const TodoRow = (props: TodoRowProps) => {
       }}
     >
       {actions > 0 && !disabled && (
-        <div ref={tray} className="todo-row-actions">
+        <div ref={tray} className={styles.actions}>
           {onSort && (
-            <button type="button" className="todo-row-action todo-row-action--sort" onFocus={swipe.open} onClick={run(onSort)}>
+            <button type="button" className={clsx(styles.action, styles.actionSort)} onFocus={swipe.open} onClick={run(onSort)}>
               <FunnelSimpleIcon aria-hidden />
               {sortLabel}
             </button>
           )}
           {onDrop && (
-            <button type="button" className="todo-row-action todo-row-action--drop" onFocus={swipe.open} onClick={run(onDrop)}>
+            <button type="button" className={clsx(styles.action, styles.actionDrop)} onFocus={swipe.open} onClick={run(onDrop)}>
               <TrashIcon aria-hidden />
               {dropLabel}
             </button>
           )}
         </div>
       )}
-      <div className="todo-row-content" style={{ transform: `translateX(${swipe.offset}px)` }} {...content}>
+      <div className={styles.content} style={{ transform: `translateX(${swipe.offset}px)` }} {...content}>
         <Checkbox.Root
           id={id}
-          className="todo-row-tick hit-area"
+          className={clsx(styles.tick, hitArea)}
           checked={checked}
           disabled={disabled}
           aria-label={onOpen ? title : undefined}
           onCheckedChange={(value) => onCheckedChange?.(value === true)}
         >
-          <Checkbox.Indicator className="todo-row-mark">
+          <Checkbox.Indicator className={styles.mark}>
             <CheckIcon weight="bold" aria-hidden />
           </Checkbox.Indicator>
         </Checkbox.Root>
-        <div className="todo-row-body">
+        <div className={styles.body}>
           {onOpen ? (
-            <button type="button" className="todo-row-title todo-row-open" onClick={onOpen} disabled={disabled}>
+            <button type="button" className={clsx(styles.title, styles.open)} onClick={onOpen} disabled={disabled}>
               {title}
             </button>
           ) : (
-            <label htmlFor={id} className="todo-row-title">
+            <label htmlFor={id} className={styles.title}>
               {title}
             </label>
           )}

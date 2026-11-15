@@ -3,9 +3,9 @@ import { Dialog } from 'radix-ui'
 import type { ReactNode } from 'react'
 import { XIcon } from '@phosphor-icons/react'
 import { IconButton } from '../icon-button/icon-button.tsx'
+import { visuallyHidden } from '../visually-hidden/visually-hidden.ts'
 import { useDragClose } from './use-drag-close.ts'
-import './sheet.css'
-import './sheet-panel.css'
+import * as styles from './sheet.styles.ts'
 
 export type SheetProps = {
   open: boolean
@@ -29,27 +29,27 @@ export const Sheet = ({ open, onOpenChange, title, hideTitle, description, heade
       }}
     >
       <Dialog.Portal>
-        <Dialog.Overlay className="sheet-scrim" />
+        <Dialog.Overlay className={styles.scrim} />
         <Dialog.Content
-          className={clsx('sheet', drag.dragging && 'is-dragging')}
+          className={clsx(styles.sheet, drag.dragging && styles.isDragging)}
           style={{ transform: drag.offset ? `translateY(${drag.offset}px)` : undefined }}
           onAnimationEnd={drag.reset}
           {...(description ? {} : { 'aria-describedby': undefined })}
         >
-          <div className="sheet-grip" {...drag.handlers}>
-            <span className="sheet-handle" aria-hidden />
+          <div className={styles.grip} {...drag.handlers}>
+            <span className={styles.handle} aria-hidden />
           </div>
-          <div className="sheet-head" {...drag.handlers}>
-            {header ?? <Dialog.Title className={clsx('sheet-title', hideTitle && 'visually-hidden')}>{title}</Dialog.Title>}
-            {header && <Dialog.Title className="visually-hidden">{title}</Dialog.Title>}
+          <div className={styles.head} {...drag.handlers}>
+            {header ?? <Dialog.Title className={clsx(styles.title, hideTitle && visuallyHidden)}>{title}</Dialog.Title>}
+            {header && <Dialog.Title className={visuallyHidden}>{title}</Dialog.Title>}
             {closeLabel && (
               <Dialog.Close asChild>
-                <IconButton icon={XIcon} label={closeLabel} className="sheet-close" />
+                <IconButton icon={XIcon} label={closeLabel} className={styles.close} />
               </Dialog.Close>
             )}
           </div>
-          {description && <Dialog.Description className="sheet-description">{description}</Dialog.Description>}
-          <div className="sheet-body">{children}</div>
+          {description && <Dialog.Description className={styles.description}>{description}</Dialog.Description>}
+          <div className={styles.body}>{children}</div>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

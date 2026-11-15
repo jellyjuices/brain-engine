@@ -1,7 +1,8 @@
 import clsx from 'clsx'
 import { useId, useState, type KeyboardEvent } from 'react'
 import { MagnifyingGlassIcon } from '@phosphor-icons/react'
-import './suggest-input.css'
+import { visuallyHidden } from '../visually-hidden/visually-hidden.ts'
+import * as styles from './suggest-input.styles.ts'
 
 export type Suggestion = { id: string; label: string; hint?: string }
 
@@ -44,15 +45,15 @@ export const SuggestInput = ({ label, placeholder, suggestions, onPick, disabled
   }
 
   return (
-    <div className={clsx('suggest-input', disabled && 'is-disabled')}>
-      <label htmlFor={id} className={clsx('suggest-input-label', hideLabel && 'visually-hidden')}>
+    <div className={clsx(styles.suggestInput, disabled && styles.isDisabled)}>
+      <label htmlFor={id} className={clsx(styles.label, hideLabel && visuallyHidden)}>
         {label}
       </label>
-      <div className="suggest-input-field">
-        <MagnifyingGlassIcon aria-hidden className="suggest-input-icon" />
+      <div className={styles.field}>
+        <MagnifyingGlassIcon aria-hidden className={styles.icon} />
         <input
           id={id}
-          className="suggest-input-control"
+          className={styles.control}
           role="combobox"
           aria-expanded={shown}
           aria-controls={`${id}-list`}
@@ -72,20 +73,20 @@ export const SuggestInput = ({ label, placeholder, suggestions, onPick, disabled
           onKeyDown={onKeyDown}
         />
       </div>
-      <ul id={`${id}-list`} role="listbox" aria-label={label} className="suggest-input-list" hidden={!shown}>
+      <ul id={`${id}-list`} role="listbox" aria-label={label} className={styles.list} hidden={!shown}>
         {items.map((item, i) => (
           <li
             key={item.id}
             id={`${id}-${i}`}
             role="option"
             aria-selected={i === active}
-            className={clsx('suggest-input-option', i === active && 'is-active')}
+            className={clsx(styles.option, i === active && styles.isActive)}
             onMouseDown={(e) => e.preventDefault()}
             onMouseEnter={() => setActive(i)}
             onClick={() => pick(item)}
           >
             <span>{item.label}</span>
-            {item.hint && <span className="suggest-input-hint">{item.hint}</span>}
+            {item.hint && <span className={styles.hint}>{item.hint}</span>}
           </li>
         ))}
       </ul>
