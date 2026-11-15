@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Bar } from '../components/bar/bar.tsx'
 import { GoalProgress } from '../components/goal-progress/goal-progress.tsx'
 import { PageHeader } from '../components/page-header/page-header.tsx'
 import { Chip } from '../components/chip/chip.tsx'
@@ -36,7 +37,7 @@ export const GoalPage: Story = {
         </PageHeader>
         <div style={{ display: 'grid', gap: 'var(--space-md)', padding: 'var(--space-lg)' }}>
           <GoalProgress title="Run a sample 10K" value={value} note="+2 this month" areas={areas} />
-          <GoalProgress title="Sample weekly runs" value={value / 2} note="Next: run on Sunday" size="md" areas={areas} />
+          <Bar label="Sample weekly runs" done={Math.round(value / 2)} total={100} countLabel="Next: run on Sunday" areas={areas} />
           <Chip label={name(areas)} areas={areas} />
         </div>
       </div>

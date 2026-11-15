@@ -17,6 +17,9 @@ type Story = StoryObj<typeof meta>
 
 export const Goal: Story = {}
 export const WithAreas: Story = { args: { areas: ['fitness', 'health'] } }
+export const Small: Story = {
+  args: { label: 'Read 12 sample books', done: 3, total: 12, countLabel: 'Next: pick book 4', gain: undefined },
+}
 export const NoGain: Story = { args: { gain: 0 } }
 export const Empty: Story = { args: { done: 0, gain: undefined, countLabel: '0 of 12' } }
 export const Full: Story = { args: { done: 12, countLabel: '12 of 12' } }

@@ -19,6 +19,9 @@
   font: inherit;
   font-size: var(--t-xs);
   font-weight: 600;
+  touch-action: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
 .add-main .shape {

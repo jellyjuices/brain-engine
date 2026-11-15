@@ -1,0 +1,17 @@
+.skip-link {
+  position: fixed;
+  top: calc(var(--s1) + env(safe-area-inset-top));
+  left: calc(var(--s1) + env(safe-area-inset-left));
+  z-index: 40;
+  padding: var(--s1-5) var(--s2);
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+  text-decoration: none;
+  translate: 0 calc(-100% - var(--s4));
+
+  &:focus {
+    translate: 0 0;
+  }
+}
