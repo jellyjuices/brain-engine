@@ -33,7 +33,7 @@ paths:
 - A fact about the owner goes in a lens (`me/`). A fact about a subject goes in its note. Never both. Table: `lenses.md`.
 - A **goal** has `# Why`, `# Targets` (checklist lines), `# Wins` and `# Notes`. A subgoal sets `parent`, one level deep.
 - A **decision** has `# Rants`, `# Buckets`, `# Options` and `# Decided`. Bits link to subjects. They are not copied.
-- The **journal day note**, `journal/YYYY-MM-DD.md`, keeps each entry whole under a time. Bits sorted from it link back.
+- A **journal note**, `journal/YYYY-MM-DD-HHMM-<slug>.md`, keeps one journal entry whole. A day can have many. It has `title` (the first words, which the owner can change), `date` and `sorted` (`false` while it waits, then the day it was sorted). Never change its text. Bits sorted from it link back.
 
 ## Lines
 
@@ -44,6 +44,7 @@ paths:
   - No to-do line for an event. Its `date` puts it in Today.
 - **Facts** go under `# Notes`: `- YYYY-MM-DD · The office moves next year.`
 - **Feelings** about a subject go under its `# Notes`, in the owner's words, with what they are about: `- YYYY-MM-DD · feeling · I like the people but the hours worry me · about the hours`. No rating. Feelings about the owner go in lenses.
+- **`· from [Title](../journal/<file>.md)`** goes last on a line sorted from a journal note. It links back to that note. Keep it when you change the line.
 - **`· check`** marks a line a helper was unsure of. The owner removes it when they agree.
 - **Relations** go under `# People`, `# Groups`, `# Projects`, `# Places`, `# Things`, `# Topics` or `# Related`: `- [Sam](../people/sam-lee.md) · co-founder · since 2025`. Write each on one side only. Use the owner's word for the role, or leave it out.
 

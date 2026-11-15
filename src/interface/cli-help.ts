@@ -39,6 +39,8 @@ ${pc.bold("Usage")}
   brain sort --json             the suggested subject for each inbox note
   brain sort <inbox note> --into <note>   move one inbox note into its subject   [--yes files every suggestion]
   brain sort --auto [--dry-run] file inbox notes that have a type, title and description
+  brain sort --journal [--json] list journal notes that wait to be sorted
+  brain sort <journal note> --bits '<json>'   file each bit in its subject; the journal stays whole
   brain intake                  brain dump (one line = one note)
   brain intake <area>           answer the 5 questions for one area
   brain intake status           progress per stage, threads and open to-dos

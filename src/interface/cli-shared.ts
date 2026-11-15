@@ -56,6 +56,8 @@ export function parseCli(rest: string[]) {
       write: { type: "boolean" },
       single: { type: "boolean" },
       into: { type: "string" },
+      bits: { type: "string" },
+      journal: { type: "boolean" },
       yes: { type: "boolean", short: "y" },
       all: { type: "boolean" },
       description: { type: "string", short: "d" },

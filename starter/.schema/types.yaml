@@ -5,6 +5,7 @@
 # Goal is a big aim, with targets and wins. A goal with `parent` is a subgoal, one level deep only.
 # Decision is one big choice, with rants, buckets, options and what was decided.
 # `areas` lists 1 or more area slugs, like [health, money]. Goal and Decision need it. The old single `area` still reads.
+# Journal is one journal entry, kept whole. `sorted: false` while it waits, then the date it was sorted.
 # "inbox" means the note stays in inbox/ until someone changes its type.
 types:
   Capture: inbox
@@ -17,7 +18,7 @@ types:
   Topic: topics
   Event: events
   Note: resources
-  Daily: journal
+  Journal: journal
   Lens: me
   Goal: goals
   Decision: decisions
