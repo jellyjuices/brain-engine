@@ -1,9 +1,18 @@
 export type AreaRole = 'accent' | 'fill' | 'text' | 'surface' | 'glow'
 
+export const MAX_MIXED_AREAS = 3
+
+export const splitAreas = (areas: string[] = []) => {
+  const unique = [...new Set(areas)]
+  return { shown: unique.slice(0, MAX_MIXED_AREAS), extra: Math.max(0, unique.length - MAX_MIXED_AREAS) }
+}
+
+export const shownAreas = (areas: string[] = []) => splitAreas(areas).shown
+
 export const areaVar = (slug: string, role: AreaRole) => `var(--area-${slug}-${role})`
 
 const colours = (areas: string[], role: AreaRole) => {
-  const list = areas.map((a) => areaVar(a, role))
+  const list = shownAreas(areas).map((a) => areaVar(a, role))
   return list.length === 1 ? [list[0], list[0]] : list
 }
 
@@ -18,8 +27,9 @@ export const mixGlow = (areas: string[]) => {
 }
 
 export const mixSplit = (areas: string[], role: AreaRole = 'accent') => {
-  const share = 100 / areas.length
-  const stops = areas.map((a, i) => `${areaVar(a, role)} ${i * share}% ${(i + 1) * share}%`)
+  const shown = shownAreas(areas)
+  const share = 100 / shown.length
+  const stops = shown.map((a, i) => `${areaVar(a, role)} ${i * share}% ${(i + 1) * share}%`)
   return `conic-gradient(from 0deg, ${stops.join(', ')})`
 }
 

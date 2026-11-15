@@ -67,6 +67,8 @@ export const size = {
   dot: '8px',
   'icon-sm': '18px',
   bar: '10px',
+  'bar-thick': '24px',
+  panel: '26rem',
   ring: '7rem',
   'ring-stroke': '10px',
   'toast-shape': '2rem',

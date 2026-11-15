@@ -121,21 +121,6 @@
   text-decoration: line-through;
 }
 
-.todo-row-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-sm);
-  margin-top: var(--space-xs);
-  font-size: var(--font-size-body-xs);
-  color: var(--text-secondary);
-}
-
-.todo-row-date.is-late {
-  color: var(--status-late);
-  font-weight: var(--font-weight-semibold);
-}
-
 .todo-row.is-disabled .todo-row-content {
   background: var(--background-primary);
 }
@@ -148,7 +133,7 @@
 }
 
 .todo-row.is-disabled .todo-row-title,
-.todo-row.is-disabled .todo-row-date {
+.todo-row.is-disabled .todo-row-meta {
   color: var(--text-disabled);
   cursor: not-allowed;
 }

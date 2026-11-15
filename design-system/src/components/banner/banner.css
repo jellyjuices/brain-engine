@@ -14,6 +14,12 @@
   height: var(--size-icon);
 }
 
+.banner-count {
+  margin-right: var(--space-xs);
+  font-family: var(--font-number);
+  font-weight: var(--font-weight-bold);
+}
+
 .banner-message {
   flex: 1;
   margin: 0;

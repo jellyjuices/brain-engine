@@ -1,0 +1,31 @@
+.todo-row-open {
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: start;
+}
+
+.todo-row-open::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.todo-row-open:focus-visible {
+  outline: none;
+}
+
+.todo-row-open:focus-visible::after {
+  outline: var(--size-focus) solid var(--border-focus);
+  outline-offset: calc(var(--size-focus) * -1);
+}
+
+.todo-row-tick {
+  z-index: 1;
+}
+
+.todo-row.is-pressed .todo-row-content {
+  background:
+    linear-gradient(var(--background-pressed), var(--background-pressed)),
+    var(--background-primary);
+}
