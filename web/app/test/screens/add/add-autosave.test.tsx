@@ -3,23 +3,28 @@ import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { go } from "@/lib/platform/router.ts";
-import { readDraft } from "@/lib/storage/drafts.ts";
+import { DRAFT_MS, readDraft } from "@/lib/storage/drafts.ts";
 import { clearStore } from "@/lib/storage/store.ts";
 import { list, remove } from "@/lib/sync/outbox.ts";
 import { AddScreen } from "@/screens/add/add.tsx";
 import { draft } from "@/screens/add/draft.ts";
-import { unlockTestVault } from "../../helpers.ts";
+import { fakeTimeouts, unlockTestVault } from "../../helpers.ts";
 
 beforeAll(unlockTestVault);
-afterEach(() => {
+let typed: string[];
+
+afterEach(async () => {
+  vi.useRealTimers();
   cleanup();
   Object.defineProperty(document, "visibilityState", { value: "visible", configurable: true });
+  await vi.waitFor(async () => expect(await sentTexts()).toEqual(typed));
 });
 beforeEach(async () => {
   vi.stubGlobal(
     "fetch",
     vi.fn(() => Promise.reject(new TypeError("offline"))),
   );
+  typed = [];
   draft.text = "";
   draft.tags = [];
   go("/add");
@@ -27,9 +32,9 @@ beforeEach(async () => {
   await Promise.all((await list()).map((item) => remove(item.id)));
 });
 
-async function typeCapture(text: string) {
-  const user = userEvent.setup();
+async function typeCapture(text: string, user = userEvent.setup()) {
   const view = render(<AddScreen />);
+  typed.push(text);
   await user.type(screen.getByRole("textbox", { name: "Add" }), text);
   return view;
 }
@@ -45,7 +50,9 @@ describe("add screen autosave", () => {
   });
 
   it("keeps the text on the phone after a pause", async () => {
-    await typeCapture("Buy eggs for meal prep");
+    await typeCapture("Buy eggs for meal prep", fakeTimeouts());
+    await vi.advanceTimersByTimeAsync(DRAFT_MS);
+    vi.useRealTimers();
     await vi.waitFor(async () =>
       expect(await readDraft("add")).toEqual({ text: "Buy eggs for meal prep", tags: [] }),
     );

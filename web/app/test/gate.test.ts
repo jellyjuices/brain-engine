@@ -26,9 +26,6 @@ vi.mock("@/lib/lock/vault.ts", () => ({
   forgetFingerprint: async () => {},
 }));
 
-function flush() {
-  return new Promise((r) => setTimeout(r, 0));
-}
 function appEl() {
   return document.getElementById("app") as HTMLElement;
 }
@@ -84,7 +81,7 @@ describe("lock gate", () => {
     session.renewSession();
     session.writeUnlocked();
     session.clearUnlocked();
-    await flush();
+    await import("@/shell/app.tsx");
     expect(calls.mount).toBe(2);
     expect(appEl().childElementCount).toBe(0);
   });

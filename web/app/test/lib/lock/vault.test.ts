@@ -1,6 +1,6 @@
 import "fake-indexeddb/auto";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { fixture } from "../../helpers.ts";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { fastPasswordKeys, fixture } from "../../helpers.ts";
 
 type Vault = typeof import("@/lib/lock/vault.ts");
 type Store = typeof import("@/lib/storage/store.ts");
@@ -83,10 +83,14 @@ async function diskDump(): Promise<string> {
   return parts.join("\n");
 }
 
+let derive: ReturnType<typeof fastPasswordKeys>;
+
 beforeEach(async () => {
+  derive = fastPasswordKeys();
   await deleteDb();
   await load();
-}, 30_000);
+});
+afterEach(() => derive.mockRestore());
 
 describe("vault keys", () => {
   it("seals and opens a value, with a fresh iv each time", async () => {
@@ -94,8 +98,8 @@ describe("vault keys", () => {
     const a = await vault.seal({ n: 1, s: SECRET }, "notes/a.md");
     const b = await vault.seal({ n: 1, s: SECRET }, "notes/a.md");
     expect(a.iv).toHaveLength(12);
-    expect(Buffer.from(a.iv).equals(Buffer.from(b.iv))).toBe(false);
-    expect(Buffer.from(a.data).equals(Buffer.from(b.data))).toBe(false);
+    expect(a.iv).not.toEqual(b.iv);
+    expect(a.data).not.toEqual(b.data);
     expect(await vault.open<{ n: number; s: string }>(a, "notes/a.md")).toEqual({
       n: 1,
       s: SECRET,
@@ -121,6 +125,7 @@ describe("vault keys", () => {
       wrapped: Uint8Array;
     }[];
     expect(rec).toMatchObject({ id: "password", iterations: 600_000 });
+    expect(derive.mock.calls[0]![0]).toMatchObject({ name: "PBKDF2", iterations: 600_000 });
     expect(rec!.salt).toHaveLength(16);
     expect(rec!.iv).toHaveLength(12);
     expect(rec!.wrapped).toHaveLength(32 + 16);
@@ -155,7 +160,11 @@ describe("vault keys", () => {
     expect(vault.hasKey()).toBe(false);
     await expect(store.allNotes()).rejects.toBeInstanceOf(vault.LockedError);
     expect(await vault.unlockWithPassword(PW)).toBe("ok");
-    expect((await store.allNotes()).length).toBe(fixture().length);
+    expect((await store.allNotes()).map((n) => n.path).sort()).toEqual(
+      fixture()
+        .map((n) => n.path)
+        .sort(),
+    );
   });
 
   it("rewrap moves the key to a new password without touching the data", async () => {
@@ -348,7 +357,7 @@ describe("sealed storage", () => {
   it("lockVault clears the in-memory note cache", async () => {
     await vault.unlockWithPassword(PW);
     await store.putNotes(fixture());
-    expect((await store.allNotes()).length).toBeGreaterThan(0);
+    expect(await store.allNotes()).toHaveLength(fixture().length);
     vault.lockVault();
     await expect(store.getNote("people/aisha.md")).rejects.toBeInstanceOf(vault.LockedError);
     await vault.unlockWithPassword(PW);

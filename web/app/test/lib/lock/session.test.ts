@@ -10,8 +10,11 @@ import {
   watchSession,
   writeUnlocked,
 } from "@/lib/lock/session.ts";
+import { SESSION } from "@/lib/storage/keys.ts";
 
 vi.mock("@/lib/lock/vault.ts", () => ({ hasKey: () => true }));
+
+const NINE_AM = Date.parse("2026-11-05T09:00:00Z");
 
 let stop: () => void;
 function setVisibility(v: "hidden" | "visible") {
@@ -21,6 +24,7 @@ function setVisibility(v: "hidden" | "visible") {
 
 beforeEach(() => {
   vi.useFakeTimers();
+  vi.setSystemTime(NINE_AM);
   sessionStorage.clear();
   localStorage.clear();
   stop = watchSession();
@@ -74,9 +78,9 @@ describe("session stamp", () => {
 
   it("is a timestamp in sessionStorage, not a flag, and never holds a password", () => {
     writeUnlocked();
-    const stored = Object.entries(sessionStorage);
-    expect(stored).toHaveLength(1);
-    expect(Number(stored[0]![1])).toBeGreaterThan(Date.now());
+    expect(Object.entries(sessionStorage)).toEqual([
+      [SESSION.unlockedUntil, String(NINE_AM + IDLE_LIMIT)],
+    ]);
   });
 
   it("a lapsed cookie is marked until the password renews it", () => {

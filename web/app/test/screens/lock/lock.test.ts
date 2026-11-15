@@ -1,8 +1,9 @@
 import "fake-indexeddb/auto";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { copy } from "@/content/index.ts";
+import { fastPasswordKeys } from "../../helpers.ts";
 
 type Vault = typeof import("@/lib/lock/vault.ts");
 type Session = typeof import("@/lib/lock/session.ts");
@@ -38,20 +39,19 @@ async function submit(password: string) {
   await user.clear(field);
   await user.type(field, password);
   await user.click(screen.getByRole("button", { name: "Unlock" }));
-  await vi.waitFor(
-    () =>
-      expect(
-        (document.querySelector(".btn[type=submit]") as HTMLButtonElement | null)?.disabled ??
-          false,
-      ).toBe(false),
-    { timeout: 10_000 },
+  await vi.waitFor(() =>
+    expect(screen.queryByRole("button", { name: copy.lock.checking })).toBeNull(),
   );
 }
 function message() {
   return document.querySelector(".lock-error")?.textContent ?? "";
 }
 
+beforeAll(async () => {
+  await import("@/screens/lock/mount-lock.tsx");
+});
 beforeEach(async () => {
+  fastPasswordKeys();
   await deleteDb();
   sessionStorage.clear();
   localStorage.clear();
@@ -62,8 +62,11 @@ beforeEach(async () => {
   notice = await import("@/lib/lock/notice.ts");
   outbox = await import("@/lib/sync/outbox.ts");
   (await import("@/screens/lock/mount-lock.tsx")).mountLock();
-}, 30_000);
-afterEach(() => vi.unstubAllGlobals());
+});
+afterEach(() => {
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
+});
 
 describe("lock screen and vault", () => {
   it("a first unlock online makes the vault and opens", async () => {
@@ -72,14 +75,14 @@ describe("lock screen and vault", () => {
     expect(vault.hasKey()).toBe(true);
     expect(session.isUnlocked()).toBe(true);
     expect(document.querySelector(".lock")).toBeNull();
-  }, 30_000);
+  });
 
   it("a stamp with no key still shows the lock (what a reload looks like)", async () => {
     online();
     await submit("pw one");
     vault.lockVault();
     expect(session.isUnlocked()).toBe(false);
-  }, 30_000);
+  });
 
   it("offline with no vault yet asks to connect", async () => {
     offline();
@@ -99,7 +102,7 @@ describe("lock screen and vault", () => {
     await submit("pw one");
     expect(vault.hasKey()).toBe(true);
     expect(session.isUnlocked()).toBe(true);
-  }, 30_000);
+  });
 
   it("a changed server password starts the vault again and says waiting changes were cleared", async () => {
     await vault.unlockWithPassword("old pw");
@@ -112,7 +115,7 @@ describe("lock screen and vault", () => {
     expect(notice.takeNotice()).toBe(copy.lock.passwordChanged);
     vault.lockVault();
     expect(await vault.unlockWithPassword("new pw")).toBe("ok");
-  }, 30_000);
+  });
 
   it("a changed server password with nothing waiting gives no notice", async () => {
     await vault.unlockWithPassword("old pw");
@@ -121,7 +124,7 @@ describe("lock screen and vault", () => {
     await submit("new pw");
     expect(session.isUnlocked()).toBe(true);
     expect(notice.takeNotice()).toBeNull();
-  }, 30_000);
+  });
 
   it("a wrong password at the server leaves the vault shut", async () => {
     await vault.unlockWithPassword("pw one");
@@ -130,5 +133,5 @@ describe("lock screen and vault", () => {
     await submit("bad");
     expect(message()).toBe(copy.lock.wrong);
     expect(vault.hasKey()).toBe(false);
-  }, 30_000);
+  });
 });

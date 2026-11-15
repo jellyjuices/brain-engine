@@ -1,3 +1,5 @@
+import userEvent from "@testing-library/user-event";
+import { vi } from "vitest";
 import type { StoredNote } from "@/lib/notes/model.ts";
 
 export function note(
@@ -61,7 +63,31 @@ export function fixture(): StoredNote[] {
   ];
 }
 
+const FAST_ITERATIONS = 1000;
+
+export function fastPasswordKeys() {
+  const derive = crypto.subtle.deriveKey.bind(crypto.subtle);
+  return vi
+    .spyOn(crypto.subtle, "deriveKey")
+    .mockImplementation((algorithm, ...rest) =>
+      derive(
+        typeof algorithm === "object" && "iterations" in algorithm
+          ? { ...algorithm, iterations: FAST_ITERATIONS }
+          : algorithm,
+        ...rest,
+      ),
+    );
+}
+
 export async function unlockTestVault(): Promise<void> {
   const { unlockWithPassword } = await import("@/lib/lock/vault.ts");
+  const derive = fastPasswordKeys();
   await unlockWithPassword("test password");
+  derive.mockRestore();
+}
+
+export function fakeTimeouts() {
+  vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+  vi.stubGlobal("jest", { advanceTimersByTime: vi.advanceTimersByTime });
+  return userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 }

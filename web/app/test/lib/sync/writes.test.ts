@@ -233,11 +233,13 @@ describe("a change, its Undo and the local copy", () => {
       "fetch",
       vi
         .fn()
-        .mockImplementation(async () => reply(200, { now: new Date().toISOString(), notes: [] })),
+        .mockImplementation(async () => reply(200, { now: "2026-11-05T09:00:00.000Z", notes: [] })),
     );
     await putNotes(fixture());
     const change = await applyChange(todo, { kind: "move", when: "2026-11-20" }, NOW);
-    await vi.waitFor(async () => expect(await list()).toHaveLength(0));
+    await flush();
+    expect(await list()).toHaveLength(0);
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("offline")));
     expect(await undoChange(change)).toBe(true);
     expect((await list()).map((i) => i.kind)).toEqual(["undo"]);
     expect((await getNote(todo.path))!.body).toContain("due 2026-11-05 · today");

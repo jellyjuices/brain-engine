@@ -1,6 +1,6 @@
 # Vitest and React (`web/app`, `design-system`)
 
-Run: `npm --prefix web/app test` (all, about 40 s) or `npx vitest run test/<path>` from `web/app`. Config: `web/app/vite.config.ts` (happy-dom, `test/**/*.test.{ts,tsx}`, setup `test/setup.ts` loads `jest-dom`). No coverage tool is installed. `design-system` has no tests, only `typecheck`.
+Run: `npx vitest run test/<path>` from `web/app` for the files you changed. Run all (`npm --prefix web/app test`, about 15 s) once at the end. After a change, also run `npx prettier --write test/<path>` and `npx tsc --noEmit -p .`. Config: `web/app/vite.config.ts` (happy-dom, `test/**/*.test.{ts,tsx}`, setup `test/setup.ts` loads `jest-dom`). No coverage tool is installed. `design-system` has no tests, only `typecheck`.
 
 ## Shape and place
 
@@ -25,7 +25,17 @@ Run: `npm --prefix web/app test` (all, about 40 s) or `npx vitest run test/<path
 
 ## Time
 
-`vi.useFakeTimers()` and `vi.setSystemTime(new Date("2026-11-05T09:00:00Z"))`, then `await vi.advanceTimersByTimeAsync(ms)`. Always `vi.useRealTimers()` in `afterEach`. With `userEvent` under fake timers, pass `userEvent.setup({ advanceTimers: vi.advanceTimersByTime })`. Never `await new Promise(r => setTimeout(r, n))`.
+Never `await new Promise(r => setTimeout(r, n))`. Pick the recipe that fits:
+
+- **Pure logic with a timer or a date** (`session.test.ts`): `vi.useFakeTimers()`, `vi.setSystemTime(new Date("2026-11-05T09:00:00Z"))`, then `vi.advanceTimersByTime(ms)`. `vi.useRealTimers()` in `afterEach`. Assert the exact stored time, not "greater than now".
+- **A screen with a timer** (a draft kept after `DRAFT_MS`): `const user = fakeTimeouts()` from `test/helpers.ts`, type with that `user`, `await vi.advanceTimersByTimeAsync(DRAFT_MS)`, `vi.useRealTimers()`, then `vi.waitFor` the stored value. See `note-edit-autosave.test.tsx`. Reason: a plain `userEvent.setup()` hangs under fake timers, and IndexedDB needs real timers again to finish. Import the delay constant from the code. Do not retype `800`.
+- **A write that is sent in the background** (`applyChange`, `settle`): `await flush()` from `@/lib/sync/outbox.ts`. It returns the flush that is already running. Then assert. See "Undo after it landed" in `writes.test.ts`.
+- **"Nothing happens"**: do not wait and look. Do a second action that does send, through the same path, await it, then assert only that one arrived. See "sends nothing when you leave without a change".
+- **A promise the code made**: await the same thing the code awaits (`await import("@/shell/app.tsx")` in `gate.test.ts`).
+
+## Screens that send when they close
+
+`AddScreen`, `NoteEdit` and `WriteScreen` send their text when they unmount. `cleanup()` in `afterEach` unmounts them, so the send lands in the next test. Record what each test typed, and in `afterEach` call `cleanup()` and then `await vi.waitFor` until the outbox holds exactly that. See `typed` in `add-autosave.test.tsx` and `leaving` in `note-edit-autosave.test.tsx`. Reason: this leak made the suite fail about 1 run in 5.
 
 ## Fetch and the Worker
 
@@ -33,7 +43,20 @@ Run: `npm --prefix web/app test` (all, about 40 s) or `npx vitest run test/<path
 
 ## Slow crypto
 
-The lock tests run PBKDF2. Pass a low `iterations` value through the parameter the code takes (`key-crypto.ts`). `lock.test.ts` has one test at 15 s: do not copy it.
+The vault runs PBKDF2 with 600000 rounds. `vault.ts` has no parameter for it, so lower it at the WebCrypto edge:
+
+- `unlockTestVault()` in `beforeAll` already does this. Use it in any test that only needs an open vault.
+- A test of the lock or the vault itself calls `fastPasswordKeys()` from `test/helpers.ts` in `beforeEach` and restores it in `afterEach`. It returns the spy, so a test can still assert the code asked for 600000 rounds. See `vault.test.ts`.
+- If the first test in a file is slow, the time is module loading. Import the screen once in `beforeAll`. See `lock.test.ts`.
+
+Never raise a test timeout to make a slow test pass.
+
+## Assert the value
+
+- A list holds an item: `expect(hits.map((h) => h.path)).toContain("topics/fit.md")`, not `.some(...)` then `toBe(true)`.
+- Two byte arrays differ: `expect(a.iv).not.toEqual(b.iv)`.
+- A button is ready: `expect(button).toBeEnabled()`. Something is gone: `expect(screen.queryByRole(...)).toBeNull()`.
+- A function that returns a boolean (`hasKey()`, `isUnlocked()`) keeps `toBe(true)`. The boolean is the value.
 
 ## Golden JSON
 
@@ -43,6 +66,6 @@ The lock tests run PBKDF2. Pass a low `iterations` value through the parameter t
 
 `it.each([...])("name $field", (row) => ...)` for same-steps-different-input. Never `forEach(it)` inside a test.
 
-## Flaky test to know about
+## Ids and dates in results
 
-`test/lib/sync/writes.test.ts` "Undo after it landed queues /api/undo" fails about 1 run in 5: it waits 30 ms with a real timer for the outbox to flush. Fix with fake timers or by awaiting the flush.
+Pass a fixed id where the code takes one (`enqueue(kind, payload, id)`) and a fixed ISO string in fake replies. No `new Date()` or `crypto.randomUUID()` in a test.
