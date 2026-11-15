@@ -83,7 +83,7 @@ Never absorb, triage, loop or outcome.
 | Markdown files are the source of truth. The index and reports are caches. | Plain text outlives any app. |
 | OKF-style frontmatter. `type` required. `generated` on helper writes; only the owner adds `verified`. | The owner sees what a helper wrote. |
 | One file per subject. Two folder levels at most. | The owner finds things by name. |
-| A note (subject, project, goal, decision) belongs to 1 to 3 life areas, such as Health or Career. | Much of life spans more than one area. |
+| A note (subject, project, goal, decision) belongs to 1 or more life areas, such as Health or Career. | Much of life spans more than one area. |
 | The 12 types in `.schema/types.yaml`, plus Goal (`goals/`) and Decision (`decisions/`). | Goals and choices need their own home. |
 | The brain holds every to-do. A client's own task tool gets a link, never a copy. | Two task homes drift. |
 | Local and free. No paid AI. | No bill and no service can lock the owner out. |

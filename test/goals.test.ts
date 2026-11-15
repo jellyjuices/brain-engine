@@ -43,26 +43,26 @@ test("Goal and Decision status, dates and sections are checked", () => {
   assert.match(decision, /missing section `# Options`/);
 });
 
-test("areas must list 1 to 3 areas where required", () => {
+test("areas must list at least 1 area where required", () => {
   const root = makeBrain();
   goal(root, "none", "areas: []");
   goal(root, "missing", "tags: []");
   goal(root, "four", "areas: [home, money, health, career]");
-  goal(root, "three", "areas: [home, money, health]");
+  goal(root, "six", "areas: [home, money, health, career, fitness, general]");
   goal(root, "ghost", "areas: [not-an-area]");
-  assert.match(messages(root, "goals/none.md"), /must list 1 to 3 areas, not 0/);
-  assert.match(messages(root, "goals/missing.md"), /must list 1 to 3 areas, not 0/);
-  assert.match(messages(root, "goals/four.md"), /must list 1 to 3 areas, not 4/);
-  assert.equal(messages(root, "goals/three.md"), "");
+  assert.match(messages(root, "goals/none.md"), /must list at least 1 area/);
+  assert.match(messages(root, "goals/missing.md"), /must list at least 1 area/);
+  assert.equal(messages(root, "goals/four.md"), "");
+  assert.equal(messages(root, "goals/six.md"), "");
   assert.match(messages(root, "goals/ghost.md"), /area `not-an-area` has no note in areas\//);
 });
 
 test("areas on other types is checked only when present", () => {
   const root = makeBrain();
   write(root, "topics/plain.md", "type: Topic\ntitle: Plain\ndescription: No areas.", "# Notes\n");
-  write(root, "topics/wide.md", "type: Topic\ntitle: Wide\ndescription: Too many.\nareas: [home, money, health, career]", "# Notes\n");
+  write(root, "topics/wide.md", "type: Topic\ntitle: Wide\ndescription: Many areas.\nareas: [home, money, health, career]", "# Notes\n");
   assert.equal(messages(root, "topics/plain.md"), "");
-  assert.match(messages(root, "topics/wide.md"), /not 4/);
+  assert.equal(messages(root, "topics/wide.md"), "");
 });
 
 test("the old single area still reads, and areas wins when both exist", () => {
