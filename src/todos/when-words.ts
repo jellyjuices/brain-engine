@@ -51,6 +51,6 @@ export function personNamed(notes: Note[], name: string): Note | undefined {
 /** The one non-person subject note with this title (a thing, topic, project, place, group or event). */
 export function subjectTitled(notes: Note[], title: string): Note | undefined {
   const want = title.trim().toLowerCase();
-  const hits = notes.filter((n) => !["Person", "Capture", "Lens", "Daily", "Area"].includes(typeOf(n) ?? "") && !n.path.startsWith(".") && titleOf(n).toLowerCase() === want);
+  const hits = notes.filter((n) => !["Person", "Capture", "Lens", "Journal", "Area"].includes(typeOf(n) ?? "") && !n.path.startsWith(".") && titleOf(n).toLowerCase() === want);
   return hits.length === 1 ? hits[0] : undefined;
 }

@@ -11,7 +11,7 @@ import { loopsIn, type Loop } from "../todos/todos.ts";
 import { relationsOf, todosNaming } from "../core/index-links.ts";
 
 export const SUBJECT_TYPES = ["Area", "Project", "Person", "Group", "Place", "Thing", "Topic", "Event", "Note", "Lens"];
-const NOT_LINKED = ["Area", "Lens", "Daily", "Capture"];
+const NOT_LINKED = ["Area", "Lens", "Journal", "Capture"];
 
 export interface CardTodo { text: string; path: string; noteTitle: string; due?: string }
 export interface CardLine { date: string; text: string; path: string }

@@ -23,7 +23,7 @@ export const SUBJECT_TYPES = [
   "Note",
   "Lens",
 ];
-const NOT_LINKED = ["Area", "Lens", "Daily", "Capture"];
+const NOT_LINKED = ["Area", "Lens", "Journal", "Capture"];
 const RANK = [
   "Person",
   "Group",
