@@ -14,7 +14,7 @@ import {
 import { createRoot } from "react-dom/client";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
-import { TabBar } from "@/components/tab-bar/tab-bar.tsx";
+import { TabBar } from "@/shell/tab-bar/tab-bar.tsx";
 import { trackViewport } from "@/lib/platform/viewport.ts";
 
 const KINDS = [

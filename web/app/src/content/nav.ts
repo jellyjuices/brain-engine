@@ -1,5 +1,10 @@
 export const nav = {
   main: "Main",
+  todos: "To-dos",
+  goals: "Goals",
+  sort: "Sort",
+  toSort: (count: number) => `${count} to sort`,
+  skipTo: (place: string) => `Skip to ${place}`,
   today: "Today",
   find: "Find",
   add: "Add",
