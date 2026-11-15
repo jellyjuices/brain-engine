@@ -43,6 +43,7 @@ The brain is meant to run on one always-on Mac, such as a Mac mini. It holds the
 - Every day at 07:00 the daily job indexes, tags and checks the notes, writes `.reports/today.md` in the brain folder, and commits the notes with `git add -A`. If the Mac is asleep, it runs on wake.
 - `launchd/status.sh` shows which jobs are loaded and whether `brain serve` answers.
 - Logs: `~/Library/Logs/brain/`.
+- A push runs the gates first. `.githooks/pre-push` runs `npm run gates` and stops the push if a gate fails. Turn it on once per clone with `git config core.hooksPath .githooks`.
 - `npm run gates` at the root runs every test, typecheck, lint and size gate for every package, plus the privacy grep. The grep reads private words from `~/.config/brain/privacy-words.txt` (template: `config/privacy-words.example.txt`).
 - The notes' git history is the backup. There are no backup tarballs or backup folders.
 
