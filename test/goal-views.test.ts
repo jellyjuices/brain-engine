@@ -43,7 +43,7 @@ test("percent is 0 with nothing, partial with some, 100 with all done; computed 
   const v = goalView(loadAll(root), RUN)!;
   assert.deepEqual([v.done, v.total, v.percent], [2, 6, 33]);
   assert.equal(v.toward.length, 2);
-  assert.ok(!readFileSync(join(root, RUN), "utf8").includes("percent"));
+  assert.doesNotMatch(readFileSync(join(root, RUN), "utf8"), /percent/);
   goal(root, "run-far", `- [x] Run 5 km · done 2026-03-05\n- [x] Run 3 km · done 2026-03-01`);
   todos(root, ["- [x] Buy shoes · toward [Run](../goals/run-far.md) · done 2026-04-02"]);
   assert.equal(percent(root), 100);

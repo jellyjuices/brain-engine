@@ -35,10 +35,10 @@ test("T6: the dry run lists changes and writes nothing", () => {
   const r = migrateAreasGeneral(root);
   assert.equal(r.wrote, false);
   assert.equal(read(root, "projects/garden.md"), before);
-  assert.ok(!existsSync(join(root, "areas/general.md")));
-  assert.ok(existsSync(join(root, "inbox/2026-11-01-sam.md")));
+  assert.equal(existsSync(join(root, "areas/general.md")), false);
+  assert.equal(existsSync(join(root, "inbox/2026-11-01-sam.md")), true);
   const kinds = new Set(r.changes.map((c) => c.kind));
-  for (const k of ["area", "general", "capture", "heading", "token"]) assert.ok(kinds.has(k as never), k);
+  for (const k of ["area", "general", "capture", "heading", "token"]) assert.equal(kinds.has(k as never), true, k);
 });
 
 test("T6: --write applies the 4 changes and keeps unknown tokens", () => {
@@ -59,8 +59,8 @@ test("T6: --write applies the 4 changes and keeps unknown tokens", () => {
   const general = read(root, "areas/general.md");
   assert.match(general, /^title: General$/m);
   assert.match(general, /^- \[ \] Ask Sam Rivers about the bikes · with \[Sam Rivers\]\(\.\.\/people\/sam-rivers\.md\)$/m);
-  assert.ok(!existsSync(join(root, "inbox/2026-11-01-sam.md")));
-  assert.ok(existsSync(join(root, "inbox/2026-11-02-tagged.md")));
+  assert.equal(existsSync(join(root, "inbox/2026-11-01-sam.md")), false);
+  assert.equal(existsSync(join(root, "inbox/2026-11-02-tagged.md")), true);
 });
 
 test("T6: the owner lists name a goal with no areas and undated to-dos", () => {

@@ -32,7 +32,7 @@ test("T4: the tool list matches its snapshot (set UPDATE_SNAPSHOT=1 to rewrite i
 test("T4: one tool per route, and owner-only routes have none", () => {
   assert.deepEqual(TOOLS.map((t) => t.route), ROUTES.filter((r) => !r.owner));
   const names = new Set(TOOLS.map((t) => t.def.name));
-  for (const r of ROUTES.filter((x) => x.owner)) assert.ok(!names.has(r.tool), r.tool);
+  for (const r of ROUTES.filter((x) => x.owner)) assert.equal(names.has(r.tool), false, r.tool);
   for (const t of TOOLS) assert.equal(t.def.annotations.readOnlyHint, t.route.method === "GET", t.def.name);
 });
 
@@ -55,7 +55,7 @@ test("T4: initialize, tools/list, then tools/call, end to end", () => withApi(as
   assert.equal((await rpc(a, { method: "notifications/initialized" }, agent)).status, 202);
   const list = await rpc(a, { id: 2, method: "tools/list" }, agent, { "MCP-Protocol-Version": LEGACY[0] });
   assert.equal(list.data.result.tools.length, TOOLS.length);
-  assert.ok(!list.data.result.tools.some((t: { name: string }) => t.name === "agent_token"));
+  assert.deepEqual(list.data.result.tools.filter((t: { name: string }) => t.name === "agent_token"), []);
   const call = await rpc(a, { id: 3, method: "tools/call", params: { name: "find", arguments: { q: "cedar" } } }, agent);
   assert.equal(call.data.result.isError, false);
   assert.match(JSON.parse(call.data.result.content[0].text).hits[0].path, /garden-shed/);
@@ -90,7 +90,8 @@ test("T4: the agent rate limit applies to /mcp too", () => withApi(async (a) => 
   assert.equal((await rpc(a, { id: 1, method: "ping" }, agent)).status, 200);
   const r = await rpc(a, { id: 2, method: "ping" }, agent);
   assert.equal(r.status, 429);
-  assert.ok(Number(r.headers.get("retry-after")) > 0);
+  const retryAfter = Number(r.headers.get("retry-after"));
+  assert.ok(retryAfter > 0, `got ${retryAfter}`);
 }, { agentRate: 1 }));
 
 test("T4: a too-large result is cut at 4 KB with a note to narrow the query", () => withApi(async (a) => {
@@ -98,7 +99,8 @@ test("T4: a too-large result is cut at 4 KB with a note to narrow the query", ()
   for (let i = 0; i < 60; i++) writeFileSync(join(a.root, `projects/made-up-${i}.md`), `---\ntype: Project\ntitle: Made-up project ${i}\ndescription: A long made-up description for project ${i}.\n---\n\n# To-dos\n`);
   const r = await rpc(a, { id: 1, method: "tools/call", params: { name: "list", arguments: { type: "Project" } } }, agent);
   const text = r.data.result.content[0].text as string;
-  assert.ok(Buffer.byteLength(text) <= MAX_RESULT);
-  assert.ok(text.endsWith(CUT_NOTE));
+  const size = Buffer.byteLength(text);
+  assert.ok(size <= MAX_RESULT, `got ${size} bytes`);
+  assert.equal(text.endsWith(CUT_NOTE), true, `missing ${CUT_NOTE}`);
   assert.equal(capText({ small: true }), `{"small":true}`);
 }));

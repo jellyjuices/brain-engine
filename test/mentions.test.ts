@@ -40,10 +40,10 @@ test("check ignores the inbox and the archive for plain mentions", () => {
 
 test("check warns once for a name with no note in 2+ subjects, and guesses the kind", () => {
   const all = Object.values(warns(brain())).flat();
-  assert.ok(all.some((m) => m === "Priya shows in 2 notes, no note. Make a Person?"));
-  assert.ok(all.some((m) => /^Tessa shows in 2 notes, no note\. Make a Person\?/.test(m)));
-  assert.ok(!all.some((m) => /^Tessa Park/.test(m))); // only 1 note
-  assert.ok(!all.some((m) => /^(Omar|The|Weather|Mon)\b.*no note/.test(m)));
+  assert.deepEqual(["Priya shows in 2 notes, no note. Make a Person?"].filter((v) => !all.includes(v)), []);
+  assert.match(all.join("\n"), /^Tessa shows in 2 notes, no note\. Make a Person\?/m);
+  assert.deepEqual(all.filter((m) => /^Tessa Park/.test(m)), []); // only 1 note
+  assert.deepEqual(all.filter((m) => /^(Omar|The|Weather|Mon)\b.*no note/.test(m)), []);
 });
 
 test("a name that is more than a first name asks who, where, doing, have, or know", () => {
@@ -51,7 +51,7 @@ test("a name that is more than a first name asks who, where, doing, have, or kno
   note(root, "projects/three.md", "Project", "Three", "# Notes\n\n- 2026-11-03 · we visit Art Fundamentals.\n");
   note(root, "projects/four.md", "Project", "Four", "# Notes\n\n- 2026-11-03 · we joined Art Fundamentals.\n");
   const all = Object.values(warns(root)).flat();
-  assert.ok(all.includes("Art Fundamentals shows in 2 notes, no note. Make one? Who, where, doing, have, or know?"));
+  assert.deepEqual(["Art Fundamentals shows in 2 notes, no note. Make one? Who, where, doing, have, or know?"].filter((w) => !all.includes(w)), []);
 });
 
 test("each warning kind is capped at 10 lines", () => {
@@ -73,6 +73,6 @@ test("languages and place words are not guessed as a Person", () => {
   const root = makeBrain();
   for (const n of ["a", "b"]) note(root, `projects/${n}.md`, "Project", `P${n}`, "# Notes\n\n- 2026-11-01 · Talk to Mac and Toronto folks, my English is fine, French too.\n");
   const all = Object.values(warns(root)).flat();
-  assert.ok(!all.some((m) => /^(Mac|English|French)\b/.test(m)));
-  assert.ok(all.includes("Toronto shows in 2 notes, no note. Make one? Who, where, doing, have, or know?"));
+  assert.deepEqual(all.filter((m) => /^(Mac|English|French)\b/.test(m)), []);
+  assert.deepEqual(["Toronto shows in 2 notes, no note. Make one? Who, where, doing, have, or know?"].filter((w) => !all.includes(w)), []);
 });

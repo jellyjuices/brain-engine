@@ -35,7 +35,7 @@ test("the feed is all-day iCalendar with stable ids", () => {
 test("text is escaped and long lines fold without breaking characters", () => {
   assert.equal(icsText("a;b,c\\d\ne"), "a\\;b\\,c\\\\d\\ne");
   const folded = foldLine("SUMMARY:" + "é".repeat(60));
-  for (const part of folded.split("\r\n")) assert.ok(Buffer.byteLength(part) <= 75);
+  for (const part of folded.split("\r\n")) assert.ok(Buffer.byteLength(part) <= 75, `got ${Buffer.byteLength(part)} bytes`);
   assert.equal(folded.replaceAll("\r\n ", ""), "SUMMARY:" + "é".repeat(60));
 });
 

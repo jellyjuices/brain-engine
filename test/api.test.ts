@@ -64,7 +64,7 @@ test("sort: a capture split into two subjects is one log entry, and one undo rev
   assert.equal(sorted.status, 200);
   assert.deepEqual(sorted.data.filed, [SHED, DANA]);
   assert.equal(sorted.data.deleted, cap.data.path);
-  assert.ok(!existsSync(join(a.root, cap.data.path)));
+  assert.equal(existsSync(join(a.root, cap.data.path)), false);
   assert.match(await body(a, SHED), /paint the shed · someday/);
   assert.match(await body(a, DANA), /lent us a ladder/);
   const log = await a.call("GET", "/api/log?n=1");
@@ -101,17 +101,17 @@ test("make a note from a type, link it, delete it to the archive, and undo the d
   assert.equal((await a.call("GET", `/api/notes/${made.data.path}`)).status, 404);
   await a.call("POST", "/api/undo", {});
   assert.equal((await a.call("GET", `/api/notes/${made.data.path}`)).data.title, "Cedar wood");
-  assert.ok(!existsSync(join(a.root, gone.data.archived)));
+  assert.equal(existsSync(join(a.root, gone.data.archived)), false);
 }));
 
 test("find gives hits and the card; a write that breaks a link reports it in check", () => withApi(async (a) => {
   const found = await a.call("GET", "/api/find?q=Garden%20shed");
   assert.equal(found.data.card.subject.path, SHED);
-  assert.ok(found.data.hits.some((h: { path: string }) => h.path === SHED));
+  assert.deepEqual([SHED].filter((p) => !found.data.hits.map((h: { path: string }) => h.path).includes(p)), []);
   const note = await a.call("GET", `/api/notes/${DANA}`);
   const edit = await a.call("PUT", `/api/notes/${DANA}`, { body: `${note.data.body}\n- see [Nobody](nobody.md)\n`, base: note.data.hash });
   assert.equal(edit.status, 200);
-  assert.ok(edit.data.check.some((i: { path: string; level: string; message: string }) => i.path === DANA && i.level === "error" && /broken link/.test(i.message)));
+  assert.deepEqual(edit.data.check.filter((i: { path: string; level: string; message: string }) => i.path === DANA && i.level === "error" && /broken link/.test(i.message)).map((i: { path: string }) => i.path), [DANA]);
   const clean = await a.call("POST", "/api/add", { client_id: "k1", text: "note: likes tea", about: [SHED] });
   assert.equal(clean.data.check, undefined);
 }));

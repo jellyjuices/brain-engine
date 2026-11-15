@@ -40,8 +40,8 @@ const missed = (results: Map<Question, boolean>, groups: Question["group"][]) =>
 test("T9: the question set has 30 questions in every group", () => {
   const all = questions();
   assert.equal(all.length, 30);
-  for (const group of ["words", "typo", "part", "spanish", "japanese", "meaning"] as const) assert.ok(all.some((q) => q.group === group), group);
-  assert.ok(all.some((q) => q.group === "japanese" && [...q.q].length === 2));
+  for (const group of ["words", "typo", "part", "spanish", "japanese", "meaning"] as const) assert.deepEqual([group].filter((g) => !all.map((q) => q.group).includes(g)), [], group);
+  assert.notEqual(all.find((q) => q.group === "japanese" && [...q.q].length === 2), undefined);
 });
 
 test("T9: fused recall at 5 beats words only; every typo, Spanish and Japanese question is found", async (t) => {
@@ -62,7 +62,7 @@ test("T9: a typo ranks the close word above a word that only shares trigrams", a
   assert.equal(result.notes[0]?.path, "topics/health-log.md");
   const strings = findEntries(root, "dentst", {}, { model: "none" }).hits.map((hit) => hit.entry.subject);
   const at = (path: string) => (strings.includes(path) ? strings.indexOf(path) : Infinity);
-  assert.ok(at("topics/health-log.md") < at("topics/identity.md"));
+  assert.ok(at("topics/health-log.md") < at("topics/identity.md"), `health-log at ${at("topics/health-log.md")}, identity at ${at("topics/identity.md")}`);
 });
 
 test("T9: the name tier stays on top with meaning in play", async () => {
@@ -71,6 +71,6 @@ test("T9: the name tier stays on top with meaning in play", async () => {
   for (const [q, path] of names) {
     const result = await find(root, q, {}, fakeEmbedder);
     assert.equal(result.notes[0]?.path, path, q);
-    assert.ok((result.hits[0]?.tier ?? NO_NAME) < NO_NAME, q);
+    assert.ok((result.hits[0]?.tier ?? NO_NAME) < NO_NAME, `${q}: tier ${result.hits[0]?.tier}`);
   }
 });

@@ -43,7 +43,7 @@ test("pull lands each capture once and acks it", async () => {
     assert.equal(r.pulled, 2);
     assert.equal(readdirSync(join(root, "inbox")).length, 2);
     assert.deepEqual(fake.acks, [["a1", "a2"]]);
-    assert.ok(fake.tokens.every((t) => t === "tok"));
+    assert.deepEqual(fake.tokens.filter((t) => t !== "tok"), []);
     assert.deepEqual(loadAll(root).filter((n) => n.meta.client_id).map((n) => n.meta.client_id).sort(), ["a1", "a2"]);
   } finally {
     fake.server.close();

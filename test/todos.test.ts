@@ -121,7 +121,8 @@ test("done on a repeating loop ticks it and adds the next one", () => {
   const root = fixture();
   addLoop(root, "areas/health.md", { text: "Refill meds", due: "2000-01-01", every: "week" });
   const l = completeLoop(root, "refill");
-  assert.ok(l.next && l.next > "2000-01-01");
+  assert.equal(typeof l.next, "string");
+  assert.ok((l.next ?? "") > "2000-01-01", `got ${l.next}`);
   const open = allLoops(loadAll(root), { done: false }).filter((x) => x.text === "Refill meds");
   assert.equal(open.length, 1);
   assert.equal(open[0].due, l.next);

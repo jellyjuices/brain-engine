@@ -36,19 +36,21 @@ test("agent token: calls past the rate limit get 429 with Retry-After; the owner
   assert.equal((await a.call("GET", "/api/log", undefined, agent)).status, 200);
   const third = await a.call("GET", "/api/log", undefined, agent);
   assert.equal(third.status, 429);
-  assert.ok(Number(third.headers.get("retry-after")) > 0);
+  const retryAfter = Number(third.headers.get("retry-after"));
+  assert.ok(retryAfter > 0, `got ${retryAfter}`);
   for (let i = 0; i < 4; i++) assert.equal((await a.call("GET", "/api/log")).status, 200);
 }, { agentRate: 2 }));
 
 test("rate limit opens again after the minute", () => {
   const limit = new RateLimit(1);
   assert.equal(limit.take(1_000), 0);
-  assert.ok(limit.take(2_000) > 0);
+  const wait = limit.take(2_000);
+  assert.ok(wait > 0, `got ${wait}`);
   assert.equal(limit.take(61_001), 0);
 });
 
 test("every route has a tool name, and no two share one", () => {
   const tools = ROUTES.map((r) => r.tool);
   assert.equal(new Set(tools).size, tools.length);
-  assert.ok(ROUTES.every((r) => r.summary.length > 0));
+  assert.deepEqual(ROUTES.filter((r) => r.summary.length === 0).map((r) => r.tool), []);
 });

@@ -118,12 +118,12 @@ test("intake save refuses a lens set to skip", () => {
 test("check warns when a headline lens holds long answers, and errors on bad labels", () => {
   const root = fixture();
   saveLensAnswer(root, "wellbeing", "x".repeat(200));
-  assert.ok(issues(root, "me/wellbeing.md").some((m) => /set to headline/.test(m)));
+  assert.match(issues(root, "me/wellbeing.md").join("\n"), /set to headline/);
   writeFileSync(join(root, "me", "bad.md"), "---\ntype: Lens\ntitle: Bad\ndescription: Bad.\nlens: weather\nprivacy: secret\nstatus: done\n---\n\nx\n");
   const bad = issues(root, "me/bad.md");
-  assert.ok(bad.some((m) => /unknown lens/.test(m)));
-  assert.ok(bad.some((m) => /unknown privacy/.test(m)));
-  assert.ok(bad.some((m) => /unknown status/.test(m)));
+  assert.match(bad.join("\n"), /unknown lens/);
+  assert.match(bad.join("\n"), /unknown privacy/);
+  assert.match(bad.join("\n"), /unknown status/);
 });
 
 test("intake status follows stages, threads and open loops", () => {
@@ -199,7 +199,7 @@ test("save refuses a quote or raw answer on a headline lens, and a long quote", 
 test("check asks to distill a long answer on a full lens", () => {
   const root = fixture();
   saveLensAnswer(root, "day", "y".repeat(260));
-  assert.ok(issues(root, "me/day.md").some((m) => /Distill to one line/.test(m)));
+  assert.match(issues(root, "me/day.md").join("\n"), /Distill to one line/);
 });
 
 test("redact removes the line, its quote, the raw answer and matching threads", () => {
@@ -270,7 +270,8 @@ test("a fixture intake session makes a relation and nothing lands in inbox", () 
   assert.match(end.text.join("\n"), /brain undo/);
   assert.equal(endSummary(root).text[0], "No new subjects, facts or to-dos this session."); // cleared
   // each edit is logged so brain undo reverses it
-  assert.ok(readLog(root).filter((e) => e.undo).length >= 3);
+  const undoable = readLog(root).filter((e) => e.undo).length;
+  assert.ok(undoable >= 3, `got ${undoable}`);
   undo(root);
   assert.doesNotMatch(readFileSync(join(root, "projects", "acme.md"), "utf8"), /Send Omar/);
 });

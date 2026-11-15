@@ -64,8 +64,10 @@ test("journal: a sort files bits in two subjects with links back, keeps the note
   assert.equal(r.status, 200);
   assert.deepEqual([r.data.filed, r.data.kept, r.data.deleted], [[SHED, DANA], ONE, undefined]);
   const link = `from [Woke up early, and the shed](../${ONE})`;
-  assert.ok(file(a.root, SHED).includes(`- [ ] fix the shed roof leak · someday · ${link}`));
-  assert.ok(file(a.root, DANA).includes(`- 2026-11-14 · feeling · grateful she lent the ladder · about the ladder · ${link}`));
+  const shedLine = `- [ ] fix the shed roof leak · someday · ${link}`;
+  const danaLine = `- 2026-11-14 · feeling · grateful she lent the ladder · about the ladder · ${link}`;
+  assert.equal(file(a.root, SHED).includes(shedLine), true, `missing ${shedLine}`);
+  assert.equal(file(a.root, DANA).includes(danaLine), true, `missing ${danaLine}`);
   const n = parse(file(a.root, ONE));
   assert.equal(n.body, `${MORNING}\n`);
   assert.match(String(n.meta.sorted), /^\d{4}-\d{2}-\d{2}$/);
@@ -84,8 +86,8 @@ test("journal: a title edit keeps the link back working", () => withApi(async (a
   writeFileSync(join(a.root, ONE), file(a.root, ONE).replace("title: Woke up early, and the shed", "title: Leaky roof morning"));
   const shown = await a.call("GET", `/api/notes/${ONE}`);
   assert.equal(shown.data.title, "Leaky roof morning");
-  assert.ok(file(a.root, SHED).includes(`](../${ONE})`));
-  assert.ok(JSON.stringify(shown.data.backlinks).includes(SHED));
+  assert.equal(file(a.root, SHED).includes(`](../${ONE})`), true, `missing link to ${ONE}`);
+  assert.equal(JSON.stringify(shown.data.backlinks).includes(SHED), true, `missing backlink ${SHED}`);
 }));
 
 test("journal: brain sort --journal lists what waits, and brain sort <journal> --bits sorts it", () => withApi(async (a) => {
@@ -94,7 +96,8 @@ test("journal: brain sort --journal lists what waits, and brain sort <journal> -
   assert.deepEqual(JSON.parse(brain("sort", "--journal", "--json").stdout).map((w: { path: string }) => w.path), [ONE, TWO]);
   const r = brain("sort", TWO, "--bits", JSON.stringify([{ into: DANA, when: "note", text: "read two chapters" }]));
   assert.equal(r.status, 0, r.stderr);
-  assert.ok(file(a.root, DANA).includes(`read two chapters · from [Quiet night. Read two chapters](../${TWO})`));
+  const chaptersLine = `read two chapters · from [Quiet night. Read two chapters](../${TWO})`;
+  assert.equal(file(a.root, DANA).includes(chaptersLine), true, `missing ${chaptersLine}`);
   assert.notEqual(brain("sort", TWO, "--bits", "[]").status, 0);
 }));
 
@@ -103,6 +106,6 @@ test("journal: a plain capture is still deleted on sort", () => withApi(async (a
   const cap = await a.call("POST", "/api/add", { client_id: "c2", text: "oil the hinges" });
   const r = await a.call("POST", "/api/sort", { path: cap.data.path, into: SHED, when: "someday" });
   assert.equal(r.data.deleted, cap.data.path);
-  assert.ok(!existsSync(join(a.root, cap.data.path)));
+  assert.equal(existsSync(join(a.root, cap.data.path)), false);
   assert.doesNotMatch(file(a.root, SHED), /oil the hinges · .*from /);
 }));
