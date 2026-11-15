@@ -55,6 +55,7 @@ function autoSort(c: CliContext): number {
 export async function sortCommand(c: CliContext): Promise<number> {
   const { root, args, flags, json, report } = c;
   if (flags.auto) return autoSort(c);
+  if (flags.journal || args[0]?.startsWith("journal/")) return (await import("./cli-journal.ts")).journalSort(c);
   const { absorb, planAbsorb } = await import("../todos/absorb.ts");
   if (args[0]) {
     if (!flags.into) return fail("Use: brain sort <inbox note path> --into <note path>");
