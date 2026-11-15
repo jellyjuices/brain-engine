@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { XIcon } from '@phosphor-icons/react'
-import { areaVar } from '../../lib/area-mix.ts'
+import { areaVar, splitAreas } from '../../lib/area-mix.ts'
 import './chip.css'
 
 export type ChipProps = {
@@ -15,17 +15,19 @@ export type ChipProps = {
 
 export const Chip = ({ label, variant = 'tag', onClick, onRemove, removeLabel, disabled, areas }: ChipProps) => {
   const Body = onClick ? 'button' : 'span'
+  const dots = splitAreas(areas)
   return (
     <span className={clsx('chip', `chip--${variant}`, disabled && 'is-disabled')}>
       <Body
         className={onClick ? "chip-label hit-area" : "chip-label"}
         {...(onClick ? { type: 'button' as const, onClick, disabled } : {})}
       >
-        {areas && areas.length > 0 && (
+        {dots.shown.length > 0 && (
           <span className="chip-dots" aria-hidden>
-            {areas.map((a) => (
+            {dots.shown.map((a) => (
               <span key={a} className="chip-dot" style={{ background: areaVar(a, 'accent') }} />
             ))}
+            {dots.extra > 0 && <span className="chip-dots-extra">+{dots.extra}</span>}
           </span>
         )}
         {label}

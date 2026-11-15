@@ -7,7 +7,8 @@
     "contrast": "node scripts/check-contrast.ts",
     "storybook": "npm run tokens && storybook dev -p 6006",
     "build-storybook": "npm run tokens && storybook build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --disable-warning=ExperimentalWarning --test 'src/lib/*.test.ts'"
   },
   "dependencies": {
     "@fontsource-variable/atkinson-hyperlegible-next": "^5.3.0",

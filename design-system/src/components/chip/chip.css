@@ -45,6 +45,12 @@ button.chip-label,
   box-shadow: 0 0 0 var(--size-hair) var(--background-secondary);
 }
 
+.chip-dots-extra {
+  margin-left: var(--space-2xs);
+  font-family: var(--font-number);
+  font-size: var(--font-size-number-xs);
+}
+
 .chip-dot + .chip-dot {
   margin-left: calc(var(--size-dot) / -3);
 }

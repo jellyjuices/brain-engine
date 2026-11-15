@@ -241,6 +241,8 @@
   --size-dot: 8px;
   --size-icon-sm: 18px;
   --size-bar: 10px;
+  --size-bar-thick: 24px;
+  --size-panel: 26rem;
   --size-ring: 7rem;
   --size-ring-stroke: 10px;
   --size-toast-shape: 2rem;
@@ -292,6 +294,9 @@
   --radius-input: var(--radius-md);
   --radius-card: var(--radius-lg);
   --radius-sheet: var(--radius-xl);
+  --bar-goal: var(--size-bar-thick);
+  --bar-step: var(--size-bar);
+  --panel-width: var(--size-panel);
   --shape-plus: var(--shape-cookie);
   --shape-toast-success: var(--shape-cookie);
   --shape-toast-error: var(--shape-burst);
@@ -349,6 +354,7 @@
   --status-late: var(--color-amber-300);
   --status-done: var(--color-seafoam-400);
   --status-check: var(--color-yellow-300);
+  --status-waiting: var(--color-sky-300);
   --action-sort: var(--color-seafoam-300);
   --action-drop: var(--color-coral-400);
   --action-ink: var(--color-neutral-900);
@@ -473,6 +479,7 @@
   --status-late: var(--color-amber-700);
   --status-done: var(--color-seafoam-600);
   --status-check: var(--color-yellow-700);
+  --status-waiting: var(--color-sky-700);
   --action-sort: var(--color-seafoam-700);
   --action-drop: var(--color-coral-700);
   --action-ink: var(--color-neutral-0);
