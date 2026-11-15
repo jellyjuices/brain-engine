@@ -1,5 +1,7 @@
 import { useRef, useState, type PointerEvent } from 'react'
 
+const WIDE = '(min-width: 48rem)'
+
 export const useDragClose = (onClose: () => void) => {
   const [offset, setOffset] = useState(0)
   const [dragging, setDragging] = useState(false)
@@ -7,6 +9,7 @@ export const useDragClose = (onClose: () => void) => {
 
   const onPointerDown = (e: PointerEvent<HTMLElement>) => {
     if (e.button !== 0 || (e.target as Element).closest('button, a, input')) return
+    if (window.matchMedia(WIDE).matches) return
     const sheet = e.currentTarget.closest<HTMLElement>('[role="dialog"]')
     start.current = { y: e.clientY, t: e.timeStamp, height: sheet?.offsetHeight ?? 1 }
     setDragging(true)

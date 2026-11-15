@@ -4,14 +4,18 @@ import './banner.css'
 
 export type BannerProps = {
   message: string
+  count?: number
   actionLabel?: string
   onAction?: () => void
 }
 
-export const Banner = ({ message, actionLabel, onAction }: BannerProps) => (
+export const Banner = ({ message, count, actionLabel, onAction }: BannerProps) => (
   <div className="banner" role="status">
     <TrayIcon aria-hidden className="banner-icon" />
-    <p className="banner-message">{message}</p>
+    <p className="banner-message">
+      {count !== undefined && <span className="banner-count">{count}</span>}
+      {message}
+    </p>
     {actionLabel && (
       <Button variant="primary" size="sm" onClick={onAction}>
         {actionLabel}

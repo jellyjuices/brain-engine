@@ -1,53 +1,94 @@
 import clsx from 'clsx'
-import { useId, useRef } from 'react'
+import { useId, useLayoutEffect, useRef, type KeyboardEvent } from 'react'
 import { Checkbox } from 'radix-ui'
 import { CheckIcon, FunnelSimpleIcon, TrashIcon } from '@phosphor-icons/react'
-import { Chip } from '../chip/chip.tsx'
+import type { WhenChipProps } from '../when-chip/when-chip.tsx'
+import { TodoRowMeta, hasMeta } from './todo-row-meta.tsx'
+import { useLongPress } from './use-long-press.ts'
 import { useSwipe } from './use-swipe.ts'
 import './todo-row.css'
+import './todo-row-open.css'
 
 export type TodoRowProps = {
   title: string
   tag?: string
-  date?: string
-  late?: boolean
+  areas?: string[]
+  when?: WhenChipProps
+  people?: string[]
+  goal?: string
+  goalAreas?: string[]
   check?: boolean
+  checkLabel?: string
+  from?: string
+  markLabels?: { people?: string; goal?: string; from?: string }
   checked?: boolean
   disabled?: boolean
+  pressed?: boolean
+  defaultSwiped?: boolean
   onCheckedChange?: (checked: boolean) => void
+  onOpen?: () => void
+  onMenu?: () => void
   onSort?: () => void
   onDrop?: () => void
   sortLabel?: string
   dropLabel?: string
 }
 
-export const TodoRow = ({
-  title,
-  tag,
-  date,
-  late,
-  check,
-  checked,
-  disabled,
-  onCheckedChange,
-  onSort,
-  onDrop,
-  sortLabel = 'Sort',
-  dropLabel = 'Delete',
-}: TodoRowProps) => {
+const isMenuKey = (e: KeyboardEvent) => e.key === 'ContextMenu' || (e.shiftKey && e.key === 'F10')
+
+export const TodoRow = (props: TodoRowProps) => {
+  const { title, checked, disabled, pressed, defaultSwiped, onCheckedChange, onOpen, onMenu, onSort, onDrop } = props
+  const { sortLabel = 'Sort', dropLabel = 'Delete' } = props
   const id = useId()
-  const actions = [onSort && 'sort', onDrop && 'drop'].filter(Boolean).length
+  const actions = [onSort, onDrop].filter(Boolean).length
   const tray = useRef<HTMLDivElement>(null)
   const swipe = useSwipe(() => tray.current?.offsetWidth ?? 0, disabled || actions === 0)
+  const hold = useLongPress(disabled ? undefined : onMenu)
   const run = (fn?: () => void) => () => {
     swipe.close()
     fn?.()
   }
 
+  useLayoutEffect(() => {
+    if (defaultSwiped) swipe.open()
+  }, [defaultSwiped])
+
+  const both = <E,>(a: (e: E) => void, b: (e: E) => void) => (e: E) => {
+    a(e)
+    b(e)
+  }
+  const content = {
+    onPointerDown: both(swipe.handlers.onPointerDown, hold.handlers.onPointerDown),
+    onPointerMove: both(swipe.handlers.onPointerMove, hold.handlers.onPointerMove),
+    onPointerUp: both(swipe.handlers.onPointerUp, hold.handlers.onPointerUp),
+    onPointerCancel: both(swipe.handlers.onPointerCancel, hold.handlers.onPointerCancel),
+    onClickCapture: both(hold.handlers.onClickCapture, swipe.handlers.onClickCapture),
+  }
+
+  const onKeyDown = (e: KeyboardEvent<HTMLLIElement>) => {
+    if (e.key === 'Escape') swipe.close()
+    if (onMenu && !disabled && isMenuKey(e)) {
+      e.preventDefault()
+      onMenu()
+    }
+  }
+
   return (
     <li
-      className={clsx('todo-row', checked && 'is-done', disabled && 'is-disabled', swipe.dragging && 'is-dragging')}
-      onKeyDown={(e) => e.key === 'Escape' && swipe.close()}
+      className={clsx(
+        'todo-row',
+        checked && 'is-done',
+        disabled && 'is-disabled',
+        swipe.dragging && 'is-dragging',
+        (pressed || hold.holding) && 'is-pressed',
+        props.when?.status === 'overdue' && 'is-late',
+      )}
+      onKeyDown={onKeyDown}
+      onContextMenu={(e) => {
+        if (!onMenu || disabled) return
+        e.preventDefault()
+        onMenu()
+      }}
     >
       {actions > 0 && !disabled && (
         <div ref={tray} className="todo-row-actions">
@@ -65,12 +106,13 @@ export const TodoRow = ({
           )}
         </div>
       )}
-      <div className="todo-row-content" style={{ transform: `translateX(${swipe.offset}px)` }} {...swipe.handlers}>
+      <div className="todo-row-content" style={{ transform: `translateX(${swipe.offset}px)` }} {...content}>
         <Checkbox.Root
           id={id}
           className="todo-row-tick hit-area"
           checked={checked}
           disabled={disabled}
+          aria-label={onOpen ? title : undefined}
           onCheckedChange={(value) => onCheckedChange?.(value === true)}
         >
           <Checkbox.Indicator className="todo-row-mark">
@@ -78,16 +120,16 @@ export const TodoRow = ({
           </Checkbox.Indicator>
         </Checkbox.Root>
         <div className="todo-row-body">
-          <label htmlFor={id} className="todo-row-title">
-            {title}
-          </label>
-          {(tag || date || check) && (
-            <div className="todo-row-meta">
-              {tag && <Chip label={tag} disabled={disabled} />}
-              {check && <Chip label="check" variant="check" disabled={disabled} />}
-              {date && <span className={clsx('todo-row-date', late && 'is-late')}>{date}</span>}
-            </div>
+          {onOpen ? (
+            <button type="button" className="todo-row-title todo-row-open" onClick={onOpen} disabled={disabled}>
+              {title}
+            </button>
+          ) : (
+            <label htmlFor={id} className="todo-row-title">
+              {title}
+            </label>
           )}
+          {hasMeta(props) && <TodoRowMeta {...props} />}
         </div>
       </div>
     </li>
