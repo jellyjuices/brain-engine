@@ -53,7 +53,7 @@ const paths = (hits: { path: string }[]) => hits.map((hit) => hit.path);
 test("entries change only where the hash changed, and deleted entries go", async () => {
   const root = brain();
   const first = updateIndex(root);
-  assert.ok(first.entries.added > 10);
+  assert.ok(first.entries.added > 10, `got ${first.entries.added}`);
   assert.equal(await embedPending(root, fake), first.entries.added);
 
   write(root, "resources/flat.md", "Flat", "# Notes\n\nRent is due on the fifth. Keep a budget sheet.");
@@ -85,10 +85,10 @@ test("a meaning-only match joins the results, and the answer card cites it", asy
   const root = brain();
   updateIndex(root);
   await embedPending(root, fake);
-  assert.ok(!paths(search(root, "teeth")).includes("resources/health.md"));
+  assert.deepEqual(paths(search(root, "teeth")).filter((w) => w === "resources/health.md"), []);
   const result = await find(root, "teeth", {}, fake);
   assert.equal(result.meaning, "query");
-  assert.ok(paths(result.notes).includes("resources/health.md"));
+  assert.deepEqual(["resources/health.md"].filter((w) => !paths(result.notes).includes(w)), []);
   assert.equal(result.answer?.path, result.hits[0]?.entry.subject);
 });
 
@@ -141,10 +141,10 @@ test("a note with several areas is found by each area", () => {
   const root = brain();
   write(root, "resources/shared.md", "Shared plan", "# Notes\n\nPlan the shared garden.", "areas: [home, health]\n");
   for (const area of ["home", "health"]) {
-    assert.ok(paths(search(root, "garden", { area })).includes("resources/shared.md"), `search --area ${area}`);
-    assert.ok(paths(list(root, { area })).includes("resources/shared.md"), `list --area ${area}`);
+    assert.deepEqual(["resources/shared.md"].filter((w) => !paths(search(root, "garden", { area })).includes(w)), [], `search --area ${area}`);
+    assert.deepEqual(["resources/shared.md"].filter((w) => !paths(list(root, { area })).includes(w)), [], `list --area ${area}`);
   }
-  assert.ok(!paths(search(root, "garden", { area: "money" })).includes("resources/shared.md"));
+  assert.deepEqual(paths(search(root, "garden", { area: "money" })).filter((w) => w === "resources/shared.md"), []);
 });
 
 test("an old index rebuilds itself once, and --full rebuilds all", () => {

@@ -50,31 +50,31 @@ test("auth: health is open, other routes need the right token", () => withApi(as
   const health = await a.call("GET", "/api/health", undefined, null);
   assert.equal(health.status, 200);
   assert.equal(health.data.ok, true);
-  assert.ok(health.data.note_count >= 2);
+  assert.ok(health.data.note_count >= 2, `got ${health.data.note_count}`);
   assert.equal((await a.call("GET", "/api/today", undefined, null)).status, 401);
   assert.equal((await a.call("GET", "/api/today", undefined, "wrong")).status, 401);
   const bad = await a.call("GET", "/api/today", undefined, "wrong");
-  assert.ok(bad.data.error);
+  assert.match(bad.data.error, /\S/);
   assert.equal((await a.call("GET", "/api/today")).status, 200);
 }));
 
 test("search finds a note by words", () => withApi(async (a) => {
   const r = await a.call("GET", "/api/find?q=doctor&type=Project");
   assert.equal(r.status, 200);
-  assert.ok(r.data.hits.some((h: { path: string }) => h.path === "projects/visit.md"));
+  assert.deepEqual(["projects/visit.md"].filter((v) => !r.data.hits.map((h: { path: string }) => h.path).includes(v)), []);
   const card = await a.call("GET", "/api/card?q=Family%20doctor%20visit");
   assert.equal(card.data.card.subject.path, "projects/visit.md");
 }));
 
 test("notes since: returns changed notes with a hash, and one note with backlinks", () => withApi(async (a) => {
   const all = await a.call("GET", "/api/notes");
-  assert.ok(all.data.notes.every((n: { hash: string; body: string }) => n.hash.length === 64 && typeof n.body === "string"));
+  assert.deepEqual(all.data.notes.filter((n: { hash: string; body: string }) => !(n.hash.length === 64 && typeof n.body === "string")), []);
   const future = await a.call("GET", `/api/notes?since=${encodeURIComponent(new Date(Date.now() + 60_000).toISOString())}`);
   assert.deepEqual(future.data.notes, []);
   assert.equal((await a.call("GET", "/api/notes?since=nope")).status, 400);
   const one = await a.call("GET", "/api/notes/projects/visit.md");
   assert.equal(one.data.title, "Family doctor visit");
-  assert.ok(Array.isArray(one.data.backlinks));
+  assert.equal(Array.isArray(one.data.backlinks), true);
 }));
 
 test("reports come as JSON and Markdown", () => withApi(async (a) => {
@@ -96,7 +96,7 @@ test("today, done and undo round trip with stable refs", () => withApi(async (a)
   assert.match(file, /- \[x\] Ask about Advil/);
   assert.match(file, /Call the lab/);
   const after = await a.call("GET", "/api/today");
-  assert.ok(!after.data.items.some((x: { text: string }) => x.text === "Ask about Advil"));
+  assert.deepEqual(after.data.items.filter((x: { text: string }) => x.text === "Ask about Advil"), []);
   assert.equal((await a.call("POST", "/api/undo", {})).status, 200);
   assert.match(readFileSync(join(a.root, "projects/visit.md"), "utf8"), /- \[ \] Ask about Advil/);
   assert.equal((await a.call("POST", "/api/done", { ref: "projects/visit.md::Gone" })).status, 400);
@@ -126,7 +126,7 @@ test("inbox saves a capture once per client_id", () => withApi(async (a) => {
   const two = await a.call("POST", "/api/inbox", body);
   assert.equal(one.status, 200);
   assert.equal(one.data.path, two.data.path);
-  assert.ok(existsSync(join(a.root, one.data.path)));
+  assert.equal(existsSync(join(a.root, one.data.path)), true);
   assert.equal((await a.call("POST", "/api/inbox", { text: "x" })).status, 400);
 }));
 
@@ -179,7 +179,7 @@ test("token file is made once with mode 600; non-loopback hosts are refused", ()
   const path = join(mkdtempSync(join(tmpdir(), "brain-token-")), "sub", "token");
   const said: string[] = [];
   const t1 = loadToken(path, (s) => said.push(s));
-  assert.ok(t1.length >= 43);
+  assert.ok(t1.length >= 43, `got ${t1.length}`);
   assert.equal(statSync(path).mode & 0o777, 0o600);
   assert.equal(said.length, 1);
   assert.equal(loadToken(path, (s) => said.push(s)), t1);
@@ -242,7 +242,7 @@ test("local app: the page is marked local and sets the cookie; any app path gets
   assert.match(String(js.headers["content-type"]), /javascript/);
   assert.equal((await raw("GET", "/sw.js")).status, 404, "no service worker on the Mac");
   const escape = await raw("GET", "/%2e%2e/%2e%2e/package.json");
-  assert.ok(!escape.body.includes('"name"'), "a path cannot leave the app folder");
+  assert.doesNotMatch(escape.body, /"name"/, "a path cannot leave the app folder");
 }));
 
 test("local app: the tunnel, a proxy or another host name never gets the page or the cookie", () => local(async (raw) => {

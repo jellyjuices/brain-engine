@@ -12,7 +12,7 @@ test("unlock with the right password sets a strict cookie", async () => {
   const cookie = res.headers.get("Set-Cookie") ?? "";
   assert.match(cookie, /^brain_session=\d+\.[\w-]+;/);
   for (const flag of ["Path=/", "HttpOnly", "Secure", "SameSite=Strict", "Max-Age=2592000"])
-    assert.ok(cookie.includes(flag), flag);
+    assert.equal(cookie.includes(flag), true, flag);
   assert.equal(res.headers.get("Cache-Control"), "no-store");
 });
 
@@ -36,7 +36,7 @@ test("the sixth try after five failures is 429 with Retry-After, even with the r
     assert.equal((await call(env, "/api/unlock", post({ password: "bad" }))).status, 401);
   const res = await call(env, "/api/unlock", post({ password: PASSWORD }));
   assert.equal(res.status, 429);
-  assert.ok(Number(res.headers.get("Retry-After")) > 0);
+  assert.ok(Number(res.headers.get("Retry-After")) > 0, `got ${res.headers.get("Retry-After")}`);
   assert.equal(
     (await call(env, "/api/unlock", { ...post({ password: PASSWORD }), ip: "9.9.9.9" })).status,
     200,
@@ -70,7 +70,7 @@ test("a valid cookie opens a gated route, no cookie gets 401 with no-store", asy
   const denied = await call(env, "/api/today");
   assert.equal(denied.status, 401);
   assert.equal(denied.headers.get("Cache-Control"), "no-store");
-  assert.ok(((await denied.json()) as { error: string }).error);
+  assert.equal(typeof ((await denied.json()) as { error: string }).error, "string");
   const cookie = await login(env);
   const res = await call(env, "/api/today", { headers: { Cookie: cookie } });
   assert.equal(res.status, 503);

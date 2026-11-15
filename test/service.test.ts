@@ -32,15 +32,15 @@ test("serve enables and loads both jobs, then says it is on", async () => {
   const r = await startService({ ...base, run: l.run, agentsDir: agents("com.brain.serve", "com.brain.tunnel"), health: async () => true });
   assert.equal(r.ok, true);
   assert.deepEqual(r.lines, ["Phone access is on."]);
-  assert.ok(l.calls.includes("enable gui/501/com.brain.serve"));
-  assert.ok(l.calls.includes("enable gui/501/com.brain.tunnel"));
+  assert.deepEqual(["enable gui/501/com.brain.serve"].filter((v) => !l.calls.includes(v)), []);
+  assert.deepEqual(["enable gui/501/com.brain.tunnel"].filter((v) => !l.calls.includes(v)), []);
   assert.deepEqual([...l.loaded].sort(), ["com.brain.serve", "com.brain.tunnel"]);
 });
 
 test("serve leaves a job that is already running alone", async () => {
   const l = fakeLaunchd(new Set(["com.brain.serve"]));
   await startService({ ...base, run: l.run, agentsDir: agents("com.brain.serve", "com.brain.tunnel"), health: async () => true });
-  assert.ok(!l.calls.some((c) => c.startsWith("bootstrap") && c.includes("com.brain.serve")));
+  assert.deepEqual(l.calls.filter((c) => c.startsWith("bootstrap") && c.includes("com.brain.serve")), []);
 });
 
 test("serve without setup says to run setup.sh", async () => {
@@ -64,7 +64,7 @@ test("kill unloads and disables both jobs", async () => {
   const r = await stopService({ ...base, run: l.run });
   assert.equal(r.ok, true);
   assert.equal(l.loaded.size, 0);
-  assert.ok(l.calls.includes("disable gui/501/com.brain.serve"));
-  assert.ok(l.calls.includes("disable gui/501/com.brain.tunnel"));
+  assert.deepEqual(["disable gui/501/com.brain.serve"].filter((v) => !l.calls.includes(v)), []);
+  assert.deepEqual(["disable gui/501/com.brain.tunnel"].filter((v) => !l.calls.includes(v)), []);
   assert.match(r.lines[0], /off/);
 });

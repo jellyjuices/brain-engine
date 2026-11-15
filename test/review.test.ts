@@ -21,7 +21,7 @@ test("only steps with items show, in order", () => {
   const steps = reviewSteps(root, now);
   assert.deepEqual(steps.map((s) => s.key), ["overdue", "stale", "waiting", "someday"]);
   assert.deepEqual(steps[0].items.map((i) => i.text), ["Late one"]);
-  assert.ok(steps.every((s) => s.items.length));
+  assert.deepEqual(steps.filter((s) => !s.items.length).map((s) => s.key), []);
 });
 
 test("addNow writes a dated line under # Now and undo reverses it", () => {
@@ -30,7 +30,7 @@ test("addNow writes a dated line under # Now and undo reverses it", () => {
   const before = file();
   addNow(root, "health", "Started walking daily");
   assert.match(file(), new RegExp(`# Now\\n\\n- ${now} · Started walking daily\\n`));
-  assert.ok(file().indexOf("Started walking") < file().indexOf("# To-dos"));
+  assert.ok(file().indexOf("Started walking") < file().indexOf("# To-dos"), `walking at ${file().indexOf("Started walking")}, to-dos at ${file().indexOf("# To-dos")}`);
   undo(root);
   assert.equal(file(), before);
 });
