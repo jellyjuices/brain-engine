@@ -1,7 +1,7 @@
 [
   {
     "name": "add",
-    "description": "Add a thought. A tag, person or subject files it at once; journal keeps it whole in the day note. Use for any new thought or to-do.",
+    "description": "Add a thought. A tag, person or subject files it at once; journal keeps it whole as a note. Use for any new thought or to-do.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -53,7 +53,11 @@
             "todo",
             "journal"
           ],
-          "description": "journal keeps the text whole in the day note, to sort later."
+          "description": "journal keeps the text whole as its own note, to sort later."
+        },
+        "title": {
+          "type": "string",
+          "description": "A journal note's title. With none, the first words."
         }
       },
       "required": [
@@ -328,13 +332,13 @@
   },
   {
     "name": "sort",
-    "description": "Sort a capture or journal entry into subjects. A capture is deleted; an entry stays whole. Use on an item from unsorted.",
+    "description": "Sort a capture or journal note into subjects. A capture is deleted; a journal stays whole. Use on an item from unsorted.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "path": {
           "type": "string",
-          "description": "A path from unsorted: a capture, or a journal entry like journal/2026-05-04.md#0930."
+          "description": "A path from unsorted: a capture in inbox/ or a journal note in journal/."
         },
         "into": {
           "type": "string",
@@ -414,7 +418,7 @@
   },
   {
     "name": "unsorted",
-    "description": "How many captures and journal entries wait, and which. Use before you sort.",
+    "description": "How many captures and journal notes wait, and which. Use before you sort.",
     "inputSchema": {
       "type": "object",
       "additionalProperties": false
@@ -853,7 +857,11 @@
             "todo",
             "journal"
           ],
-          "description": "journal keeps the text whole in the day note, to sort later."
+          "description": "journal keeps the text whole as its own note, to sort later."
+        },
+        "title": {
+          "type": "string",
+          "description": "A journal note's title. With none, the first words."
         }
       },
       "required": [
@@ -898,7 +906,7 @@
   },
   {
     "name": "add_journal",
-    "description": "Add a journal entry, whole, to the day note. It waits to be sorted. Use for a dated journal entry.",
+    "description": "Add a journal entry, whole, as its own note. It waits to be sorted. Use for a dated journal entry.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -918,7 +926,7 @@
         },
         "created_at": {
           "type": "string",
-          "description": "ISO time. Its HH:MM heads the entry."
+          "description": "ISO time. Its HH:MM goes in the path."
         }
       },
       "required": [

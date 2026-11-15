@@ -32,7 +32,8 @@ const add = obj<AddRequest>({
   tags: strs(),
   by: str(BY),
   draft_id: str(),
-  kind: oneOf(["todo", "journal"], "journal keeps the text whole in the day note, to sort later."),
+  kind: oneOf(["todo", "journal"], "journal keeps the text whole as its own note, to sort later."),
+  title: str("A journal note's title. With none, the first words."),
 });
 
 const bit = shape<SortBitRequest>({
@@ -64,7 +65,7 @@ export const INPUTS: Record<string, Input> = {
   goal: obj<NotePath>({ path: req(str("A goal slug or path, like goals/run-far.md.")) }, "path"),
   decision: obj<NotePath>({ path: req(str("A decision slug or path, like decisions/move-city.md.")) }, "path"),
   sort: obj<SortRequest>({
-    path: req(str("A path from unsorted: a capture, or a journal entry like journal/2026-05-04.md#0930.")),
+    path: req(str("A path from unsorted: a capture in inbox/ or a journal note in journal/.")),
     into: str(PATH),
     when: str(WHEN),
     bits: { type: "array", items: bit, minItems: 1, description: "Instead of into and when, one entry per line." },
@@ -87,7 +88,7 @@ export const INPUTS: Record<string, Input> = {
   calendar: NONE,
   report: obj<{ name: string }>({ name: req(str("today, weekly or area/<slug>.")) }, "name"),
   add_person: obj<Person>({ name: req(str()), birthday: str("Like 1990-05-04."), description: str() }),
-  add_journal: obj<Journal>({ date: req(str("Like 2026-05-04.")), text: req(str()), about: str(PATH), title: str(), created_at: str("ISO time. Its HH:MM heads the entry.") }),
+  add_journal: obj<Journal>({ date: req(str("Like 2026-05-04.")), text: req(str()), about: str(PATH), title: str(), created_at: str("ISO time. Its HH:MM goes in the path.") }),
   add_subject: obj<Subject>({ type: req(oneOf(["Place", "Thing"])), name: req(str()) }),
   drop_capture: notePath(false),
   add_file: obj<TextFile>({ title: req(str()), text: req(str()) }),

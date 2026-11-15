@@ -32,8 +32,10 @@ export interface AddRequest {
   tags?: string[];
   by?: string;
   draft_id?: string;
-  /** "journal" writes the text whole into the day note, where it waits to be sorted. */
+  /** "journal" writes the text whole as its own journal note, where it waits to be sorted. */
   kind?: "todo" | "journal";
+  /** A journal note's title. With none, the first words of the text. */
+  title?: string;
 }
 
 export interface AddResponse extends WriteResult {
@@ -79,7 +81,7 @@ export interface SortBitRequest {
   about?: string;
 }
 
-/** Either one `into` and `when` for the whole capture, or `bits` for a capture split into several lines. `path` may be a journal entry, `journal/YYYY-MM-DD.md#HHMM`. */
+/** Either one `into` and `when` for the whole capture, or `bits` for a capture split into several lines. `path` may be a journal note. */
 export interface SortRequest {
   path: string;
   into?: string;
@@ -91,9 +93,8 @@ export interface SortRequest {
 export interface SortResponse extends WriteResult {
   into: string;
   filed: string[];
-  /** A sorted capture is deleted. */
+  /** A sorted capture is `deleted`; a sorted journal note is `kept` whole. */
   deleted?: string;
-  /** A sorted journal entry is kept whole. */
   kept?: string;
 }
 
@@ -102,6 +103,7 @@ export interface UnsortedItem {
   created?: string;
   text: string;
   kind: "capture" | "journal";
+  title?: string;
 }
 
 export interface UnsortedResponse {

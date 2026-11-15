@@ -8,7 +8,7 @@ import { loadAll } from "../../core/files.ts";
 import { folderOf, str } from "../../core/notes.ts";
 import { isOwnerWriter } from "../../core/owner.ts";
 import type { AddResponse, SortResponse, UnsortedItem, UnsortedResponse } from "../api-types.ts";
-import { addJournalEntry, entryRef, isEntryRef, sortJournal, waitingItems } from "./journal.ts";
+import { addJournalEntry, isJournalPath, sortJournalRoute, waitingItems } from "./journal.ts";
 import { HttpError, MAX_CAPTURE } from "../server-auth.ts";
 import { afterWrite, asUserError, type Ctx, existingNote, safeNotePath, text, textList } from "../server-context.ts";
 import { clearDraft } from "./drafts.ts";
@@ -32,7 +32,7 @@ export function addRoute(c: Ctx): AddResponse {
   const kind = text(c.body.kind, "kind", false);
   if (kind && kind !== "todo" && kind !== "journal") throw new HttpError(400, `"kind" must be todo or journal.`);
   if (kind === "journal") {
-    const r = addJournalEntry(c, { text: t, client_id: clientId, created_at: text(c.body.created_at, "created_at", false), by: writer(c) });
+    const r = addJournalEntry(c, { text: t, client_id: clientId, created_at: text(c.body.created_at, "created_at", false), title: text(c.body.title, "title", false), by: writer(c) });
     clearDraft(c.root, c.body.draft_id);
     return { ...r, client_id: clientId };
   }
@@ -83,10 +83,10 @@ function kindOf(raw: unknown): SortBit["kind"] {
   return kind as SortBit["kind"];
 }
 
-/** Sort one capture into its subjects. The capture is deleted, and one undo reverses the whole sort. A journal entry is kept whole. */
+/** Sort one capture into its subjects. The capture is deleted, and one undo reverses the whole sort. A journal note is kept whole. */
 export function sortRoute(c: Ctx): SortResponse {
-  if (isEntryRef(c.body.path)) {
-    const r = sortJournal(c, entryRef(c.body.path), bitsOf(c));
+  if (isJournalPath(c.body.path)) {
+    const r = sortJournalRoute(c, c.body.path, bitsOf(c));
     clearDraft(c.root, c.body.draft_id);
     return r;
   }
@@ -99,7 +99,7 @@ export function sortRoute(c: Ctx): SortResponse {
   return { into: r.into[0], filed: r.into, deleted: r.deleted };
 }
 
-/** Captures in the inbox and journal entries that wait to be sorted, oldest first. */
+/** Captures in the inbox and journal notes that wait to be sorted, oldest first. */
 export function unsortedRoute(c: Ctx): UnsortedResponse {
   const notes = loadAll(c.root);
   const captures: UnsortedItem[] = notes
