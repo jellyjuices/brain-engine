@@ -39,7 +39,7 @@ beforeAll(async () => {
   sessionStorage.clear();
   localStorage.clear();
   document.body.innerHTML = '<div id="app"></div>';
-  vi.stubGlobal("fetch", async () => new Response(JSON.stringify({ noPassword: false })));
+  vi.stubEnv("SHOW_LOCK", "true");
   session = await import("@/lib/lock/session.ts");
   await import("@/main.ts");
   await vi.waitFor(() => expect(lockShown()).toBe(true), { timeout: 25_000 });
