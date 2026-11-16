@@ -1,3 +1,6 @@
+@import "@fontsource-variable/newsreader/opsz.css";
+@import "@fontsource/instrument-serif/400.css";
+
 *,
 *::before,
 *::after {
@@ -8,9 +11,9 @@ html,
 body {
   margin: 0;
   height: 100%;
-  background: var(--background-primary);
-  color: var(--text-primary);
-  font: var(--font-size-body-md) / var(--font-leading-normal) var(--font-body);
+  background: var(--bg);
+  color: var(--ink);
+  font: var(--text) / var(--leading) var(--font-body);
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
   text-size-adjust: 100%;
@@ -52,20 +55,21 @@ p {
 }
 
 :focus-visible {
-  outline: var(--size-focus) solid var(--border-focus);
-  outline-offset: var(--size-focus);
+  outline: var(--ring) solid var(--accent);
+  outline-offset: var(--ring);
 }
 
 .serif {
-  font-family: var(--font-display);
-  font-weight: var(--font-weight-semibold);
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 72;
+  font-weight: 600;
   letter-spacing: -0.01em;
 }
 
 .sr-only {
   position: absolute;
-  width: var(--size-hair);
-  height: var(--size-hair);
+  width: var(--hair);
+  height: var(--hair);
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
@@ -102,10 +106,4 @@ h1.serif {
 
 [hidden] {
   display: none !important;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
 }

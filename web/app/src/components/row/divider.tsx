@@ -1,5 +1,5 @@
-import { divider } from "./row.styles.ts";
+import "./row.css";
 
 export function Divider() {
-  return <hr className={divider} />;
+  return <hr className="list-divider" />;
 }

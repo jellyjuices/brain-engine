@@ -1,48 +1,9 @@
-import { css } from "@linaria/core";
+import "./pull.css";
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { copy } from "@/content/index.ts";
 
 const TRIGGER = 72;
-
-const dot = css`
-  width: 10px;
-  height: 10px;
-  border-radius: var(--radius-full);
-  background: var(--background-accent);
-`;
-
-const pull = css`
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-sm);
-  height: 0;
-  margin: 0 calc(-1 * var(--space-lg));
-  overflow: hidden;
-  color: var(--text-secondary);
-  font-size: var(--font-size-body-xs);
-
-  @keyframes pulse {
-    to {
-      transform: scale(0.5);
-      opacity: 0.4;
-    }
-  }
-`;
-
-const settlingStyle = css`
-  .${pull}& {
-    transition: height var(--motion-slow) var(--motion-easing);
-  }
-`;
-
-const busyStyle = css`
-  .${pull}& .${dot} {
-    animation: pulse 700ms var(--motion-easing) infinite alternate;
-  }
-`;
 
 export function Pull({ onRefresh }: { onRefresh: () => Promise<unknown> }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -111,11 +72,11 @@ export function Pull({ onRefresh }: { onRefresh: () => Promise<unknown> }) {
   return (
     <div
       ref={ref}
-      className={clsx(pull, settling && settlingStyle, busy && busyStyle)}
+      className={clsx("pull", settling && "is-settling", busy && "is-busy")}
       style={{ height }}
       aria-hidden="true"
     >
-      <span className={dot} />
+      <span className="pull-dot" />
       <span>{label}</span>
     </div>
   );

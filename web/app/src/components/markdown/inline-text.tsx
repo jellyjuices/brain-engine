@@ -1,4 +1,3 @@
-import { mdNoteLink } from "./markdown.styles.ts";
 import { Mention } from "@/components/mention/mention.tsx";
 import type { InlineToken } from "@/lib/notes/markdown.ts";
 
@@ -17,7 +16,7 @@ export function InlineText({ tokens }: { tokens: InlineToken[] }) {
       <a
         key={i}
         href={tok.href}
-        className={tok.note ? mdNoteLink : undefined}
+        className={tok.note ? "md-note-link" : undefined}
         target={tok.external ? "_blank" : undefined}
         rel={tok.external ? "noopener noreferrer" : undefined}
       >

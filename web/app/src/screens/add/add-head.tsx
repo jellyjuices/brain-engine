@@ -1,7 +1,5 @@
-import clsx from "clsx";
-import { addAfter, addHead, addTarget } from "./add.styles.ts";
 import { NoteIcon } from "@phosphor-icons/react";
-import { Button } from "@ds/components/button/button.tsx";
+import { Button } from "@/components/button/button.tsx";
 import { Chip } from "@/components/chip/chip.tsx";
 import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
 import { copy } from "@/content/index.ts";
@@ -25,7 +23,7 @@ export function AddHead({
   onClearInto: () => void;
 }) {
   return (
-    <header className={addHead}>
+    <header className="add-head">
       <ScreenHead
         title={after ? copy.add.nextTitle : copy.nav.add}
         fallback="/new"
@@ -37,9 +35,9 @@ export function AddHead({
           ) : undefined
         }
       />
-      {after && <p className={clsx(addAfter, "lede")}>{copy.add.afterTodo(after)}</p>}
+      {after && <p className="add-after lede">{copy.add.afterTodo(after)}</p>}
       {into && (
-        <div className={addTarget}>
+        <div className="add-target">
           <span className="lede">{copy.add.addingTo}</span>
           <Chip
             icon={NoteIcon}

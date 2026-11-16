@@ -1,4 +1,4 @@
-import * as s from "./row.styles.ts";
+import "./row.css";
 import type { ReactNode } from "react";
 import clsx from "clsx";
 
@@ -10,7 +10,7 @@ export interface ListProps {
 
 export function List({ children, variant = "outlined", label }: ListProps) {
   return (
-    <div className={clsx(s.list, s.lists[variant])} aria-label={label}>
+    <div className={clsx("list", `list--${variant}`)} aria-label={label}>
       {children}
     </div>
   );

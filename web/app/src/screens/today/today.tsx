@@ -1,8 +1,8 @@
-import { css } from "@linaria/core";
+import "./today.css";
 import { TrayIcon } from "@phosphor-icons/react";
 import { useCallback, useEffect, useState } from "react";
 import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
-import { IconButton } from "@ds/components/icon-button/icon-button.tsx";
+import { IconButton } from "@/components/button/icon-button.tsx";
 import { Pull } from "@/components/pull/pull.tsx";
 import { SyncLine } from "@/components/sync-line/sync-line.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
@@ -18,33 +18,6 @@ import { Empty } from "@/components/empty/empty.tsx";
 import { copy } from "@/content/index.ts";
 
 type Remote = { date: string; items: TodayItem[] } | null;
-
-const inboxBtn = css`
-  position: relative;
-  flex: none;
-
-  & button {
-    color: var(--text-primary);
-  }
-`;
-
-const inboxBadge = css`
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  min-width: var(--size-icon-sm);
-  height: var(--size-icon-sm);
-  padding: 0 var(--space-xs);
-  border-radius: var(--radius-full);
-  background: var(--background-accent);
-  color: var(--text-on-accent);
-  font-size: var(--font-size-body-xs);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--size-icon-sm);
-  text-align: center;
-  font-variant-numeric: tabular-nums;
-  pointer-events: none;
-`;
 
 export function TodayScreen() {
   const now = todayIso();
@@ -81,14 +54,14 @@ export function TodayScreen() {
       <ScreenHead
         title={longDate(now)}
         action={
-          <span className={inboxBtn}>
+          <span className="inbox-btn">
             <IconButton
               icon={TrayIcon}
               label={inbox ? copy.nav.inboxCount(inbox) : copy.nav.inbox}
               onClick={() => navigate("inbox")}
             />
             {inbox > 0 && (
-              <span className={inboxBadge} aria-hidden="true">
+              <span className="inbox-badge" aria-hidden="true">
                 {inbox > 99 ? "99+" : inbox}
               </span>
             )}

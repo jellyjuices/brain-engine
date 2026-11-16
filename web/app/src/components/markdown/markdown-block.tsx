@@ -1,4 +1,3 @@
-import { mdHeading, mdList } from "./markdown.styles.ts";
 import { Fragment } from "react";
 import { List } from "@/components/row/list.tsx";
 import { InlineText } from "./inline-text.tsx";
@@ -20,7 +19,7 @@ export function MarkdownBlock({
   if (block.t === "heading") {
     const Tag = `h${Math.min(block.level + 1, 5)}` as "h2";
     return (
-      <Tag className={mdHeading}>
+      <Tag className="md-h">
         <InlineText tokens={inline(block.text, path)} />
       </Tag>
     );
@@ -45,7 +44,7 @@ export function MarkdownBlock({
     );
   if (block.t === "hr") return <hr />;
   return (
-    <div className={mdList}>
+    <div className="md-list">
       {checkGroups(block.items).map((group, i) =>
         group.kind === "checks" ? (
           <List key={i}>

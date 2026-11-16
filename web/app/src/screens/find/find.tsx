@@ -1,4 +1,4 @@
-import { css } from "@linaria/core";
+import "./find.css";
 import { useEffect, useRef, useState } from "react";
 import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
 import { SearchInput } from "@/components/field/search-input.tsx";
@@ -12,13 +12,6 @@ import { RecentChips } from "./recent-chips.tsx";
 import { copy } from "@/content/index.ts";
 
 const ASK_DELAY = 250;
-
-const results = css`
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-  margin-top: var(--space-sm);
-`;
 
 export function FindScreen() {
   const notes = useNotes();
@@ -72,7 +65,7 @@ export function FindScreen() {
         }}
       />
       <SyncLine />
-      <div className={results} aria-live="polite">
+      <div className="results" aria-live="polite">
         {!q ? (
           <RecentChips
             onPick={(r) => {

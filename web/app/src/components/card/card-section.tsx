@@ -1,11 +1,11 @@
-import { cardBody, cardSec } from "./card.styles.ts";
+import "./card.css";
 import type { ReactNode } from "react";
 
 export function CardSection({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className={cardSec}>
+    <div className="card-sec">
       <h3 className="section-label">{label}</h3>
-      <div className={cardBody}>{children}</div>
+      <div className="card-body">{children}</div>
     </div>
   );
 }

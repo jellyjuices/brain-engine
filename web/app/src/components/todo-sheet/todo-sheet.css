@@ -1,0 +1,33 @@
+.sheet-context {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s1);
+}
+
+.sheet-due {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s0);
+  color: var(--muted);
+  font-size: var(--t-xs);
+}
+
+.sheet-due svg {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+}
+
+.sheet-due.is-late {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.sheet-quote {
+  padding-left: var(--s1-5);
+  border-left: var(--bar) solid var(--line);
+  color: var(--muted);
+  font-family: var(--font-serif);
+  font-size: var(--t-md);
+  line-height: 1.4;
+}

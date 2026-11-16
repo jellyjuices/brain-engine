@@ -1,3 +1,4 @@
+import "./find.css";
 import { SubjectCard } from "@/components/card/subject-card.tsx";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";

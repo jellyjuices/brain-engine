@@ -1,10 +1,9 @@
-import { addHere } from "../add/add.styles.ts";
-import { backlinks, pending } from "./note.styles.ts";
+import "./note.css";
 import { PencilSimpleIcon, PlusIcon } from "@phosphor-icons/react";
 import { useEffect } from "react";
-import { Button } from "@ds/components/button/button.tsx";
+import { Button } from "@/components/button/button.tsx";
 import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
-import { IconButton } from "@ds/components/icon-button/icon-button.tsx";
+import { IconButton } from "@/components/button/icon-button.tsx";
 import { SubjectCard } from "@/components/card/subject-card.tsx";
 import { NoteIntro } from "@/components/facts/note-intro.tsx";
 import { List } from "@/components/row/list.tsx";
@@ -54,13 +53,13 @@ export function NoteRead({ path }: { path: string }) {
         }
       />
       <NoteIntro note={note} notes={notes} />
-      {status.waiting && <p className={pending}>{copy.notes.editWaiting}</p>}
+      {status.waiting && <p className="pending">{copy.notes.editWaiting}</p>}
       {showCard && <SubjectCard card={card} />}
       <NoteBody note={note} hideOpenLoops={showCard} />
-      <div className={addHere}>
+      <div className="add-here">
         <Button
           variant="outlined"
-          icon={<PlusIcon aria-hidden />}
+          icon={PlusIcon}
           block
           onClick={() => navigate("add", { into: path })}
         >
@@ -68,7 +67,7 @@ export function NoteRead({ path }: { path: string }) {
         </Button>
       </div>
       {links.length > 0 && (
-        <section className={backlinks}>
+        <section className="backlinks">
           <h2 className="section-label">{copy.notes.linkedFrom}</h2>
           <List>
             {links.map((l) => (

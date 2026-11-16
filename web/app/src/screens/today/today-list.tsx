@@ -1,3 +1,4 @@
+import "./today.css";
 import { List } from "@/components/row/list.tsx";
 import { TodoRow } from "@/components/todo-row/todo-row.tsx";
 import { makeTodo } from "@/lib/notes/todos.ts";

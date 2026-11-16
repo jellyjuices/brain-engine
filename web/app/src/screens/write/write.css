@@ -1,0 +1,10 @@
+.write-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  margin: var(--s2) 0;
+}
+
+.screen--write {
+  padding-bottom: 0;
+}

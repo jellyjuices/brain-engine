@@ -1,6 +1,4 @@
-import clsx from "clsx";
-import { cardDesc, cardHead, cardLink, cardTitle, cardWhen } from "./card.styles.ts";
-import { cardType } from "./card-type.ts";
+import "./card.css";
 import { List } from "@/components/row/list.tsx";
 import { Panel } from "@/components/panel/panel.tsx";
 import { CardSection } from "./card-section.tsx";
@@ -31,11 +29,11 @@ export function SubjectCard({ card, heading, bare }: SubjectCardProps) {
     <Panel label={copy.notes.subjectLabel(subject.title)}>
       {heading && (
         <>
-          <a className={cardHead} href={noteHref(subject.path)}>
-            <span className={clsx("serif", cardTitle)}>{subject.title}</span>
-            <span className={cardType}>{subject.type ?? copy.common.note}</span>
+          <a className="card-head" href={noteHref(subject.path)}>
+            <span className="serif card-title">{subject.title}</span>
+            <span className="card-type">{subject.type ?? copy.common.note}</span>
           </a>
-          {subject.description && <p className={clsx("lede", cardDesc)}>{subject.description}</p>}
+          {subject.description && <p className="lede card-desc">{subject.description}</p>}
         </>
       )}
       {card.todo.length > 0 && (
@@ -50,10 +48,10 @@ export function SubjectCard({ card, heading, bare }: SubjectCardProps) {
       {card.next && (
         <CardSection label={copy.notes.next}>
           <p>
-            <a className={cardLink} href={noteHref(card.next.path)}>
+            <a className="card-link" href={noteHref(card.next.path)}>
               {card.next.text}
             </a>
-            <span className={cardWhen}>
+            <span className="card-when">
               {` · ${card.next.date === todayIso() ? copy.common.today : longDate(card.next.date)}`}
             </span>
           </p>
@@ -62,8 +60,8 @@ export function SubjectCard({ card, heading, bare }: SubjectCardProps) {
       {card.history.length > 0 && (
         <CardSection label={copy.notes.lately}>
           {card.history.map((l, i) => (
-            <p key={i}>
-              <span className={cardWhen}>{`${longDate(l.date)} · `}</span>
+            <p key={i} className="card-line">
+              <span className="card-when">{`${longDate(l.date)} · `}</span>
               {l.text}
             </p>
           ))}

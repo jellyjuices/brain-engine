@@ -1,0 +1,94 @@
+.toasts {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--tabbar) + env(safe-area-inset-bottom) + var(--s2));
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--s1);
+  padding: 0 var(--s2);
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  pointer-events: auto;
+  max-width: var(--w-md);
+  padding: var(--s1-5) var(--s2);
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: var(--bg);
+  font-size: var(--t-sm);
+  box-shadow: var(--shadow);
+  touch-action: pan-y;
+  user-select: none;
+  transition:
+    translate var(--fast) var(--ease),
+    opacity var(--fast) var(--ease);
+  animation: toast-in var(--slow) var(--ease) both;
+}
+
+.toast.is-dragging {
+  transition: none;
+}
+
+.toast.leaving {
+  animation: toast-out var(--fast) var(--ease) both;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--s1-5));
+  }
+}
+
+@keyframes toast-out {
+  to {
+    opacity: 0;
+    transform: translateY(var(--s1));
+  }
+}
+
+[data-keyboard] .toasts {
+  bottom: calc(var(--tabbar) + var(--s4));
+}
+
+.toast-btn {
+  min-height: var(--control-sm);
+  margin: calc(var(--radius-sm) * -1) calc(var(--s1) * -1) calc(var(--radius-sm) * -1) 0;
+  padding: 0 var(--s1-5);
+  border: 0;
+  border-radius: var(--pill);
+  background: transparent;
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.toast--action {
+  padding-right: var(--s2);
+}
+
+.toast .toast-btn {
+  color: color-mix(in srgb, var(--bg) 70%, var(--accent));
+}
+
+.toast--offline {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+.toast--error {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.toast--offline .toast-btn,
+.toast--error .toast-btn {
+  color: inherit;
+  text-decoration: underline;
+}

@@ -1,0 +1,48 @@
+.screen-head {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--s1);
+  min-height: var(--touch);
+  margin-bottom: var(--s2);
+}
+
+.screen-head.has-back {
+  margin-left: calc(-1 * var(--s1));
+}
+
+.screen-head .icon-btn {
+  flex: none;
+  color: var(--ink);
+}
+
+.screen-head-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.screen-kicker {
+  color: var(--muted);
+  font-size: var(--t-xs);
+  font-weight: 600;
+}
+
+.screen-kicker,
+.screen-head .screen-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.screen-head .screen-title {
+  margin: 0;
+}
+
+.screen-head-action {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--s1);
+}

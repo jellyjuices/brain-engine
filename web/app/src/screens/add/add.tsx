@@ -1,4 +1,4 @@
-import { composer } from "@/components/field/field.styles.ts";
+import "./add.css";
 import { useEffect, useRef, useState } from "react";
 import { ToolBar } from "@/components/tool-bar/tool-bar.tsx";
 import { MentionDrawer } from "@/components/mention-drawer/mention-drawer.tsx";
@@ -148,7 +148,7 @@ export function AddScreen() {
       />
       <textarea
         ref={input}
-        className={composer}
+        className="composer"
         placeholder={PLACEHOLDER}
         aria-label={copy.add.input}
         enterKeyHint="enter"

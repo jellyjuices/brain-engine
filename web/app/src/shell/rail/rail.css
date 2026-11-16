@@ -1,0 +1,36 @@
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s0);
+  flex: none;
+  width: var(--rail);
+  padding: calc(var(--s3) + env(safe-area-inset-top)) var(--s1-5) var(--s2)
+    calc(var(--s1-5) + env(safe-area-inset-left));
+  background: var(--surface);
+  border-right: var(--hair) solid var(--line);
+  overflow-y: auto;
+  position: relative;
+  z-index: 30;
+}
+
+.rail .add-panel {
+  justify-content: flex-start;
+  margin-bottom: var(--s2);
+}
+
+.rail .add-main {
+  flex-direction: row;
+  gap: var(--s1-5);
+  font-size: var(--t-md);
+  color: var(--ink);
+}
+
+.rail .add-main .shape {
+  margin-top: 0;
+}
+
+.rail-end {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+}

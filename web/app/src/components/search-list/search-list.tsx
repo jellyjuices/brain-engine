@@ -1,4 +1,4 @@
-import { css } from "@linaria/core";
+import "./search-list.css";
 import { PlusIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 import { List } from "@/components/row/list.tsx";
@@ -6,11 +6,6 @@ import { Row, type RowProps } from "@/components/row/row.tsx";
 import { SearchInput } from "@/components/field/search-input.tsx";
 import { Empty } from "@/components/empty/empty.tsx";
 import { copy } from "@/content/index.ts";
-
-const results = css`
-  max-height: 45vh;
-  overflow-y: auto;
-`;
 
 export interface SearchItem<T> {
   key: string;
@@ -55,7 +50,7 @@ export function SearchList<T>({
         onChange={setQuery}
         onEnter={pickFirst}
       />
-      <div className={results}>
+      <div className="search-results">
         {hits.length || showAdd ? (
           <List variant="ghost">
             {hits.map((x) => (

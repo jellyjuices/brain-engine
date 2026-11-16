@@ -1,18 +1,9 @@
-import {
-  eye,
-  errorInfo,
-  errorText,
-  fieldBox,
-  lock,
-  panelBox,
-  shaking,
-  wordmark,
-} from "./lock.styles.ts";
+import "./lock.css";
 import { EyeIcon, EyeSlashIcon, FingerprintIcon } from "@phosphor-icons/react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import clsx from "clsx";
-import { Button } from "@ds/components/button/button.tsx";
-import { IconButton } from "@ds/components/icon-button/icon-button.tsx";
+import { Button } from "@/components/button/button.tsx";
+import { IconButton } from "@/components/button/icon-button.tsx";
 import { isEnrolled, verify } from "@/lib/lock/fingerprint.ts";
 import { isSessionLapsed, writeUnlocked } from "@/lib/lock/session.ts";
 import { unlock } from "@/lib/lock/unlock.ts";
@@ -38,9 +29,9 @@ export function LockScreen() {
   function shake() {
     const el = panel.current;
     if (!el) return;
-    el.classList.remove(shaking);
+    el.classList.remove("shake");
     void el.offsetWidth;
-    el.classList.add(shaking);
+    el.classList.add("shake");
   }
 
   async function tryFingerprint(auto = false) {
@@ -81,10 +72,10 @@ export function LockScreen() {
   }
 
   return (
-    <div className={lock} role="dialog" aria-modal="true" aria-label={copy.lock.dialog}>
-      <form ref={panel} className={panelBox} noValidate onSubmit={(e) => void onSubmit(e)}>
-        <h1 className={clsx(wordmark, "serif")}>brain</h1>
-        <div className={fieldBox}>
+    <div className="lock" role="dialog" aria-modal="true" aria-label={copy.lock.dialog}>
+      <form ref={panel} className="lock-panel" noValidate onSubmit={(e) => void onSubmit(e)}>
+        <h1 className="wordmark serif">brain</h1>
+        <div className="field">
           <input
             ref={input}
             id="unlock-password"
@@ -100,15 +91,14 @@ export function LockScreen() {
           <IconButton
             icon={revealed ? EyeSlashIcon : EyeIcon}
             label={revealed ? copy.lock.hidePassword : copy.lock.showPassword}
-            className={eye}
-            aria-pressed={revealed}
+            pressed={revealed}
             onClick={() => {
               setRevealed(!revealed);
               input.current?.focus();
             }}
           />
         </div>
-        <p className={clsx(errorText, message.info && errorInfo)} role="alert">
+        <p className={clsx("lock-error", message.info && "info")} role="alert">
           {message.text}
         </p>
         <Button type="submit" block disabled={busy}>
@@ -117,7 +107,7 @@ export function LockScreen() {
         <Button
           variant="outlined"
           block
-          icon={<FingerprintIcon aria-hidden />}
+          icon={FingerprintIcon}
           hidden={fingerHidden}
           onClick={() => void tryFingerprint()}
         >

@@ -1,55 +1,10 @@
-import { css } from "@linaria/core";
+import "./screen-head.css";
 import { CaretLeftIcon } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import clsx from "clsx";
-import { IconButton } from "@ds/components/icon-button/icon-button.tsx";
+import { IconButton } from "@/components/button/icon-button.tsx";
 import { back } from "@/lib/platform/router.ts";
 import { copy } from "@/content/index.ts";
-
-const screenHead = css`
-  display: flex;
-  flex: none;
-  align-items: center;
-  gap: var(--space-sm);
-  min-height: var(--size-target);
-  margin-bottom: var(--space-lg);
-
-  & .screen-title {
-    margin: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-`;
-
-const hasBackStyle = css`
-  .${screenHead}& {
-    margin-left: calc(-1 * var(--space-sm));
-  }
-`;
-
-const main = css`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-width: 0;
-`;
-
-const kickerText = css`
-  color: var(--text-secondary);
-  font-size: var(--font-size-body-xs);
-  font-weight: var(--font-weight-semibold);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const actionBox = css`
-  display: flex;
-  flex: none;
-  align-items: center;
-  gap: var(--space-sm);
-`;
 
 export interface ScreenHeadProps {
   title?: string;
@@ -70,7 +25,7 @@ export function ScreenHead({
 }: ScreenHeadProps) {
   const hasBack = !!onBack || fallback !== undefined;
   return (
-    <header className={clsx(screenHead, hasBack && hasBackStyle)}>
+    <header className={clsx("screen-head", hasBack && "has-back")}>
       {hasBack && (
         <IconButton
           icon={CaretLeftIcon}
@@ -78,11 +33,11 @@ export function ScreenHead({
           onClick={onBack ?? (() => back(fallback))}
         />
       )}
-      <div className={main}>
-        {kicker && <span className={kickerText}>{kicker}</span>}
+      <div className="screen-head-main">
+        {kicker && <span className="screen-kicker">{kicker}</span>}
         {title && <h1 className="screen-title serif">{title}</h1>}
       </div>
-      {action && <div className={actionBox}>{action}</div>}
+      {action && <div className="screen-head-action">{action}</div>}
     </header>
   );
 }

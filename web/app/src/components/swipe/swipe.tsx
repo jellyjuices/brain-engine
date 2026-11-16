@@ -1,4 +1,4 @@
-import * as s from "./swipe.styles.ts";
+import "./swipe.css";
 import { useRef, useState, type MouseEvent, type PointerEvent, type ReactNode } from "react";
 import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 import clsx from "clsx";
@@ -132,7 +132,7 @@ export function Swipe({ right, left, onTap, children }: SwipeProps) {
   return (
     <div
       ref={wrap}
-      className={clsx(s.swipe, gone === 0 && s.isGone)}
+      className={clsx("swipe", gone === 0 && "is-gone")}
       data-dir={dir ?? undefined}
       data-armed={armed || undefined}
       style={gone === null ? undefined : { height: gone }}
@@ -143,17 +143,17 @@ export function Swipe({ right, left, onTap, children }: SwipeProps) {
       onClickCapture={onClickCapture}
       onContextMenu={onContextMenu}
     >
-      <div className={s.swipeBg} aria-hidden="true">
-        <span className={s.bgRight}>
+      <div className="swipe-bg" aria-hidden="true">
+        <span className="swipe-bg-right">
           {right.icon && <Icon icon={right.icon} />}
           {right.label}
         </span>
-        <span className={s.bgLeft}>
+        <span className="swipe-bg-left">
           {left.icon && <Icon icon={left.icon} />}
           {left.label}
         </span>
       </div>
-      <div ref={main} className={clsx(s.swipeMain, settling && s.isSettling)}>
+      <div ref={main} className={clsx("swipe-main", settling && "is-settling")}>
         {children}
       </div>
     </div>

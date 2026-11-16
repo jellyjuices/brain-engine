@@ -1,4 +1,4 @@
-import * as s from "./sheet.styles.ts";
+import "./sheet.css";
 import { XIcon } from "@phosphor-icons/react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import clsx from "clsx";
@@ -31,17 +31,16 @@ export function Sheet({ title, leaving, onClose, children }: SheetProps) {
 
   return (
     <div
-      className={clsx(s.scrim, leaving && s.leaving, swiped && s.swiped)}
+      className={clsx("sheet-scrim", leaving && "leaving", swiped && "swiped")}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div
-        ref={panel}
-        className={clsx(s.sheet, "stack")}
-        role="dialog"
-        aria-modal="true"
-        aria-label={title}
-      >
-        <button type="button" className={s.close} aria-label={copy.common.close} onClick={onClose}>
+      <div ref={panel} className="sheet stack" role="dialog" aria-modal="true" aria-label={title}>
+        <button
+          type="button"
+          className="sheet-close"
+          aria-label={copy.common.close}
+          onClick={onClose}
+        >
           <Icon icon={XIcon} />
         </button>
         {children}

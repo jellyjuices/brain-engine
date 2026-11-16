@@ -13,7 +13,7 @@ describe("person mention", () => {
     );
     render(<InlineText tokens={tokens} />);
     const mention = screen.getByRole("link", { name: "@Aisha" });
-    expect(mention).toHaveAttribute("data-mention");
+    expect(mention).toHaveClass("mention");
     expect(mention).toHaveAttribute("href", "/note/people/aisha.md");
     expect(screen.getAllByRole("link", { name: /^@/ })).toHaveLength(1);
     expect(screen.getAllByRole("link")).toHaveLength(2);

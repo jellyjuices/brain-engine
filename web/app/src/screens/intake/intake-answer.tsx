@@ -1,6 +1,4 @@
-import { step } from "./intake.styles.ts";
-import { composer } from "@/components/field/field.styles.ts";
-import { Button } from "@ds/components/button/button.tsx";
+import { Button } from "@/components/button/button.tsx";
 import { SheetActions } from "@/components/sheet/sheet-actions.tsx";
 import { copy } from "@/content/index.ts";
 
@@ -18,9 +16,9 @@ export function IntakeAnswer({
   onNext: () => void;
 }) {
   return (
-    <div className={step}>
+    <div className="intake-step">
       <textarea
-        className={composer}
+        className="composer"
         placeholder={copy.intake.answerPlaceholder}
         aria-label={copy.intake.answer}
         autoCapitalize="sentences"

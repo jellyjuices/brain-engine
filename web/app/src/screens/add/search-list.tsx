@@ -1,5 +1,4 @@
-import clsx from "clsx";
-import { title as sheetTitle } from "@/components/sheet/sheet.styles.ts";
+import "./add.css";
 import { useEffect, useState } from "react";
 import type { Finish } from "@/components/sheet/open-sheet.tsx";
 import { Option, type OptionProps } from "@/components/sheet/option.tsx";
@@ -33,7 +32,7 @@ export function SearchList<T>({ title, placeholder, load, finish }: SearchListPr
 
   return (
     <>
-      <h2 className={clsx("serif", sheetTitle)}>{title}</h2>
+      <h2 className="serif sheet-title">{title}</h2>
       <input
         className="ask-input"
         type="search"

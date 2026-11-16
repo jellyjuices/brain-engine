@@ -1,7 +1,7 @@
-import { pendingRow } from "./settings.styles.ts";
+import "./settings.css";
 import { ArrowClockwiseIcon } from "@phosphor-icons/react";
 import { useState } from "react";
-import { Button } from "@ds/components/button/button.tsx";
+import { Button } from "@/components/button/button.tsx";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
 import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
@@ -46,7 +46,7 @@ export function SettingsScreen() {
               }
             />
             {items.map((item) => (
-              <Row key={item.id} title={<span className={pendingRow}>{pendingText(item)}</span>} />
+              <Row key={item.id} title={<span className="pending-row">{pendingText(item)}</span>} />
             ))}
           </>
         )}
@@ -60,7 +60,7 @@ export function SettingsScreen() {
             <Button
               variant="outlined"
               size="sm"
-              icon={<ArrowClockwiseIcon aria-hidden />}
+              icon={ArrowClockwiseIcon}
               disabled={updating}
               busy={updating}
               onClick={() => {

@@ -1,5 +1,4 @@
-import clsx from "clsx";
-import { css } from "@linaria/core";
+import "./intake.css";
 import { useState } from "react";
 import { Empty } from "@/components/empty/empty.tsx";
 import { Panel } from "@/components/panel/panel.tsx";
@@ -14,10 +13,6 @@ import { useIntakeQuestions } from "@/hooks/use-intake-questions.ts";
 import { copy } from "@/content/index.ts";
 import { IntakeAnswer } from "./intake-answer.tsx";
 import { IntakeCheck } from "./intake-check.tsx";
-
-const question = css`
-  font-size: var(--font-size-body-lg);
-`;
 
 export function IntakeScreen() {
   const { result, current, finish } = useIntakeQuestions();
@@ -54,7 +49,7 @@ export function IntakeScreen() {
       {current && (
         <>
           <Panel>
-            <p className={clsx(question, "serif")}>{current.question}</p>
+            <p className="intake-question serif">{current.question}</p>
           </Panel>
           {draft ? (
             <IntakeCheck

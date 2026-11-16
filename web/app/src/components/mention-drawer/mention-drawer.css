@@ -1,0 +1,11 @@
+.mention-drawer {
+  max-height: 40dvh;
+  margin: 0 calc(-1 * var(--s2));
+  padding: var(--s1) var(--s2);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--surface);
+  border-top: var(--hair) solid var(--line);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow: var(--shadow);
+}

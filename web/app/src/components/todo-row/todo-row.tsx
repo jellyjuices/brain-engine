@@ -1,7 +1,7 @@
-import { css } from "@linaria/core";
+import "@/components/row/row.css";
+import "./todo-row.css";
 import { CalendarCheckIcon, CheckIcon } from "@phosphor-icons/react";
 import clsx from "clsx";
-import { row, rowEnd, rowIcon, rowMain, rowSub, rowTitle } from "@/components/row/row.styles.ts";
 import { Chip } from "@/components/chip/chip.tsx";
 import { Icon } from "@/components/icon/icon.tsx";
 import { Mention } from "@/components/mention/mention.tsx";
@@ -12,25 +12,6 @@ import { inline, type InlineToken } from "@/lib/notes/markdown.ts";
 import type { TodoRef } from "@/lib/sync/local-edit.ts";
 import { copy } from "@/content/index.ts";
 
-const todoLink = css`
-  color: var(--text-accent);
-  text-decoration: underline;
-  text-decoration-thickness: var(--size-hair);
-  text-underline-offset: 3px;
-`;
-
-const todoMain = css`
-  & .${rowSub} {
-    display: flex;
-  }
-`;
-
-const overdueEnd = css`
-  .${rowEnd}& {
-    color: var(--text-danger);
-  }
-`;
-
 function TodoText({ tokens }: { tokens: InlineToken[] }) {
   return tokens.map((tok, i) => {
     if (tok.t === "text") return tok.text;
@@ -39,7 +20,7 @@ function TodoText({ tokens }: { tokens: InlineToken[] }) {
     if (tok.t === "link" && tok.person) return <Mention key={i} name={kids} />;
     if (tok.t === "link")
       return (
-        <span key={i} className={todoLink}>
+        <span key={i} className="todo-link">
           {kids}
         </span>
       );
@@ -71,24 +52,24 @@ export function TodoRow({ todo, showSubject = true, overdue }: TodoRowProps) {
       }}
       onTap={(collapse) => void openTodo(todo, "menu", collapse)}
     >
-      <button className={clsx(row, todoMain)} type="button">
+      <button className="row todo-main" type="button">
         {event && (
-          <span className={rowIcon}>
+          <span className="row-icon">
             <Icon icon={CalendarCheckIcon} />
           </span>
         )}
-        <span className={rowMain}>
-          <span className={rowTitle}>
+        <span className="row-main">
+          <span className="row-title">
             <TodoText tokens={inline(todo.text, todo.path)} />
           </span>
           {subject && (
-            <span className={rowSub}>
+            <span className="row-sub">
               <Chip size="sm">{subject}</Chip>
             </span>
           )}
         </span>
         {todo.due && (
-          <span className={clsx(rowEnd, overdue && overdueEnd)}>{niceDate(todo.due)}</span>
+          <span className={clsx("row-end", overdue && "is-overdue")}>{niceDate(todo.due)}</span>
         )}
       </button>
     </Swipe>

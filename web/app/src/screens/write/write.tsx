@@ -1,5 +1,4 @@
-import { composer } from "@/components/field/field.styles.ts";
-import { css } from "@linaria/core";
+import "./write.css";
 import { FileTextIcon, UserIcon } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 import { DateField } from "@/components/date-field/date-field.tsx";
@@ -25,13 +24,6 @@ interface WriteDraft {
 function blank(): WriteDraft {
   return { title: "", date: todayIso(), about: null, text: "" };
 }
-
-const writeMeta = css`
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-lg);
-  margin: var(--space-lg) 0;
-`;
 
 export function WriteScreen() {
   const [form, setForm] = useState(blank);
@@ -80,7 +72,7 @@ export function WriteScreen() {
         value={form.title}
         onChange={(title) => update({ title })}
       />
-      <div className={writeMeta}>
+      <div className="write-meta">
         <DateField
           label={copy.add.day}
           value={form.date}
@@ -98,7 +90,7 @@ export function WriteScreen() {
         />
       </div>
       <textarea
-        className={composer}
+        className="composer"
         placeholder={copy.add.writePlaceholder}
         aria-label={copy.nav.journal}
         autoCapitalize="sentences"

@@ -1,0 +1,48 @@
+.tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s1);
+}
+
+.tile {
+  display: flex;
+  gap: var(--s1-5);
+  min-width: 0;
+  min-height: var(--tile);
+  padding: var(--s1-5) var(--s2);
+  border: var(--hair) solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: inherit;
+  text-align: left;
+}
+
+.tile--dashed {
+  border-style: dashed;
+  background: transparent;
+}
+
+.tile--choice {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--s0);
+}
+
+.sheet .tile {
+  background: var(--bg);
+}
+
+button.tile:active {
+  background: var(--accent-soft);
+}
+
+.tile-label {
+  font-size: var(--t-md);
+  font-weight: 600;
+}
+
+.tile-sub {
+  color: var(--muted);
+  font-size: var(--t-sm);
+}

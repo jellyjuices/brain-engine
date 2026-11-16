@@ -38,8 +38,7 @@ export const SuggestInput = ({ label, placeholder, suggestions, onPick, disabled
       setActive((i) => (i + step + items.length) % Math.max(items.length, 1))
     } else if (e.key === 'Enter' && shown) {
       e.preventDefault()
-      const chosen = items[active]
-      if (chosen) pick(chosen)
+      pick(items[active])
     } else if (e.key === 'Escape') {
       setOpen(false)
     }

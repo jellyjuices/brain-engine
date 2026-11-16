@@ -30,7 +30,7 @@ function appEl() {
   return document.getElementById("app") as HTMLElement;
 }
 function lockShown() {
-  return document.querySelector("[role=dialog]") !== null;
+  return document.querySelector(".lock") !== null;
 }
 
 let session: typeof import("@/lib/lock/session.ts");

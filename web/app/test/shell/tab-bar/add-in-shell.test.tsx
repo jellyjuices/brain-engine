@@ -12,7 +12,7 @@ function addButton() {
 }
 
 function finishClosing() {
-  const blob = document.querySelector("[data-add-blob]");
+  const blob = document.querySelector(".add-blob");
   if (blob) fireEvent.animationEnd(blob, { animationName: "add-deflate" });
 }
 

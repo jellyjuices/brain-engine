@@ -1,3 +1,5 @@
+import "./sheet.css";
+
 export interface QuickChipProps {
   label: string;
   sub: string;
