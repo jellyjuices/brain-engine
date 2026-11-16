@@ -12,9 +12,9 @@ describe("person mention", () => {
       "areas/fitness.md",
     );
     const { container } = render(<InlineText tokens={tokens} />);
-    const mention = container.querySelector(".mention");
+    const mention = container.querySelector("[data-mention]");
     expect(mention?.textContent).toBe("@Aisha");
     expect(mention?.getAttribute("href")).toBe("/note/people/aisha.md");
-    expect(container.querySelectorAll(".mention")).toHaveLength(1);
+    expect(container.querySelectorAll("[data-mention]")).toHaveLength(1);
   });
 });

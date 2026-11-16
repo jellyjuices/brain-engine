@@ -31,12 +31,12 @@ const choice = css`
   gap: var(--space-xs);
 `;
 
-const label = css`
+const labelText = css`
   font-size: var(--font-size-body-md);
   font-weight: var(--font-weight-semibold);
 `;
 
-const sub = css`
+const subText = css`
   color: var(--text-secondary);
   font-size: var(--font-size-body-sm);
 `;
@@ -53,8 +53,8 @@ export interface TileProps {
 export function Tile({ label, sub, autoFocus, onClick }: TileProps) {
   return (
     <button className={clsx(tile, choice)} type="button" autoFocus={autoFocus} onClick={onClick}>
-      <span className={label}>{label}</span>
-      <span className={sub}>{sub}</span>
+      <span className={labelText}>{label}</span>
+      <span className={subText}>{sub}</span>
     </button>
   );
 }

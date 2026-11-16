@@ -12,7 +12,8 @@ const tabbar = css`
   background: var(--background-secondary);
   border-top: var(--size-hair) solid var(--border-primary);
   padding: var(--space-xs) calc(var(--space-sm) + env(safe-area-inset-right))
-    calc(var(--space-xs) + env(safe-area-inset-bottom)) calc(var(--space-sm) + env(safe-area-inset-left));
+    calc(var(--space-xs) + env(safe-area-inset-bottom))
+    calc(var(--space-sm) + env(safe-area-inset-left));
   min-height: calc(var(--size-tabbar) + env(safe-area-inset-bottom));
   position: relative;
   z-index: 30;

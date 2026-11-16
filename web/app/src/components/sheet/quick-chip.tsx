@@ -1,4 +1,3 @@
-
 export interface QuickChipProps {
   label: string;
   sub: string;

@@ -96,12 +96,7 @@ export function Chip({
       </span>
     );
   return (
-    <button
-      className={clsx(className, pressable)}
-      type="button"
-      aria-label={label}
-      onClick={press}
-    >
+    <button className={clsx(className, pressable)} type="button" aria-label={label} onClick={press}>
       {inner}
     </button>
   );

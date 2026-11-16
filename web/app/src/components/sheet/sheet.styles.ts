@@ -56,9 +56,7 @@ export const sheet = css`
     cursor: grab;
   }
 
-  & .${panel},
-  & .${tile},
-  & .${input} {
+  & .${panel}, & .${tile}, & .${input} {
     background: var(--background-primary);
   }
 `;

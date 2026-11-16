@@ -7,8 +7,9 @@ import { useUnsortedCount } from "./use-unsorted-count.ts";
 import { copy } from "@/content/index.ts";
 
 export const frame = css`
-  margin: calc(var(--space-lg) + env(safe-area-inset-top)) calc(var(--space-lg) + env(safe-area-inset-right))
-    0 calc(var(--space-lg) + env(safe-area-inset-left));
+  margin: calc(var(--space-lg) + env(safe-area-inset-top))
+    calc(var(--space-lg) + env(safe-area-inset-right)) 0
+    calc(var(--space-lg) + env(safe-area-inset-left));
 `;
 
 export function UnsortedBanner() {

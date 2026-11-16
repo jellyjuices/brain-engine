@@ -9,9 +9,13 @@ import type { ReactNode } from "react";
 export function Mention({ name, href }: { name: ReactNode; href?: string }) {
   if (href)
     return (
-      <a className={mention} href={href}>
+      <a data-mention className={mention} href={href}>
         @{name}
       </a>
     );
-  return <span className={mention}>@{name}</span>;
+  return (
+    <span data-mention className={mention}>
+      @{name}
+    </span>
+  );
 }

@@ -32,7 +32,13 @@ export function ReportSummary({ markdown, path }: { markdown: string; path: stri
   }
   return (
     <div className={summaryBox}>
-      <Button variant="secondary" icon={<SparkleIcon aria-hidden />} block busy={busy} onClick={() => void run()}>
+      <Button
+        variant="secondary"
+        icon={<SparkleIcon aria-hidden />}
+        block
+        busy={busy}
+        onClick={() => void run()}
+      >
         {copy.report.summarize}
       </Button>
       {failed && <p className={noteText}>{copy.report.summaryFailed}</p>}

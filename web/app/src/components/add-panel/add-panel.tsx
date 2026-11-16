@@ -5,6 +5,7 @@ import { Shape } from "@/components/shape/shape.tsx";
 import { AddArc } from "@/components/add-arc/add-arc.tsx";
 import { AddBox } from "@/components/add-box/add-box.tsx";
 import * as s from "./add-panel.styles.ts";
+import * as b from "./add-blob.styles.ts";
 import { AddFull } from "./add-full.tsx";
 import { useHoldToPick } from "./use-hold-to-pick.ts";
 import { keepCaretInView } from "@/lib/platform/caret.ts";
@@ -94,14 +95,16 @@ export function AddPanel() {
   const label = editing ? copy.common.save : mode === "open" ? copy.common.close : copy.nav.add;
 
   return (
-    <div className={clsx(
+    <div
+      className={clsx(
         s.panel,
         mode === "open" && s.modeOpen,
         mode === "todo" && s.modeTodo,
         mode === "journal" && s.modeJournal,
         mode !== "closed" && s.notClosed,
         closing && s.closing,
-      )}>
+      )}
+    >
       {mode !== "closed" && (
         <button
           type="button"
@@ -115,9 +118,9 @@ export function AddPanel() {
           data-add-blob
           className={clsx(
             s.blob,
-            mode === "todo" && s.blobTodo,
-            mode === "journal" && s.blobJournal,
-            full && s.blobFull,
+            mode === "todo" && b.blobTodo,
+            mode === "journal" && b.blobJournal,
+            full && b.blobFull,
           )}
           onAnimationEnd={(e) => {
             if (e.animationName === "add-deflate") closed();

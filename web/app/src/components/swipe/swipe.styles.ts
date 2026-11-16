@@ -52,8 +52,7 @@ export const swipe = css`
     justify-content: flex-end;
   }
 
-  &[data-dir="right"] .${bgRight},
-  &[data-dir="left"] .${bgLeft} {
+  &[data-dir="right"] .${bgRight}, &[data-dir="left"] .${bgLeft} {
     display: inline-flex;
   }
 

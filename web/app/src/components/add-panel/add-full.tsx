@@ -6,8 +6,8 @@ import { copy } from "@/content/index.ts";
 const addFull = css`
   position: fixed;
   top: calc(
-    var(--vvt, 0) + var(--vvh, 100dvh) - var(--size-tabbar) - env(safe-area-inset-bottom) - 36px -
-      var(--space-lg)
+    var(--vvt, 0) + var(--vvh, 100dvh) - var(--size-tabbar) - env(safe-area-inset-bottom) -
+      36px - var(--space-lg)
   );
   right: calc(var(--space-xl) + env(safe-area-inset-right));
   z-index: 3;

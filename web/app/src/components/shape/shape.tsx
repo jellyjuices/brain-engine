@@ -74,7 +74,9 @@ const variants = {
   `,
 };
 
-const kindVar = (name: ShapeName) => (name === "add" ? "var(--shape-plus)" : `var(--shape-kind-${name})`);
+function kindVar(name: ShapeName) {
+  return name === "add" ? "var(--shape-plus)" : `var(--shape-kind-${name})`;
+}
 
 export interface ShapeProps {
   name: ShapeName;
