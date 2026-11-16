@@ -1,8 +1,10 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
+import { homedir } from "node:os";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
-import type { Plugin } from "vite";
+import { loadEnv, type Plugin } from "vite";
 import { defineConfig } from "vitest/config";
 
 const pkg = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")) as {
@@ -46,7 +48,29 @@ function serviceWorker(): Plugin {
   };
 }
 
+const showLock =
+  loadEnv("development", fileURLToPath(new URL(".", import.meta.url)), "SHOW_LOCK").SHOW_LOCK === "true";
+
+function macToken(): string {
+  const path = process.env.BRAIN_TOKEN_FILE || join(homedir(), ".config", "brain", "token");
+  try {
+    return readFileSync(path, "utf8").trim();
+  } catch {
+    return "";
+  }
+}
+
+const apiProxy = showLock
+  ? { "/api": "http://127.0.0.1:8788" }
+  : {
+      "/api": {
+        target: "http://127.0.0.1:8787",
+        headers: { Authorization: `Bearer ${macToken()}` },
+      },
+    };
+
 export default defineConfig({
+  envPrefix: ["VITE_", "SHOW_LOCK"],
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   resolve: {
     alias: {
@@ -56,7 +80,7 @@ export default defineConfig({
   },
   plugins: [react(), serviceWorker()],
   server: {
-    proxy: { "/api": "http://127.0.0.1:8788" },
+    proxy: apiProxy,
     fs: {
       allow: [
         fileURLToPath(new URL(".", import.meta.url)),

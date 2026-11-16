@@ -55,15 +55,10 @@ subscribeSession(gate);
 
 const ON_MAC = document.querySelector('meta[name="brain-local"]') !== null;
 
-async function isPasswordOff(): Promise<boolean> {
-  if (!import.meta.env.DEV) return false;
-  const res = await fetch("/api/unlock", { credentials: "same-origin" }).catch(() => null);
-  const data = (await res?.json().catch(() => null)) as { noPassword?: boolean } | null;
-  return data?.noPassword === true;
-}
+const NO_LOCK = import.meta.env.DEV && import.meta.env.SHOW_LOCK !== "true";
 
-void (async () => {
-  if (ON_MAC || (await isPasswordOff())) {
+void (() => {
+  if (ON_MAC || NO_LOCK) {
     void unlockOnMac().then(setOnMac, (e) => {
       console.error("Mac unlock failed", e);
       app.textContent = copy.sync.startFailed;
