@@ -13,6 +13,7 @@
     "types": ["vite/client"],
     "paths": {
       "@/*": ["./src/*"],
+      "@ds/*": ["../../design-system/src/*"],
       "@shared/*": ["../../shared/*"]
     },
     "jsx": "react-jsx",
