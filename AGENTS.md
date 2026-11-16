@@ -18,6 +18,10 @@ Where it runs: one always-on home server, a Mac mini, holds the one copy of the 
 
 Intent for every part: [docs/intent/README.md](docs/intent/README.md). When the intent and the code disagree, the intent wins: change the intent doc first.
 
+Plan and state of the work: [docs/plan/handoff.md](docs/plan/handoff.md). Screen design: [docs/design/](docs/design/concept-a.md).
+
+One `npm install` at the root installs every package. `design-system`, `web/app` and `web/worker` are npm workspaces. There is one `package-lock.json`. Never run `npm install` inside a package folder.
+
 ## Invariants
 
 - **The brain folder comes from config.** `brainHome()` in `src/core/home.ts` reads `BRAIN_HOME`, then `~/.config/brain/env` (or `$BRAIN_CONFIG/env`). There is no default path. Reason: the engine runs against any owner's folder.

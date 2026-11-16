@@ -65,7 +65,8 @@ function serviceWorker(): Plugin {
 }
 
 const showLock =
-  loadEnv("development", fileURLToPath(new URL(".", import.meta.url)), "SHOW_LOCK").SHOW_LOCK === "true";
+  loadEnv("development", fileURLToPath(new URL(".", import.meta.url)), "SHOW_LOCK").SHOW_LOCK ===
+  "true";
 
 function macToken(): string {
   const path = process.env.BRAIN_TOKEN_FILE || join(homedir(), ".config", "brain", "token");

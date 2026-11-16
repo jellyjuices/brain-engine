@@ -68,7 +68,7 @@ install_packages() {
   if [ ! -f "$ENGINE/web/app/dist/index.html" ]; then
     if [ "$DRY" = 1 ]; then would "build the app in web/app"; else
       say "Building the app"
-      (cd "$ENGINE/web/app" && PATH="$NODE_DIR:$PATH" npm install --silent && PATH="$NODE_DIR:$PATH" npm run -s build >/dev/null)
+      (cd "$ENGINE/web/app" && PATH="$NODE_DIR:$PATH" npm run -s build >/dev/null)
     fi
   fi
   ok "Packages installed"

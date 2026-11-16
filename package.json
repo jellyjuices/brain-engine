@@ -4,6 +4,11 @@
   "private": true,
   "description": "Query, check and report on the Markdown notes in a brain folder.",
   "type": "module",
+  "workspaces": [
+    "design-system",
+    "web/app",
+    "web/worker"
+  ],
   "bin": {
     "brain": "bin/brain.ts"
   },
