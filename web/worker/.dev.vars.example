@@ -3,3 +3,5 @@ PASSWORD=
 SESSION_SECRET=
 RELAY_TOKEN=
 SERVER_TOKEN=
+# Local dev only: skip the lock screen. Works on localhost only.
+# NO_PASSWORD=1
