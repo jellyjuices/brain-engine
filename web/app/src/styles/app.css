@@ -17,22 +17,23 @@
   inset: 0;
   display: flex;
   flex-direction: column;
-  padding: calc(var(--s3) + env(safe-area-inset-top)) calc(var(--s2) + env(safe-area-inset-right))
-    var(--s2) calc(var(--s2) + env(safe-area-inset-left));
+  padding: calc(var(--space-xl) + env(safe-area-inset-top))
+    calc(var(--space-lg) + env(safe-area-inset-right)) var(--space-lg)
+    calc(var(--space-lg) + env(safe-area-inset-left));
   overflow-y: auto;
   overscroll-behavior: contain;
-  animation: screen-in var(--slow) var(--ease) both;
+  animation: screen-in var(--motion-slow) var(--motion-easing) both;
 }
 
 .screen.leaving {
-  animation: screen-out var(--fast) var(--ease) both;
+  animation: screen-out var(--motion-fast) var(--motion-easing) both;
   pointer-events: none;
 }
 
 @keyframes screen-in {
   from {
     opacity: 0;
-    transform: translateY(var(--s1));
+    transform: translateY(var(--space-sm));
   }
 }
 
@@ -43,52 +44,74 @@
 }
 
 .screen-title {
-  font-size: var(--t-2xl);
+  font-size: var(--font-size-display-xl);
   line-height: 1.15;
-  margin-bottom: var(--s2);
+  margin-bottom: var(--space-lg);
 }
 
 .lede {
-  color: var(--muted);
+  color: var(--text-secondary);
 }
 
 .section-label {
-  margin: var(--s3) var(--s2) var(--s1);
+  margin: var(--space-xl) var(--space-lg) var(--space-sm);
   line-height: 1.3;
-  color: var(--muted);
-  font-size: var(--t-xs);
-  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-semibold);
 }
 
 .stack {
   display: flex;
   flex-direction: column;
-  gap: var(--s2);
+  gap: var(--space-lg);
 }
 
 .chip-slot {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--s1);
-  min-height: var(--s4);
+  gap: var(--space-sm);
+  min-height: var(--space-2xl);
 }
 
 .screen--today,
 .screen--find,
 .screen--areas,
 .screen--note {
-  padding-bottom: calc(var(--s4) + var(--s2));
+  padding-bottom: calc(var(--space-2xl) + var(--space-lg));
+}
+
+.screen--write,
+.screen--editor {
+  padding-bottom: 0;
+}
+
+.screen--add {
+  padding-bottom: 0;
+  overflow: hidden;
 }
 
 .group .section-label {
-  margin-left: var(--s0);
+  margin-left: var(--space-xs);
 }
 
 .group--overdue .section-label {
-  color: var(--danger);
+  color: var(--text-danger);
 }
 
 .group + .group {
-  margin-top: var(--s1);
+  margin-top: var(--space-sm);
+}
+
+@property --add-fade-top {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --add-fade-bottom {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
 }

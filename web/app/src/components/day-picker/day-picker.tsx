@@ -1,4 +1,4 @@
-import "./day-picker.css";
+import * as s from "./day-picker.styles.ts";
 import {
   CaretDoubleLeftIcon,
   CaretDoubleRightIcon,
@@ -63,11 +63,11 @@ export function DayPicker({ min, max, yearSteps, today, value, onPick }: DayPick
   }
 
   return (
-    <div className="dp">
-      <div className="dp-head">
+    <div className={s.dp}>
+      <div className={s.head}>
         {yearSteps && (
           <button
-            className="dp-nav dp-year"
+            className={clsx(s.nav, s.year)}
             type="button"
             aria-label={copy.common.lastYear}
             disabled={stop(-12)}
@@ -77,7 +77,7 @@ export function DayPicker({ min, max, yearSteps, today, value, onPick }: DayPick
           </button>
         )}
         <button
-          className="dp-nav"
+          className={s.nav}
           type="button"
           aria-label={copy.common.lastMonth}
           disabled={min !== undefined && month <= min.slice(0, 7)}
@@ -85,11 +85,11 @@ export function DayPicker({ min, max, yearSteps, today, value, onPick }: DayPick
         >
           <Icon icon={CaretLeftIcon} />
         </button>
-        <span className="dp-title" aria-live="polite">
+        <span className={s.title} aria-live="polite">
           {MONTH.format(first)}
         </span>
         <button
-          className="dp-nav"
+          className={s.nav}
           type="button"
           aria-label={copy.common.nextMonth}
           disabled={max !== undefined && month >= max.slice(0, 7)}
@@ -99,7 +99,7 @@ export function DayPicker({ min, max, yearSteps, today, value, onPick }: DayPick
         </button>
         {yearSteps && (
           <button
-            className="dp-nav dp-year"
+            className={clsx(s.nav, s.year)}
             type="button"
             aria-label={copy.common.nextYear}
             disabled={stop(12)}
@@ -109,19 +109,19 @@ export function DayPicker({ min, max, yearSteps, today, value, onPick }: DayPick
           </button>
         )}
       </div>
-      <div className="dp-week" aria-hidden="true">
+      <div className={s.week} aria-hidden="true">
         {WEEK.map((d, i) => (
           <span key={i}>{d}</span>
         ))}
       </div>
-      <div className="dp-grid" role="grid">
+      <div className={s.grid} role="grid">
         {Array.from({ length: first.getDay() }, (_, i) => (
-          <span key={`pad-${i}`} className="dp-pad" />
+          <span key={`pad-${i}`} aria-hidden="true" />
         ))}
         {daysOf(shown.year, shown.month).map((day) => (
           <button
             key={day}
-            className={clsx("dp-day", day === today && "is-today", day === picked && "is-picked")}
+            className={clsx(s.day, day === today && s.isToday, day === picked && s.isPicked)}
             type="button"
             disabled={(min !== undefined && day < min) || (max !== undefined && day > max)}
             aria-pressed={day === picked}

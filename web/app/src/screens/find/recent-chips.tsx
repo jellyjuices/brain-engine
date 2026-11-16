@@ -1,7 +1,6 @@
-import "./find.css";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
-import { Chip } from "@/components/chip/chip.tsx";
+import { Chip, chips } from "@/components/chip/chip.tsx";
 import { recentSearches } from "@/lib/notes/recent-searches.ts";
 import { Empty } from "@/components/empty/empty.tsx";
 import { copy } from "@/content/index.ts";
@@ -16,7 +15,7 @@ export function RecentChips({ onPick }: { onPick: (q: string) => void }) {
   return (
     <>
       <p className="section-label">{copy.notes.recent}</p>
-      <div className="chips">
+      <div className={chips}>
         {recent.map((r) => (
           <Chip key={r} icon={MagnifyingGlassIcon} onClick={() => onPick(r)}>
             {r}

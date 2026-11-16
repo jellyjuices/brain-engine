@@ -1,5 +1,6 @@
-import "./styles/tokens.css";
+import "@ds/styles/base.css";
 import "./styles/base.css";
+import { followSystemTheme } from "./styles/theme.ts";
 
 import { LOCKED_EVENT } from "./lib/sync/api.ts";
 import { mountLock } from "./screens/lock/mount-lock.tsx";
@@ -50,6 +51,7 @@ function gate() {
   return isUnlocked() ? openApp() : lockApp();
 }
 
+followSystemTheme();
 trackViewport();
 subscribeSession(gate);
 

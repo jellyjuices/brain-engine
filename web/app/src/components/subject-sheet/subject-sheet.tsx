@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "@/components/button/button.tsx";
+import { Button } from "@ds/components/button/button.tsx";
 import { TextField } from "@/components/field/text-field.tsx";
 import { openSheet } from "@/components/sheet/open-sheet.tsx";
 import { SheetActions } from "@/components/sheet/sheet-actions.tsx";

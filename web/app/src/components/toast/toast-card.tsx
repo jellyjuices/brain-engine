@@ -1,8 +1,105 @@
 import { useRef, useState, type PointerEvent } from "react";
 import clsx from "clsx";
+import { css } from "@linaria/core";
 import { closeToast, type ToastItem } from "./toast-store.ts";
 
 const SWIPE_CLOSE = 64;
+
+const toastButton = css`
+  min-height: 36px;
+  margin: calc(var(--radius-sm) * -1) calc(var(--space-sm) * -1) calc(var(--radius-sm) * -1) 0;
+  padding: 0 var(--space-md);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-on-accent);
+  font-weight: var(--font-weight-semibold);
+`;
+
+const toast = css`
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  pointer-events: auto;
+  max-width: 480px;
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-md);
+  background: var(--text-primary);
+  color: var(--background-primary);
+  font-size: var(--font-size-body-sm);
+  box-shadow: var(--shadow-raised);
+  touch-action: pan-y;
+  user-select: none;
+  transition:
+    translate var(--motion-fast) var(--motion-easing),
+    opacity var(--motion-fast) var(--motion-easing);
+  animation: toast-in var(--motion-slow) var(--motion-easing) both;
+
+  & .${toastButton} {
+    color: color-mix(in srgb, var(--background-primary) 70%, var(--text-accent));
+  }
+
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(var(--space-md));
+    }
+  }
+
+  @keyframes toast-out {
+    to {
+      opacity: 0;
+      transform: translateY(var(--space-sm));
+    }
+  }
+`;
+
+const withAction = css`
+  .${toast}& {
+    padding-right: var(--space-lg);
+  }
+`;
+
+const dragging = css`
+  .${toast}& {
+    transition: none;
+  }
+`;
+
+const leaving = css`
+  .${toast}& {
+    animation: toast-out var(--motion-fast) var(--motion-easing) both;
+  }
+`;
+
+const tones = {
+  offline: css`
+    --toast-bg: color-mix(in srgb, var(--status-late) 18%, var(--background-secondary));
+
+    .${toast}& {
+      background: var(--toast-bg);
+      color: var(--status-late);
+    }
+
+    .${toast}& .${toastButton} {
+      color: inherit;
+      text-decoration: underline;
+    }
+  `,
+  error: css`
+    --toast-bg: color-mix(in srgb, var(--text-danger) 18%, var(--background-secondary));
+
+    .${toast}& {
+      background: var(--toast-bg);
+      color: var(--text-danger);
+    }
+
+    .${toast}& .${toastButton} {
+      color: inherit;
+      text-decoration: underline;
+    }
+  `,
+};
 
 export function ToastCard({ item }: { item: ToastItem }) {
   const start = useRef<number | null>(null);
@@ -29,11 +126,11 @@ export function ToastCard({ item }: { item: ToastItem }) {
   return (
     <div
       className={clsx(
-        "toast",
-        item.action && "toast--action",
-        item.tone && `toast--${item.tone}`,
-        item.leaving && "leaving",
-        dx !== 0 && "is-dragging",
+        toast,
+        item.action && withAction,
+        item.tone && tones[item.tone],
+        item.leaving && leaving,
+        dx !== 0 && dragging,
       )}
       style={
         dx !== 0 && !item.leaving
@@ -48,7 +145,7 @@ export function ToastCard({ item }: { item: ToastItem }) {
       <span>{item.message}</span>
       {item.action && (
         <button
-          className="toast-btn"
+          className={toastButton}
           type="button"
           onClick={() => {
             closeToast(item.id);

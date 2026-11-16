@@ -1,4 +1,4 @@
-import { Button } from "@/components/button/button.tsx";
+import { Button } from "@ds/components/button/button.tsx";
 import { typeIcon } from "@/components/icon/icons.ts";
 import { SearchList } from "@/components/search-list/search-list.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";

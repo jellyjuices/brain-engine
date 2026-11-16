@@ -49,7 +49,7 @@ export function useSwipeToClose(panelRef: RefObject<HTMLElement | null>, close: 
       if (!dragging) return;
       dragging = false;
       const speed = dy / Math.max(1, performance.now() - startT);
-      panel!.style.transition = "transform var(--fast) var(--ease)";
+      panel!.style.transition = "transform var(--motion-fast) var(--motion-easing)";
       if (dy > panel!.offsetHeight * 0.25 || (dy > 24 && speed > 0.5)) {
         panel!.style.transform = "translateY(100%)";
         onClose.current();

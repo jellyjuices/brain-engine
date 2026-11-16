@@ -1,4 +1,4 @@
-import { Button, type ButtonVariant } from "@/components/button/button.tsx";
+import { Button, type ButtonProps } from "@ds/components/button/button.tsx";
 import { openSheet } from "./open-sheet.tsx";
 import { SheetActions } from "./sheet-actions.tsx";
 import { SheetHead } from "./sheet-head.tsx";
@@ -6,7 +6,7 @@ import { SheetHead } from "./sheet-head.tsx";
 export interface SheetAction {
   id: string;
   label: string;
-  variant?: ButtonVariant;
+  variant?: ButtonProps["variant"];
 }
 
 export function confirmSheet(

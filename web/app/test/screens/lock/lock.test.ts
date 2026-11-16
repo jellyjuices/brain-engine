@@ -44,7 +44,7 @@ async function submit(password: string) {
   );
 }
 function message() {
-  return document.querySelector(".lock-error")?.textContent ?? "";
+  return document.querySelector("[role=alert]")?.textContent ?? "";
 }
 
 beforeAll(async () => {
@@ -74,7 +74,7 @@ describe("lock screen and vault", () => {
     await submit("pw one");
     expect(vault.hasKey()).toBe(true);
     expect(session.isUnlocked()).toBe(true);
-    expect(document.querySelector(".lock")).toBeNull();
+    expect(document.querySelector("form")).toBeNull();
   });
 
   it("a stamp with no key still shows the lock (what a reload looks like)", async () => {
