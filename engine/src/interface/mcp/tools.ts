@@ -1,4 +1,4 @@
-// One MCP tool per route in routes/table.ts, owner-only routes left out. A call runs the route's own handler in
+// One MCP tool per route in routes/table.ts. Owner-only routes and routes marked `mcp: false` are left out. A call runs the route's own handler in
 // process, wrapped the way server.ts wraps it: a write is snapshotted, then re-indexed and checked (server-check.ts).
 
 import { ROUTES, type Route } from "../routes/table.ts";
@@ -29,7 +29,7 @@ function toolOf(route: Route): Tool {
   return { route, input, def: { name: route.tool, description, inputSchema: input.schema, annotations: annotations(route) } };
 }
 
-export const TOOLS: Tool[] = ROUTES.filter((r) => !r.owner).map(toolOf);
+export const TOOLS: Tool[] = ROUTES.filter((r) => !r.owner && r.mcp !== false).map(toolOf);
 const BY_NAME = new Map(TOOLS.map((t) => [t.def.name, t]));
 
 export const findTool = (name: string) => BY_NAME.get(name);

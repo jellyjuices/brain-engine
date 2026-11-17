@@ -29,10 +29,11 @@ test("T4: the tool list matches its snapshot (set UPDATE_SNAPSHOT=1 to rewrite i
   for (const d of defs) assert.ok(d.description.split(/\s+/).length < 30, `${d.name}: description is 30 words or more`);
 });
 
-test("T4: one tool per route, and owner-only routes have none", () => {
-  assert.deepEqual(TOOLS.map((t) => t.route), ROUTES.filter((r) => !r.owner));
+test("T4: one tool per route, and owner-only and hidden routes have none", () => {
+  assert.deepEqual(TOOLS.map((t) => t.route), ROUTES.filter((r) => !r.owner && r.mcp !== false));
   const names = new Set(TOOLS.map((t) => t.def.name));
-  for (const r of ROUTES.filter((x) => x.owner)) assert.equal(names.has(r.tool), false, r.tool);
+  for (const r of ROUTES.filter((x) => x.owner || x.mcp === false)) assert.equal(names.has(r.tool), false, r.tool);
+  assert.equal(TOOLS.length, 22);
   for (const t of TOOLS) assert.equal(t.def.annotations.readOnlyHint, t.route.method === "GET", t.def.name);
 });
 
@@ -96,8 +97,9 @@ test("T4: the agent rate limit applies to /mcp too", () => withApi(async (a) => 
 
 test("T4: a too-large result is cut at 4 KB with a note to narrow the query", () => withApi(async (a) => {
   const agent = issueAgentToken(a.agentFile);
-  for (let i = 0; i < 60; i++) writeFileSync(join(a.root, `projects/made-up-${i}.md`), `---\ntype: Project\ntitle: Made-up project ${i}\ndescription: A long made-up description for project ${i}.\n---\n\n# To-dos\n`);
-  const r = await rpc(a, { id: 1, method: "tools/call", params: { name: "list", arguments: { type: "Project" } } }, agent);
+  const longBody = Array.from({ length: 200 }, (_, i) => `A long made-up line, number ${i}, about nothing real.`).join("\n");
+  writeFileSync(join(a.root, "projects/made-up-long.md"), `---\ntype: Project\ntitle: Made-up long project\ndescription: A made-up project with a long body.\n---\n\n# Notes\n\n${longBody}\n`);
+  const r = await rpc(a, { id: 1, method: "tools/call", params: { name: "read_note", arguments: { path: "projects/made-up-long.md" } } }, agent);
   const text = r.data.result.content[0].text as string;
   const size = Buffer.byteLength(text);
   assert.ok(size <= MAX_RESULT, `got ${size} bytes`);
