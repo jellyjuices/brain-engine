@@ -14,15 +14,19 @@ export const shownAreas = (areas: string[] = []) => splitAreas(areas).shown;
 
 export const areaVar = (slug: string, role: AreaRole) => `var(--area-${slug}-${role})`;
 
+const VIVID_CHROMA = 0.3;
+
+const vivid = (colour: string) =>
+  `color-mix(in oklch, ${colour}, oklch(from ${colour} l ${VIVID_CHROMA} h) var(--mix-vivid))`;
+
 const colours = (areas: string[], role: AreaRole) => {
   const list = shownAreas(areas).map((a) => areaVar(a, role));
-  return list.length === 1 ? [list[0], list[0]] : list;
+  if (list.length === 1) return [list[0], list[0]];
+  return role === "fill" ? list.map(vivid) : list;
 };
 
 export const mixGradient = (areas: string[], role: AreaRole = "fill", angle = 135) =>
   `linear-gradient(in oklch ${angle}deg, ${colours(areas, role).join(", ")})`;
-
-export const mixSurface = (areas: string[]) => mixGradient(areas, "surface", 135);
 
 export const mixGlow = (areas: string[]) => {
   const list = colours(areas, "glow");

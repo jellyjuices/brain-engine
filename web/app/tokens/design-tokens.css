@@ -271,6 +271,8 @@
   --mix-accent-hover: 14%;
   --mix-pressed: 15%;
   --mix-soft: 16%;
+  --mix-track: 10%;
+  --mix-vivid: 35%;
   --mix-accent-pressed: 24%;
   --mix-scrim-light: 35%;
   --mix-scrim-dark: 60%;
@@ -358,7 +360,7 @@
   --action-sort: var(--color-seafoam-300);
   --action-drop: var(--color-coral-400);
   --action-ink: var(--color-neutral-900);
-  --progress-track: var(--color-neutral-700);
+  --progress-track: color-mix(in oklch, var(--text-primary) var(--mix-track), transparent);
   --progress-fill-start: var(--color-seafoam-400);
   --progress-fill-end: var(--color-seafoam-200);
   --plus-fill: var(--color-seafoam-300);
@@ -483,7 +485,7 @@
   --action-sort: var(--color-seafoam-700);
   --action-drop: var(--color-coral-700);
   --action-ink: var(--color-neutral-0);
-  --progress-track: var(--color-neutral-200);
+  --progress-track: color-mix(in oklch, var(--text-primary) var(--mix-track), transparent);
   --progress-fill-start: var(--color-seafoam-600);
   --progress-fill-end: var(--color-seafoam-400);
   --plus-fill: var(--color-seafoam-700);

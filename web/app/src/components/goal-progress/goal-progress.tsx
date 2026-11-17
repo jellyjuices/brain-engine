@@ -2,7 +2,7 @@ import { css } from "@linaria/core";
 import { useId } from "react";
 import { Progress } from "radix-ui";
 import clsx from "clsx";
-import { mixStops, mixSurface } from "@/lib/design/area-mix.ts";
+import { mixStops } from "@/lib/design/area-mix.ts";
 
 const number = css`
   margin: 0;
@@ -156,11 +156,7 @@ export const GoalProgress = ({
 }: GoalProgressProps) => {
   const percent = Math.max(0, Math.min(100, Math.round(value)));
   return (
-    <section
-      className={clsx(goalProgress, areas?.length && hasAreas)}
-      aria-label={heading}
-      style={areas?.length ? { backgroundImage: mixSurface(areas) } : undefined}
-    >
+    <section className={clsx(goalProgress, areas?.length && hasAreas)} aria-label={heading}>
       <Progress.Root className={dial} value={percent} aria-label={`${heading}: ${percent}%`}>
         <Ring percent={percent} areas={areas} />
         <p className={number} aria-hidden>

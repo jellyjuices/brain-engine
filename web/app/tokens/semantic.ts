@@ -71,7 +71,7 @@ export const themed: Record<string, Pair> = {
   "action-sort": pair("color-seafoam-300", "color-seafoam-700"),
   "action-drop": pair("color-coral-400", "color-coral-700"),
   "action-ink": pair("color-neutral-900", "color-neutral-0"),
-  "progress-track": pair("color-neutral-700", "color-neutral-200"),
+  "progress-track": pair(tint("text-primary", "mix-track"), tint("text-primary", "mix-track")),
   "progress-fill-start": pair("color-seafoam-400", "color-seafoam-600"),
   "progress-fill-end": pair("color-seafoam-200", "color-seafoam-400"),
   "plus-fill": pair("color-seafoam-300", "color-seafoam-700"),
@@ -204,7 +204,7 @@ export const contrastPairs: Check[] = [
   c("Focus ring on page", "border-focus", "background-primary", 3),
   c("Focus ring on card", "border-focus", "background-secondary", 3),
   c("Done tick on card", "status-done", "background-secondary", 3),
-  c("Bar fill on track", "progress-fill-start", "progress-track", 3),
+  c("Bar fill on track", "progress-fill-start", ["background-secondary", "progress-track"], 3),
   ...areaSlugs.flatMap((a) => [
     c(`${a}: area text on its surface`, `area-${a}-text`, [
       "background-secondary",
@@ -219,6 +219,6 @@ export const contrastPairs: Check[] = [
       `area-${a}-surface`,
     ]),
     c(`${a}: accent on card`, `area-${a}-accent`, "background-secondary", 3),
-    c(`${a}: ring fill on track`, `area-${a}-fill`, "progress-track", 3),
+    c(`${a}: ring fill on track`, `area-${a}-fill`, ["background-secondary", "progress-track"], 3),
   ]),
 ];

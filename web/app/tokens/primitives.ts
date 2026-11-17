@@ -186,6 +186,8 @@ export const mix = {
   "accent-hover": "14%",
   pressed: "15%",
   soft: "16%",
+  track: "10%",
+  vivid: "35%",
   "accent-pressed": "24%",
   "scrim-light": "35%",
   "scrim-dark": "60%",

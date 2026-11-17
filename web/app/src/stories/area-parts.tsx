@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import { areaKeys } from "../../tokens/areas.ts";
 import { Chip } from "../components/chip-next/chip.tsx";
 import { AreaShape } from "../components/area-shape/area-shape.tsx";
-import { areaVar, mixGlow, mixGradient, mixSurface } from "@/lib/design/area-mix.ts";
+import { areaVar, mixGlow, mixGradient } from "@/lib/design/area-mix.ts";
 
 export const label: CSSProperties = {
   margin: 0,
@@ -64,7 +64,7 @@ export const MixCell = ({ areas }: { areas: string[] }) => (
       padding: "var(--space-md)",
       borderRadius: "var(--radius-card)",
       border: "var(--size-hair) solid var(--border-primary)",
-      background: `${mixSurface(areas)}, var(--background-secondary)`,
+      background: "var(--background-secondary)",
     }}
   >
     <div

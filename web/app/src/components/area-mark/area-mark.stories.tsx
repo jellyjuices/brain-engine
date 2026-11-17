@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { mixSurface } from "@/lib/design/area-mix.ts";
 import { Bar } from "../bar/bar.tsx";
 import { Chip } from "../chip-next/chip.tsx";
 import { AreaMark } from "./area-mark.tsx";
@@ -34,7 +33,7 @@ export const Counts: Story = {
             gap: "var(--space-sm)",
             padding: "var(--space-lg)",
             borderRadius: "var(--radius-card)",
-            backgroundImage: mixSurface(areas),
+            background: "var(--background-secondary)",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)" }}>
