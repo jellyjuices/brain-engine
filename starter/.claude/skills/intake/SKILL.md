@@ -13,7 +13,7 @@ Before the first question, read `.claude/rules/notes.md` and `.claude/rules/lens
 
 ## Start
 
-1. Run `brain intake status --json` and `brain thread list --open`. Read `me/settings.yaml` and `brain log`.
+1. Run `brain intake status --json` and `brain thread list --open`. Read `me/settings.yaml` and the last changes with the `log` tool.
 2. Tell the owner in one line where things stand. Offer two choices: the next stage, or `brain thread next --json`.
 
 ## Asking questions
@@ -38,7 +38,7 @@ After each answer run `brain intake ask "<their words>" --json`.
 - **Known name:** `brain intake save` links it. A fact about a subject goes to its note (`--fact "<note>::<fact>"` or `brain intake fact <note> "fact"`), not the lens.
 - **Fix a role:** `brain intake role <subject> --about <note> --role "…"`.
 - **To-dos:** ask About what? and When?, then `brain intake todo "text" --when today|tomorrow|<date>|someday|waiting|note --about <note>`. Never `inbox/`.
-- **Fix a mistake:** `brain undo` does not cover intake saves. Use the fix lines that `brain intake end` prints.
+- **Fix a mistake:** `undo` does not cover intake saves. Use the fix lines that `brain intake end` prints.
 
 ## Care
 

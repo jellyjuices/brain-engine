@@ -37,7 +37,8 @@ What stays in the notes folder: its own `AGENTS.md`, `.claude/` rules and skills
 | Today reads real dates. Goal and Decision types. Areas: 1 or more, no upper limit | Done |
 | API routes, drafts, helper token, one undo per sort | Done |
 | Mac mini | The brain and the engine are on the mini. `ops/setup.sh` ran there. All four jobs are loaded and `brain serve` answers |
-| MCP server at `/mcp` | Built and tested. The tool list is cut from 39 to 22. The helper token exists. `/mcp` lists the tools and runs a read with it, and answers 401 with no token. Claude Code on the mini is connected for the notes folder and called two tools. Not done: the tunnel check and MCP in the docs |
+| MCP server at `/mcp` | Built and tested. The tool list is cut from 39 to 22. The helper token exists. `/mcp` lists the tools and runs a read with it, and answers 401 with no token. Claude Code on the mini is connected for the notes folder and called two tools. The helper docs and skills use the tools. Not done: the tunnel check (the owner said to wait) |
+| Terminal commands | Removed, with the terminal app: add, done, move, delete, undo, find, list, show, new, recent, area, today, weekly, review, tag, sort, todos, log. Kept: index, check, serve, kill, pull, migrate, swiftbar, intake, thread |
 | Data changes (`area` to `areas`, General) | Applied to the notes |
 | Goal percent, wins, decide-by | Done |
 | Journal: one note per journal, title from first words, `sorted` field | Done |
@@ -117,6 +118,8 @@ Install once, at the root: `npm install`. It covers the engine, the app, the Wor
 - `brain serve` and the jobs run from this checkout on the mini. Keep the gates passing between commits. Restart the server after a server change: `launchctl kickstart -k gui/$(id -u)/com.brain.serve`.
 - Paths in [plan.md](plan.md), [search.md](search.md) and [add-flows.md](add-flows.md) are from before the layout change: `src/` is now `engine/src/`, `shared/` is `engine/shared/`, `design-system/` is `web/design-system/`.
 - `~/.config/brain/privacy-words.txt` does not exist, so the privacy scan checks nothing.
-- TypeScript and `@types/node` come in two versions: 5.9 and 22 for the engine and the Worker, 7.0 and 26 for the app and the design system. One version for all is a tech change for the owner to approve.
+- TypeScript is 7.0 in every package. `@types/node` still comes in two versions: 22 for the engine and the Worker, 26 for the app and the design system.
+- Intake and thread have no MCP tools beyond `intake_next`, `intake_save` and `intake_skip`. Until they do, the intake skill runs `brain intake ...` and `brain thread ...`.
+- Code that only tests use is still in `engine/src/todos/` (the numbered day list, the done wrap-up prompts). It belongs to the dead code job, item 11.
 - The app's CSS and lint: 15 React warnings in old screens. The new screens replace most of them.
 - In the notes folder, for the owner to delete: the engine docs now copied here (`.reports/migration/`, `.reports/add-flows-2026-11-14/`, `.reports/design-v2-2026-11-12/concept-a.md`), the stale reports (`.reports/tech-review-2026-11-12`, `retro-2026-11-13`, `mobile-screens-2026-11-08`), the 22 sorted captures in `.archive/` and the empty `threads/` folder.

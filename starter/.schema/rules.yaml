@@ -1,4 +1,4 @@
-# Word rules for `brain tag`.
+# Word rules for tags on a new capture.
 # If an inbox note contains a word or phrase on the left, it gets the tags on the right.
 # Matching ignores case and only matches whole words.
 # Every tag must also be in tags.yaml.

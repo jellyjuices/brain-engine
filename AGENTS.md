@@ -6,9 +6,9 @@ This repo is the code for a second brain. The notes live in a separate brain fol
 
 | Part | Where | Notes |
 | --- | --- | --- |
-| `brain` command | `engine/bin/brain.ts`, `engine/src/` | Legacy terminal CLI. It stays until the MCP server covers what agents need. Rules: [brain-cli.md](.claude/rules/brain-cli.md) |
-| `brain serve` | `engine/src/interface/server*.ts` |
-| Shared modules | `engine/shared/` | The to-do line and search code. The engine and the app both read it. The app imports it as `@shared` | HTTP server for the app and the menu bar. The MCP server for agents is built at `/mcp` inside `brain serve`. It is not running yet |
+| `brain` command | `engine/bin/brain.ts`, `engine/src/` | Upkeep and intake only: index, check, serve, kill, pull, migrate, swiftbar, intake, thread. Adds, to-dos and Find go through `brain serve`. Rules: [brain-cli.md](.claude/rules/brain-cli.md) |
+| `brain serve` | `engine/src/interface/server*.ts` | HTTP server for the app and the menu bar. The MCP server for agents runs at `/mcp` inside it, on the Mac mini. A route marked `mcp: false` in `routes/table.ts` is not a tool |
+| Shared modules | `engine/shared/` | The to-do line and search code. The engine and the app both read it. The app imports it as `@shared` |
 | Phone app | `web/app/` | Rules: [web.md](.claude/rules/web.md), [web-ui.md](.claude/rules/web-ui.md), [web-tests.md](.claude/rules/web-tests.md). On the phone, loaded for web UI work: [phone-preview.md](.claude/rules/phone-preview.md) |
 | Worker | `web/worker/` | Deploy values come from `~/.config/brain/web.env`. See [docs/phone-setup.md](docs/phone-setup.md) |
 | Design system | `web/design-system/` | Tokens and Storybook. The app imports it as `@ds` |

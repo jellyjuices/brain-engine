@@ -9,7 +9,7 @@ This skill splits journal notes that wait for a chat. Quick to-dos and captures 
 
 ## 1. Find what waits
 
-Run `brain sort --journal --json`. Each item is one journal note with `sorted: false`: its path, title, date and text.
+Call the `unsorted` tool. Each journal item is one journal note with `sorted: false`: its path, title, date and text.
 
 ## 2. Keep the journal whole
 
@@ -30,14 +30,15 @@ Show one table per journal note, one row per bit:
 
 ## 4. File
 
-After the owner says yes to all rows, or the rows they name, sort the journal note in one step:
+After the owner says yes to all rows, or the rows they name, sort the journal note in one step. Call the `sort` tool with the note's `path` and one entry in `bits` per row:
 
 ```
-brain sort journal/<file>.md --bits '[{"into":"people/sam-lee.md","when":"note","kind":"feeling","text":"…","about":"…"},{"into":"areas/general.md","when":"tomorrow","kind":"to-do","text":"…"}]'
+path: journal/<file>.md
+bits: [{"into":"people/sam-lee.md","when":"note","kind":"feeling","text":"…","about":"…"},{"into":"areas/general.md","when":"tomorrow","kind":"to-do","text":"…"}]
 ```
 
-Each bit gets `· from [<title>](../journal/<file>.md)`. The journal note stays and gets `sorted: <today>`. One `brain undo` takes every bit out and the note waits again.
+Each bit gets `· from [<title>](../journal/<file>.md)`. The journal note stays and gets `sorted: <today>`. One `undo` takes every bit out and the note waits again.
 
 ## 5. Close
 
-The Stop hook runs `brain check`. Fix what it reports. Then run `brain log "sorted N journal notes"`. Tell the owner in one line what went where.
+The Stop hook runs `brain check`. Fix what it reports. The sort is logged on its own. Tell the owner in one line what went where.

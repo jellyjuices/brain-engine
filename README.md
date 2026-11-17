@@ -15,7 +15,7 @@ Setup fills an empty folder from `starter/`, writes `~/.config/brain/env`, puts 
 
 Secrets and machine settings live outside the repo, in `~/.config/brain/`. Templates for each file are in `ops/config/`: `env.example`, `relay.env.example` (phone captures) and `web.env.example` (deploys). For the Worker, copy `web/worker/.dev.vars.example` to `.dev.vars`.
 
-Then type `brain`. The terminal command is legacy. It stays until the MCP server at `/mcp`, inside `brain serve`, covers what agents need.
+Add, find and tick to-dos in the app. AI helpers use the MCP server at `/mcp`, inside `brain serve`. The `brain` command is for upkeep and intake only; `brain help` lists what it does.
 
 The brain is meant to run on one always-on Mac, such as a Mac mini. It holds the one copy of the notes. A laptop and a phone send adds to it.
 
@@ -39,7 +39,7 @@ The brain is meant to run on one always-on Mac, such as a Mac mini. It holds the
 
 ## Upkeep
 
-- Every day at 07:00 the daily job indexes, tags and checks the notes, writes `.reports/today.md` in the brain folder, and commits the notes with `git add -A`. If the Mac is asleep, it runs on wake.
+- Every day at 07:00 the daily job indexes and checks the notes, and commits the notes with `git add -A`. If the Mac is asleep, it runs on wake.
 - `ops/launchd/status.sh` shows which jobs are loaded and whether `brain serve` answers.
 - Logs: `~/Library/Logs/brain/`.
 - A push runs the gates first. The hook in `.git/hooks/pre-push` runs `npm run gates` and stops the push if a gate fails. `npm install` at the root copies it there from `ops/hooks/pre-push`.

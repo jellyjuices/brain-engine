@@ -23,7 +23,7 @@ Read the file for the area you work in. Claude Code loads it on its own.
 - `inbox/` holds captures that wait for a helper. The owner never sorts it. Once sorted, a capture is deleted. Git keeps it.
 - `events/` holds one dated visit, appointment or meeting each, with `date`, `status` (upcoming, done, cancelled) and `with`.
 - `me/` holds one Lens note per lens. `sources/` is raw material, such as the owner's full intake answers.
-- Hidden: `.archive/` (finished notes, still searchable), `.templates/`, `.schema/` (types, tags, lens names), `.reports/` and `.brain/` (made by `brain`), `.log.jsonl` (read with `brain log`).
+- Hidden: `.archive/` (finished notes, still searchable), `.templates/`, `.schema/` (types, tags, lens names), `.reports/` and `.brain/` (made by `brain`), `.log.jsonl` (read with the `log` tool).
 
 ## Trust labels
 
@@ -49,16 +49,22 @@ Read the file for the area you work in. Claude Code loads it on its own.
 
 ## Reading and writing the brain
 
-Use the `brain` command. It answers from the index, which costs far fewer tokens than opening notes. `brain help` lists every command.
+Use the brain's MCP tools. They answer from the index, which costs far fewer tokens than opening notes. Every write is logged, re-indexed and checked.
 
-| To | Run |
+| To | Tool |
 | --- | --- |
-| Find | `brain find "words" --json` |
-| Read one note and its backlinks | `brain show "<title or path>" --json` |
-| Today | `brain today --json` |
-| Add | `brain add "text"` |
-| Make a note from a template | `brain new <Type> "Title" -d "…"` |
-| Check your work | `brain check` (must pass before you finish) |
+| Find | `find` |
+| Read one note and its backlinks | `read_note` |
+| Today, or any to-do view | `today`, `todos` |
+| Add | `add` |
+| Tick, move or delete a to-do | `done`, `move`, `delete_todo` |
+| Make a note from a template | `make_note` |
+| Put back the last change | `undo`, after `log` |
+| Sort what waits | `unsorted`, then `sort` |
+
+If the tools are not there, read the notes as files and edit them by the rules in [notes.md](.claude/rules/notes.md). Then run `brain check`. It must pass before you finish.
+
+The `brain` command is for upkeep and intake only: `brain index`, `brain check`, `brain intake ...`, `brain thread ...`. `brain help` lists them.
 
 ## Words the owner sees
 
