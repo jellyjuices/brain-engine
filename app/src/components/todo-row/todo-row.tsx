@@ -68,10 +68,12 @@ export function TodoRow(props: TodoRowProps) {
   const tray = useRef<HTMLDivElement>(null);
   const swipe = useSwipe(() => tray.current?.offsetWidth ?? 0, disabled || actions === 0);
   const hold = useLongPress(disabled ? undefined : onMenu);
-  const run = (fn?: () => void) => () => {
-    swipe.close();
-    fn?.();
-  };
+  function run(fn?: () => void) {
+    return () => {
+      swipe.close();
+      fn?.();
+    };
+  }
 
   useLayoutEffect(() => {
     if (defaultSwiped) swipe.open();
