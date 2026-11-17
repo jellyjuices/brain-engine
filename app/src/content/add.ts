@@ -48,4 +48,8 @@ export const add = {
   other: "Other",
   fullScreen: "Full screen",
   smaller: "Smaller",
+  format: "Format",
+  bold: "Bold",
+  italic: "Italic",
+  list: "List",
 };

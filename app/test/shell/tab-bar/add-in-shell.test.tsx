@@ -1,6 +1,8 @@
+import "fake-indexeddb/auto";
 import { act, cleanup, fireEvent, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { unlockTestVault } from "../../helpers.ts";
 import { HOLD_MS } from "@/components/add-panel/use-hold-to-pick.ts";
 import { HOME } from "@/lib/platform/router.ts";
 import { copy } from "@/content/index.ts";
@@ -22,6 +24,7 @@ async function holdAdd() {
   await act(() => vi.advanceTimersByTimeAsync(HOLD_MS));
 }
 
+beforeAll(unlockTestVault);
 beforeEach(() => stubUnsorted(0));
 
 afterEach(() => {

@@ -1,4 +1,5 @@
 .add-panel {
+  --add-tools: calc(var(--control) + var(--s1) * 2 + var(--hair));
   position: relative;
   display: flex;
   justify-content: center;
@@ -117,13 +118,10 @@
 }
 
 .add-full {
-  position: fixed;
-  top: calc(
-    var(--vvt, 0) + var(--vvh, 100dvh) - var(--tabbar) - env(safe-area-inset-bottom) -
-      var(--control-sm) - var(--s2)
-  );
-  right: calc(var(--s3) + env(safe-area-inset-right));
-  z-index: 3;
+  display: grid;
+  min-width: var(--touch);
+  min-height: var(--touch);
+  place-items: center;
   padding: 0;
   border: 0;
   background: transparent;

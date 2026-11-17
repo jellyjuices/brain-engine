@@ -1,0 +1,20 @@
+.addBar {
+  position: fixed;
+  top: calc(var(--vvt, 0) + var(--vvh, 100dvh) - var(--size-tabbar) - env(safe-area-inset-bottom));
+  right: 0;
+  left: 0;
+  z-index: 3;
+  padding-inline: var(--s2);
+  translate: 0 -100%;
+}
+
+.tools {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.end {
+  margin-inline-start: auto;
+}

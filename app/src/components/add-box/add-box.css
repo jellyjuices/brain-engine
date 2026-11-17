@@ -12,7 +12,7 @@
 
 .add-box {
   position: absolute;
-  inset-block: 22% 58%;
+  inset-block: 16% calc(50% + var(--tabbar) / 2 + var(--add-tools));
   inset-inline: calc((var(--add-blob-w) - 100vw) / 2 + var(--s3));
   overflow-y: auto;
   color: var(--accent-ink);
@@ -29,7 +29,7 @@
 }
 
 .add-box--journal {
-  inset-block: 30% calc(20% + var(--tabbar));
+  inset-block: 30% calc(20% + var(--tabbar) / 2 + var(--add-tools));
   mask-image: linear-gradient(
     transparent,
     black var(--add-fade-top),
@@ -58,5 +58,5 @@
 
 .add-box.is-full {
   inset-block: calc(30% + var(--s5))
-    calc(70% - var(--vvh, 100dvh) + var(--tabbar) + env(safe-area-inset-bottom) + var(--s5));
+    calc(70% - var(--vvh, 100dvh) + var(--tabbar) + env(safe-area-inset-bottom) + var(--add-tools));
 }

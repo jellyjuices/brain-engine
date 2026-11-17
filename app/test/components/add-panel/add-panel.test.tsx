@@ -1,6 +1,8 @@
+import "fake-indexeddb/auto";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { unlockTestVault } from "../../helpers.ts";
 
 const go = vi.fn();
 const saveFlow = vi.fn(async () => true);
@@ -10,6 +12,7 @@ vi.mock("@/lib/sync/writes.ts", () => ({ queueInbox: vi.fn() }));
 
 const { AddPanel } = await import("@/components/add-panel/add-panel.tsx");
 
+beforeAll(unlockTestVault);
 afterEach(cleanup);
 
 describe("AddPanel", () => {
