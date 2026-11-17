@@ -46,6 +46,11 @@
   transition: transform var(--motion-fast) var(--motion-easing);
 }
 
+.addPanel.isOpen .addMain > :first-child {
+  width: var(--size-kind-pick);
+  height: var(--size-kind-pick);
+}
+
 .addMain > :first-child > svg {
   transition: transform var(--motion-fast) var(--motion-easing);
 }
