@@ -2,11 +2,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { spawnSync } from "node:child_process";
 import { buildCard, cardLines, matchSubject } from "../src/reports/card.ts";
 import { addDays, today } from "../src/core/notes.ts";
 import { loadAll } from "../src/core/files.ts";
-import { BIN, makeBrain } from "./fixture.ts";
+import { makeBrain } from "./fixture.ts";
 
 function note(root: string, rel: string, front: string, body: string) {
   writeFileSync(join(root, rel), `---\n${front}\n---\n\n${body}\n`);
@@ -37,10 +36,5 @@ test("find doctor shows the family doctor's card with the to-do, the visit and t
   assert.deepEqual(c.relations.map((r) => [r.direction, r.title, r.role]), [["in", "Sleep", "treats it"]]);
   assert.deepEqual(["resources/health-history.md"].filter((p) => !c.related.map((s) => s.path).includes(p)), []);
   assert.deepEqual(c.todo.filter((t) => t.text === "An area to-do"), [], "area to-dos stay off the card");
-
-  const r = spawnSync(process.execPath, ["--disable-warning=ExperimentalWarning", BIN, "find", "doctor", "--json"], { env: { ...process.env, BRAIN_HOME: root }, encoding: "utf8" });
-  const j = JSON.parse(r.stdout);
-  assert.equal(j.card.subject.path, "people/family-doctor.md");
-  assert.equal(Array.isArray(j.hits), true);
   assert.match(cardLines(c).join("\n"), /To do\n {2}- Ask about Advil · Family doctor visit/);
 });

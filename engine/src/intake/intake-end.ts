@@ -43,7 +43,7 @@ export function endSummary(root: string, opts: { keep?: boolean } = {}): EndSumm
   else if (lines.length) text.push(lines.join(" "));
   if (facts) text.push(`${facts} fact${facts === 1 ? "" : "s"} added to subject notes.`);
   if (todos) text.push(`${todos} to-do${todos === 1 ? "" : "s"} filed in subject notes. None in the inbox.`);
-  if (text.length) text.push("To fix one, edit its note or tell me. To put back the last change, run: brain undo. To remove a new note, move it to .archive/.");
+  if (text.length) text.push("To fix one, edit its note or tell me. To put back the last change, use undo. To remove a new note, move it to .archive/.");
   else text.push("No new subjects, facts or to-dos this session.");
   if (!opts.keep) writeSession(root, fresh());
   return { new: news, lines, todos, text };

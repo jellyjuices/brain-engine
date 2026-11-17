@@ -1,6 +1,5 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { readNote } from "../src/core/files.ts";
@@ -8,7 +7,7 @@ import { areasOf, summary } from "../src/core/notes.ts";
 import { relationsIn } from "../src/core/relations.ts";
 import { relationsOf } from "../src/core/index-links.ts";
 import { check } from "../src/reports/reports.ts";
-import { BIN, makeBrain } from "./fixture.ts";
+import { makeBrain } from "./fixture.ts";
 
 const GOAL_BODY = "# Why\n\n# Targets\n\n- [ ] Run 5 km\n\n# Wins\n\n# Notes\n";
 const DECISION_BODY = "# Rants\n\n# Buckets\n\n# Options\n\n# Decided\n";
@@ -97,15 +96,4 @@ test("relation sections on goals and decisions parse into the index", () => {
   const rels = relationsOf(root, "goals/run-far.md");
   assert.deepEqual(rels.out.map((r) => r.to), ["people/sam.md"]);
   assert.deepEqual(rels.in.map((r) => [r.from, r.heading]), [["decisions/race.md", "Goals"]]);
-});
-
-test("brain new Goal and brain new Decision make valid notes", () => {
-  const root = makeBrain();
-  const run = (...args: string[]) => spawnSync(process.execPath, ["--disable-warning=ExperimentalWarning", BIN, ...args], { env: { ...process.env, BRAIN_HOME: root }, encoding: "utf8" });
-  assert.equal(run("new", "Goal", "Run a marathon", "-d", "A sample goal.", "--area", "fitness").status, 0);
-  assert.equal(run("new", "decision", "Buy a bike?", "-d", "A sample choice.").status, 0);
-  const g = readNote(root, "goals/run-a-marathon.md");
-  assert.deepEqual([g.meta.type, g.meta.status, g.meta.areas, g.meta.area], ["Goal", "active", ["fitness"], undefined]);
-  assert.match(readFileSync(join(root, "decisions/buy-a-bike.md"), "utf8"), /# Rants[\s\S]*# Decided/);
-  assert.deepEqual(check(root), []);
 });

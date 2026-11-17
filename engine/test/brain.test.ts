@@ -267,13 +267,8 @@ function run(root: string, ...args: string[]) {
   return spawnSync(process.execPath, ["--disable-warning=ExperimentalWarning", BIN, ...args], { env: { ...process.env, BRAIN_HOME: root }, encoding: "utf8" });
 }
 
-test("brain command: add, find --json, today, check exit codes", () => {
+test("brain command: check and index exit codes", () => {
   const root = fixture();
-  assert.equal(run(root, "add", "Pay the HST", "--tag", "business-admin").status, 0);
-  const found = JSON.parse(run(root, "find", "hst", "--json").stdout);
-  assert.equal(found[0].tags[0], "business-admin");
-  assert.equal(run(root, "today").status, 0);
-  assert.ok(existsSync(join(root, ".reports/today.md")));
   assert.equal(run(root, "check").status, 0);
   write(root, "inbox/bad.md", "no frontmatter");
   assert.equal(run(root, "check").status, 1);

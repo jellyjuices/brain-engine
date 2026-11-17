@@ -98,14 +98,10 @@ export async function intakeCommand(c: CliContext): Promise<number> {
     report(st, `${pc.green("Done:")} stage ${st.n}, ${st.name}`);
     return 0;
   }
-  const { intakeDump, intakeArea } = await import("./menu.ts");
-  if (args[0]) return intakeArea(root, args[0]);
-  if (!process.stdin.isTTY) {
-    const notes = brainDump(root, readFileSync(0, "utf8"), { single: flags.single, area: flags.area });
-    report(notes.map(summary), `${pc.green("Saved")} ${notes.length} note${notes.length === 1 ? "" : "s"} to inbox/.`);
-    return 0;
-  }
-  return intakeDump(root);
+  if (args[0] || process.stdin.isTTY) return fail("Use: brain intake <status|save|ask|subject|fact|role|todo|end|redact|privacy|done>, or pipe text in: one line is one note.");
+  const notes = brainDump(root, readFileSync(0, "utf8"), { single: flags.single, area: flags.area });
+  report(notes.map(summary), `${pc.green("Saved")} ${notes.length} note${notes.length === 1 ? "" : "s"} to inbox/.`);
+  return 0;
 }
 
 export async function threadCommand(c: CliContext): Promise<number> {

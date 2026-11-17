@@ -6,8 +6,8 @@ import { addDays, today } from "../src/core/notes.ts";
 import { loadAll } from "../src/core/files.ts";
 import { smartAdd, sortCapture, splitPrefix, subjectsNamed } from "../src/capture/file.ts";
 import { capture } from "../src/capture/actions.ts";
-import { spawnSync } from "node:child_process";
-import { BIN, makeBrain } from "./fixture.ts";
+import { undo } from "../src/todos/undo.ts";
+import { makeBrain } from "./fixture.ts";
 
 function brain(): string {
   const root = makeBrain();
@@ -71,15 +71,13 @@ test("one-step sort writes the line with · with, and deletes the capture, with 
   assert.deepEqual(readdirSync(join(root, ".archive")), []);
 });
 
-test("brain undo puts a sorted capture back and takes the filed lines out", () => {
+test("undo puts a sorted capture back and takes the filed lines out", () => {
   const root = brain();
   const cap = capture(root, { text: "Ask Dr about Advil with Omar" });
   const before = read(root, "people/family-doctor.md");
   sortCapture(root, loadAll(root), cap.path, "people/family-doctor.md", { kind: "waiting" }, { with: ["people/omar.md"] });
   assert.equal(existsSync(join(root, cap.path)), false);
-  const r = spawnSync("node", [BIN, "undo"], { cwd: root, env: { ...process.env, BRAIN_HOME: root, NO_COLOR: "1" }, encoding: "utf8" });
-  assert.equal(r.status, 0, r.stderr);
-  assert.match(r.stdout, /Undone: sorted /);
+  assert.match(undo(root).line, /Undone: sorted /);
   assert.equal(existsSync(join(root, cap.path)), true);
   assert.match(read(root, cap.path), /Ask Dr about Advil with Omar/);
   assert.equal(read(root, "people/family-doctor.md"), before);

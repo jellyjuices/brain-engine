@@ -102,7 +102,7 @@ const HEAD: Record<Group, string> = { overdue: "Overdue", today: "Today", waitin
 
 /** The numbered list as plain lines. */
 export function listLines(items: Item[]): string[] {
-  if (!items.length) return ["Nothing due today. Add with: brain add \"text\""];
+  if (!items.length) return ["Nothing due today."];
   const out: string[] = [];
   for (const group of ORDER) {
     const xs = items.filter((x) => x.group === group);

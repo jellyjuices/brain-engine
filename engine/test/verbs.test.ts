@@ -38,7 +38,7 @@ test("done by number ticks the line, keeps its parts, and undo puts it back", ()
   dayList(root);
   const before = file(root);
   const r = done(root, "2");
-  assert.equal(r.line, "Done: Ask about Advil · Family doctor visit · brain undo");
+  assert.equal(r.line, "Done: Ask about Advil · Family doctor visit · undo");
   assert.match(file(root), new RegExp(`- \\[x\\] Ask about Advil · re \\[Sleep\\]\\(\\.\\./topics/sleep\\.md\\) · due ${now} · today · done ${now}`));
   undo(root);
   assert.equal(file(root), before);
@@ -59,7 +59,7 @@ test("move sets the due date and token; drop ticks and marks dropped; undo rever
   const root = brainWithTodos();
   dayList(root);
   const before = file(root);
-  assert.equal(move(root, "1", "tomorrow").line, `Moved: Book the sleep test · Family doctor visit → tomorrow · brain undo`);
+  assert.equal(move(root, "1", "tomorrow").line, `Moved: Book the sleep test · Family doctor visit → tomorrow · undo`);
   assert.match(file(root), new RegExp(`- \\[ \\] Book the sleep test · due ${addDays(now, 1)}`));
   const afterMove = file(root);
   drop(root, "4");
@@ -104,15 +104,12 @@ test("when words map to dates and tokens", () => {
 
 const help = (...args: string[]) => spawnSync(process.execPath, ["--disable-warning=ExperimentalWarning", BIN, "help", ...args], { encoding: "utf8", env: { ...process.env, BRAIN_HOME: makeBrain(), NO_COLOR: "1" } });
 
-test("brain help is 10 lines or fewer and names the verbs", () => {
+test("brain help names the commands that are left, and an old command fails with the help", () => {
   const r = help();
-  const lines = r.stdout.trimEnd().split("\n");
-  assert.ok(lines.length <= 10, `help has ${lines.length} lines`);
-  assert.deepEqual(["add", "done", "move", "delete", "find"].filter((verb) => !r.stdout.includes(`brain ${verb}`)), []);
-});
-
-test("brain help --all names the menu", () => {
-  assert.match(help("--all").stdout, /brain menu/);
+  assert.deepEqual(["index", "check", "serve", "pull", "migrate", "intake", "thread"].filter((name) => !r.stdout.includes(`brain ${name}`)), []);
+  const old = spawnSync(process.execPath, ["--disable-warning=ExperimentalWarning", BIN, "add", "a made-up thought"], { encoding: "utf8", env: { ...process.env, BRAIN_HOME: makeBrain(), NO_COLOR: "1" } });
+  assert.equal(old.status, 1);
+  assert.match(old.stderr + old.stdout, /Unknown command: add/);
 });
 
 // ---- R9: what happened, follow-up, why ----
@@ -179,13 +176,6 @@ test("a subject named by its exact title is offered for a link", () => {
 test("linkText links the first mention with a relative path", () => {
   const fake = { path: "people/omar.md", meta: { type: "Person", title: "Omar" }, body: "", mtime: 0, links: [] };
   assert.equal(linkText("Talked to Omar and Omar agreed", "projects/visit.md", fake), "Talked to [Omar](../people/omar.md) and Omar agreed");
-});
-
-test("with --json nothing is asked and the answers stay empty", () => {
-  const root = brainWithTodos();
-  const r = spawnSync("node", [BIN, "done", "Later thing", "--json"], { cwd: root, env: { ...process.env, BRAIN_HOME: root }, encoding: "utf8", input: "" });
-  assert.equal(r.status, 0, r.stderr);
-  assert.deepEqual(file(root).split("\n").filter((line) => line.startsWith("- [x] Later thing")), [`- [x] Later thing · someday · done ${now}`]);
 });
 
 test("done and move accept a stable path::text ref, and fail clearly when it is gone", () => {

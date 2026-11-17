@@ -161,11 +161,6 @@ test("the brain command runs thread and intake subcommands", () => {
   assert.equal(r.status, 0, r.stderr);
   r = run("intake", "status", "--json");
   assert.equal(JSON.parse(r.stdout).stages[3].state, "done");
-  r = run("log", "intake session 1: day lens");
-  assert.equal(r.status, 0, r.stderr);
-  assert.match(readFileSync(join(root, ".log.jsonl"), "utf8"), /"msg":"intake session 1: day lens"/);
-  r = run("log", "--json");
-  assert.equal(JSON.parse(r.stdout)[0].msg, "intake session 1: day lens");
   r = run("check");
   assert.equal(r.status, 0, r.stdout);
 });
@@ -267,7 +262,7 @@ test("a fixture intake session makes a relation and nothing lands in inbox", () 
   assert.deepEqual(check(root).filter((x) => x.issues.some((i) => i.level === "error")), []);
   const end = endSummary(root);
   assert.equal(end.text[0], "New: Omar (person), Omar · co-founder of Acme.");
-  assert.match(end.text.join("\n"), /brain undo/);
+  assert.match(end.text.join("\n"), /use undo/);
   assert.equal(endSummary(root).text[0], "No new subjects, facts or to-dos this session."); // cleared
   // each edit is logged so brain undo reverses it
   const undoable = readLog(root).filter((e) => e.undo).length;

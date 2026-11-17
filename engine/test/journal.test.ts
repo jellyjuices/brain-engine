@@ -2,9 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { spawnSync } from "node:child_process";
 import { withApi } from "./api-helpers.ts";
-import { BIN } from "./fixture.ts";
 import { titleFrom } from "../src/capture/journal.ts";
 import { parse } from "../src/core/notes.ts";
 
@@ -88,17 +86,6 @@ test("journal: a title edit keeps the link back working", () => withApi(async (a
   assert.equal(shown.data.title, "Leaky roof morning");
   assert.equal(file(a.root, SHED).includes(`](../${ONE})`), true, `missing link to ${ONE}`);
   assert.equal(JSON.stringify(shown.data.backlinks).includes(SHED), true, `missing backlink ${SHED}`);
-}));
-
-test("journal: brain sort --journal lists what waits, and brain sort <journal> --bits sorts it", () => withApi(async (a) => {
-  await twoJournals(a);
-  const brain = (...args: string[]) => spawnSync(process.execPath, ["--disable-warning=ExperimentalWarning", BIN, ...args], { env: { ...process.env, BRAIN_HOME: a.root }, encoding: "utf8" });
-  assert.deepEqual(JSON.parse(brain("sort", "--journal", "--json").stdout).map((w: { path: string }) => w.path), [ONE, TWO]);
-  const r = brain("sort", TWO, "--bits", JSON.stringify([{ into: DANA, when: "note", text: "read two chapters" }]));
-  assert.equal(r.status, 0, r.stderr);
-  const chaptersLine = `read two chapters · from [Quiet night. Read two chapters](../${TWO})`;
-  assert.equal(file(a.root, DANA).includes(chaptersLine), true, `missing ${chaptersLine}`);
-  assert.notEqual(brain("sort", TWO, "--bits", "[]").status, 0);
 }));
 
 test("journal: a plain capture is still deleted on sort", () => withApi(async (a) => {

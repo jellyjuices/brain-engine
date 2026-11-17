@@ -1,6 +1,5 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { loadAll } from "../src/core/files.ts";
@@ -9,7 +8,7 @@ import { decisionView } from "../src/reports/decisions.ts";
 import { goalList, goalView } from "../src/reports/goals.ts";
 import { dayList } from "../src/todos/day-list.ts";
 import { startApi } from "./api-helpers.ts";
-import { BIN, makeBrain } from "./fixture.ts";
+import { makeBrain } from "./fixture.ts";
 
 const now = today();
 const tomorrow = addDays(now, 1);
@@ -123,12 +122,4 @@ test("the read routes return the module's views; the decide-by to-do shows in to
   } finally {
     a.close();
   }
-});
-
-test("brain show prints the goal view", () => {
-  const root = makeBrain();
-  goal(root, "run-far", "- [x] Run 5 km · done 2026-03-05\n- [ ] Run 10 km");
-  const run = spawnSync(process.execPath, ["--disable-warning=ExperimentalWarning", BIN, "show", RUN], { env: { ...process.env, BRAIN_HOME: root }, encoding: "utf8" });
-  assert.match(run.stdout, /50%  1 of 2 done/);
-  assert.match(run.stdout, /Wins/);
 });

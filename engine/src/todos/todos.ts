@@ -86,7 +86,7 @@ export function addNoteLine(root: string, rel: string, text: string, date = toda
 
 function matchOne(root: string, words: string): Loop {
   const needle = words.toLowerCase().trim();
-  if (!needle) throw new Error("Say which to-do: brain done \"words from it\"");
+  if (!needle) throw new Error("Say which to-do, with words from it.");
   const hits = allLoops(loadAll(root), { done: false }).filter((l) => l.text.toLowerCase().includes(needle));
   if (!hits.length) throw new Error(`No open to-do matches "${words}".`);
   if (hits.length > 1 && !hits.every((h) => h.text === hits[0].text)) {

@@ -80,7 +80,7 @@ export function done(root: string, ref: string, extra: Extra = {}): { item: Item
     });
     extra.also?.();
   });
-  return { item, next, line: `Done: ${item.text}${where(item)}${next ? ` · next due ${next}` : ""} · brain undo` };
+  return { item, next, line: `Done: ${item.text}${where(item)}${next ? ` · next due ${next}` : ""} · undo` };
 }
 
 /**
@@ -117,7 +117,7 @@ export function move(root: string, ref: string, when: string, opts: { who?: stri
       return [formatTodoLine(updateTodo(l, { due: w.due, outcome: w.outcome, with: who ? add(fields.with) : fields.with, re: what ? add(fields.re) : fields.re }))];
     });
   });
-  return { item, line: `Moved: ${item.text}${where(item)} → ${label} · brain undo` };
+  return { item, line: `Moved: ${item.text}${where(item)} → ${label} · undo` };
 }
 
 export function drop(root: string, ref: string, extra: Extra = {}): { item: Item; line: string } {
@@ -132,7 +132,7 @@ export function drop(root: string, ref: string, extra: Extra = {}): { item: Item
       return [formatTodoLine(dropTodo(l, today())), ...(note ? [note] : [])];
     });
   });
-  return { item, line: `Deleted: ${item.text}${where(item)} · brain undo` };
+  return { item, line: `Deleted: ${item.text}${where(item)} · undo` };
 }
 
 /** Move many items in one change, logged as one entry so one `brain undo` reverses all. Events only take a date. */
