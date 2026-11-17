@@ -1,7 +1,7 @@
 import { TodoRow } from "./todo-row.tsx";
 import type { WhenChipProps } from "../when-chip/when-chip.tsx";
 import { whenStatus } from "@/lib/design/when.ts";
-import { openTodo } from "@/flows/todo-flow.ts";
+import { openTodo, tomorrow } from "@/flows/todo-flow.ts";
 import { niceDate, todayIso } from "@/lib/notes/model.ts";
 import { plainText } from "@/lib/notes/search.ts";
 import type { TodoRef } from "@/lib/sync/local-edit.ts";
@@ -34,6 +34,7 @@ export function TodoRefRow({ todo, showSubject = true }: TodoRefRowProps) {
       onCheckedChange={() => void openTodo(todo, "done")}
       onOpen={menu}
       onMenu={menu}
+      onLater={() => void tomorrow(todo)}
     />
   );
 }

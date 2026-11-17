@@ -1,0 +1,17 @@
+.areaMark {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.extra {
+  font-family: var(--font-number);
+  font-size: var(--font-size-number-xs);
+  line-height: var(--font-leading-tight);
+  color: var(--text-secondary);
+}
+
+.md .extra {
+  font-size: var(--font-size-number-sm);
+}

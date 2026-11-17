@@ -1,4 +1,4 @@
-import "./tool-bar.css";
+import styles from "./tool-bar.module.css";
 import { Icon } from "@/components/icon/icon.tsx";
 import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 
@@ -12,7 +12,7 @@ export function Tool({
   onClick: () => void;
 }) {
   return (
-    <button className="tool" type="button" onClick={onClick}>
+    <button className={styles.tool} type="button" onClick={onClick}>
       <Icon icon={icon} />
       <span>{label}</span>
     </button>

@@ -1,0 +1,80 @@
+.swipe {
+  position: relative;
+  overflow: hidden;
+  transition:
+    height var(--motion-slow) var(--motion-easing),
+    opacity var(--motion-fast) var(--motion-easing);
+}
+
+.swipe.isGone {
+  opacity: 0;
+}
+
+.swipe.isGone:not(:first-child) {
+  border-top-color: transparent;
+}
+
+.swipeBg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-xl);
+  font-weight: 600;
+  font-size: var(--font-size-body-sm);
+  color: var(--text-on-accent);
+  visibility: hidden;
+}
+
+.swipe[data-dir] .swipeBg {
+  visibility: visible;
+}
+
+.swipe[data-dir="right"] .swipeBg {
+  background: var(--background-accent);
+}
+
+.swipe[data-dir="left"] .swipeBg {
+  background: var(--text-primary);
+  color: var(--background-primary);
+  justify-content: flex-end;
+}
+
+.swipeBgRight,
+.swipeBgLeft {
+  display: none;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.swipeBg svg {
+  width: var(--size-icon);
+  height: var(--size-icon);
+}
+
+.swipe[data-dir="right"] .swipeBgRight,
+.swipe[data-dir="left"] .swipeBgLeft {
+  display: inline-flex;
+}
+
+.swipe[data-armed] .swipeBg {
+  filter: brightness(1.08);
+}
+
+.swipeMain {
+  position: relative;
+  background: var(--background-secondary);
+  touch-action: pan-y;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.swipeMain.isSettling {
+  transition: transform var(--motion-slow) var(--motion-easing);
+}
+
+.swipeMain > *:active {
+  background: color-mix(in srgb, var(--background-secondary) 92%, var(--text-primary));
+}

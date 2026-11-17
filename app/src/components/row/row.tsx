@@ -1,8 +1,8 @@
-import "./row.css";
 import { CaretRightIcon, CircleNotchIcon, type Icon as PhosphorIcon } from "@phosphor-icons/react";
 import type { MouseEvent, ReactNode } from "react";
 import clsx from "clsx";
 import { Icon } from "@/components/icon/icon.tsx";
+import styles from "./row.module.css";
 import { Shape, type ShapeName } from "@/components/shape/shape.tsx";
 
 export interface RowProps {
@@ -36,21 +36,26 @@ export function Row({
   busy,
   onClick,
 }: RowProps) {
-  const className = clsx("row", variant !== "default" && `row--${variant}`, busy && "is-busy");
+  const className = clsx(
+    styles.row,
+    variant === "primary" && styles.primary,
+    variant === "danger" && styles.danger,
+    busy && styles.busy,
+  );
   const inner = (
     <>
       {icon && shape && <Shape name={shape} icon={icon} />}
       {icon && !shape && (
-        <span className="row-icon">
+        <span className={styles.icon}>
           <Icon icon={icon} />
         </span>
       )}
-      <span className="row-main">
-        <span className="row-title">{title}</span>
-        {sub && <span className="row-sub">{sub}</span>}
+      <span className={styles.main}>
+        <span className={styles.title}>{title}</span>
+        {sub && <span className={styles.sub}>{sub}</span>}
       </span>
       {(end || chevron || busy) && (
-        <span className="row-end">
+        <span className={styles.end}>
           {end}
           {busy && <Icon icon={CircleNotchIcon} />}
           {chevron && <Icon icon={CaretRightIcon} />}

@@ -1,3 +1,4 @@
+import styles from "./confirm-sheet.module.css";
 import { Button, type ButtonVariant } from "@/components/button/button.tsx";
 import { openSheet } from "./open-sheet.tsx";
 import { SheetActions } from "./sheet-actions.tsx";
@@ -17,7 +18,7 @@ export function confirmSheet(
   return openSheet<string>(title, (finish) => (
     <>
       <SheetHead title={title} />
-      <p className="lede">{body}</p>
+      <p className={styles.body}>{body}</p>
       <SheetActions>
         {actions.map((a, i) => (
           <Button key={a.id} variant={a.variant} autoFocus={i === 0} onClick={() => finish(a.id)}>

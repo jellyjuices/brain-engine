@@ -1,0 +1,80 @@
+.timelineLine {
+  position: relative;
+  display: grid;
+  gap: var(--space-2xs);
+  min-height: var(--size-target);
+  padding: var(--space-sm) var(--space-lg);
+  list-style: none;
+}
+
+.timelineLine + .timelineLine {
+  border-top: var(--size-hair) solid var(--border-primary);
+}
+
+.timelineLine.isLink:active {
+  background: var(--background-pressed);
+}
+
+@media (hover: hover) {
+  .timelineLine.isLink:hover {
+    background: var(--background-hover);
+  }
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-xs);
+  margin: 0;
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-secondary);
+}
+
+.about {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.glyph {
+  width: var(--font-size-body-sm);
+  height: var(--font-size-body-sm);
+}
+
+.text {
+  margin: 0;
+  font-size: var(--font-size-body-sm);
+  line-height: var(--font-leading-normal);
+  color: var(--text-primary);
+}
+
+.open {
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: start;
+  cursor: pointer;
+}
+
+.open::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.open:focus-visible {
+  outline: none;
+}
+
+.open:focus-visible::after {
+  outline: var(--size-focus) solid var(--border-focus);
+  outline-offset: calc(var(--size-focus) * -1);
+}
+
+.beforeText {
+  margin: 0;
+  font-size: var(--font-size-body-xs);
+  color: var(--text-secondary);
+}

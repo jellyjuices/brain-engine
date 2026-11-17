@@ -1,0 +1,16 @@
+.areaShape {
+  display: inline-block;
+  flex: none;
+  width: var(--size-toast-shape);
+  height: var(--size-toast-shape);
+}
+
+.sm {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+}
+
+.lg {
+  width: var(--size-plus);
+  height: var(--size-plus);
+}

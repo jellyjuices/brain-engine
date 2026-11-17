@@ -1,7 +1,6 @@
 .row {
   position: relative;
   overflow: hidden;
-  list-style: none;
   background: var(--background-primary);
 }
 
@@ -33,6 +32,10 @@
 .action:focus-visible {
   outline-color: var(--action-ink);
   outline-offset: calc(var(--size-focus) * -2);
+}
+
+.actionLater {
+  background: var(--status-waiting);
 }
 
 .actionSort {

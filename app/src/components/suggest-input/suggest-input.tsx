@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { useId, useState, type KeyboardEvent } from "react";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 import visually from "../visually-hidden/visually-hidden.module.css";
-import * as styles from "./suggest-input.styles.ts";
+import styles from "./suggest-input.module.css";
 
 export type Suggestion = { id: string; label: string; hint?: string };
 

@@ -1,5 +1,5 @@
-import "./row.css";
+import styles from "./list.module.css";
 
 export function Divider() {
-  return <hr className="list-divider" />;
+  return <hr className={styles.divider} />;
 }

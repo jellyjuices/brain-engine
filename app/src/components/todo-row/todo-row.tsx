@@ -1,13 +1,14 @@
 import clsx from "clsx";
 import { useId, useLayoutEffect, useRef, type KeyboardEvent } from "react";
 import { Checkbox } from "radix-ui";
-import { CheckIcon, FunnelSimpleIcon, TrashIcon } from "@phosphor-icons/react";
+import { CalendarDotsIcon, CheckIcon, FunnelSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 import type { WhenChipProps } from "../when-chip/when-chip.tsx";
 import { TodoRowMeta, hasMeta } from "./todo-row-meta.tsx";
 import { useLongPress } from "./use-long-press.ts";
 import { useSwipe } from "./use-swipe.ts";
 import hit from "../hit-area/hit-area.module.css";
 import styles from "./todo-row.module.css";
+import { copy } from "@/content/index.ts";
 
 export type TodoRowProps = {
   title: string;
@@ -30,8 +31,10 @@ export type TodoRowProps = {
   onMenu?: () => void;
   onSort?: () => void;
   onDrop?: () => void;
+  onLater?: () => void;
   sortLabel?: string;
   dropLabel?: string;
+  laterLabel?: string;
 };
 
 function isMenuKey(e: KeyboardEvent) {
@@ -57,10 +60,11 @@ export function TodoRow(props: TodoRowProps) {
     onMenu,
     onSort,
     onDrop,
+    onLater,
   } = props;
-  const { sortLabel = "Sort", dropLabel = "Delete" } = props;
+  const { sortLabel = "Sort", dropLabel = "Delete", laterLabel = copy.todo.swipeLater } = props;
   const id = useId();
-  const actions = [onSort, onDrop].filter(Boolean).length;
+  const actions = [onLater, onSort, onDrop].filter(Boolean).length;
   const tray = useRef<HTMLDivElement>(null);
   const swipe = useSwipe(() => tray.current?.offsetWidth ?? 0, disabled || actions === 0);
   const hold = useLongPress(disabled ? undefined : onMenu);
@@ -81,7 +85,7 @@ export function TodoRow(props: TodoRowProps) {
     onClickCapture: both(hold.handlers.onClickCapture, swipe.handlers.onClickCapture),
   };
 
-  function onKeyDown(e: KeyboardEvent<HTMLLIElement>) {
+  function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
     if (e.key === "Escape") swipe.close();
     if (onMenu && !disabled && isMenuKey(e)) {
       e.preventDefault();
@@ -90,7 +94,7 @@ export function TodoRow(props: TodoRowProps) {
   }
 
   return (
-    <li
+    <div
       className={clsx(
         styles.row,
         checked && styles.isDone,
@@ -107,6 +111,17 @@ export function TodoRow(props: TodoRowProps) {
     >
       {actions > 0 && !disabled && (
         <div ref={tray} className={styles.actions}>
+          {onLater && (
+            <button
+              type="button"
+              className={clsx(styles.action, styles.actionLater)}
+              onFocus={swipe.open}
+              onClick={run(onLater)}
+            >
+              <CalendarDotsIcon aria-hidden />
+              {laterLabel}
+            </button>
+          )}
           {onSort && (
             <button
               type="button"
@@ -166,6 +181,6 @@ export function TodoRow(props: TodoRowProps) {
           {hasMeta(props) && <TodoRowMeta {...props} />}
         </div>
       </div>
-    </li>
+    </div>
   );
 }

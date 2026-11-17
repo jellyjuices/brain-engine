@@ -1,3 +1,4 @@
+import styles from "./add-panel.module.css";
 import { ArrowsInSimpleIcon, ArrowsOutSimpleIcon } from "@phosphor-icons/react";
 import { Shape } from "@/components/shape/shape.tsx";
 import { copy } from "@/content/index.ts";
@@ -6,7 +7,7 @@ export function AddFull({ full, onToggle }: { full: boolean; onToggle: () => voi
   return (
     <button
       type="button"
-      className="add-full"
+      className={styles.addFull}
       aria-label={full ? copy.add.smaller : copy.add.fullScreen}
       aria-pressed={full}
       onMouseDown={(e) => e.preventDefault()}

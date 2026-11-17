@@ -1,4 +1,4 @@
-import "./mention-drawer.css";
+import styles from "./mention-drawer.module.css";
 import { CalendarDotsIcon, HashIcon } from "@phosphor-icons/react";
 import { typeIcon } from "@/components/icon/icons.ts";
 import { List } from "@/components/row/list.tsx";
@@ -22,7 +22,7 @@ export function MentionDrawer({
   onPick: (s: Suggestion) => void;
 }) {
   return (
-    <div className="mention-drawer" onMouseDown={(e) => e.preventDefault()}>
+    <div className={styles.mentionDrawer} onMouseDown={(e) => e.preventDefault()}>
       <List variant="ghost" label={kind === "tag" ? copy.notes.tagList : copy.notes.mentionList}>
         {suggestions.map((s) => (
           <Row key={s.key} icon={iconOf(s)} title={s.title} sub={s.sub} onClick={() => onPick(s)} />

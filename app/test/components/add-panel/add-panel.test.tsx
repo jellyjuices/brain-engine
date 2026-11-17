@@ -1,6 +1,7 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import styles from "@/components/add-panel/add-panel.module.css";
 
 const go = vi.fn();
 const saveFlow = vi.fn(async () => true);
@@ -19,8 +20,8 @@ describe("AddPanel", () => {
     await user.click(screen.getByRole("button", { name: "Add" }));
     expect(screen.getAllByRole("menuitem")).toHaveLength(3);
     await user.click(screen.getByRole("button", { name: "Close", expanded: true }));
-    const blob = document.querySelector(".add-blob");
-    if (blob) fireEvent.animationEnd(blob, { animationName: "add-deflate" });
+    const blob = document.querySelector('[class*="addBlob"]');
+    if (blob) fireEvent.animationEnd(blob, { animationName: styles["add-deflate"] });
     expect(screen.queryByRole("menuitem")).toBeNull();
   });
 

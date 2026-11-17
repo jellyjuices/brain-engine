@@ -1,0 +1,41 @@
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) var(--space-lg) var(--space-sm);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-display-md);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-leading-snug);
+  color: var(--text-primary);
+}
+
+.sectionHeader.isLate .title {
+  color: var(--status-late);
+}
+
+.countBadge {
+  display: inline-grid;
+  place-items: center;
+  min-width: var(--space-xl);
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--radius-control);
+  background: var(--background-tag);
+  font-family: var(--font-number);
+  line-height: var(--font-leading-tight);
+  font-size: var(--font-size-body-xs);
+  color: var(--text-secondary);
+}
+
+.actionBox {
+  display: flex;
+  align-items: center;
+}

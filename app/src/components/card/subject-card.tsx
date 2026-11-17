@@ -1,7 +1,6 @@
-import clsx from "clsx";
 import { List } from "@/components/row/list.tsx";
 import { Panel } from "@/components/panel/panel.tsx";
-import { cardDesc, cardHead, cardLink, cardTitle, cardType, cardWhen } from "./card.styles.ts";
+import styles from "./card.module.css";
 import { CardSection } from "./card-section.tsx";
 import { CardTodoRow } from "./card-todo-row.tsx";
 import { LinkLine, type Line } from "./link-line.tsx";
@@ -30,11 +29,11 @@ export function SubjectCard({ card, heading, bare }: SubjectCardProps) {
     <Panel label={copy.notes.subjectLabel(subject.title)}>
       {heading && (
         <>
-          <a className={cardHead} href={noteHref(subject.path)}>
-            <span className={clsx("serif", cardTitle)}>{subject.title}</span>
-            <span className={cardType}>{subject.type ?? copy.common.note}</span>
+          <a className={styles.cardHead} href={noteHref(subject.path)}>
+            <span className={styles.cardTitle}>{subject.title}</span>
+            <span className={styles.cardType}>{subject.type ?? copy.common.note}</span>
           </a>
-          {subject.description && <p className={clsx("lede", cardDesc)}>{subject.description}</p>}
+          {subject.description && <p className={styles.cardDesc}>{subject.description}</p>}
         </>
       )}
       {card.todo.length > 0 && (
@@ -49,10 +48,10 @@ export function SubjectCard({ card, heading, bare }: SubjectCardProps) {
       {card.next && (
         <CardSection label={copy.notes.next}>
           <p>
-            <a className={cardLink} href={noteHref(card.next.path)}>
+            <a className={styles.cardLink} href={noteHref(card.next.path)}>
               {card.next.text}
             </a>
-            <span className={cardWhen}>
+            <span className={styles.cardWhen}>
               {` · ${card.next.date === todayIso() ? copy.common.today : longDate(card.next.date)}`}
             </span>
           </p>
@@ -62,7 +61,7 @@ export function SubjectCard({ card, heading, bare }: SubjectCardProps) {
         <CardSection label={copy.notes.lately}>
           {card.history.map((l, i) => (
             <p key={i}>
-              <span className={cardWhen}>{`${longDate(l.date)} · `}</span>
+              <span className={styles.cardWhen}>{`${longDate(l.date)} · `}</span>
               {l.text}
             </p>
           ))}

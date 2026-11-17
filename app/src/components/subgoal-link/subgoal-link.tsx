@@ -1,19 +1,11 @@
-import { css } from "@linaria/core";
+import styles from "./subgoal-link.module.css";
 import { Bar } from "@/components/bar/bar.tsx";
 import type { GoalRef } from "@shared/todos/index.ts";
 import { goalHref } from "@/lib/notes/goals.ts";
 
-const link = css`
-  display: grid;
-  gap: var(--space-xs);
-  color: var(--text-primary);
-  text-decoration: none;
-  font-size: var(--font-size-body-sm);
-`;
-
 export function SubgoalLink({ goal }: { goal: GoalRef }) {
   return (
-    <a className={link} href={goalHref(goal.path)}>
+    <a className={styles.link} href={goalHref(goal.path)}>
       {goal.title}
       <Bar label={goal.title} done={goal.done} total={goal.total} size="step" />
     </a>

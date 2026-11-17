@@ -1,5 +1,5 @@
 import { noteHref } from "@/lib/notes/model.ts";
-import { cardLink, cardWhen } from "./card.styles.ts";
+import styles from "./card.module.css";
 
 export interface Line {
   path: string;
@@ -11,11 +11,11 @@ export interface Line {
 export function LinkLine({ line }: { line: Line }) {
   return (
     <p>
-      <a className={cardLink} href={noteHref(line.path)}>
+      <a className={styles.cardLink} href={noteHref(line.path)}>
         {line.title}
       </a>
-      {line.role && <span className={cardWhen}>{` · ${line.role}`}</span>}
-      {line.time && <span className={cardWhen}>{` · ${line.time}`}</span>}
+      {line.role && <span className={styles.cardWhen}>{` · ${line.role}`}</span>}
+      {line.time && <span className={styles.cardWhen}>{` · ${line.time}`}</span>}
     </p>
   );
 }
