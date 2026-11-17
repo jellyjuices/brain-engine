@@ -1,8 +1,9 @@
 .pageHeader {
   position: relative;
   isolation: isolate;
+  margin-top: calc(-1 * var(--screen-pad-top, 0%));
   margin-inline: calc(-1 * var(--screen-pad-x, 0%));
-  padding-top: var(--space-2xl);
+  padding-top: calc(var(--space-2xl) + env(safe-area-inset-top));
 }
 
 .glow::before,
