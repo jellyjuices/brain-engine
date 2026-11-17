@@ -15,7 +15,7 @@ import {
   SquaresFourIcon,
   TargetIcon,
   TrayIcon,
-  UserPlusIcon,
+  UserIcon,
   UsersIcon,
   type Icon as PhosphorIcon,
 } from "@phosphor-icons/react";
@@ -23,7 +23,7 @@ import {
 export const KIND_ICON = {
   todo: CheckSquareIcon,
   journal: BookOpenIcon,
-  person: UserPlusIcon,
+  person: UserIcon,
   place: HouseIcon,
   thing: PackageIcon,
   file: FileTextIcon,
