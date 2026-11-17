@@ -36,10 +36,6 @@ export function areasOfNote(n: Note): string[] {
   return areas.length ? areas : n.path.startsWith("areas/") ? [n.path.slice(6, -3)] : [];
 }
 
-export function areaOf(n: Note): string | undefined {
-  return areasOfNote(n)[0];
-}
-
 export const inArea = (l: Loop, area: string) => l.area === area || !!l.areas?.includes(area);
 
 function areaFields(n: Note): Pick<Loop, "area" | "areas"> {

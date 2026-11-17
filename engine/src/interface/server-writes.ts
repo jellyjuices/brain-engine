@@ -1,8 +1,9 @@
 import { applyTriage, newNote } from "../capture/actions.ts";
-import { dump, type Meta, parse } from "../core/notes.ts";
+import { dump, type Meta, type Note, parse, typeOf } from "../core/notes.ts";
 import { loadAll, readNote, writeNote } from "../core/files.ts";
 import { undoLast } from "../core/log.ts";
 import { loadSchema } from "../core/schema.ts";
+import { statusesFor } from "../core/schema-kinds.ts";
 import { move } from "../todos/verbs.ts";
 import { change } from "../todos/undo.ts";
 import { inboxPath } from "./routes/capture.ts";
@@ -107,14 +108,32 @@ function withTags(meta: Meta, tags: string[] | undefined): Meta {
   return next;
 }
 
+function editTitle(raw: unknown, current: Note): string | undefined {
+  const title = text(raw, "title", false)?.trim().replace(/\s+/g, " ");
+  if (title === undefined) return undefined;
+  if (typeOf(current) !== "Journal") throw new HttpError(400, "Only a journal title can be changed here.");
+  if (title.length > 120) throw new HttpError(400, `"title" must be 1 to 120 characters.`);
+  return title;
+}
+
+function editStatus(root: string, raw: unknown, current: Note): string | undefined {
+  const status = text(raw, "status", false)?.trim();
+  if (status === undefined) return undefined;
+  const allowed = statusesFor(typeOf(current), loadSchema(root));
+  if (!allowed.includes(status)) throw new HttpError(400, `"status" must be one of: ${allowed.join(", ")}.`);
+  return status;
+}
+
 export function editNote(c: Ctx, rawPath: string) {
   const path = safeNotePath(rawPath, true);
-  const body = text(c.body.body, "body")!;
   const base = text(c.body.base, "base")!;
   const tags = editTags(c.root, c.body.tags);
   const current = existingNote(c.root, path);
+  const body = text(c.body.body, "body", false) ?? current.body;
+  const title = editTitle(c.body.title, current);
+  const status = editStatus(c.root, c.body.status, current);
   if (hash(fileText(c.root, path)) !== base) throw new HttpError(409, "This note changed since you read it.", { current: fullNoteJson(c.root, loadAll(c.root), current) });
-  const meta = withTags(current.meta as Meta, tags);
+  const meta = { ...withTags(current.meta as Meta, tags), ...(title && { title }), ...(status && { status }) };
   const check = parse(dump(meta, body));
   if (check.error) throw new HttpError(400, check.error);
   if (dump(meta, body) !== dump(current.meta as Meta, current.body)) afterWrite(c.root, () => change(c.root, path, `edit: ${path}`, () => void writeNote(c.root, path, meta, body)));

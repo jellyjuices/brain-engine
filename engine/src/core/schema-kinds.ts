@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
 import { join, posix } from "node:path";
-import { areasOf, slugOf, str, typeOf, type Note } from "./notes.ts";
+import { areasOf, SLUG, slugOf, str, typeOf, type Note } from "./notes.ts";
 import type { Issue, Schema } from "./schema.ts";
 
 export const AREAS_MIN = 1;
@@ -10,7 +10,6 @@ export const KIND_SECTIONS: Record<string, string[]> = {
   Decision: ["# Rants", "# Buckets", "# Options", "# Decided"],
 };
 
-const SLUG = /^[a-z0-9-]+$/;
 const isDate = (v: unknown) => /^\d{4}-\d{2}-\d{2}/.test(String(v)) && !isNaN(Date.parse(String(v).slice(0, 10)));
 const error = (message: string): Issue => ({ level: "error", message });
 const warn = (message: string): Issue => ({ level: "warn", message });
@@ -19,6 +18,7 @@ export function statusesFor(type: string | undefined, schema: Schema): string[] 
   if (type === "Thread") return schema.threadStatus;
   if (type === "Event") return schema.eventStatus;
   if (type === "Goal") return schema.goalStatus;
+  if (type === "Project") return schema.projectStatus;
   if (type === "Decision") return schema.decisionStatus;
   return schema.status;
 }

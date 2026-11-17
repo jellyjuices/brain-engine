@@ -14,6 +14,6 @@ What to bring up.
 
 # To-dos
 
-# Outcome
+# What happened
 
 What happened. Fill in after.

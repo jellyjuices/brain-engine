@@ -1,6 +1,6 @@
 // Journal notes: one note per entry, kept whole. Each waits (`sorted: false`) until it is sorted into bits.
 
-import { addJournalNote, sortJournal, waitingJournals } from "../../capture/journal.ts";
+import { addJournalNote, journalFor, sortJournal, waitingJournals } from "../../capture/journal.ts";
 import type { SortBit } from "../../capture/file.ts";
 import { alreadyFiled, phoneMark } from "../../capture/pull.ts";
 import { loadAll } from "../../core/files.ts";
@@ -15,9 +15,9 @@ export const isJournalPath = (raw: unknown): raw is string => typeof raw === "st
 
 /** An add marked as journal. A retry with the same client_id or the same text makes no copy. */
 export function addJournalEntry(c: Ctx, body: { text: string; client_id: string; created_at?: string; title?: string; by?: string }) {
-  if (alreadyFiled(c.root, body.client_id)) return { saved: "skipped" as const, path: undefined };
+  if (alreadyFiled(c.root, body.client_id)) return { saved: "skipped" as const, ...journalFor(c.root, phoneMark(body.client_id)) };
   const r = afterWrite(c.root, () => addJournalNote(c.root, loadAll(c.root), { text: body.text, at: body.created_at, title: body.title, by: body.by, tag: phoneMark(body.client_id) }));
-  return { saved: r.created ? ("journal" as const) : ("skipped" as const), path: r.path };
+  return { saved: r.created ? ("journal" as const) : ("skipped" as const), path: r.path, title: r.title };
 }
 
 function aboutOf(c: Ctx): { title: string; path: string } | undefined {
@@ -34,7 +34,10 @@ export function addJournal(c: Ctx) {
   const body = text(c.body.text, "text")!;
   if (!body.trim()) throw new HttpError(400, `Missing "text".`);
   if (Buffer.byteLength(body) > MAX_FILE) throw new HttpError(413, "A journal entry can be 60 KB at most.");
-  const input = { text: body, day: date, at: text(c.body.created_at, "created_at", false), title: text(c.body.title, "title", false), about: aboutOf(c) };
+  const clientId = text(c.body.client_id, "client_id", false);
+  const prior = clientId && alreadyFiled(c.root, clientId) ? journalFor(c.root, phoneMark(clientId)) : undefined;
+  if (prior) return { ...prior, created: false };
+  const input = { text: body, day: date, at: text(c.body.created_at, "created_at", false), title: text(c.body.title, "title", false), about: aboutOf(c), ...(clientId && { tag: phoneMark(clientId) }) };
   return afterWrite(c.root, () => addJournalNote(c.root, loadAll(c.root), input));
 }
 

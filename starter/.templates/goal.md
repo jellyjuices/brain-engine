@@ -13,6 +13,8 @@ tags: []
 
 # Targets
 
+# To-dos
+
 # Wins
 
 # Notes
@@ -20,6 +22,8 @@ tags: []
 # People
 
 # Groups
+
+# Projects
 
 # Topics
 

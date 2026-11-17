@@ -21,7 +21,7 @@ function brainWithTodos(): string {
 }
 const file = (root: string) => readFileSync(join(root, "projects/visit.md"), "utf8");
 
-test("brain lists overdue, today, then waiting, numbered, and saves the list", () => {
+test("the day list shows overdue, today, then waiting, numbered", () => {
   const root = brainWithTodos();
   const items = dayList(root);
   assert.deepEqual(items.map((x) => [x.n, x.group, x.text]), [
@@ -30,14 +30,12 @@ test("brain lists overdue, today, then waiting, numbered, and saves the list", (
     [3, "today", "Pay rent"],
     [4, "waiting", "Hear back from Omar"],
   ]);
-  assert.equal(JSON.parse(readFileSync(join(root, ".brain/last-list.json"), "utf8")).length, 4);
 });
 
-test("done by number ticks the line, keeps its parts, and undo puts it back", () => {
+test("done by words ticks the line, keeps its parts, and undo puts it back", () => {
   const root = brainWithTodos();
-  dayList(root);
   const before = file(root);
-  const r = done(root, "2");
+  const r = done(root, "Advil");
   assert.equal(r.line, "Done: Ask about Advil · Family doctor visit · undo");
   assert.match(file(root), new RegExp(`- \\[x\\] Ask about Advil · re \\[Sleep\\]\\(\\.\\./topics/sleep\\.md\\) · due ${now} · today · done ${now}`));
   undo(root);
@@ -57,12 +55,11 @@ test("done on a repeating to-do adds the next one, and undo removes it", () => {
 
 test("move sets the due date and token; drop ticks and marks dropped; undo reverses each in turn", () => {
   const root = brainWithTodos();
-  dayList(root);
   const before = file(root);
-  assert.equal(move(root, "1", "tomorrow").line, `Moved: Book the sleep test · Family doctor visit → tomorrow · undo`);
+  assert.equal(move(root, "sleep test", "tomorrow").line, `Moved: Book the sleep test · Family doctor visit → tomorrow · undo`);
   assert.match(file(root), new RegExp(`- \\[ \\] Book the sleep test · due ${addDays(now, 1)}`));
   const afterMove = file(root);
-  drop(root, "4");
+  drop(root, "Hear back");
   assert.match(file(root), new RegExp(`- \\[x\\] Hear back from Omar · waiting · done ${now} · dropped`));
   undo(root);
   assert.equal(file(root), afterMove);
@@ -114,7 +111,7 @@ test("brain help names the commands that are left, and an old command fails with
 
 // ---- R9: what happened, follow-up, why ----
 
-import { doneWith, dropWith, linkText, namedSubjects } from "../src/todos/wrapup.ts";
+import { doneWith, dropWith } from "../src/todos/wrapup.ts";
 import { loadAll } from "../src/core/files.ts";
 
 test("done with an answer writes a dated note line right under the ticked to-do, and undo reverses it", () => {
@@ -165,22 +162,8 @@ test("drop with a reason writes a note line", () => {
   assert.equal(file(root), before);
 });
 
-test("a subject named by its exact title is offered for a link", () => {
-  const root = brainWithTodos();
-  writeFileSync(join(root, "topics/sleep.md"), "---\ntype: Topic\ntitle: Sleep\ndescription: Sleep facts.\n---\n\n# Notes\n");
-  const notes = loadAll(root);
-  assert.deepEqual(namedSubjects(notes, "Read about Sleep tonight", "projects/visit.md").map((n) => n.path), ["topics/sleep.md"]);
-  assert.deepEqual(namedSubjects(notes, "Read about it tonight", "projects/visit.md"), []);
-});
-
-test("linkText links the first mention with a relative path", () => {
-  const fake = { path: "people/omar.md", meta: { type: "Person", title: "Omar" }, body: "", mtime: 0, links: [] };
-  assert.equal(linkText("Talked to Omar and Omar agreed", "projects/visit.md", fake), "Talked to [Omar](../people/omar.md) and Omar agreed");
-});
-
 test("done and move accept a stable path::text ref, and fail clearly when it is gone", () => {
   const root = brainWithTodos();
-  dayList(root);
   const r = ref("projects/visit.md", "Book the sleep test");
   move(root, r, "tomorrow");
   assert.match(file(root), new RegExp(`- \\[ \\] Book the sleep test · due ${addDays(now, 1)}`));

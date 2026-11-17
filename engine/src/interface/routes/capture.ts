@@ -14,6 +14,7 @@ import { afterWrite, asUserError, type Ctx, existingNote, safeNotePath, text, te
 import { clearDraft } from "./drafts.ts";
 
 const AGENT_BY = "agent";
+const ADD_KINDS = ["todo", "journal", "fact", "feeling"];
 
 /** Who wrote it. The owner's calls carry no `by`. A helper's call always does, and never an owner's name. */
 function writer(c: Ctx): string | undefined {
@@ -30,19 +31,30 @@ export function addRoute(c: Ctx): AddResponse {
   if (Buffer.byteLength(t) > MAX_CAPTURE) throw new HttpError(413, "A capture can be 64 KB at most.");
   const clientId = text(c.body.client_id, "client_id")!;
   const kind = text(c.body.kind, "kind", false);
-  if (kind && kind !== "todo" && kind !== "journal") throw new HttpError(400, `"kind" must be todo or journal.`);
+  if (kind && !ADD_KINDS.includes(kind)) throw new HttpError(400, `"kind" must be one of: ${ADD_KINDS.join(", ")}.`);
   if (kind === "journal") {
     const r = addJournalEntry(c, { text: t, client_id: clientId, created_at: text(c.body.created_at, "created_at", false), title: text(c.body.title, "title", false), by: writer(c) });
     clearDraft(c.root, c.body.draft_id);
     return { ...r, client_id: clientId };
   }
+  const when = text(c.body.when, "when", false);
+  if (when && !whenFrom(when)) throw new HttpError(400, `"when" is not a day I know.`);
+  const into = text(c.body.into, "into", false);
+  if (kind === "fact" || kind === "feeling") {
+    if (!into) throw new HttpError(400, `A ${kind} needs "into".`);
+    existingNote(c.root, safeNotePath(into, true));
+  }
+  const side = typeof c.body.about === "string" ? c.body.about.trim() || undefined : undefined;
   const item = {
     client_id: clientId,
     text: t,
     tags: textList(c.body.tags, "tags"),
     created_at: text(c.body.created_at, "created_at", false),
-    into: text(c.body.into, "into", false),
-    about: notePaths(c.body.about, "about"),
+    into,
+    kind: kind as "todo" | "fact" | "feeling" | undefined,
+    when,
+    side,
+    about: side ? undefined : notePaths(c.body.about, "about"),
     people: notePaths(c.body.people, "people"),
     by: writer(c),
   };

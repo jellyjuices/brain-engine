@@ -6,7 +6,7 @@ import { existsSync } from "node:fs";
 import { join, posix } from "node:path";
 import { type Meta, type Note, nowStamp, str, titleOf, today, typeOf } from "../core/notes.ts";
 import { readNote, slugify, uniquePath, writeNote } from "../core/files.ts";
-import { changeFiles } from "../core/log.ts";
+import { changeFiles, readLog } from "../core/log.ts";
 import { isOwnerWriter } from "../core/owner.ts";
 import { fileInto, type SortBit } from "./file.ts";
 
@@ -45,20 +45,27 @@ export interface JournalInput {
 }
 
 /** Write one journal note. The same text on the same day returns that note, so a retry makes no copy. */
-export function addJournalNote(root: string, notes: Note[], input: JournalInput): { path: string; created: boolean } {
+export function addJournalNote(root: string, notes: Note[], input: JournalInput): { path: string; created: boolean; title: string } {
   const at = input.at ?? nowStamp();
   const day = input.day ?? (DAY.test(at.slice(0, 10)) ? at.slice(0, 10) : today());
   const time = /^\d{2}:\d{2}$/.test(at.slice(11, 16)) ? at.slice(11, 16) : nowStamp().slice(11, 16);
   const text = input.text.replace(/^\s*\n/, "").trimEnd();
   const same = notes.find((n) => isJournal(n) && str(n.meta.date)?.startsWith(day) && n.body.startsWith(text));
-  if (same) return { path: same.path, created: false };
+  if (same) return { path: same.path, created: false, title: titleOf(same) };
   const title = input.title?.trim().replace(/\s+/g, " ").slice(0, 120) || titleFrom(text);
   const path = uniquePath(root, "journal", `${day}-${time.replace(":", "")}-${slugify(title, 40) || "journal"}`);
   const meta: Meta = { type: JOURNAL, title, description: `Journal for ${day} ${time}.`, date: `${day}T${time}`, sorted: false };
   if (input.by && !isOwnerWriter(input.by)) meta.generated = { by: input.by, at };
   const related = input.about ? `\n\n# Related\n\n- [${input.about.title}](${posix.relative("journal", input.about.path)}) · about` : "";
   changeFiles(root, [path], `journal ${path}${input.tag ? ` ${input.tag}` : ""}`, () => writeNote(root, path, meta, `${text}${related}\n`));
-  return { path, created: true };
+  return { path, created: true, title };
+}
+
+/** The journal note an earlier add with this client_id made, from the log. */
+export function journalFor(root: string, mark: string): { path: string; title: string } | undefined {
+  const hit = readLog(root).find((e) => e.msg.startsWith("journal ") && e.msg.endsWith(mark));
+  const path = hit?.msg.split(" ")[1];
+  return path && existsSync(join(root, path)) ? { path, title: titleOf(readNote(root, path)) } : undefined;
 }
 
 const linkBack = (from: string, n: Note) => `[${titleOf(n)}](${posix.relative(posix.dirname(from), n.path)})`;

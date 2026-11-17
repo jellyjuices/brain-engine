@@ -6,7 +6,6 @@ import { mixGlow } from "@/lib/design/area-mix.ts";
 const pageHeader = css`
   position: relative;
   isolation: isolate;
-  overflow: hidden;
   padding-top: var(--space-2xl);
 `;
 

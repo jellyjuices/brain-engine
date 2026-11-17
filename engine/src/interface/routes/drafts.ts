@@ -11,6 +11,7 @@ import { HttpError, MAX_CAPTURE } from "../server-auth.ts";
 import { type Ctx, text } from "../server-context.ts";
 
 const ID = /^[a-z0-9-]{1,40}$/;
+const DRAFT_DAYS = 14;
 const dir = (root: string) => join(root, ".brain", "drafts");
 
 function draftFile(root: string, id: string): string {
@@ -31,7 +32,17 @@ export function clearDraft(root: string, id: unknown): void {
   if (existsSync(file)) unlinkSync(file);
 }
 
+function pruneDrafts(root: string): void {
+  if (!existsSync(dir(root))) return;
+  const cutoff = Date.now() - DRAFT_DAYS * 86_400_000;
+  for (const f of readdirSync(dir(root)).filter((x) => x.endsWith(".json"))) {
+    const updated = Date.parse((JSON.parse(readFileSync(join(dir(root), f), "utf8")) as Draft).updated);
+    if (updated < cutoff) unlinkSync(join(dir(root), f));
+  }
+}
+
 export function saveDraft(c: Ctx): Draft {
+  pruneDrafts(c.root);
   const kind = text(c.body.kind, "kind") as DraftKind;
   if (!DRAFT_KINDS.includes(kind)) throw new HttpError(400, `"kind" must be one of: ${DRAFT_KINDS.join(", ")}.`);
   const data = c.body.data;
@@ -49,6 +60,7 @@ export function saveDraft(c: Ctx): Draft {
 }
 
 export function listDrafts(c: Ctx): DraftsResponse {
+  pruneDrafts(c.root);
   if (!existsSync(dir(c.root))) return { drafts: [] };
   const kind = c.url.searchParams.get("kind");
   const drafts = readdirSync(dir(c.root))

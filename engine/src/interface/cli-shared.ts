@@ -21,23 +21,6 @@ export type CliFlags = ReturnType<typeof parseCli>["values"];
 
 export const out = (s = "") => process.stdout.write(s + "\n");
 
-export function printHits(hits: (Hit | Summary)[]) {
-  if (!hits.length) return out(pc.dim("No matches."));
-  for (const hit of hits) {
-    const meta = [hit.type, hit.area, hit.tags.join(" ")].filter(Boolean).join(" · ");
-    out(`${pc.bold(hit.title)}  ${pc.dim(hit.path)}`);
-    if (hit.description) out(`  ${hit.description}`);
-    if ("snippet" in hit && hit.snippet) out(`  ${hit.snippet.replace(/\[([^\]]*)\]/g, (_, w: string) => pc.yellow(w))}`);
-    if (meta) out(`  ${pc.cyan(meta)}`);
-  }
-}
-
-export function writeReport(root: string, name: string, md: string) {
-  const path = join(root, DIRS.reports, `${name}.md`);
-  writeAtomic(path, md + "\n");
-  return path;
-}
-
 export function parseCli(rest: string[]) {
   return parseArgs({
     args: rest,

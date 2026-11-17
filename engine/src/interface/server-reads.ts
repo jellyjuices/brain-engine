@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildCard, matchSubject } from "../reports/card.ts";
-import { summary } from "../core/notes.ts";
+import { SLUG, summary } from "../core/notes.ts";
 import { loadAll, notePaths } from "../core/files.ts";
 import { areaBrief, areaMarkdown, todayMarkdown, todayReport, weeklyMarkdown, weeklyReport } from "../reports/reports.ts";
 import { changedVectors, feedModel, list, search } from "../core/search.ts";
@@ -46,7 +46,13 @@ export function cardRoute(c: Ctx) {
   return card ? { card, hits } : hits;
 }
 
-export function report(c: Ctx, name: string) {
+export function report(c: Ctx, rawName: string) {
+  let name = rawName;
+  try {
+    name = decodeURIComponent(rawName);
+  } catch {
+    throw new HttpError(400, "That name is not valid.");
+  }
   if (name === "today") {
     const r = todayReport(c.root);
     return { ...r, markdown: todayMarkdown(r) };
@@ -55,8 +61,8 @@ export function report(c: Ctx, name: string) {
     const r = weeklyReport(c.root);
     return { ...r, markdown: weeklyMarkdown(r) };
   }
-  const area = /^area\/([a-z0-9-]+)$/.exec(name)?.[1];
-  if (!area) throw new HttpError(404, `No report named ${name}.`);
+  const area = /^area\/(.+)$/.exec(name)?.[1];
+  if (!area || !SLUG.test(area)) throw new HttpError(404, `No report named ${name}.`);
   const brief = areaBrief(c.root, area);
   return { ...brief, note: brief.note && summary(brief.note), markdown: areaMarkdown(brief) };
 }
@@ -103,7 +109,7 @@ export function intakeSkip(c: Ctx) {
 }
 
 export function todayRoute(c: Ctx) {
-  const items = dayList(c.root, { save: false }).map((x) => ({ ...x, ref: x.kind === "event" ? x.path : ref(x.path, x.text) }));
+  const items = dayList(c.root).map((x) => ({ ...x, ref: x.kind === "event" ? x.path : ref(x.path, x.text) }));
   return { date: new Date().toLocaleDateString("en-CA"), items };
 }
 

@@ -8,9 +8,9 @@ interface Words { q: string; limit?: number }
 interface Filters { type?: string; tag?: string; area?: string; status?: string; limit?: number }
 interface NotePath { path: string }
 interface DraftId { id: string }
-interface EditNote { path: string; body: string; base: string; tags?: string[] }
+interface EditNote { path: string; body?: string; base: string; tags?: string[]; title?: string; status?: string }
 interface Person { name: string; birthday?: string; description?: string }
-interface Journal { date: string; text: string; about?: string; title?: string; created_at?: string }
+interface Journal { date: string; text: string; about?: string; title?: string; created_at?: string; client_id?: string }
 interface Subject { type: string; name: string }
 interface TextFile { title: string; text: string }
 interface Birthday { path: string; birthday: string }
@@ -27,12 +27,13 @@ const add = obj<AddRequest>({
   text: req(str()),
   created_at: str("ISO time."),
   into: str("A note path to file it in."),
-  about: strs(PATHS),
+  about: { description: "Note paths. With kind feeling, the side: what it is about, in the owner's words.", oneOf: [strs(PATHS), str()] },
   people: strs("Person note paths."),
   tags: strs(),
   by: str(BY),
   draft_id: str(),
-  kind: oneOf(["todo", "journal"], "journal keeps the text whole as its own note, to sort later."),
+  when: str(WHEN),
+  kind: oneOf(["todo", "journal", "fact", "feeling"], "todo writes a to-do line. journal keeps the text whole as its own note, to sort later. fact and feeling write one dated line into into."),
   title: str("A journal note's title. With none, the first words."),
 });
 
@@ -72,9 +73,20 @@ export const INPUTS: Record<string, Input> = {
     draft_id: str(),
   }),
   unsorted: NONE,
-  make_note: obj<MakeNoteRequest>({ type: req(str("A note type, like Goal, Decision or Project.")), title: req(str()), description: str(), draft_id: str() }),
+  make_note: obj<MakeNoteRequest>({
+    type: req(str("A note type, like Goal, Decision or Project.")),
+    title: req(str()),
+    description: str(),
+    draft_id: str(),
+    fields: { type: "object", description: "Any of why, when, date, with, decide_by, subjects, birthday, from, renews, status. Text, or a list of text.", additionalProperties: { oneOf: [{ type: "string" }, { type: "array", items: { type: "string" } }] } },
+    areas: strs("Area slugs, like health."),
+    parent: str("A goal path or slug. The new goal is its subgoal."),
+    sections: { type: "object", description: "Lines under headings, like { \"# Targets\": [\"- [ ] Run 5 km\"] }.", additionalProperties: { type: "array", items: { type: "string" } } },
+    relations: { type: "array", description: "Links written in the new note.", items: shape<{ to: string; role?: string; time?: string }>({ to: req(str(PATH)), role: str(), time: str() }) },
+    todos: { type: "array", description: "To-dos under # To-dos. Text, or an object.", items: { oneOf: [{ type: "string" }, shape<{ text: string; when?: string; toward?: string }>({ text: req(str()), when: str(WHEN), toward: str("A goal path this to-do is toward.") })] } },
+  }),
   delete_note: notePath(true),
-  edit_note: obj<EditNote>({ path: req(str(PATH)), body: req(str()), base: req(str("The hash from read_note.")), tags: strs() }, "path"),
+  edit_note: obj<EditNote>({ path: req(str(PATH)), body: str("The whole new body. Leave it out to keep the body."), base: req(str("The hash from read_note.")), tags: strs(), title: str("A new title. Journal notes only. The path stays."), status: str("A new status the note type allows, like finished for a Project.") }, "path"),
   relations: notePath(false),
   add_relation: obj<AddRelationRequest>({ from: req(str(PATH)), to: req(str(PATH)), role: str(), time: str() }),
   log: obj<{ n?: number }>({ n: int("How many, up to 200.") }),
@@ -88,7 +100,7 @@ export const INPUTS: Record<string, Input> = {
   calendar: NONE,
   report: obj<{ name: string }>({ name: req(str("today, weekly or area/<slug>.")) }, "name"),
   add_person: obj<Person>({ name: req(str()), birthday: str("Like 1990-05-04."), description: str() }),
-  add_journal: obj<Journal>({ date: req(str("Like 2026-05-04.")), text: req(str()), about: str(PATH), title: str(), created_at: str("ISO time. Its HH:MM goes in the path.") }),
+  add_journal: obj<Journal>({ date: req(str("Like 2026-05-04.")), text: req(str()), about: str(PATH), title: str(), created_at: str("ISO time. Its HH:MM goes in the path."), client_id: str("Any unique id. A retry with the same id makes no copy, even if the text was edited.") }),
   add_subject: obj<Subject>({ type: req(oneOf(["Place", "Thing"])), name: req(str()) }),
   drop_capture: notePath(false),
   add_file: obj<TextFile>({ title: req(str()), text: req(str()) }),

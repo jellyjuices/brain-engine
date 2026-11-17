@@ -11,6 +11,11 @@ import { sectionRange } from "../../shared/line/index.ts";
 
 export const RELATION_HEADINGS = ["# People", "# Groups", "# Projects", "# Places", "# Things", "# Topics", "# Goals", "# Decisions", "# Related"];
 
+const HEADING_OF_TYPE: Record<string, string> = { Person: "# People", Group: "# Groups", Project: "# Projects", Place: "# Places", Thing: "# Things", Topic: "# Topics", Goal: "# Goals", Decision: "# Decisions" };
+
+/** The relation heading a link to a note of this type goes under. */
+export const headingForType = (type: string | undefined): string => HEADING_OF_TYPE[type ?? ""] ?? "# Related";
+
 export interface Relation {
   from: string;
   to: string;
