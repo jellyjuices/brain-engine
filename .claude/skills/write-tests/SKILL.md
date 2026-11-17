@@ -1,6 +1,6 @@
 ---
 name: write-tests
-description: Writes or fixes tests in brain-engine the way this repo does them (node:test in engine and web/worker, Vitest and Testing Library in web/app). Use when asked to "write tests", "add a test", "test this", "cover this", "fix a flaky test", or after adding or changing code in engine/src, engine/shared, web/app/src or web/worker/src.
+description: Writes or fixes tests in brain-engine the way this repo does them (node:test in engine and worker, Vitest and Testing Library in app). Use when asked to "write tests", "add a test", "test this", "cover this", "fix a flaky test", or after adding or changing code in engine/src, engine/shared, app/src or worker/src.
 ---
 
 # Write tests
@@ -8,8 +8,8 @@ description: Writes or fixes tests in brain-engine the way this repo does them (
 A test earns its place only if it fails when the product breaks. Read the reference for the package you touch, only that one:
 
 - `engine/` (the `brain` code and its `test/`): [references/node-test.md](references/node-test.md). In this skill, `test/`, `src/` and `shared/` with no folder in front mean the ones inside `engine/`
-- `web/app` (Vitest, React): [references/vitest-react.md](references/vitest-react.md)
-- `web/worker`: [references/worker.md](references/worker.md)
+- `app` (Vitest, React): [references/vitest-react.md](references/vitest-react.md)
+- `worker`: [references/worker.md](references/worker.md)
 - The checkable list another agent scores tests against: [references/criteria.md](references/criteria.md)
 
 ## Steps
@@ -32,8 +32,8 @@ A test earns its place only if it fails when the product breaks. Read the refere
 ## Where tests go and what they are called
 
 - Engine: `engine/test/<topic>.test.ts`, flat, one file per topic. Helpers and fixtures sit beside them (`fixture.ts`, `api-helpers.ts`, `t9-brain.ts`).
-- App: `web/app/test/<area>/<name>/<name>.test.ts(x)`, mirroring `src`. Shared helpers: `web/app/test/helpers.ts`.
-- Worker: `web/worker/test/<topic>.test.ts`. Helpers: `helpers.ts`, `fake-d1.ts`.
+- App: `app/test/<area>/<name>/<name>.test.ts(x)`, mirroring `src`. Shared helpers: `app/test/helpers.ts`.
+- Worker: `worker/test/<topic>.test.ts`. Helpers: `helpers.ts`, `fake-d1.ts`.
 - Name = scenario plus result: `"Undo after it landed queues /api/undo"`. Reason: a red test name should say what broke.
 - Prefix `T1`, `T2`... only for the numbered suites that already use them (line, T9, MCP).
 
@@ -59,10 +59,10 @@ A test earns its place only if it fails when the product breaks. Read the refere
 
 One JSON file feeds two test runners, so the CLI and the app agree.
 
-- `shared/line/golden.json`: rows of `{ line, parsed }`. Root `test/line.test.ts` reads it with `readFileSync`. `web/app/test/shared/line.test.ts` imports it as `@shared/line/golden.json` and uses `it.each(golden)`.
+- `shared/line/golden.json`: rows of `{ line, parsed }`. Root `test/line.test.ts` reads it with `readFileSync`. `app/test/shared/line.test.ts` imports it as `@shared/line/golden.json` and uses `it.each(golden)`.
 - T9 questions: `test/fixtures/t9/questions.json` and `notes.json`, built into a brain by `t9Brain()` in `test/t9-brain.ts`.
 - To add a case, add a row to the JSON. Do not copy the case into a test file. Reason: one source of truth.
-- MCP tool list: `test/mcp-tools.snapshot.json`. After a deliberate tool change, run `UPDATE_SNAPSHOT=1 npm test`, then read the git diff before you commit it. Never refresh it to make a failure go away.
+- MCP tool list: `test/mcp-tools.snapshot.json`. After a deliberate tool change, run `UPDATE_SNAPSHOT=1 npm run test:engine`, then read the git diff before you commit it. Never refresh it to make a failure go away.
 
 ## Top failure patterns in this repo and the fix
 
@@ -71,7 +71,7 @@ One JSON file feeds two test runners, so the CLI and the app agree.
 | `await new Promise(r => setTimeout(r, 30))` | `await flush()`, or `fakeTimeouts()` for a screen. Recipes: "Time" in `vitest-react.md` |
 | A wait to prove "nothing happens" | Do a second action that does send, await it, assert only that one arrived |
 | A screen left open sends its text into the next test | Wait for the test's own send in `afterEach` |
-| One test over 1 s from PBKDF2 | `unlockTestVault()` or `fastPasswordKeys()` from `web/app/test/helpers.ts` |
+| One test over 1 s from PBKDF2 | `unlockTestVault()` or `fastPasswordKeys()` from `app/test/helpers.ts` |
 | One root test over 1 s | It runs the `brain` command too often. 3 runs or fewer per test |
 | A test that passes only on the owner's Mac | Pass `BRAIN_HOME: makeBrain()`. Use a fixed clock, never `Date.now()` against a file time |
 | `expect(x).toBe(true)` or `ok(a === b)` | Compare the value itself. Patterns: "Assert the value" in each reference |

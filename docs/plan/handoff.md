@@ -18,8 +18,8 @@ Updated 2026-11-17. This lists only work still to do. The intent for every part 
 | Where | Command |
 | --- | --- |
 | Everything | `npm run gates` at the root |
-| Engine only | in `engine`: `npm test`, `npm run check` |
-| App only | in `web/app`: `npm run typecheck`, `npm test`, `npm run build` |
+| Engine only | `npm run test:engine`, `npm run check` |
+| App only | `npm run typecheck`, `npm run test:app`, `npm run build` |
 | Notes | `brain check` |
 
 ## For the owner
@@ -49,7 +49,7 @@ Updated 2026-11-17. This lists only work still to do. The intent for every part 
 | 16 | Goal API gaps | Small | none | A list of linked projects in `GoalView`; subgoals and decisions in `/api/goals`; a route to cross off a target (today the app edits the note) |
 | 17 | One home for shared app and engine code | Small | none | The view rules (`engine/src/interface/routes/reads.ts`) and goal types (`engine/src/reports/goals.ts`) are copied in the app. Move them to `engine/shared` |
 | 6 | Dead code, rest | Small | none | fallow still lists 21 unused exports in `engine/` |
-| 8 | Test cleanup | Small | after the UI settles | `if` and `for` in tests, files with no failure case. Skipped against the new criteria: `web/app/test/shell/shell-frame/shell-frame.test.tsx`, the tab bar and rail rows for To-dos and Goals. Delete the scratch folder `web/app/test/tmpx/` in the app worktree |
+| 8 | Test cleanup | Small | after the UI settles | `if` and `for` in tests, files with no failure case. Skipped against the new criteria: `app/test/shell/shell-frame/shell-frame.test.tsx`, the tab bar and rail rows for To-dos and Goals. Delete the scratch folder `app/test/tmpx/` in the app worktree |
 
 ## App
 
@@ -65,4 +65,4 @@ Design: [concept-a.md](../design/concept-a.md). Add flows: [add-flows.md](add-fl
 | 19 | Drafts kept on the device (G12) | Small | none | The device keeps its own draft copy and syncs it with `save_draft` |
 | 14 | Delete old screens: `inbox`, `today`, `report`, `write`, `new` | Small | 10, 12, 13 | No tab points at `today` or `report` now. The owner runs any `rm` |
 
-Paths in [add-flows.md](add-flows.md), [search.md](search.md) and [concept-a.md](../design/concept-a.md) predate the folder layout: `src/` is now `engine/src/`, `shared/` is `engine/shared/`, `design-system/` is now inside the app: `web/app/src/components/`, `web/app/tokens/`.
+Paths in [add-flows.md](add-flows.md), [search.md](search.md) and [concept-a.md](../design/concept-a.md) predate the folder layout: `src/` is now `engine/src/`, `shared/` is `engine/shared/`, `design-system/` is now inside the app: `app/src/components/`, `app/tokens/`.

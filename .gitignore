@@ -3,8 +3,8 @@ dist/
 storybook-static/
 .DS_Store
 .dev.vars
-web/worker/.wrangler/
-web/worker/wrangler.toml
+worker/.wrangler/
+worker/wrangler.toml
 .code-review-graph/
 .claude/settings.local.json
 CLAUDE.local.md

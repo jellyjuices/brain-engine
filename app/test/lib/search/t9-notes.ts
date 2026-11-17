@@ -1,5 +1,5 @@
-import notesJson from "../../../../../engine/test/fixtures/t9/notes.json";
-import questionsJson from "../../../../../engine/test/fixtures/t9/questions.json";
+import notesJson from "../../../../engine/test/fixtures/t9/notes.json";
+import questionsJson from "../../../../engine/test/fixtures/t9/questions.json";
 import type { StoredNote } from "@/lib/notes/model.ts";
 import { note } from "../../helpers.ts";
 

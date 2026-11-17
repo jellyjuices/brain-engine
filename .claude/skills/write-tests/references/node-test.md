@@ -2,7 +2,7 @@
 
 Every path here is inside `engine/`. Run the commands from `engine/`.
 
-Run: `node --disable-warning=ExperimentalWarning --test test/<file>.test.ts` for the files you changed. Run all (`npm test`) once at the end. Coverage: add `--experimental-test-coverage`. Baseline is about 94% lines, 254 tests, 8 s.
+Run: `node --disable-warning=ExperimentalWarning --test engine/test/<file>.test.ts` for the files you changed. Run all (`npm run test:engine`) once at the end. Coverage: add `--experimental-test-coverage`. Baseline is about 94% lines, 254 tests, 8 s.
 
 ## Shape
 
@@ -35,7 +35,7 @@ Always `assert/strict`. Use `assert.deepEqual` on whole values so a failure prin
 
 ## MCP snapshot
 
-`test/mcp.test.ts` (T4) compares the tool list to `test/mcp-tools.snapshot.json`. Rewrite only with `UPDATE_SNAPSHOT=1 npm test` after a deliberate change, then review the diff. `mcp-parity.test.ts` checks that MCP tools match the HTTP routes.
+`test/mcp.test.ts` (T4) compares the tool list to `test/mcp-tools.snapshot.json`. Rewrite only with `UPDATE_SNAPSHOT=1 npm run test:engine` after a deliberate change, then review the diff. `mcp-parity.test.ts` checks that MCP tools match the HTTP routes.
 
 ## Table tests and no logic
 

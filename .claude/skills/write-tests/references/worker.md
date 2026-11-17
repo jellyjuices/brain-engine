@@ -1,10 +1,10 @@
-# Worker (`web/worker`)
+# Worker (`worker`)
 
-Run: `npm --prefix web/worker test`. It is `node:test` with `node:assert/strict`, same style as the root. Baseline: 33 tests, about 98% lines. Rules also in `.claude/rules/web-tests.md`.
+Run: `npm run test:worker`. It is `node:test` with `node:assert/strict`, same style as the root. Baseline: 33 tests, about 98% lines. Rules also in `.claude/rules/web-tests.md`.
 
 ## Files
 
-`web/worker/test/`: `auth.test.ts`, `calendar.test.ts`, `proxy.test.ts`, `relay.test.ts`, plus helpers `helpers.ts` and `fake-d1.ts`. One file per route group.
+`worker/test/`: `auth.test.ts`, `calendar.test.ts`, `proxy.test.ts`, `relay.test.ts`, plus helpers `helpers.ts` and `fake-d1.ts`. One file per route group.
 
 ## Helpers
 
@@ -22,4 +22,4 @@ Run: `npm --prefix web/worker test`. It is `node:test` with `node:assert/strict`
 
 ## Gate
 
-`npm --prefix web/worker run typecheck`, `lint` and `size` run in `npm run gates` too.
+`npm run typecheck`, `lint` and `size` cover the worker and run in `npm run gates` too.

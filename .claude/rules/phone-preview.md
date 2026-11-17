@@ -1,7 +1,7 @@
 ---
 description: How to show the owner a web app change when they work from their phone, not their laptop.
 paths:
-  - "web/app/**"
+  - "app/**"
 ---
 
 # Phone preview
@@ -16,10 +16,10 @@ Use this mode when the owner says they are on their phone (a Pixel), or when the
 
 ## Steps
 
-1. Change the code in `web/app/src` as usual.
-2. If the demo needs a different screen, edit `web/app/preview/main.tsx`. It draws real parts from `src/`, not copies. Keep it small: only what the demo needs.
+1. Change the code in `app/src` as usual.
+2. If the demo needs a different screen, edit `app/preview/main.tsx`. It draws real parts from `src/`, not copies. Keep it small: only what the demo needs.
 3. Build one self-contained page into the scratchpad:
-   `cd web/app && npm run preview:page -- <scratchpad>/preview.html`
+   `npm run preview:page -- <scratchpad>/preview.html`
 4. Publish it with the Artifact tool. First publish: pass `icon`. Every later publish: the same `file_path`, so the link stays the same. The page is private to the owner.
 5. Give the owner the link. Say what to tap.
 6. To check it yourself, take a phone-size screenshot with Playwright (`devices["iPhone 13"]`) of the same page. Read it before you send it. Send screenshots with `SendUserFile`.
@@ -36,5 +36,5 @@ Say these limits once, in plain words, when you share the link.
 ## Real app on the phone
 
 When the owner wants the real thing, they run this on their laptop, on the same wifi as the phone:
-`cd web/app && npm run dev -- --host`
+`npm run dev -- --host`
 Then they open the address it prints on the phone. Do not run this yourself.

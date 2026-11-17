@@ -1,15 +1,15 @@
 ---
 description: How to write web app tests (Vitest, happy-dom, Testing Library) and Worker tests (node:test).
 paths:
-  - "web/app/test/**"
-  - "web/worker/test/**"
+  - "app/test/**"
+  - "worker/test/**"
 ---
 
 # Web tests
 
 A test earns its place only if it fails when the product breaks.
 
-App tests use Vitest. Worker tests use `node:test` and `node:assert/strict`, with a fake D1 in `web/worker/test/fake-d1.ts`. The rules below apply to both. The parts rules (`render()`, `userEvent`, queries) are for the app only.
+App tests use Vitest. Worker tests use `node:test` and `node:assert/strict`, with a fake D1 in `worker/test/fake-d1.ts`. The rules below apply to both. The parts rules (`render()`, `userEvent`, queries) are for the app only.
 
 - One behaviour per test: one action, then asserts on its result.
 - Assert what a caller can see, not internals.

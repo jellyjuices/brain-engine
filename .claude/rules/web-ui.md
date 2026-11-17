@@ -1,11 +1,11 @@
 ---
 description: Design system, naming, styles and on-screen words for the web app parts and screens.
 paths:
-  - "web/app/src/components/**"
-  - "web/app/src/screens/**"
-  - "web/app/src/shell/**"
-  - "web/app/src/styles/**"
-  - "web/app/src/content/**"
+  - "app/src/components/**"
+  - "app/src/screens/**"
+  - "app/src/shell/**"
+  - "app/src/styles/**"
+  - "app/src/content/**"
 ---
 
 # Web app UI

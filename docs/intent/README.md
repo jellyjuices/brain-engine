@@ -68,7 +68,7 @@ The tab bar is **To-dos · Goals · + · Find · Brain**.
 - Fonts: Hedvig Letters Serif for titles, Atkinson Hyperlegible Next for body and UI, Space Mono for numbers.
 - Each life area has a key colour. An item in several areas shows a mix of their colours.
 - Text always stays neutral. Colour sits on dots, bars and shapes, never on words.
-- The design system lives inside the phone app: parts in `web/app/src/components/`, tokens in `web/app/tokens/`.
+- The design system lives inside the phone app: parts in `app/src/components/`, tokens in `app/tokens/`.
 
 ### Words the owner sees
 

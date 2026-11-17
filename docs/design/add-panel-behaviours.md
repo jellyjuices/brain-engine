@@ -1,6 +1,6 @@
 # Add button, Add panel and inputs: behaviours on main
 
-Check list for hand-testing later slices. Paths are under `web/app/src/components/`. Old tokens: fast 160ms, slow 220ms, pop 460ms, spin 40s, ease `cubic-bezier(0.2,0.7,0.2,1)`, ease-in `cubic-bezier(0.5,0,0.75,0)`.
+Check list for hand-testing later slices. Paths are under `app/src/components/`. Old tokens: fast 160ms, slow 220ms, pop 460ms, spin 40s, ease `cubic-bezier(0.2,0.7,0.2,1)`, ease-in `cubic-bezier(0.5,0,0.75,0)`.
 
 ## Animations (keyframes name, owner)
 

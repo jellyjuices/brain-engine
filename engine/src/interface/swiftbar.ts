@@ -1,5 +1,5 @@
 // SwiftBar menu bar plugin: `brain swiftbar` prints one line, the scribble icon and the inbox count.
-// A click on the icon opens the web app (web/app) in SwiftBar's popover. Format: https://github.com/swiftbar/SwiftBar#plugin-api
+// A click on the icon opens the web app (app) in SwiftBar's popover. Format: https://github.com/swiftbar/SwiftBar#plugin-api
 //
 // DECISION: the whole menu is the web app. It has the real screens (Add, Find, Today, sort), so the menu has no copy of them.
 // DECISION: the app comes from `brain serve` on this Mac, so it needs no internet and no password (server.ts says why that

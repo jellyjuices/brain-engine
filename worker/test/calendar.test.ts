@@ -19,7 +19,12 @@ function stub(respond: () => Response): string[] {
 }
 
 function env(overrides = {}) {
-  return makeEnv({ MAC_ORIGIN: "https://mac.example.com/", SERVER_TOKEN: "srv", CAL_TOKEN: TOKEN, ...overrides }).env;
+  return makeEnv({
+    MAC_ORIGIN: "https://mac.example.com/",
+    SERVER_TOKEN: "srv",
+    CAL_TOKEN: TOKEN,
+    ...overrides,
+  }).env;
 }
 
 test("the feed URL with the right token gets the Mac feed with the server token", async () => {

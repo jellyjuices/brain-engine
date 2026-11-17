@@ -1,7 +1,8 @@
 ---
-description: Core rules for the phone app and Worker in web/ (gates, layout, app flow, React, code style).
+description: Core rules for the phone app and Worker in app/ and worker/ (gates, layout, app flow, React, code style).
 paths:
-  - "web/**"
+  - "app/**"
+  - "worker/**"
 ---
 
 # Web app
@@ -13,12 +14,12 @@ Stack: Vite, React 19, TypeScript, Linaria (plain CSS for the families not yet m
 Run `npm run gates` from the repo root before you finish. All must pass.
 
 - `npm run size` fails on any file over 200 lines. Split the file. Never raise the limit. Some old files are still over. If you touch one, split it, or at least do not make it longer.
-- Tests: `npx vitest run test/<file>.test.tsx`, only for files you added or changed.
+- Tests: `npm run test:app -- test/<file>.test.tsx`, only for files you added or changed.
 - A failure in a file you did not touch is likely another agent's work. Say so in one line. Do not fix or revert it.
 - Do not open the app in a browser and do not take screenshots. The browser tools are blocked to save tokens. Check your work with typecheck, lint and tests. The owner checks the screen themselves. Do not start a dev server from Bash. Exception: when the owner works from their phone, follow [phone-preview.md](phone-preview.md).
 - Do not deploy (see `AGENTS.md`). Build, then tell the owner what to run.
 
-## Layout of `web/app/src`
+## Layout of `app/src`
 
 | Folder | Holds |
 | --- | --- |

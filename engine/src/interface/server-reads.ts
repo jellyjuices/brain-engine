@@ -16,7 +16,7 @@ import { afterWrite, type Ctx, existingNote, fullNoteJson, noteJson, safeNotePat
 import { OWNER_BY, ownerWriters } from "../core/owner.ts";
 
 export function health(root: string) {
-  const pkg = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "..", "package.json"), "utf8")) as { version: string };
+  const pkg = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "package.json"), "utf8")) as { version: string };
   return { ok: true, version: pkg.version, note_count: notePaths(root).length };
 }
 

@@ -9,8 +9,8 @@ This repo is the code for a second brain. The notes live in a separate brain fol
 | `brain` command | `engine/bin/brain.ts`, `engine/src/` | Upkeep and intake only: index, check, serve, kill, pull, migrate, swiftbar, intake, thread. Adds, to-dos and Find go through `brain serve`. Rules: [brain-cli.md](.claude/rules/brain-cli.md) |
 | `brain serve` | `engine/src/interface/server*.ts` | HTTP server for the app and the menu bar. The MCP server for agents runs at `/mcp` inside it, on the Mac mini. A route marked `mcp: false` in `routes/table.ts` is not a tool |
 | Shared modules | `engine/shared/` | The to-do line and search code. The engine and the app both read it. The app imports it as `@shared` |
-| Phone app | `web/app/` | Its design tokens are in `web/app/tokens/` and its Storybook is `npm run storybook` in `web/app`. Rules: [design-system.md](.claude/rules/design-system.md), [web.md](.claude/rules/web.md), [web-ui.md](.claude/rules/web-ui.md), [web-tests.md](.claude/rules/web-tests.md). On the phone, loaded for web UI work: [phone-preview.md](.claude/rules/phone-preview.md) |
-| Worker | `web/worker/` | Deploy values come from `~/.config/brain/web.env`. See [docs/phone-setup.md](docs/phone-setup.md) |
+| Phone app | `app/` | Its design tokens are in `app/tokens/` and its Storybook is `npm run storybook` at the root. Rules: [design-system.md](.claude/rules/design-system.md), [web.md](.claude/rules/web.md), [web-ui.md](.claude/rules/web-ui.md), [web-tests.md](.claude/rules/web-tests.md). On the phone, loaded for web UI work: [phone-preview.md](.claude/rules/phone-preview.md) |
+| Worker | `worker/` | Deploy values come from `~/.config/brain/web.env`. See [docs/phone-setup.md](docs/phone-setup.md) |
 | Jobs | `ops/launchd/*.plist`, `ops/daily.sh`, `ops/swiftbar/` | Templates; `ops/setup.sh` fills the `__WORDS__` |
 | Machine setup | `ops/setup.sh`, `ops/config/`, `ops/scripts/`, `ops/hooks/` | Setup, config templates, the gate scripts and the git hook |
 | New brain | `starter/` | Copied into an empty brain folder by `setup.sh` |
@@ -21,9 +21,9 @@ Intent for every part: [docs/intent/README.md](docs/intent/README.md). When the 
 
 Plan and state of the work: [docs/plan/handoff.md](docs/plan/handoff.md). Screen design: [docs/design/](docs/design/concept-a.md).
 
-The root holds five folders and no code: `engine/`, `web/`, `ops/`, `starter/` and `docs/`. Put a new file inside one of them, not at the root.
+The root holds six folders and no code: `engine/`, `app/`, `worker/`, `ops/`, `starter/` and `docs/`. Put a new file inside one of them, not at the root.
 
-One `npm install` at the root installs every package. `engine`, `web/app` and `web/worker` are npm workspaces. There is one `package-lock.json`. Never run `npm install` inside a package folder. The install also copies `ops/hooks/pre-push` into `.git/hooks/`.
+One `package.json` at the root holds every dependency and every script. `npm install` at the root makes the only `node_modules`. There is one `package-lock.json`. Never add a `package.json` or run `npm install` inside `engine/`, `app/` or `worker/`. The install also copies `ops/hooks/pre-push` into `.git/hooks/`.
 
 ## Invariants
 
@@ -35,7 +35,7 @@ One `npm install` at the root installs every package. `engine`, `web/app` and `w
 
 ## Hard rules
 
-- **Never deploy.** Do not run `npm run deploy`, `wrangler deploy` or `web/go-live.sh`. Reason: a deploy is public. The owner does it. `refuse-under-agent.mjs` and `.claude/settings.json` block it too.
+- **Never deploy.** Do not run `npm run deploy`, `wrangler deploy` or `ops/go-live.sh`. Reason: a deploy is public. The owner does it. `refuse-under-agent.mjs` and `.claude/settings.json` block it too.
 - **Commit by path. Never push to `main`.** The owner pushes `main`. A push to any other branch is fine.
 - **Never edit a brain folder from here** except through `setup.sh` or the `brain` command.
 - Never run a dev server or Storybook. Verify with typecheck, lint, tests and build.

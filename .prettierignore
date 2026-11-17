@@ -1,4 +1,4 @@
 dist
 node_modules
 package-lock.json
-tokens/design-tokens.css
+app/tokens/design-tokens.css

@@ -14,7 +14,7 @@ One line each. A test file passes a criterion when the check is true. Score a fi
 - I3 Independent: no test needs another to run first, shared state is reset, no numbered order names.
 - I4 Deterministic: no `setTimeout` waits, no real clock, no unseeded random or `randomUUID` driving a result, 5 runs in a row all pass.
 
-## UI (`web/app`)
+## UI (`app`)
 - U1 User actions: `userEvent` drives clicks and typing. No direct handler or prop calls, no `.simulate`, no state set from the test. `fireEvent` only for pointer gestures.
 - U2 What the user sees: query by role, label or text. No `querySelector`, class or test id when a role, label or text exists.
 - U3 Meaningful styles: no asserts on colour, spacing or layout classes unless they show a state.

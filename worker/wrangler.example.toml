@@ -11,7 +11,7 @@ binding = "DB"
 database_name = "brain_inbox"
 database_id = "__D1_ID__"
 
-# The phone app (built by web/app). The Worker runs first only for the API and relay.
+# The phone app (built by app). The Worker runs first only for the API and relay.
 [assets]
 directory = "../app/dist"
 run_worker_first = ["/api/*", "/relay/*", "/cal/*"]

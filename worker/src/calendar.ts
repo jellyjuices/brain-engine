@@ -10,10 +10,12 @@ function notFound() {
 }
 
 export async function calendarFeed(request: Request, env: Env): Promise<Response> {
-  if (request.method !== "GET" && request.method !== "HEAD") return jsonError("Method not allowed", 405);
+  if (request.method !== "GET" && request.method !== "HEAD")
+    return jsonError("Method not allowed", 405);
   const match = FEED_PATH.exec(new URL(request.url).pathname);
   const token = env.CAL_TOKEN ?? "";
-  if (!match || token.length < MIN_TOKEN_LENGTH || !(await safeEqual(match[1]!, token))) return notFound();
+  if (!match || token.length < MIN_TOKEN_LENGTH || !(await safeEqual(match[1]!, token)))
+    return notFound();
   if (!env.MAC_ORIGIN || !env.SERVER_TOKEN) return jsonError("The Mac is offline", 503);
   try {
     const res = await fetch(`${env.MAC_ORIGIN.replace(/\/+$/, "")}/api/cal.ics`, {

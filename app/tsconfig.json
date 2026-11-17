@@ -13,7 +13,7 @@
     "types": ["vite/client", "node"],
     "paths": {
       "@/*": ["./src/*"],
-      "@shared/*": ["../../engine/shared/*"]
+      "@shared/*": ["../engine/shared/*"]
     },
     "jsx": "react-jsx",
     "resolveJsonModule": true

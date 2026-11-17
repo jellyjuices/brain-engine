@@ -40,8 +40,8 @@ chmod 600 "$CONF"
 say "Tunnel settings in $CONF"
 
 # 4. Build the app and deploy the Worker on its own name.
-(cd "$HERE/app" && npm run -s build >/dev/null)
-(cd "$HERE/worker" && npx wrangler deploy >/dev/null)
+(cd "$HERE/.." && npm run -s build >/dev/null)
+(cd "$HERE/../worker" && npx wrangler deploy >/dev/null)
 say "Phone app deployed to https://$APP_HOST"
 
 # 5. brain pull uses the new name.
@@ -49,7 +49,7 @@ sed -i '' "s|^RELAY_URL=.*|RELAY_URL=https://$APP_HOST|" "$HOME/.config/brain/re
 say "brain pull uses https://$APP_HOST"
 
 # 6. Keep the tunnel running.
-"$HERE/../ops/setup.sh" >/dev/null
+"$HERE/setup.sh" >/dev/null
 say "Tunnel kept running"
 
 echo

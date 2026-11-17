@@ -8,7 +8,7 @@ import wyw from "@wyw-in-js/vite";
 import { loadEnv, type Plugin } from "vite";
 import { defineConfig } from "vitest/config";
 
-const pkg = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")) as {
+const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as {
   version: string;
 };
 
@@ -87,13 +87,14 @@ const apiProxy = showLock
     };
 
 export default defineConfig({
+  cacheDir: fileURLToPath(new URL("../node_modules/.vite", import.meta.url)),
   envPrefix: ["VITE_", "SHOW_LOCK"],
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   resolve: {
     dedupe: ["react", "react-dom", "@phosphor-icons/react", "clsx"],
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
-      "@shared": fileURLToPath(new URL("../../engine/shared", import.meta.url)),
+      "@shared": fileURLToPath(new URL("../engine/shared", import.meta.url)),
     },
   },
   plugins: [linariaCssInTests(), react(), wyw(), serviceWorker()],
@@ -102,7 +103,8 @@ export default defineConfig({
     fs: {
       allow: [
         fileURLToPath(new URL(".", import.meta.url)),
-        fileURLToPath(new URL("../../engine/shared", import.meta.url)),
+        fileURLToPath(new URL("../engine/shared", import.meta.url)),
+        fileURLToPath(new URL("../node_modules", import.meta.url)),
       ],
     },
   },

@@ -12,19 +12,19 @@ Put these in `~/.config/brain/web.env`. The engine never holds them.
 | `MAC_HOST` | The tunnel name for this Mac, for example `brain-mac.example.com` |
 | `D1_ID` | The id from `npx wrangler d1 create brain_inbox` |
 
-`web/worker/write-config.sh` turns `web/worker/wrangler.example.toml` into `web/worker/wrangler.toml` (gitignored) from these values. `npm run dev` and `npm run deploy` in `web/worker` run it first.
+`worker/write-config.sh` turns `worker/wrangler.example.toml` into `worker/wrangler.toml` (gitignored) from these values. `npm run worker:dev` and `npm run deploy` run it first.
 
 ## Worker secrets
 
-Set with `npx wrangler secret put <NAME>` in `web/worker`: `RELAY_TOKEN`, `SERVER_TOKEN`, `SESSION_SECRET` and `PASSWORD`. For `wrangler dev`, put them in `web/worker/.dev.vars` (gitignored).
+Set with `npx wrangler secret put <NAME>` in `worker`: `RELAY_TOKEN`, `SERVER_TOKEN`, `SESSION_SECRET` and `PASSWORD`. For `wrangler dev`, put them in `worker/.dev.vars` (gitignored).
 
 ## Calendar feed (optional)
 
 The Worker can serve your to-dos with a due date, and your events, as a calendar feed. Each one shows as an all-day entry.
 
 1. Make a long random secret: `openssl rand -hex 32`.
-2. Set it: `npx wrangler secret put CAL_TOKEN` in `web/worker`. It must be 32 characters or more, or the feed stays off.
-3. Run `web/worker/write-config.sh` again, so `wrangler.toml` sends `/cal/*` to the Worker. Then deploy.
+2. Set it: `npx wrangler secret put CAL_TOKEN` in `worker`. It must be 32 characters or more, or the feed stays off.
+3. Run `worker/write-config.sh` again, so `wrangler.toml` sends `/cal/*` to the Worker. Then deploy.
 4. In Google Calendar, open Other calendars, then From URL. Paste `https://<your app host>/cal/<secret>.ics`.
 
 Anyone with the URL can read your to-do titles. Keep it private. To turn it off, change or delete `CAL_TOKEN`. Google checks the feed only every few hours, and the Mac must be on when it does. The feed is read only: marking an entry done in Google does not change your brain.
@@ -33,6 +33,6 @@ Anyone with the URL can read your to-do titles. Keep it private. To turn it off,
 
 1. `~/.config/brain/relay.env` holds `RELAY_URL=https://<APP_HOST>` and `RELAY_TOKEN=<the same token>`. With it, `ops/setup.sh` loads the 5-minute pull job.
 2. Install `cloudflared` and log in with `cloudflared tunnel login`.
-3. Run `web/go-live.sh` yourself. It makes the tunnel, points `MAC_HOST` at it, writes `~/.config/brain/cloudflared.yml`, builds the app, deploys the Worker and re-runs `ops/setup.sh`.
+3. Run `ops/go-live.sh` yourself. It makes the tunnel, points `MAC_HOST` at it, writes `~/.config/brain/cloudflared.yml`, builds the app, deploys the Worker and re-runs `ops/setup.sh`.
 
 A deploy is public. Agents never run `go-live.sh` or `npm run deploy`.

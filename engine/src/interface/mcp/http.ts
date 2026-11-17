@@ -11,7 +11,7 @@ import { dispatch } from "./rpc.ts";
 
 export const MCP_PATH = "/mcp";
 const LOOPBACK = new Set(["127.0.0.1", "localhost", "[::1]", "::1"]);
-const VERSION = (JSON.parse(readFileSync(new URL("../../../package.json", import.meta.url), "utf8")) as { version: string }).version;
+const VERSION = (JSON.parse(readFileSync(new URL("../../../../package.json", import.meta.url), "utf8")) as { version: string }).version;
 
 export interface McpDeps {
   root: string;

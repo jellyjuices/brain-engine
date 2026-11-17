@@ -47,7 +47,7 @@ export function isAuthorized(req: IncomingMessage, token: string): boolean {
 
 // ---- the web app on this Mac -------------------------------------------------------------------------------
 //
-// `brain serve` also serves the built phone app (web/app/dist) at http://127.0.0.1:8787/, for the menu bar popover.
+// `brain serve` also serves the built phone app (app/dist) at http://127.0.0.1:8787/, for the menu bar popover.
 // DECISION: on this Mac the app opens with no password. The notes are already plain files here, so a password adds nothing.
 // The gate is a cookie the server sets when it sends the page. It is HttpOnly and SameSite=Strict.
 // It is only good when the request came straight to the loopback address:
@@ -56,7 +56,7 @@ export function isAuthorized(req: IncomingMessage, token: string): boolean {
 //   - a write must carry this exact Origin (blocks other pages on this Mac).
 
 export const LOCAL_COOKIE = "brain_local";
-const APP_DIR = () => process.env.BRAIN_APP_DIR || join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "web", "app", "dist");
+const APP_DIR = () => process.env.BRAIN_APP_DIR || join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "app", "dist");
 const LOOPBACK_NAMES = new Set(["127.0.0.1", "localhost", "[::1]"]);
 const PROXY_HEADERS = ["cf-connecting-ip", "cf-ray", "cdn-loop", "x-forwarded-for", "forwarded"];
 
@@ -117,7 +117,7 @@ export function serveApp(req: IncomingMessage, res: ServerResponse, token: strin
   if (!isDirectLocal(req)) return send(res, 404, { error: "Not found." });
   if (req.method !== "GET" && req.method !== "HEAD") return send(res, 405, { error: "Method not allowed." });
   const dir = resolve(APP_DIR());
-  if (!existsSync(join(dir, "index.html"))) return send(res, 503, { error: "The app is not built. Run: npm --prefix web/app run build in the brain engine" });
+  if (!existsSync(join(dir, "index.html"))) return send(res, 503, { error: "The app is not built. Run: npm run build in the brain engine" });
   const path = decodeURIComponent(new URL(req.url ?? "/", "http://localhost").pathname);
   const file = resolve(dir, "." + path);
   // No service worker here: the Mac copy always loads fresh from disk.

@@ -65,10 +65,10 @@ install_packages() {
   say "Installing packages"
   (cd "$ENGINE" && PATH="$NODE_DIR:$PATH" npm install --silent)
   chmod +x "$ENGINE/engine/bin/brain.ts" "$ENGINE/ops/daily.sh" "$ENGINE/ops/launchd/status.sh" "$ENGINE/ops/swiftbar/brain.5m.sh"
-  if [ ! -f "$ENGINE/web/app/dist/index.html" ]; then
-    if [ "$DRY" = 1 ]; then would "build the app in web/app"; else
+  if [ ! -f "$ENGINE/app/dist/index.html" ]; then
+    if [ "$DRY" = 1 ]; then would "build the app"; else
       say "Building the app"
-      (cd "$ENGINE/web/app" && PATH="$NODE_DIR:$PATH" npm run -s build >/dev/null)
+      (cd "$ENGINE" && PATH="$NODE_DIR:$PATH" npm run -s build >/dev/null)
     fi
   fi
   ok "Packages installed"
