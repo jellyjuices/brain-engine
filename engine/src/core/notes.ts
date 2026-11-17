@@ -159,6 +159,8 @@ export function summary(n: Note): Summary {
   };
 }
 
+export const SLUG = /^[\p{Ll}\p{Lo}\p{Lm}\p{N}\p{M}-]+$/u;
+
 export function extractLinks(notePath: string, body: string): string[] {
   const out: string[] = [];
   const base = posix.dirname(notePath);

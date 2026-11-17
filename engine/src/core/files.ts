@@ -62,11 +62,12 @@ export function moveNote(root: string, from: string, to: string, meta: Meta, bod
 export function slugify(text: string, max = 60): string {
   const slug = text
     .normalize("NFKD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
+    .normalize("NFC")
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/[^\p{L}\p{N}\p{M}]+/gu, "-")
     .replace(/^-+|-+$/g, "");
-  return slug.slice(0, max).replace(/-+$/, "") || "note";
+  return Array.from(slug).slice(0, max).join("").replace(/-+$/, "") || "note";
 }
 
 export function uniquePath(root: string, folder: string, slug: string): string {

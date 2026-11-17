@@ -3,7 +3,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import YAML from "yaml";
-import { DIRS, folderOf, tagsOf, typeOf, type Note } from "./notes.ts";
+import { DIRS, folderOf, SLUG, tagsOf, typeOf, type Note } from "./notes.ts";
 import { kindIssues, statusesFor } from "./schema-kinds.ts";
 
 export interface Rule {
@@ -101,7 +101,7 @@ export function validate(note: Note, schema: Schema): Issue[] {
     if (meta.due) warn("an Event uses `date`, not `due`");
   }
   for (const f of ["due", "stale_after", "date"]) if (meta[f] && !isDate(meta[f])) err(`\`${f}\` is not a date (use YYYY-MM-DD)`);
-  if (meta.area && meta.areas === undefined && !/^[a-z0-9-]+$/.test(String(meta.area))) warn("`area` should be the slug of a note in areas/");
+  if (meta.area && meta.areas === undefined && !SLUG.test(String(meta.area))) warn("`area` should be the slug of a note in areas/");
   out.push(...kindIssues(note));
   return out;
 }
