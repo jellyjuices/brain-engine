@@ -30,16 +30,22 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 | Tappable line | `Row` (`title`, `sub`, `icon`, `end`, `variant`, `chevron`, `href` or `onClick`) |
 | Group of rows | `List` (`outlined` on a screen, `ghost` in a sheet, `menu` for a sheet menu) |
 | Line between menu groups | `Divider` inside `List variant="menu"` |
-| Tag, count, removable value | `Chip` (`variant`, `size`, `onClick`, `onRemove`) |
+| Tag, count, removable value | `Chip` (`label`, `variant` `tag`/`check`/`accent`, `icon`, `areas`, `onClick`, `onRemove`) |
 | Quick choice in a grid | `Tile` inside `.tiles` |
-| Screen header | `ScreenHead` (`title`, `kicker`, `fallback` or `onBack`, `action`) |
-| Sheet | `openSheet()`, `confirmSheet()` |
+| Screen header | `PageHeader` (`title`, `kicker`, `fallback` or `onBack`, `action`, `areas`) |
+| Group header with a count | `SectionHeader` (`title`, `count`, `tone`, `action`) |
+| Notice with one action | `Banner` (`message`, `count`, `actionLabel`, `onAction`) |
+| Sheet | `openSheet()`, `confirmSheet()`. Both draw `Sheet` from `components/sheet/` |
+| Sheet menu, with steps | `OptionsMenu` (`options`, `open`, `onOpenChange`) |
+| Pick one from a list | `Select` |
+| Short message after an action | `toast()` from `components/toast/toast-store.ts`. It draws `Toast` |
 | Sheet top | `SheetHead` (`title`, `context`, `quote`, `onBack`) |
 | Sheet buttons | `SheetActions`, primary last |
 | Type a value | `TextField` (`label`, `multiline`, `onEnter`) |
 | Search | `SearchInput` |
 | Pick a note, person or tag | `SearchList` (`items`, `onPick`, `onAdd`) |
-| Pick in another sheet or calendar | `PickField`, `DateField` |
+| Pick in another sheet | `PickField` |
+| Pick a day in a field | `DateField` (`label`, `value`, `onChange`, `min`, `max`, `yearSteps`) |
 | Pick a note or tag in a sheet | `noteSheet()`, `tagSheet()` from `components/pick-sheet/` |
 | Ask for a person, birthday or subject | `personSheet()`, `birthdaySheet()`, `subjectSheet()` |
 | Change a to-do or sort a capture | `todoSheet()`, `inboxSheet()` |
@@ -52,13 +58,14 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 | Sync state line | `SyncLine` |
 | Bottom tabs | `TabBar` |
 | Say when | `WhenPicker` (`choices`, `onPick`, `onNotTodo`) |
-| Pick a day only | `DayPicker` |
+| Pick a day only | `Calendar` (`today`, `value`, `min`, `max`, `yearSteps`, `onPick`) |
 | Long text | `<textarea className="composer">` |
 | Load a text file | `FilePicker` |
 | Label on a group | `.section-label` |
 | Padded box | `Panel` |
 | Fact on a note | `Fact`, `AddFact` |
-| To-do line | `TodoRow`, with `makeTodo()` from `lib/notes/todos.ts` |
+| To-do line | `TodoRow` (`title`, `tag`, `when`, `checked`, `onCheckedChange`, `onOpen`, `onMenu`). For a `TodoRef` from `makeTodo()`, use `TodoRefRow` |
+| When a to-do is due | `WhenChip` (`label`, `status`) |
 | A goal's target or step, with its tick box | `GoalStep` from `components/goal-step/` |
 | A goal's big percent, bar and "+N this month" | `GoalBar` from `components/goal-bar/` |
 | A subgoal: its name and small bar, as a link | `SubgoalLink` from `components/subgoal-link/` |
