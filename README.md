@@ -24,9 +24,8 @@ The brain is meant to run on one always-on Mac, such as a Mac mini. It holds the
 | Path | What it is |
 | --- | --- |
 | `engine/` | The `brain` command and `brain serve` (TypeScript on Node, `node:test`): `bin/`, `src/`, `test/`, `shared/` (code the app also reads) and `migrations/` (one-off note migrations) |
-| `web/app/` | The phone and menu bar app (Vite, React) |
+| `web/app/` | The phone and menu bar app (Vite, React), with its design tokens and Storybook |
 | `web/worker/` | The Cloudflare Worker: relay for phone adds, Mac proxy |
-| `web/design-system/` | Tokens and Storybook for the app |
 | `ops/` | Everything that sets up or runs on the Mac: `setup.sh`, `daily.sh`, `launchd/`, `swiftbar/`, `config/` templates, `scripts/` for the gates, `hooks/` for git |
 | `starter/` | What a new brain folder gets |
 | `docs/` | Intent, plan, design and setup docs |

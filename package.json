@@ -2,13 +2,12 @@
   "name": "brain-engine",
   "version": "0.1.0",
   "private": true,
-  "description": "The code for a second brain: the brain command, the server, the phone app, the Worker and the design system.",
+  "description": "The code for a second brain: the brain command, the server, the phone app, and the Worker.",
   "type": "module",
   "workspaces": [
     "engine",
     "web/app",
-    "web/worker",
-    "web/design-system"
+    "web/worker"
   ],
   "engines": {
     "node": ">=22.18"
@@ -18,6 +17,6 @@
     "test": "npm --prefix engine test",
     "deploy": "npm --prefix web/worker run deploy",
     "privacy": "node ops/scripts/privacy-check.mjs",
-    "gates": "f=0; npm --prefix engine test || f=1; npm --prefix engine run check || f=1; npm run privacy || f=1; for d in web/app web/worker web/design-system; do npm --prefix $d run typecheck || f=1; done; npm --prefix web/app test || f=1; npm --prefix web/app run lint || f=1; npm --prefix web/app run format:check || f=1; npm --prefix web/app run size || f=1; npm --prefix web/app run build || f=1; npm --prefix web/worker test || f=1; npm --prefix web/worker run lint || f=1; npm --prefix web/worker run size || f=1; exit $f"
+    "gates": "f=0; npm --prefix engine test || f=1; npm --prefix engine run check || f=1; npm run privacy || f=1; for d in web/app web/worker; do npm --prefix $d run typecheck || f=1; done; npm --prefix web/app test || f=1; npm --prefix web/app run lint || f=1; npm --prefix web/app run format:check || f=1; npm --prefix web/app run size || f=1; npm --prefix web/app run build || f=1; npm --prefix web/worker test || f=1; npm --prefix web/worker run lint || f=1; npm --prefix web/worker run size || f=1; exit $f"
   }
 }

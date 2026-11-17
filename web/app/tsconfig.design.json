@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noUncheckedIndexedAccess": false
+  },
+  "include": [
+    "tokens",
+    "scripts/build-tokens.ts",
+    "scripts/check-contrast.ts",
+    "src/stories",
+    ".storybook"
+  ],
+  "exclude": []
+}

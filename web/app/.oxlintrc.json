@@ -26,5 +26,50 @@
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-static-element-interactions": "off"
   },
+  "overrides": [
+    {
+      "files": [
+        "tokens/**",
+        "scripts/build-tokens.ts",
+        "scripts/check-contrast.ts",
+        "src/stories/**",
+        "src/lib/design/**",
+        "**/*.stories.tsx",
+        "src/components/area-mark/**",
+        "src/components/area-shape/**",
+        "src/components/banner/**",
+        "src/components/bar/**",
+        "src/components/builder-step/**",
+        "src/components/calendar/**",
+        "src/components/goal-progress/**",
+        "src/components/hit-area/**",
+        "src/components/icon-button/**",
+        "src/components/menu/**",
+        "src/components/options-menu/**",
+        "src/components/page-header/**",
+        "src/components/plus-button/**",
+        "src/components/section-header/**",
+        "src/components/select/**",
+        "src/components/suggest-input/**",
+        "src/components/tab-bar/**",
+        "src/components/timeline-line/**",
+        "src/components/view-tabs/**",
+        "src/components/visually-hidden/**",
+        "src/components/when-chip/**",
+        "src/components/button-next/**",
+        "src/components/chip-next/**",
+        "src/components/date-field-next/**",
+        "src/components/sheet-next/**",
+        "src/components/toast-next/**",
+        "src/components/todo-row-next/**"
+      ],
+      "rules": {
+        "func-style": "off",
+        "jsx-a11y/control-has-associated-label": "off",
+        "jsx-a11y/no-noninteractive-element-interactions": "off",
+        "jsx-a11y/no-noninteractive-element-to-interactive-role": "off"
+      }
+    }
+  ],
   "ignorePatterns": ["dist/**", "node_modules/**"]
 }

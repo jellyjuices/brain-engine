@@ -10,14 +10,14 @@
     "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "isolatedModules": true,
-    "types": ["vite/client"],
+    "types": ["vite/client", "node"],
     "paths": {
       "@/*": ["./src/*"],
-      "@ds/*": ["../design-system/src/*"],
       "@shared/*": ["../../engine/shared/*"]
     },
     "jsx": "react-jsx",
     "resolveJsonModule": true
   },
-  "include": ["src", "test", "preview", "vite.config.ts"]
+  "include": ["src", "test", "preview", "vite.config.ts"],
+  "exclude": ["src/stories"]
 }

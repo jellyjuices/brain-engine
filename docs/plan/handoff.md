@@ -19,7 +19,6 @@ Updated 2026-11-17. This lists only work still to do. The intent for every part 
 | Everything | `npm run gates` at the root |
 | Engine only | in `engine`: `npm test`, `npm run check` |
 | App only | in `web/app`: `npm run typecheck`, `npm test`, `npm run build` |
-| Design system only | in `web/design-system`: `npm run typecheck`, `npm test` |
 | Notes | `brain check` |
 
 ## For the owner
@@ -63,4 +62,4 @@ Design: [concept-a.md](../design/concept-a.md). Add flows: [add-flows.md](add-fl
 | 13 | Find with the answer card, Brain tab, Settings | Medium | 10 | |
 | 14 | Delete old screens: `inbox`, `today`, `report`, `write`, `new` | Small | 10 to 13 | The owner runs any `rm` |
 
-Paths in [add-flows.md](add-flows.md), [search.md](search.md) and [concept-a.md](../design/concept-a.md) predate the folder layout: `src/` is now `engine/src/`, `shared/` is `engine/shared/`, `design-system/` is `web/design-system/`.
+Paths in [add-flows.md](add-flows.md), [search.md](search.md) and [concept-a.md](../design/concept-a.md) predate the folder layout: `src/` is now `engine/src/`, `shared/` is `engine/shared/`, `design-system/` is now inside the app: `web/app/src/components/`, `web/app/tokens/`.

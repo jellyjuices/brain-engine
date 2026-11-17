@@ -8,7 +8,7 @@ description: Writes or fixes tests in brain-engine the way this repo does them (
 A test earns its place only if it fails when the product breaks. Read the reference for the package you touch, only that one:
 
 - `engine/` (the `brain` code and its `test/`): [references/node-test.md](references/node-test.md). In this skill, `test/`, `src/` and `shared/` with no folder in front mean the ones inside `engine/`
-- `web/app` and `web/design-system` (Vitest, React): [references/vitest-react.md](references/vitest-react.md)
+- `web/app` (Vitest, React): [references/vitest-react.md](references/vitest-react.md)
 - `web/worker`: [references/worker.md](references/worker.md)
 - The checkable list another agent scores tests against: [references/criteria.md](references/criteria.md)
 
