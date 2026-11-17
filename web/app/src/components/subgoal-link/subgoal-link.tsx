@@ -1,5 +1,5 @@
 import { css } from "@linaria/core";
-import { Bar } from "@ds/components/bar/bar.tsx";
+import { Bar } from "@/components/bar/bar.tsx";
 import { goalHref, type GoalRef } from "@/lib/notes/goals.ts";
 
 const link = css`

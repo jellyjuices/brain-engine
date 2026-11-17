@@ -1,4 +1,4 @@
-import { PageHeader } from "@ds/components/page-header/page-header.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { Empty } from "@/components/empty/empty.tsx";
 import { useLoaded } from "@/hooks/use-loaded.ts";
 import { useNotes } from "@/hooks/use-notes.ts";

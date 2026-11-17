@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { SectionHeader } from "@ds/components/section-header/section-header.tsx";
+import { SectionHeader } from "@/components/section-header/section-header.tsx";
 
 export interface GoalSectionProps {
   title: string;

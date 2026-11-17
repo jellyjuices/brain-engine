@@ -1,4 +1,4 @@
-import { TodoRow } from "@ds/components/todo-row/todo-row.tsx";
+import { TodoRow } from "@/components/todo-row-next/todo-row.tsx";
 import { doneStep } from "@/flows/goal-flow.ts";
 import type { GoalStep as Step } from "@/lib/notes/goals.ts";
 import { niceDate, noteHref } from "@/lib/notes/model.ts";

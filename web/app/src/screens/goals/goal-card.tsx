@@ -1,4 +1,4 @@
-import { SectionHeader } from "@ds/components/section-header/section-header.tsx";
+import { SectionHeader } from "@/components/section-header/section-header.tsx";
 import { GoalBar } from "@/components/goal-bar/goal-bar.tsx";
 import { GoalStep } from "@/components/goal-step/goal-step.tsx";
 import { SubgoalLink } from "@/components/subgoal-link/subgoal-link.tsx";

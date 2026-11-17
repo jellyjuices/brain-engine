@@ -1,4 +1,4 @@
-import { SectionHeader } from "@ds/components/section-header/section-header.tsx";
+import { SectionHeader } from "@/components/section-header/section-header.tsx";
 import { Empty } from "@/components/empty/empty.tsx";
 import { groupView, type TodoViewId, type ViewTodo } from "@/lib/notes/todo-views.ts";
 import { TodoLine } from "./todo-line.tsx";

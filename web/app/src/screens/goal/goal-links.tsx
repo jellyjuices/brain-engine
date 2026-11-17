@@ -1,4 +1,4 @@
-import { TimelineLine } from "@ds/components/timeline-line/timeline-line.tsx";
+import { TimelineLine } from "@/components/timeline-line/timeline-line.tsx";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
 import { SubgoalLink } from "@/components/subgoal-link/subgoal-link.tsx";

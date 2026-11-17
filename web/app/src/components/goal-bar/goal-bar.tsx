@@ -1,4 +1,4 @@
-import { Bar } from "@ds/components/bar/bar.tsx";
+import { Bar } from "@/components/bar/bar.tsx";
 import type { GoalView } from "@/lib/notes/goals.ts";
 import { copy } from "@/content/index.ts";
 

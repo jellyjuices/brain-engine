@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Button } from "@ds/components/button/button.tsx";
-import { PageHeader } from "@ds/components/page-header/page-header.tsx";
-import { ViewTabs } from "@ds/components/view-tabs/view-tabs.tsx";
+import { Button } from "@/components/button-next/button.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
+import { ViewTabs } from "@/components/view-tabs/view-tabs.tsx";
 import { Pull } from "@/components/pull/pull.tsx";
 import { SyncLine } from "@/components/sync-line/sync-line.tsx";
 import { longDate } from "@/lib/notes/model.ts";
