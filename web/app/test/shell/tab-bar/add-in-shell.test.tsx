@@ -2,6 +2,7 @@ import { act, cleanup, fireEvent, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { HOLD_MS } from "@/components/add-panel/use-hold-to-pick.ts";
+import { HOME } from "@/lib/platform/router.ts";
 import { copy } from "@/content/index.ts";
 import { renderShell, resetShell, stubUnsorted } from "../shell-setup.tsx";
 
@@ -60,7 +61,7 @@ describe("Add in the shell", () => {
     history.back();
     await act(() => popped);
     finishClosing();
-    expect([screen.queryByRole("menu"), location.pathname]).toEqual([null, "/today"]);
+    expect([screen.queryByRole("menu"), location.pathname]).toEqual([null, HOME]);
   });
 
   it("holding Add opens the kinds before the finger lifts", async () => {

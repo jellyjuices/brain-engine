@@ -1,8 +1,9 @@
 import { resetLayers, takePop, whenSettled } from "./back-stack.ts";
 
-export const DEFAULT_ROUTE = "today";
+export const DEFAULT_ROUTE = "todos";
 export const HOME = `/${DEFAULT_ROUTE}`;
 export const SCREEN_NAMES = [
+  "todos",
   "today",
   "find",
   "add",

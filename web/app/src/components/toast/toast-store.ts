@@ -8,7 +8,7 @@ export type ToastTone = "offline" | "error";
 export interface ToastItem {
   id: number;
   message: string;
-  action?: ToastAction;
+  actions: ToastAction[];
   tone?: ToastTone;
   leaving: boolean;
 }
@@ -16,6 +16,7 @@ export interface ToastItem {
 export interface ToastOptions {
   ms?: number;
   action?: ToastAction;
+  actions?: ToastAction[];
   tone?: ToastTone;
 }
 
@@ -47,8 +48,9 @@ export function closeToast(id: number) {
 export function toast(message: string, opts: number | ToastOptions = {}) {
   const o = typeof opts === "number" ? { ms: opts } : opts;
   const id = nextId++;
-  publish([...items, { id, message, action: o.action, tone: o.tone, leaving: false }]);
-  later(() => closeToast(id), o.ms ?? (o.action ? 5000 : 3000));
+  const actions = [...(o.actions ?? []), ...(o.action ? [o.action] : [])];
+  publish([...items, { id, message, actions, tone: o.tone, leaving: false }]);
+  later(() => closeToast(id), o.ms ?? (actions.length ? 5000 : 3000));
 }
 
 export function clearToasts() {

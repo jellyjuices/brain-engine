@@ -11,6 +11,7 @@ import { settings } from "./settings.ts";
 import { sync } from "./sync.ts";
 import { today } from "./today.ts";
 import { todo } from "./todo.ts";
+import { todos } from "./todos.ts";
 
 export const copy = {
   add,
@@ -26,4 +27,5 @@ export const copy = {
   sync,
   today,
   todo,
+  todos,
 };

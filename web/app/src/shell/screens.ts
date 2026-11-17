@@ -11,9 +11,11 @@ import { WriteScreen } from "@/screens/write/write.tsx";
 import { NoteScreen } from "@/screens/note/note.tsx";
 import { SettingsScreen } from "@/screens/settings/settings.tsx";
 import { TodayScreen } from "@/screens/today/today.tsx";
+import { TodosScreen } from "@/screens/todos/todos.tsx";
 import { copy } from "@/content/index.ts";
 
 export const SCREENS: Record<ScreenName, { title: string; Component: ComponentType }> = {
+  todos: { title: copy.nav.todos, Component: TodosScreen },
   today: { title: copy.nav.today, Component: TodayScreen },
   find: { title: copy.nav.find, Component: FindScreen },
   add: { title: copy.nav.add, Component: AddScreen },

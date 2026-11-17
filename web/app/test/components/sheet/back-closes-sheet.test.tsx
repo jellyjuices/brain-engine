@@ -1,7 +1,7 @@
 import { act, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { openSheet } from "@/components/sheet/open-sheet.tsx";
-import { goTab, startRouter, stopRouter } from "@/lib/platform/router.ts";
+import { goTab, HOME, startRouter, stopRouter } from "@/lib/platform/router.ts";
 
 function pressBack() {
   const popped = new Promise((resolve) => addEventListener("popstate", resolve, { once: true }));
@@ -10,7 +10,7 @@ function pressBack() {
 }
 
 beforeEach(() => {
-  history.replaceState(null, "", "/today");
+  history.replaceState(null, "", HOME);
   startRouter();
   goTab("/brain");
 });

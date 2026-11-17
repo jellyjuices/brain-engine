@@ -6,7 +6,7 @@ import {
   TargetIcon,
   type Icon as PhosphorIcon,
 } from "@phosphor-icons/react";
-import type { ScreenName } from "@/lib/platform/router.ts";
+import { HOME, type ScreenName } from "@/lib/platform/router.ts";
 import { copy } from "@/content/index.ts";
 
 export interface Place {
@@ -19,8 +19,8 @@ export interface Place {
 export const TODOS: Place = {
   label: copy.nav.todos,
   icon: CheckSquareIcon,
-  href: "/today",
-  screens: ["today", "inbox"],
+  href: HOME,
+  screens: ["todos", "today", "inbox"],
 };
 
 export const GOALS: Place = {

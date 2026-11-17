@@ -15,7 +15,7 @@ import {
 } from "@/lib/notes/capture.ts";
 import { noteHref } from "@/lib/notes/model.ts";
 import { previewWhen } from "@/lib/notes/when.ts";
-import { go } from "@/lib/platform/router.ts";
+import { back, go } from "@/lib/platform/router.ts";
 import { getNote } from "@/lib/storage/store.ts";
 import { queueInbox } from "@/lib/sync/writes.ts";
 import { saveFlow } from "@/flows/save-flow.ts";
@@ -118,7 +118,8 @@ export function AddScreen() {
 
   async function finishAfter() {
     if (!(await send())) return;
-    go(into ? noteHref(into.path) : "/today");
+    if (into) go(noteHref(into.path));
+    else back();
   }
 
   useEffect(() => {
