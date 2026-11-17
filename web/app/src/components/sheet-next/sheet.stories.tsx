@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { Button } from "../button-next/button.tsx";
+import { Button } from "../button/button.tsx";
 import { Sheet, type SheetProps } from "./sheet.tsx";
 
 const Live = (args: SheetProps) => {

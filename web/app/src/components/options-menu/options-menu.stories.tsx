@@ -9,7 +9,7 @@ import {
   TagIcon,
   TrashIcon,
 } from "@phosphor-icons/react";
-import { Button } from "../button-next/button.tsx";
+import { Button } from "../button/button.tsx";
 import { OptionsMenu, type Option, type OptionsMenuProps } from "./options-menu.tsx";
 
 const Live = (args: OptionsMenuProps) => {

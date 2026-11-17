@@ -56,7 +56,6 @@
         "src/components/view-tabs/**",
         "src/components/visually-hidden/**",
         "src/components/when-chip/**",
-        "src/components/button-next/**",
         "src/components/chip-next/**",
         "src/components/date-field-next/**",
         "src/components/sheet-next/**",

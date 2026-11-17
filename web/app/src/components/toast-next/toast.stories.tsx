@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { ArrowsLeftRightIcon } from "@phosphor-icons/react";
-import { Button } from "../button-next/button.tsx";
+import { Button } from "../button/button.tsx";
 import { Toast, ToastProvider, type ToastProps } from "./toast.tsx";
 
 const Live = (args: ToastProps) => {

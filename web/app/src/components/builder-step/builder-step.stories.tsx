@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { fn } from "storybook/test";
-import { Button } from "../button-next/button.tsx";
+import { Button } from "../button/button.tsx";
 import { SuggestInput } from "../suggest-input/suggest-input.tsx";
 import { BuilderStep } from "./builder-step.tsx";
 import { useBuilder } from "./use-builder.ts";

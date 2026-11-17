@@ -42,6 +42,12 @@
   }
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .screen-title {
   font-size: var(--t-2xl);
   line-height: 1.15;

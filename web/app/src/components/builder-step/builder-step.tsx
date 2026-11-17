@@ -2,7 +2,7 @@ import { css } from "@linaria/core";
 import { useEffect, useId, useRef, type FormEvent, type ReactNode } from "react";
 import { ArrowLeftIcon, XIcon } from "@phosphor-icons/react";
 import { Bar } from "../bar/bar.tsx";
-import { Button } from "../button-next/button.tsx";
+import { Button } from "../button/button.tsx";
 import { IconButton } from "../icon-button/icon-button.tsx";
 
 const builderStep = css`
@@ -156,12 +156,7 @@ export const BuilderStep = (props: BuilderStepProps) => {
         )}
         <div className={nav}>
           {onBack && (
-            <Button
-              variant="secondary"
-              size="lg"
-              icon={<ArrowLeftIcon aria-hidden />}
-              onClick={onBack}
-            >
+            <Button variant="secondary" size="lg" icon={ArrowLeftIcon} onClick={onBack}>
               {backLabel}
             </Button>
           )}

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { GearSixIcon } from "@phosphor-icons/react";
-import { Button } from "../button-next/button.tsx";
+import { Button } from "../button/button.tsx";
 import { PageHeader } from "./page-header.tsx";
 
 const meta = {
@@ -10,9 +10,7 @@ const meta = {
     title: "To-dos",
     kicker: "Friday, Nov 13",
     glow: true,
-    action: (
-      <Button variant="ghost" size="sm" aria-label="Settings" icon={<GearSixIcon aria-hidden />} />
-    ),
+    action: <Button variant="ghost" size="sm" aria-label="Settings" icon={GearSixIcon} />,
   },
   decorators: [
     (Story) => (
