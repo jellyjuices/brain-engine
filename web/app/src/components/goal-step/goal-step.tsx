@@ -2,7 +2,7 @@ import { TodoRow } from "@/components/todo-row-next/todo-row.tsx";
 import { doneStep } from "@/flows/goal-flow.ts";
 import type { GoalStep as Step } from "@shared/todos/index.ts";
 import { niceDate, noteHref } from "@/lib/notes/model.ts";
-import { plainText } from "@/lib/notes/todo-views.ts";
+import { plainText } from "@/lib/notes/search.ts";
 import { go } from "@/lib/platform/router.ts";
 
 export interface GoalStepProps {

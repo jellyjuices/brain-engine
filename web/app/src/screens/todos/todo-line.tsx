@@ -4,7 +4,8 @@ import { whenStatus } from "@/lib/design/when.ts";
 import { openTodo, tickTodo } from "@/flows/todo-flow.ts";
 import { niceDate, noteHref } from "@/lib/notes/model.ts";
 import { makeTodo } from "@/lib/notes/todos.ts";
-import { goalOf, linkLabel, plainText, type ViewTodo } from "@/lib/notes/todo-views.ts";
+import { plainText } from "@/lib/notes/search.ts";
+import { goalOf, linkLabel, type ViewTodo } from "@/lib/notes/todo-views.ts";
 import { go } from "@/lib/platform/router.ts";
 import { copy } from "@/content/index.ts";
 

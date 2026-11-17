@@ -5,7 +5,7 @@ import { SubgoalLink } from "@/components/subgoal-link/subgoal-link.tsx";
 import type { GoalView } from "@shared/todos/index.ts";
 import { linkedPaths, titleAt } from "@/lib/notes/goals.ts";
 import { niceDate, noteHref, type StoredNote } from "@/lib/notes/model.ts";
-import { plainText } from "@/lib/notes/todo-views.ts";
+import { plainText } from "@/lib/notes/search.ts";
 import { go } from "@/lib/platform/router.ts";
 import { GoalSection } from "./goal-section.tsx";
 import * as styles from "./goal.styles.ts";

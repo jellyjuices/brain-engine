@@ -4,7 +4,7 @@ import { addDays } from "./dates.ts";
 export const TODO_VIEWS = ["today", "soon", "no-date", "on-hold", "by-goal", "all"] as const;
 export type TodoView = (typeof TODO_VIEWS)[number];
 
-export const SOON_DAYS = 14;
+const SOON_DAYS = 14;
 
 type ViewTodo = Pick<TodoFields, "due" | "outcome" | "toward">;
 

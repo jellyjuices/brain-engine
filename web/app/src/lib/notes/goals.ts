@@ -5,7 +5,7 @@ import {
   type GoalStep,
   type GoalView,
 } from "@shared/todos/index.ts";
-import type { StoredNote } from "./model.ts";
+import { slugOf, type StoredNote } from "./model.ts";
 
 export function isGoalView(data: unknown): data is GoalView {
   const g = data as Partial<GoalView> | null;
@@ -47,7 +47,7 @@ export function linkedPaths(goal: GoalView): string[] {
 }
 
 export function titleAt(notes: StoredNote[] | null, path: string): string {
-  return notes?.find((n) => n.path === path)?.title ?? path.slice(path.lastIndexOf("/") + 1, -3);
+  return notes?.find((n) => n.path === path)?.title ?? slugOf(path);
 }
 
 export function crossTarget(body: string, text: string, date: string): string | null {

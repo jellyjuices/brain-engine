@@ -50,10 +50,6 @@ export function linkLabel(token: string): string {
   return /\[([^\]]+)\]/.exec(token)?.[1] ?? token;
 }
 
-export function plainText(text: string): string {
-  return text.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1");
-}
-
 export function goalOf(todo: Loop): string | undefined {
   const first = todo.toward?.[0];
   return first ? linkLabel(first) : undefined;
