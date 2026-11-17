@@ -49,7 +49,7 @@ export interface GoalView extends GoalRef {
   decisions: DecisionRef[];
 }
 
-export const TARGETS_HEADING = "# Targets";
+const TARGETS_HEADING = "# Targets";
 
 export function isGoalView(data: unknown): data is GoalView {
   const g = data as Partial<GoalView> | null;

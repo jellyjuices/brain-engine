@@ -2,7 +2,7 @@ import { allLoops, todoRef, type Loop } from "./todos.ts";
 import { addDays, longDate, type StoredNote } from "./model.ts";
 import { copy } from "@/content/index.ts";
 
-export const TODO_VIEW_IDS = ["today", "soon", "no-date", "on-hold", "by-goal", "all"] as const;
+const TODO_VIEW_IDS = ["today", "soon", "no-date", "on-hold", "by-goal", "all"] as const;
 export type TodoViewId = (typeof TODO_VIEW_IDS)[number];
 
 export const TODO_VIEWS: { id: TodoViewId; label: string }[] = [

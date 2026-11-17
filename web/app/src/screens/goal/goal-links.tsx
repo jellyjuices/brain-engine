@@ -1,8 +1,8 @@
-import { Bar } from "@ds/components/bar/bar.tsx";
 import { TimelineLine } from "@ds/components/timeline-line/timeline-line.tsx";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
-import { goalHref, linkedPaths, titleAt, type GoalView } from "@/lib/notes/goals.ts";
+import { SubgoalLink } from "@/components/subgoal-link/subgoal-link.tsx";
+import { linkedPaths, titleAt, type GoalView } from "@/lib/notes/goals.ts";
 import { niceDate, noteHref, type StoredNote } from "@/lib/notes/model.ts";
 import { plainText } from "@/lib/notes/todo-views.ts";
 import { go } from "@/lib/platform/router.ts";
@@ -48,10 +48,7 @@ export function GoalLinks({ goal, notes }: GoalLinksProps) {
         <GoalSection title={copy.goals.subgoals}>
           <div className={styles.subs}>
             {goal.subgoals.map((sub) => (
-              <a key={sub.path} className={styles.sub} href={goalHref(sub.path)}>
-                {sub.title}
-                <Bar label={sub.title} done={sub.done} total={sub.total} size="step" />
-              </a>
+              <SubgoalLink key={sub.path} goal={sub} />
             ))}
           </div>
         </GoalSection>

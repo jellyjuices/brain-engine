@@ -31,12 +31,3 @@ export const list = css`
   padding: 0;
   list-style: none;
 `;
-
-export const sub = css`
-  display: grid;
-  gap: var(--space-xs);
-  padding-left: var(--space-md);
-  color: var(--text-primary);
-  text-decoration: none;
-  font-size: var(--font-size-body-sm);
-`;

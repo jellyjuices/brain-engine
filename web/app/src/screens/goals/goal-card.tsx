@@ -1,6 +1,7 @@
-import { Bar } from "@ds/components/bar/bar.tsx";
 import { SectionHeader } from "@ds/components/section-header/section-header.tsx";
+import { GoalBar } from "@/components/goal-bar/goal-bar.tsx";
 import { GoalStep } from "@/components/goal-step/goal-step.tsx";
+import { SubgoalLink } from "@/components/subgoal-link/subgoal-link.tsx";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
 import { goalHref, titleAt, type GoalView } from "@/lib/notes/goals.ts";
@@ -21,16 +22,7 @@ export function GoalCard({ goal, notes }: GoalCardProps) {
       <h2 className={styles.title}>
         <a href={goalHref(goal.path)}>{goal.title}</a>
       </h2>
-      <Bar
-        label={goal.title}
-        showLabel={false}
-        done={goal.done}
-        total={goal.total}
-        countLabel={copy.goals.count(goal.done, goal.total)}
-        gain={goal.recent}
-        gainLabel={copy.goals.thisMonth}
-        areas={goal.areas}
-      />
+      <GoalBar goal={goal} />
       {next && (
         <section aria-label={copy.goals.nextStep}>
           <SectionHeader title={copy.goals.nextStep} as="h3" />
@@ -40,10 +32,7 @@ export function GoalCard({ goal, notes }: GoalCardProps) {
         </section>
       )}
       {goal.subgoals.map((sub) => (
-        <a key={sub.path} className={styles.sub} href={goalHref(sub.path)}>
-          {sub.title}
-          <Bar label={sub.title} done={sub.done} total={sub.total} size="step" />
-        </a>
+        <SubgoalLink key={sub.path} goal={sub} />
       ))}
       {goal.decisions.length > 0 && (
         <section aria-label={copy.goals.decisions}>

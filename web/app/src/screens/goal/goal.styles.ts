@@ -26,10 +26,3 @@ export const subs = css`
   display: grid;
   gap: var(--space-md);
 `;
-
-export const sub = css`
-  display: grid;
-  gap: var(--space-xs);
-  color: var(--text-primary);
-  text-decoration: none;
-`;

@@ -1,4 +1,4 @@
-import { Bar } from "@ds/components/bar/bar.tsx";
+import { GoalBar } from "@/components/goal-bar/goal-bar.tsx";
 import { GoalStep } from "@/components/goal-step/goal-step.tsx";
 import { openSteps, titleAt, type GoalView } from "@/lib/notes/goals.ts";
 import type { StoredNote } from "@/lib/notes/model.ts";
@@ -17,16 +17,7 @@ export function GoalBody({ goal, notes }: GoalBodyProps) {
   return (
     <div className={styles.body}>
       {goal.why && <p className={styles.why}>{goal.why}</p>}
-      <Bar
-        label={goal.title}
-        showLabel={false}
-        done={goal.done}
-        total={goal.total}
-        countLabel={copy.goals.count(goal.done, goal.total)}
-        gain={goal.recent}
-        gainLabel={copy.goals.thisMonth}
-        areas={goal.areas}
-      />
+      <GoalBar goal={goal} />
       {goal.next && (
         <GoalSection title={copy.goals.nextStep}>
           <ul className={styles.list}>

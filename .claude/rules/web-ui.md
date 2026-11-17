@@ -60,6 +60,8 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 | Fact on a note | `Fact`, `AddFact` |
 | To-do line | `TodoRow`, with `makeTodo()` from `lib/notes/todos.ts` |
 | A goal's target or step, with its tick box | `GoalStep` from `components/goal-step/` |
+| A goal's big percent, bar and "+N this month" | `GoalBar` from `components/goal-bar/` |
+| A subgoal: its name and small bar, as a link | `SubgoalLink` from `components/subgoal-link/` |
 | Nothing to show | `Empty` (`title`, `body`, `size`) |
 
 ## Variants
