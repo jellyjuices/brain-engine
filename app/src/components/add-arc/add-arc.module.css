@@ -23,6 +23,8 @@
 }
 
 .addArcPick > :first-child {
+  width: var(--size-kind-pick);
+  height: var(--size-kind-pick);
   color: var(--text-accent);
 }
 

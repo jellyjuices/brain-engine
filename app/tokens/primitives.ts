@@ -167,6 +167,7 @@ export const size = {
   target: "44px",
   blob: "520px",
   plus: "58px",
+  "kind-pick": "40px",
   row: "52px",
   tabbar: "64px",
   glow: "260px",
