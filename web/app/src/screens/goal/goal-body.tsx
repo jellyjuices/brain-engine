@@ -49,7 +49,7 @@ export function GoalBody({ goal, notes }: GoalBodyProps) {
           <ul className={styles.list}>
             {steps.map((step) => (
               <GoalStep
-                key={step.ref ?? step.text}
+                key={`${step.path}::${step.text}`}
                 step={step}
                 goal={goal.title}
                 subject={titleAt(notes, step.path)}

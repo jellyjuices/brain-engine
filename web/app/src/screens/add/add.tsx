@@ -118,7 +118,7 @@ export function AddScreen() {
 
   async function finishAfter() {
     if (!(await send())) return;
-    if (into) go(noteHref(into.path));
+    if (into) go(noteHref(into.path), true);
     else back();
   }
 

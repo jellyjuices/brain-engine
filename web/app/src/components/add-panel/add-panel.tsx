@@ -36,10 +36,15 @@ export function AddPanel() {
     if (editing) requestAnimationFrame(() => box.current?.focus());
   }, [editing]);
 
+  const latestClose = useRef(close);
+  useEffect(() => {
+    latestClose.current = close;
+  });
+
   useEffect(() => {
     if (mode === "closed") return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") close();
+      if (e.key === "Escape") latestClose.current();
     }
     addEventListener("keydown", onKey);
     return () => removeEventListener("keydown", onKey);

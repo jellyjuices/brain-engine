@@ -79,7 +79,10 @@ export function goalHref(path: string): string {
 }
 
 export function openSteps(goal: GoalView): GoalStep[] {
-  return goal.toward.filter((s) => !s.done && s.ref !== goal.next?.ref);
+  const next = goal.next;
+  const open = goal.toward.filter((s) => !s.done);
+  if (!next) return open;
+  return open.filter((s) => s.path !== next.path || s.text !== next.text);
 }
 
 export function linkedPaths(goal: GoalView): string[] {

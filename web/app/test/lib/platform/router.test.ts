@@ -75,6 +75,28 @@ describe("back", () => {
     expect([here(), close.mock.calls.length]).toEqual(["/find", 1]);
   });
 
+  it("a tab tap with a sheet open changes the tab and leaves no extra entry", async () => {
+    start(HOME);
+    goTab("/brain");
+    const close = vi.fn();
+    openLayer(close);
+    goTab("/find");
+    await vi.waitFor(() => expect(here()).toBe("/find"));
+    await pressBack();
+    expect([here(), close.mock.calls.length]).toEqual([HOME, 1]);
+  });
+
+  it("releasing a lower layer keeps the upper layer's entry", async () => {
+    start(HOME);
+    goTab("/find");
+    const releaseLower = openLayer(() => undefined);
+    const closeUpper = vi.fn();
+    openLayer(closeUpper);
+    releaseLower();
+    await pressBack();
+    expect([here(), closeUpper.mock.calls.length]).toEqual(["/find", 1]);
+  });
+
   it("waits for a closed layer before it moves to a new screen", async () => {
     start(HOME);
     const release = openLayer(() => undefined);

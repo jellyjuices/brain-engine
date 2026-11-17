@@ -1,4 +1,11 @@
-import { resetLayers, takePop, whenSettled } from "./back-stack.ts";
+import {
+  closeAllLayers,
+  isLayerEntry,
+  resetLayers,
+  skipLayerEntry,
+  takePop,
+  whenSettled,
+} from "./back-stack.ts";
 
 export const DEFAULT_ROUTE = "todos";
 export const HOME = `/${DEFAULT_ROUTE}`;
@@ -89,6 +96,7 @@ export function back(fallback = HOME) {
 }
 
 export function goTab(url: string) {
+  closeAllLayers();
   whenSettled(() => {
     const steps = depth();
     if (steps === 0) {
@@ -128,6 +136,10 @@ function onClick(e: MouseEvent) {
 
 function onPop() {
   if (takePop()) return;
+  if (isLayerEntry()) {
+    skipLayerEntry();
+    return;
+  }
   const tab = pendingTab;
   pendingTab = null;
   if (tab !== null && tab !== here()) history.pushState({ depth: depth() + 1 }, "", tab);
@@ -146,6 +158,7 @@ export function startRouter() {
   if (location.hash.startsWith("#/")) history.replaceState(null, "", location.hash.slice(1));
   seedHistory();
   window.addEventListener("popstate", onPop);
+  if (isLayerEntry()) skipLayerEntry();
   document.addEventListener("click", onClick);
 }
 
