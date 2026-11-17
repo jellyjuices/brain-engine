@@ -1,0 +1,31 @@
+{
+  "name": "brain",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Query, check and report on the Markdown notes in a brain folder.",
+  "type": "module",
+  "bin": {
+    "brain": "bin/brain.ts"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "test": "node --disable-warning=ExperimentalWarning --test test/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "size": "node ../ops/scripts/size-check.mjs src bin",
+    "check": "npm run typecheck && npm run size"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.8.1",
+    "picocolors": "^1.1.1",
+    "yaml": "^2.8.1"
+  },
+  "optionalDependencies": {
+    "@huggingface/transformers": "^4.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.0",
+    "typescript": "^5.9.3"
+  }
+}

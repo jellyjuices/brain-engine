@@ -8,12 +8,12 @@ Needs Node 22.18 or later (`brew install node`) and git.
 
 ```
 git clone <this repo> ~/Git/brain-engine
-~/Git/brain-engine/setup.sh --brain ~/brain
+~/Git/brain-engine/ops/setup.sh --brain ~/brain
 ```
 
-Setup fills an empty folder from `starter/`, writes `~/.config/brain/env`, puts `brain` on your PATH, makes the brain folder a git repo, and loads the background jobs. Run `setup.sh --help` for options. It never overwrites a file in your brain folder unless you pass `--force-agent-files`.
+Setup fills an empty folder from `starter/`, writes `~/.config/brain/env`, puts `brain` on your PATH, makes the brain folder a git repo, and loads the background jobs. Run `ops/setup.sh --help` for options. Run it again after you move or update the engine, so the jobs find the right paths. It never overwrites a file in your brain folder unless you pass `--force-agent-files`.
 
-Secrets and machine settings live outside the repo, in `~/.config/brain/`. Templates for each file are in `config/`: `env.example`, `relay.env.example` (phone captures) and `web.env.example` (deploys). For the Worker, copy `web/worker/.dev.vars.example` to `.dev.vars`.
+Secrets and machine settings live outside the repo, in `~/.config/brain/`. Templates for each file are in `ops/config/`: `env.example`, `relay.env.example` (phone captures) and `web.env.example` (deploys). For the Worker, copy `web/worker/.dev.vars.example` to `.dev.vars`.
 
 Then type `brain`. The terminal command is legacy. It stays until the MCP server at `/mcp`, inside `brain serve`, covers what agents need.
 
@@ -23,14 +23,13 @@ The brain is meant to run on one always-on Mac, such as a Mac mini. It holds the
 
 | Path | What it is |
 | --- | --- |
-| `bin/`, `src/`, `test/` | The `brain` command and `brain serve` (TypeScript on Node, `node:test`) |
+| `engine/` | The `brain` command and `brain serve` (TypeScript on Node, `node:test`): `bin/`, `src/`, `test/`, `shared/` (code the app also reads) and `migrations/` (one-off note migrations) |
 | `web/app/` | The phone and menu bar app (Vite, React) |
 | `web/worker/` | The Cloudflare Worker: relay for phone adds, Mac proxy |
-| `design-system/` | Tokens and Storybook for the app |
-| `launchd/`, `daily.sh`, `swiftbar/` | Background jobs and the menu bar plugin |
+| `web/design-system/` | Tokens and Storybook for the app |
+| `ops/` | Everything that sets up or runs on the Mac: `setup.sh`, `daily.sh`, `launchd/`, `swiftbar/`, `config/` templates, `scripts/` for the gates, `hooks/` for git |
 | `starter/` | What a new brain folder gets |
-| `migrations/` | One-off note migrations |
-| `docs/` | Intent and setup docs |
+| `docs/` | Intent, plan, design and setup docs |
 
 ## Docs
 
@@ -41,10 +40,10 @@ The brain is meant to run on one always-on Mac, such as a Mac mini. It holds the
 ## Upkeep
 
 - Every day at 07:00 the daily job indexes, tags and checks the notes, writes `.reports/today.md` in the brain folder, and commits the notes with `git add -A`. If the Mac is asleep, it runs on wake.
-- `launchd/status.sh` shows which jobs are loaded and whether `brain serve` answers.
+- `ops/launchd/status.sh` shows which jobs are loaded and whether `brain serve` answers.
 - Logs: `~/Library/Logs/brain/`.
-- A push runs the gates first. `.githooks/pre-push` runs `npm run gates` and stops the push if a gate fails. Turn it on once per clone with `git config core.hooksPath .githooks`.
-- `npm run gates` at the root runs every test, typecheck, lint and size gate for every package, plus the privacy grep. The grep reads private words from `~/.config/brain/privacy-words.txt` (template: `config/privacy-words.example.txt`).
+- A push runs the gates first. The hook in `.git/hooks/pre-push` runs `npm run gates` and stops the push if a gate fails. `npm install` at the root copies it there from `ops/hooks/pre-push`.
+- `npm run gates` at the root runs every test, typecheck, lint and size gate for every package, plus the privacy grep. The grep reads private words from `~/.config/brain/privacy-words.txt` (template: `ops/config/privacy-words.example.txt`).
 - The notes' git history is the backup. There are no backup tarballs or backup folders.
 
 ## Licence

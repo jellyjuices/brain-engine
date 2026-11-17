@@ -92,9 +92,9 @@ export default defineConfig({
   resolve: {
     dedupe: ["react", "react-dom", "@phosphor-icons/react", "clsx"],
     alias: {
-      "@ds": fileURLToPath(new URL("../../design-system/src", import.meta.url)),
+      "@ds": fileURLToPath(new URL("../design-system/src", import.meta.url)),
       "@": fileURLToPath(new URL("./src", import.meta.url)),
-      "@shared": fileURLToPath(new URL("../../shared", import.meta.url)),
+      "@shared": fileURLToPath(new URL("../../engine/shared", import.meta.url)),
     },
   },
   plugins: [linariaCssInTests(), react(), wyw(), serviceWorker()],
@@ -103,8 +103,8 @@ export default defineConfig({
     fs: {
       allow: [
         fileURLToPath(new URL(".", import.meta.url)),
-        fileURLToPath(new URL("../../shared", import.meta.url)),
-        fileURLToPath(new URL("../../design-system", import.meta.url)),
+        fileURLToPath(new URL("../../engine/shared", import.meta.url)),
+        fileURLToPath(new URL("../design-system", import.meta.url)),
       ],
     },
   },

@@ -1,11 +1,11 @@
-# Vitest and React (`web/app`, `design-system`)
+# Vitest and React (`web/app`, `web/design-system`)
 
 Run: `npx vitest run test/<path>` from `web/app` for the files you changed. Run all (`npm --prefix web/app test`, about 15 s) once at the end. After a change, also run `npx prettier --write test/<path>` and `npx tsc --noEmit -p .`. Config: `web/app/vite.config.ts` (happy-dom, `test/**/*.test.{ts,tsx}`, setup `test/setup.ts` loads `jest-dom`). No coverage tool is installed. `design-system` has no tests, only `typecheck`.
 
 ## Shape and place
 
 - `web/app/test/<area>/<name>/<name>.test.tsx`, mirroring `src` (`components`, `screens`, `lib`, `flows`, `shared`).
-- Import `describe, expect, it, vi` from `vitest`. Use `@/` for app source and `@shared/` for `shared/`.
+- Import `describe, expect, it, vi` from `vitest`. Use `@/` for app source and `@shared/` for `engine/shared/`.
 - Pure logic: `.test.ts`. Anything that renders: `.test.tsx`.
 
 ## Helpers to reuse first (`web/app/test/helpers.ts`)

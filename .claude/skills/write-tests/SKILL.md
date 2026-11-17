@@ -1,14 +1,14 @@
 ---
 name: write-tests
-description: Writes or fixes tests in brain-engine the way this repo does them (node:test in the root and web/worker, Vitest and Testing Library in web/app). Use when asked to "write tests", "add a test", "test this", "cover this", "fix a flaky test", or after adding or changing code in src/, shared/, web/app/src or web/worker/src.
+description: Writes or fixes tests in brain-engine the way this repo does them (node:test in engine and web/worker, Vitest and Testing Library in web/app). Use when asked to "write tests", "add a test", "test this", "cover this", "fix a flaky test", or after adding or changing code in engine/src, engine/shared, web/app/src or web/worker/src.
 ---
 
 # Write tests
 
 A test earns its place only if it fails when the product breaks. Read the reference for the package you touch, only that one:
 
-- Root `test/` and the `brain` code: [references/node-test.md](references/node-test.md)
-- `web/app` and `design-system` (Vitest, React): [references/vitest-react.md](references/vitest-react.md)
+- `engine/` (the `brain` code and its `test/`): [references/node-test.md](references/node-test.md). In this skill, `test/`, `src/` and `shared/` with no folder in front mean the ones inside `engine/`
+- `web/app` and `web/design-system` (Vitest, React): [references/vitest-react.md](references/vitest-react.md)
 - `web/worker`: [references/worker.md](references/worker.md)
 - The checkable list another agent scores tests against: [references/criteria.md](references/criteria.md)
 
@@ -31,7 +31,7 @@ A test earns its place only if it fails when the product breaks. Read the refere
 
 ## Where tests go and what they are called
 
-- Root: `test/<topic>.test.ts`, flat, one file per topic. Helpers and fixtures sit beside them (`fixture.ts`, `api-helpers.ts`, `t9-brain.ts`).
+- Engine: `engine/test/<topic>.test.ts`, flat, one file per topic. Helpers and fixtures sit beside them (`fixture.ts`, `api-helpers.ts`, `t9-brain.ts`).
 - App: `web/app/test/<area>/<name>/<name>.test.ts(x)`, mirroring `src`. Shared helpers: `web/app/test/helpers.ts`.
 - Worker: `web/worker/test/<topic>.test.ts`. Helpers: `helpers.ts`, `fake-d1.ts`.
 - Name = scenario plus result: `"Undo after it landed queues /api/undo"`. Reason: a red test name should say what broke.

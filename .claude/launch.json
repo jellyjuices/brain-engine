@@ -34,7 +34,7 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": [
         "--prefix",
-        "design-system",
+        "web/design-system",
         "run",
         "storybook",
         "--",

@@ -2,7 +2,7 @@
 description: How to show the owner a web app change when they work from their phone, not their laptop.
 paths:
   - "web/app/**"
-  - "design-system/**"
+  - "web/design-system/**"
 ---
 
 # Phone preview

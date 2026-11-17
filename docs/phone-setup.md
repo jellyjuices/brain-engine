@@ -31,8 +31,8 @@ Anyone with the URL can read your to-do titles. Keep it private. To turn it off,
 
 ## This Mac
 
-1. `~/.config/brain/relay.env` holds `RELAY_URL=https://<APP_HOST>` and `RELAY_TOKEN=<the same token>`. With it, `setup.sh` loads the 5-minute pull job.
+1. `~/.config/brain/relay.env` holds `RELAY_URL=https://<APP_HOST>` and `RELAY_TOKEN=<the same token>`. With it, `ops/setup.sh` loads the 5-minute pull job.
 2. Install `cloudflared` and log in with `cloudflared tunnel login`.
-3. Run `web/go-live.sh` yourself. It makes the tunnel, points `MAC_HOST` at it, writes `~/.config/brain/cloudflared.yml`, builds the app, deploys the Worker and re-runs `setup.sh`.
+3. Run `web/go-live.sh` yourself. It makes the tunnel, points `MAC_HOST` at it, writes `~/.config/brain/cloudflared.yml`, builds the app, deploys the Worker and re-runs `ops/setup.sh`.
 
 A deploy is public. Agents never run `go-live.sh` or `npm run deploy`.

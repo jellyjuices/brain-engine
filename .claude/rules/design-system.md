@@ -1,7 +1,7 @@
 ---
 description: How design system styles are written (Linaria).
 paths:
-  - "design-system/src/**"
+  - "web/design-system/src/**"
 ---
 
 # Design system styles

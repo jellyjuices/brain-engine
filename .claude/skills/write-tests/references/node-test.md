@@ -1,4 +1,6 @@
-# node:test in the root (`test/`)
+# node:test in the engine (`engine/test/`)
+
+Every path here is inside `engine/`. Run the commands from `engine/`.
 
 Run: `node --disable-warning=ExperimentalWarning --test test/<file>.test.ts` for the files you changed. Run all (`npm test`) once at the end. Coverage: add `--experimental-test-coverage`. Baseline is about 94% lines, 254 tests, 8 s.
 

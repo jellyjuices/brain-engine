@@ -6,7 +6,7 @@ import { captureText } from "../../src/todos/absorb.ts";
 import { newTodoLine, toOutcome } from "../../shared/line/index.ts";
 
 export const GENERAL = "areas/general.md";
-export const STARTER_GENERAL = fileURLToPath(new URL("../../starter/areas/general.md", import.meta.url));
+export const STARTER_GENERAL = fileURLToPath(new URL("../../../starter/areas/general.md", import.meta.url));
 
 const OLD_OUTCOMES: Record<string, string> = { "do-now": "today", park: "someday", parked: "someday", "hand-off": "waiting" };
 const isPerson = (n: Note) => typeOf(n) === "Person";

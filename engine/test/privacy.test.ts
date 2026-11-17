@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { after, describe, it } from "node:test";
 
-const script = join(import.meta.dirname, "..", "privacy-check.mjs");
+const script = join(import.meta.dirname, "..", "..", "ops", "scripts", "privacy-check.mjs");
 const dirs: string[] = [];
 
 function repo(files: Record<string, string>): string {

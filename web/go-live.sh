@@ -49,7 +49,7 @@ sed -i '' "s|^RELAY_URL=.*|RELAY_URL=https://$APP_HOST|" "$HOME/.config/brain/re
 say "brain pull uses https://$APP_HOST"
 
 # 6. Keep the tunnel running.
-"$HERE/../setup.sh" >/dev/null
+"$HERE/../ops/setup.sh" >/dev/null
 say "Tunnel kept running"
 
 echo

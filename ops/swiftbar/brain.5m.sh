@@ -34,4 +34,4 @@ if [ -z "$NODE" ]; then
   echo "Node not found. Run setup.sh in the brain engine."
   exit 0
 fi
-exec "$NODE" --disable-warning=ExperimentalWarning "$BRAIN_ENGINE/bin/brain.ts" swiftbar "$@"
+exec "$NODE" --disable-warning=ExperimentalWarning "$BRAIN_ENGINE/engine/bin/brain.ts" swiftbar "$@"

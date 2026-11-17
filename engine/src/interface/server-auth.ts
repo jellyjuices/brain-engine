@@ -56,7 +56,7 @@ export function isAuthorized(req: IncomingMessage, token: string): boolean {
 //   - a write must carry this exact Origin (blocks other pages on this Mac).
 
 export const LOCAL_COOKIE = "brain_local";
-const APP_DIR = () => process.env.BRAIN_APP_DIR || join(dirname(fileURLToPath(import.meta.url)), "..", "..", "web", "app", "dist");
+const APP_DIR = () => process.env.BRAIN_APP_DIR || join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "web", "app", "dist");
 const LOOPBACK_NAMES = new Set(["127.0.0.1", "localhost", "[::1]"]);
 const PROXY_HEADERS = ["cf-connecting-ip", "cf-ray", "cdn-loop", "x-forwarded-for", "forwarded"];
 

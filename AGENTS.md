@@ -6,12 +6,14 @@ This repo is the code for a second brain. The notes live in a separate brain fol
 
 | Part | Where | Notes |
 | --- | --- | --- |
-| `brain` command | `bin/brain.ts`, `src/` | Legacy terminal CLI. It stays until the MCP server covers what agents need. Rules: [brain-cli.md](.claude/rules/brain-cli.md) |
-| `brain serve` | `src/interface/server*.ts` | HTTP server for the app and the menu bar. The MCP server for agents is built at `/mcp` inside `brain serve`. It is not running yet |
+| `brain` command | `engine/bin/brain.ts`, `engine/src/` | Legacy terminal CLI. It stays until the MCP server covers what agents need. Rules: [brain-cli.md](.claude/rules/brain-cli.md) |
+| `brain serve` | `engine/src/interface/server*.ts` |
+| Shared modules | `engine/shared/` | The to-do line and search code. The engine and the app both read it. The app imports it as `@shared` | HTTP server for the app and the menu bar. The MCP server for agents is built at `/mcp` inside `brain serve`. It is not running yet |
 | Phone app | `web/app/` | Rules: [web.md](.claude/rules/web.md), [web-ui.md](.claude/rules/web-ui.md), [web-tests.md](.claude/rules/web-tests.md). On the phone, loaded for web UI work: [phone-preview.md](.claude/rules/phone-preview.md) |
 | Worker | `web/worker/` | Deploy values come from `~/.config/brain/web.env`. See [docs/phone-setup.md](docs/phone-setup.md) |
-| Design system | `design-system/` | Tokens and Storybook |
-| Jobs | `launchd/*.plist`, `daily.sh`, `swiftbar/` | Templates; `setup.sh` fills the `__WORDS__` |
+| Design system | `web/design-system/` | Tokens and Storybook. The app imports it as `@ds` |
+| Jobs | `ops/launchd/*.plist`, `ops/daily.sh`, `ops/swiftbar/` | Templates; `ops/setup.sh` fills the `__WORDS__` |
+| Machine setup | `ops/setup.sh`, `ops/config/`, `ops/scripts/`, `ops/hooks/` | Setup, config templates, the gate scripts and the git hook |
 | New brain | `starter/` | Copied into an empty brain folder by `setup.sh` |
 
 Where it runs: one always-on home server, a Mac mini, holds the one copy of the brain. The laptop and the phone send adds and edits to it.
@@ -20,13 +22,15 @@ Intent for every part: [docs/intent/README.md](docs/intent/README.md). When the 
 
 Plan and state of the work: [docs/plan/handoff.md](docs/plan/handoff.md). Screen design: [docs/design/](docs/design/concept-a.md).
 
-One `npm install` at the root installs every package. `design-system`, `web/app` and `web/worker` are npm workspaces. There is one `package-lock.json`. Never run `npm install` inside a package folder.
+The root holds five folders and no code: `engine/`, `web/`, `ops/`, `starter/` and `docs/`. Put a new file inside one of them, not at the root.
+
+One `npm install` at the root installs every package. `engine`, `web/app`, `web/worker` and `web/design-system` are npm workspaces. There is one `package-lock.json`. Never run `npm install` inside a package folder. The install also copies `ops/hooks/pre-push` into `.git/hooks/`.
 
 ## Invariants
 
-- **The brain folder comes from config.** `brainHome()` in `src/core/home.ts` reads `BRAIN_HOME`, then `~/.config/brain/env` (or `$BRAIN_CONFIG/env`). There is no default path. Reason: the engine runs against any owner's folder.
+- **The brain folder comes from config.** `brainHome()` in `engine/src/core/home.ts` reads `BRAIN_HOME`, then `~/.config/brain/env` (or `$BRAIN_CONFIG/env`). There is no default path. Reason: the engine runs against any owner's folder.
 - **No personal data in this repo.** No names, domains, ids, tokens or paths of a real owner. Deploy values live in `~/.config/brain/`. Reason: anyone can fork the engine.
-- **Tests never touch a real brain.** They build a temp folder from `starter/` with `test/fixture.ts`.
+- **Tests never touch a real brain.** They build a temp folder from `starter/` with `engine/test/fixture.ts`.
 - **Background jobs call Node by a fixed path.** `setup.sh` stores the real path, never a version manager's shell path.
 - **`starter/` is a template.** Change it when every new brain should get the change. It never holds an owner's notes.
 

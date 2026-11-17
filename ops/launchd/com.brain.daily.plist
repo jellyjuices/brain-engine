@@ -5,7 +5,7 @@
 <dict>
   <key>Label</key><string>com.brain.daily</string>
   <key>ProgramArguments</key>
-  <array><string>/bin/bash</string><string>__ENGINE__/daily.sh</string></array>
+  <array><string>/bin/bash</string><string>__ENGINE__/ops/daily.sh</string></array>
   <key>EnvironmentVariables</key>
   <dict>
     <key>BRAIN_HOME</key><string>__BRAIN_HOME__</string>

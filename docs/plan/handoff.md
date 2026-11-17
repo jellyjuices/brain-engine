@@ -23,7 +23,7 @@ What stays in the notes folder: its own `AGENTS.md`, `.claude/` rules and skills
 
 - The owner approves every structure, tech and design change. Read "yes" narrowly.
 - Notes repo: agents never push. Stage by path. Never `git add -A`, stash, reset or `rm`.
-- Engine: never push `main`. The owner pushes it. A push runs `npm run gates` through `.githooks/pre-push`.
+- Engine: never push `main`. The owner pushes it. A push runs `npm run gates` through the hook in `.git/hooks/pre-push`. `npm install` copies it there from `ops/hooks/`.
 - The engine is public. No personal data. Test text is made up.
 - Talk to the owner in plain words, one idea per sentence, with the word list in `AGENTS.md`.
 - A visual or interaction change is not done until someone has looked at it on a screen. Tests do not see motion, rotation or click-away. This rule was learned the hard way on 2026-11-15.
@@ -54,16 +54,17 @@ What stays in the notes folder: its own `AGENTS.md`, `.claude/` rules and skills
 
 | Branch | Worktree | State |
 | --- | --- | --- |
-| `repo-cleanup` | `brain-engine-wt/cleanup` | One `npm` install for all four packages, and these docs. Gates pass. Waits for the owner to look and merge |
-| `linaria-slice-2` | `brain-engine-wt/s1` | One commit past `main`: Empty, Card, Tile and Facts moved to Linaria. The owner looks at it on a screen before slice 3 |
-| `ui-4.3` | `brain-engine-wt/2.5` | Three commits past `main`: To-dos views and the To-dos screen. It has uncommitted files |
-| `linaria-app` | none | The rejected first try at Linaria in the app. Kept for reference only |
+| `repo-layout` | `brain-engine-wt/cleanup` | The folder layout: `engine/`, `web/`, `ops/`, `starter/`, `docs/`. Gates pass. Waits for the owner to look and merge |
+| `private-history` | none | 61 commits that are not on `main`. Kept until the owner says what it is for |
+| `ccr-e18c5284-k7y85f` | none | 9 commits of Find work from a cloud session, not on `main`. Kept until the owner looks |
 
-History of the Linaria problem: the first try moved the whole app at once and damaged the Add panel and the inputs. Commit `c1c605e` undid it. One cause is known: Linaria makes `@keyframes` names private to the `css` block they are in, so shared keyframes go in one global CSS file. The owner chose to redo the move in small slices and to look at each one on a screen.
+On 2026-11-16 the owner deleted the later Linaria slices and the first To-dos screen try (`linaria-slice-2`, `linaria-app`, `ui-4.3`). They failed. Slice 1 stays on `main`: the app has the Linaria setup and the design system link, and no part has moved.
+
+What was learned from the Linaria tries: moving the whole app at once damaged the Add panel and the inputs. One cause is known: Linaria makes `@keyframes` names private to the `css` block they are in, so shared keyframes go in one global CSS file.
 
 Two stray edits sit uncommitted in the main checkout. Their authors are unknown. The owner keeps or discards them:
-- `design-system/src/components/calendar/calendar.tsx`: one deleted line (`text-decoration: line-through`).
-- `package.json`: `bin` and `engines` moved below `scripts`. No change in meaning.
+- `web/design-system/src/components/calendar/calendar.tsx` (was `design-system/...`): one deleted line (`text-decoration: line-through`).
+- `package.json`: `bin` and `engines` moved below `scripts`. The layout branch rewrites this file, so discard this edit before the merge.
 
 ## 5. Work left, scoped by agent size
 
@@ -71,10 +72,9 @@ Small = Sonnet, under 1 hour, a few files. Medium = Sonnet, half a day. Large = 
 
 | # | Work | Size | Needs | Notes |
 | --- | --- | --- | --- | --- |
-| 0 | Folder layout of the monorepo | Medium | the owner picks a layout; no other branch in flight | Moves folders, so every open branch must merge first |
-| 3 | App join, later slices: one part family per slice (buttons, sheets, to-do row, toast, Add panel last) | Medium each | slice 2 looked at | Stop after each slice for the owner to look |
+| 3 | App join, slice 2 onward: one part family per slice (cards, buttons, sheets, to-do row, toast, Add panel last) | Medium each | none | The first try at slice 2 was deleted. Stop after each slice for the owner to look |
 | 4 | Close the 12 API gaps in [add-flows.md](add-flows.md) (fields on `make_note`, `when` and kind on `/api/add`, Japanese file names, `# Outcome` heading, project "finished") | Medium | none | Engine `src/` only. Independent of the UI |
-| 5 | UI 4.3: To-dos screen with views, Sort screen | Large | item 4 for full data | Started on `ui-4.3` |
+| 5 | UI 4.3: To-dos screen with views, Sort screen | Large | item 4 for full data | Not started. The first try was deleted |
 | 6 | UI 4.4: Add sheet and builders, from [add-flows.md](add-flows.md) | Large | items 4, 5 | The owner's 7 answers are at the end of that file |
 | 7 | UI 4.5: page, goal page, decision page, Connections | Large | item 5 | |
 | 8 | UI 4.6: Find with the answer card, Brain tab, Settings | Medium | item 5 | Find already works offline |
@@ -105,14 +105,16 @@ Install once, at the root: `npm install`. It covers the engine, the app, the Wor
 | --- | --- |
 | Engine, everything | `npm run gates` (the pre-push hook runs it) |
 | App only | in `web/app`: `npm run typecheck`, `npm test`, `npm run build` |
-| Design system only | in `design-system`: `npm run typecheck`, `npm test`, `npm run build-storybook` |
+| Engine code only | in `engine`: `npm test`, `npm run check` |
+| Design system only | in `web/design-system`: `npm run typecheck`, `npm test`, `npm run build-storybook` |
 | Notes | `brain check` |
-| Look at the parts | in `design-system`: `npm run storybook`, port 6006 |
+| Look at the parts | in `web/design-system`: `npm run storybook`, port 6006 |
 | Look at the app | in `web/worker`: `npm run dev`; in `web/app`: `npm run dev`; open port 5173 on this machine |
 
 ## 8. Leftovers
 
-- Worktrees in `brain-engine-wt/`: `2.3` and `2.4` hold merged branches. The owner removes the folders he does not need with `git worktree remove <path>`.
+- After the layout merge, the owner runs `ops/setup.sh` once. Reason: the jobs and the `brain` command on the Mac still point at the old paths.
+- Paths in [plan.md](plan.md), [search.md](search.md) and [add-flows.md](add-flows.md) are from before the layout change: `src/` is now `engine/src/`, `shared/` is `engine/shared/`, `design-system/` is `web/design-system/`.
 - `~/.config/brain/privacy-words.txt` does not exist, so the privacy scan checks nothing.
 - TypeScript and `@types/node` come in two versions: 5.9 and 22 for the engine and the Worker, 7.0 and 26 for the app and the design system. One version for all is a tech change for the owner to approve.
 - The app's CSS and lint: 15 React warnings in old screens. The new screens replace most of them.

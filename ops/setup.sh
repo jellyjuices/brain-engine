@@ -26,7 +26,7 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-ENGINE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+ENGINE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 CONFIG="${BRAIN_CONFIG:-$HOME/.config/brain}"
 AGENTS_DIR="$HOME/Library/LaunchAgents"
 LOGS="$HOME/Library/Logs/brain"
@@ -64,7 +64,7 @@ check_node() {
 install_packages() {
   say "Installing packages"
   (cd "$ENGINE" && PATH="$NODE_DIR:$PATH" npm install --silent)
-  chmod +x "$ENGINE/bin/brain.ts" "$ENGINE/daily.sh" "$ENGINE/launchd/status.sh" "$ENGINE/swiftbar/brain.5m.sh"
+  chmod +x "$ENGINE/engine/bin/brain.ts" "$ENGINE/ops/daily.sh" "$ENGINE/ops/launchd/status.sh" "$ENGINE/ops/swiftbar/brain.5m.sh"
   if [ ! -f "$ENGINE/web/app/dist/index.html" ]; then
     if [ "$DRY" = 1 ]; then would "build the app in web/app"; else
       say "Building the app"
@@ -111,8 +111,8 @@ write_config() {
 link_command() {
   if [ "$DRY" = 1 ]; then would "link brain to ~/.local/bin/brain and the global npm bin"; return; fi
   mkdir -p "$HOME/.local/bin"
-  ln -sfn "$ENGINE/bin/brain.ts" "$HOME/.local/bin/brain"
-  (cd "$ENGINE" && PATH="$NODE_DIR:$PATH" npm link --silent >/dev/null 2>&1) || true
+  ln -sfn "$ENGINE/engine/bin/brain.ts" "$HOME/.local/bin/brain"
+  (cd "$ENGINE/engine" && PATH="$NODE_DIR:$PATH" npm link --silent >/dev/null 2>&1) || true
   case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *)
     grep -q '.local/bin' "$HOME/.zshrc" 2>/dev/null || echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.zshrc"
     say "Open a new terminal tab to use brain" ;;
@@ -134,7 +134,7 @@ load_job() {
   sed -e "s|__NODE__|$NODE_BIN|g" -e "s|__NODE_DIR__|$NODE_DIR|g" -e "s|__GIT_DIR__|$(dirname "$(command -v git)")|g" \
       -e "s|__ENGINE__|$ENGINE|g" -e "s|__BRAIN_HOME__|$BRAIN_HOME|g" -e "s|__LOGS__|$LOGS|g" -e "s|__HOME__|$HOME|g" \
       -e "s|__CLOUDFLARED__|$cf|g" -e "s|__CLOUDFLARED_DIR__|$(dirname "$cf")|g" \
-      "$ENGINE/launchd/$label.plist" > "$plist"
+      "$ENGINE/ops/launchd/$label.plist" > "$plist"
   plutil -lint "$plist" >/dev/null || stop "$plist is not a valid plist."
   launchctl bootout "gui/$(id -u)/$label" 2>/dev/null || true
   for i in 1 2 3 4 5 6 7 8 9 10; do
@@ -161,15 +161,15 @@ link_swiftbar() {
   dir="$(expand_home "$dir")"
   if [ -z "$dir" ] || [ ! -d "$dir" ]; then say "SwiftBar not found. Link swiftbar/brain.5m.sh into its plugin folder later."; return; fi
   if [ "$DRY" = 1 ]; then would "link the SwiftBar plugin into $dir"; return; fi
-  ln -sfn "$ENGINE/swiftbar/brain.5m.sh" "$dir/brain.5m.sh"
+  ln -sfn "$ENGINE/ops/swiftbar/brain.5m.sh" "$dir/brain.5m.sh"
   open -g "swiftbar://refreshallplugins" 2>/dev/null || true
   ok "SwiftBar plugin linked into $dir"
 }
 
 first_run() {
   if [ "$DRY" = 1 ]; then would "run brain index and brain check in $BRAIN_HOME"; return; fi
-  BRAIN_HOME="$BRAIN_HOME" "$NODE_BIN" --disable-warning=ExperimentalWarning "$ENGINE/bin/brain.ts" index
-  BRAIN_HOME="$BRAIN_HOME" "$NODE_BIN" --disable-warning=ExperimentalWarning "$ENGINE/bin/brain.ts" check || true
+  BRAIN_HOME="$BRAIN_HOME" "$NODE_BIN" --disable-warning=ExperimentalWarning "$ENGINE/engine/bin/brain.ts" index
+  BRAIN_HOME="$BRAIN_HOME" "$NODE_BIN" --disable-warning=ExperimentalWarning "$ENGINE/engine/bin/brain.ts" check || true
 }
 
 check_node

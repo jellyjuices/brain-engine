@@ -5,7 +5,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const REPO = join(dirname(fileURLToPath(import.meta.url)), "..");
-export const STARTER = join(REPO, "starter");
+export const STARTER = join(REPO, "..", "starter");
 export const BIN = join(REPO, "bin", "brain.ts");
 
 /** One blank Area note per starter area file: same slug and title, no content. */
