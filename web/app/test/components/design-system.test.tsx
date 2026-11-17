@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { expect, test, vi } from "vitest";
-import { Button } from "@ds/components/button/button.tsx";
+import { Button } from "@/components/button-next/button.tsx";
 
 test("a design system button renders and takes a click", async () => {
   const onClick = vi.fn();

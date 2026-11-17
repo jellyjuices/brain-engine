@@ -2,6 +2,7 @@
 # Group is a company, client, family or team. Place is a city, home or clinic. Thing is something the owner has. Topic is a subject that grows.
 # Event is one dated visit, appointment or meeting. It shows in Today on its `date` until its status is done.
 # Note covers meetings, references and small ideas. Tag it to say which.
+# Project is work with an end. `finished` marks it done. An older project with `stable` counts as active.
 # Goal is a big aim, with targets and wins. A goal with `parent` is a subgoal, one level deep only.
 # Decision is one big choice, with rants, buckets, options and what was decided.
 # `areas` lists 1 or more area slugs, like [health, money]. Goal and Decision need it. The old single `area` still reads.
@@ -27,6 +28,9 @@ types:
 status: [draft, stable, deprecated]
 event_status: [upcoming, done, cancelled]
 goal_status: [active, later, done]
+project_status: [active, finished, stable, draft, deprecated]
+# The colours an area can take, in the order a new area gets them. Each is a name in the design system.
+area_colors: [health, rest-and-fun, home, money, fitness, personal-projects, client-work, career, business-admin, life-admin, relationships, love-life]
 decision_status: [open, decided, dropped]
 outcome: [today, date, someday, waiting, keep, drop]
 

@@ -4,8 +4,8 @@ import { readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import { capture } from "./actions.ts";
-import { bestHome, fileInto, namesAPerson, splitPrefix, subjectsNamed } from "./file.ts";
-import { pickedHome } from "./picked.ts";
+import { bestHome, fileInto, namesAPerson, splitPrefix, subjectsNamed, whenFrom, type When } from "./file.ts";
+import { GENERAL, pickedHome } from "./picked.ts";
 import { DIRS, folderOf, type Note, typeOf } from "../core/notes.ts";
 import { loadAll } from "../core/files.ts";
 import { readLog } from "../core/log.ts";
@@ -29,6 +29,12 @@ export interface PendingItem {
   people?: string[];
   /** Who wrote it, when it was not the owner. */
   by?: string;
+  /** "todo" makes a to-do line, "fact" a dated note line, "feeling" a feeling line. */
+  kind?: "todo" | "fact" | "feeling";
+  /** A When word or date. The text stays as typed. */
+  when?: string;
+  /** The side of a feeling line: what it is about, in the owner's words. */
+  side?: string;
 }
 
 export interface PullResult {
@@ -90,17 +96,24 @@ function homeFromText(notes: Note[], input: string): Note | undefined {
 
 export const phoneMark = (id: string) => `(phone ${id})`;
 
+/** The When and the text of one item. An explicit `when` leaves the text as typed. With none, a prefix decides, else a to-do for kind todo and a note line for the rest. */
+function whenOfItem(item: PendingItem): { w: When; text: string } {
+  const explicit = item.when ? whenFrom(item.when) : undefined;
+  if (item.kind === "fact" || item.kind === "feeling") return { w: { kind: "note" }, text: item.text.trim() };
+  if (explicit) return { w: explicit, text: item.text.trim() };
+  const { when, text } = splitPrefix(item.text);
+  return { w: when ?? (item.kind === "todo" ? { kind: "date" } : { kind: "note" }), text };
+}
+
 /** File one phone item in its note. A When prefix picks to-do or date; with none it is a dated note line. */
 function fileOnNote(root: string, notes: Note[], target: Note, item: PendingItem, picked: { with: string[]; re: string[] }): void {
-  const { when, text } = splitPrefix(item.text);
-  // DECISION: with no When prefix, a note the phone chose gets a dated note line (a fact), not a guessed to-do.
-  const w = when ?? { kind: "note" as const };
+  const { w, text } = whenOfItem(item);
   const hits = subjectsNamed(notes, text).filter((n) => n.path !== target.path);
   const people = [...new Set([...picked.with, ...hits.filter((n) => typeOf(n) === "Person").map((n) => n.path)])].filter((p) => p !== target.path);
   const re = [...new Set([...picked.re, ...hits.filter((n) => typeOf(n) !== "Person").map((n) => n.path)])].filter((p) => p !== target.path);
   const date = (item.created_at ?? "").slice(0, 10) || undefined;
   change(root, target.path, `added to ${target.path}: ${text} ${phoneMark(item.client_id)}`, () => {
-    fileInto(root, notes, target.path, text, w, { with: people, re, date });
+    fileInto(root, notes, target.path, text, w, { with: people, re, date, ...(item.kind === "feeling" && { feeling: true, about: item.side }) });
   });
 }
 
@@ -113,7 +126,8 @@ export function saveItem(root: string, item: PendingItem): { saved: "filed" | "i
   if (existing) return { saved: "skipped", path: existing.path };
   if (alreadyFiled(root, item.client_id)) return { saved: "skipped" };
   const picked = pickedHome(notes, item);
-  const target = filedNote(notes, item.into) ?? picked.target ?? homeFromText(notes, item.text);
+  const wanted = item.kind === "todo" || item.when !== undefined;
+  const target = filedNote(notes, item.into) ?? picked.target ?? homeFromText(notes, item.text) ?? (wanted ? filedNote(notes, GENERAL) : undefined);
   if (target) {
     fileOnNote(root, notes, target, item, picked);
     return { saved: "filed", path: target.path };

@@ -1,8 +1,6 @@
-// The verbs the owner uses on to-dos: `brain` (the numbered list), done, move, drop and undo.
+// The verbs the owner uses on to-dos: done, move, drop and undo.
 //
-// `brain` with no words lists overdue, today, then waiting on someone, numbered. The list is saved to
-// .brain/last-list.json so `brain done 2` means line 2 of the list the owner just saw.
-// Every change logs what it replaced, so `brain undo` can put it back.
+// Every change logs what it replaced, so undo can put it back.
 //
 // DECISION: undo stores only the changed lines and checks they are still there. If another agent
 // changed those lines since, undo stops and says so, rather than overwrite their work.
@@ -133,22 +131,4 @@ export function drop(root: string, ref: string, extra: Extra = {}): { item: Item
     });
   });
   return { item, line: `Deleted: ${item.text}${where(item)} · undo` };
-}
-
-/** Move many items in one change, logged as one entry so one `brain undo` reverses all. Events only take a date. */
-export function moveMany(root: string, items: Item[], when: string, now = today()): { moved: Item[]; skipped: Item[] } {
-  const w = parseWhen(when, now);
-  const steps: UndoStep[] = [];
-  const moved: Item[] = [];
-  const skipped: Item[] = [];
-  for (const item of items) {
-    if (item.kind === "event" && !w.due) { skipped.push(item); continue; }
-    const before = readFileSync(join(root, item.path), "utf8");
-    if (item.kind === "event") editEvent(root, item, { date: w.due! });
-    else editTodo(root, item, (l) => [formatTodoLine(updateTodo(l, { due: w.due, outcome: w.outcome }))]);
-    steps.push(diffLines(item.path, before, readFileSync(join(root, item.path), "utf8")));
-    moved.push(item);
-  }
-  if (steps.length) log(root, `move ${moved.length} to ${w.label}: ${moved.map((x) => x.text).join("; ")}`, { id: randomBytes(4).toString("hex"), undo: steps });
-  return { moved, skipped };
 }

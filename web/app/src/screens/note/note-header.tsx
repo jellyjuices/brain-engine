@@ -2,6 +2,7 @@ import "./note.css";
 import { CaretLeftIcon } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import clsx from "clsx";
+import { cardType } from "@/components/card/card.styles.ts";
 import { IconButton } from "@/components/button/icon-button.tsx";
 import { copy } from "@/content/index.ts";
 
@@ -27,7 +28,7 @@ export function NoteHeader({
       <IconButton icon={CaretLeftIcon} label={backLabel} onClick={onBack} />
       <div className="note-head-main">
         <h1 className="serif note-title">{title}</h1>
-        {type && <span className="card-type">{type}</span>}
+        {type && <span className={cardType}>{type}</span>}
       </div>
       {right ?? <span className="head-spacer" />}
     </header>

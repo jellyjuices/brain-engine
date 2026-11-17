@@ -1,4 +1,4 @@
-import "@ds/styles/tokens.css";
+import "../tokens/design-tokens.css";
 import "./styles/tokens.css";
 import "./styles/base.css";
 

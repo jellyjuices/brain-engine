@@ -4,7 +4,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { DIRS, dump, folderOf, type Meta, type Note, nowStamp, parse, tagsOf, today, typeOf } from "../core/notes.ts";
 import { loadAll, moveNote, readNote, slugify, uniquePath, writeAtomic, writeNote } from "../core/files.ts";
-import { log } from "../core/log.ts";
+import { changeFiles, log } from "../core/log.ts";
 import { loadSchema, type Schema } from "../core/schema.ts";
 import { isOwnerWriter } from "../core/owner.ts";
 
@@ -40,7 +40,13 @@ export function capture(root: string, input: CaptureInput): Note {
 }
 
 
-export function newNote(root: string, type: string, title: string, extra: Meta = {}): Note {
+export interface Draft {
+  rel: string;
+  meta: Meta;
+  body: string;
+}
+
+export function draftNote(root: string, type: string, title: string, extra: Meta = {}): Draft {
   const schema = loadSchema(root);
   const folder = schema.types[type];
   if (!folder) throw new Error(`unknown type ${type}. Use one of: ${Object.keys(schema.types).join(", ")}`);
@@ -54,10 +60,15 @@ export function newNote(root: string, type: string, title: string, extra: Meta =
     delete filled.area;
   }
   const rel = uniquePath(root, folder, slugify(title));
-  writeAtomic(join(root, rel), dump(filled, body.replaceAll("{{title}}", title).replaceAll("{{date}}", at)));
-  log(root, `created ${rel}`);
-  return readNote(root, rel);
+  return { rel, meta: filled, body: body.replaceAll("{{title}}", title).replaceAll("{{date}}", at) };
 }
+
+export function writeDraft(root: string, d: Draft): Note {
+  changeFiles(root, [d.rel], `created ${d.rel}`, () => writeAtomic(join(root, d.rel), dump(d.meta, d.body)));
+  return readNote(root, d.rel);
+}
+
+export const newNote = (root: string, type: string, title: string, extra: Meta = {}): Note => writeDraft(root, draftNote(root, type, title, extra));
 
 
 export function ruleTags(text: string, schema: Schema): string[] {

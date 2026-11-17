@@ -1,7 +1,8 @@
 // Goal and Decision views, computed on read from the notes. Nothing here is stored in a note.
 //
-// DECISION: percent = done / total over the goal's `# Targets` checklist lines plus every to-do
-// anywhere with `· toward` this goal, plus the same for its subgoals (one level). Dropped lines do not count.
+// DECISION: percent = done / total over the goal's `# Targets` checklist lines plus its steps, plus the same for its subgoals
+// (one level). A step is a to-do in the goal's own `# To-dos`, a to-do anywhere with `· toward` this goal, or a to-do in a
+// Project linked to this goal in either direction. Each to-do counts once. Dropped lines do not count.
 // DECISION: wins are computed, never written: a done target or a done `· toward` to-do is a win, dated by its `done` token.
 // DECISION: "+N this month" counts both targets and steps done in the last 30 days.
 // DECISION: the next step is the open to-do with the soonest due, else the first open target.
@@ -10,6 +11,7 @@ import { addDays, areasOf, descOf, extractLinks, folderOf, slugOf, str, titleOf,
 import { parentSlug } from "../core/schema-kinds.ts";
 import { decisionsUnder, type DecisionRef } from "./decisions.ts";
 import { fieldsOf, parseTodoLine, sectionRange } from "../../shared/line/index.ts";
+import { relationsIn } from "../core/relations.ts";
 import { allLoops } from "../todos/todos.ts";
 import { ref } from "../todos/day-list.ts";
 
@@ -75,14 +77,33 @@ function targetsOf(n: Note): GoalStep[] {
   return out;
 }
 
-function towardOf(notes: Note[], goal: string): GoalStep[] {
+type ProjectLinks = Map<string, Set<string>>;
+
+function projectLinks(notes: Note[]): ProjectLinks {
+  const goals = new Set(notes.filter(isGoal).map((n) => n.path));
+  const projects = new Set(notes.filter((n) => typeOf(n) === "Project" && live(n)).map((n) => n.path));
+  const out: ProjectLinks = new Map();
+  for (const n of notes) {
+    for (const r of relationsIn(n)) {
+      const pair = goals.has(r.from) && projects.has(r.to) ? [r.from, r.to] : projects.has(r.from) && goals.has(r.to) ? [r.to, r.from] : undefined;
+      if (pair) out.set(pair[0], (out.get(pair[0]) ?? new Set()).add(pair[1]));
+    }
+  }
+  return out;
+}
+
+function stepsOf(notes: Note[], links: ProjectLinks, goal: string): GoalStep[] {
+  const projects = links.get(goal);
   const out: GoalStep[] = [];
   for (const l of allLoops(notes)) {
-    if (l.dropped || !l.toward?.some((v) => extractLinks(l.path, v).includes(goal))) continue;
+    const mine = l.path === goal || projects?.has(l.path) || l.toward?.some((v) => extractLinks(l.path, v).includes(goal));
+    if (l.dropped || !mine) continue;
     out.push({ text: l.text, done: l.done, ...(l.doneAt && { doneAt: l.doneAt }), ...(l.due && { due: l.due }), path: l.path, goal, ref: ref(l.path, l.text) });
   }
   return out;
 }
+
+const uniq = (steps: GoalStep[]) => [...new Map(steps.map((s) => [`${s.path}\n${s.text}`, s])).values()];
 
 const byDate = (a: { date?: string }, b: { date?: string }) => (b.date ?? "").localeCompare(a.date ?? "");
 
@@ -105,9 +126,9 @@ interface Own {
   toward: GoalStep[];
 }
 
-const ownOf = (notes: Note[], n: Note): Own => ({ note: n, targets: targetsOf(n), toward: towardOf(notes, n.path) });
+const ownOf = (notes: Note[], links: ProjectLinks, n: Note): Own => ({ note: n, targets: targetsOf(n), toward: stepsOf(notes, links, n.path) });
 const tally = (parts: Own[]) => {
-  const steps = parts.flatMap((p) => [...p.targets, ...p.toward]);
+  const steps = [...uniq(parts.flatMap((p) => p.targets)), ...uniq(parts.flatMap((p) => p.toward))];
   const done = steps.filter((s) => s.done).length;
   return { done, total: steps.length, percent: percentOf(done, steps.length) };
 };
@@ -123,11 +144,12 @@ function subgoalsOf(notes: Note[], n: Note): Note[] {
 export function goalView(notes: Note[], path: string): GoalView | undefined {
   const n = notes.find((x) => x.path === path && isGoal(x));
   if (!n) return undefined;
-  const own = ownOf(notes, n);
-  const subs = subgoalsOf(notes, n).map((s) => ownOf(notes, s));
+  const links = projectLinks(notes);
+  const own = ownOf(notes, links, n);
+  const subs = subgoalsOf(notes, n).map((s) => ownOf(notes, links, s));
   const parts = [own, ...subs];
-  const targets = parts.flatMap((p) => p.targets);
-  const toward = parts.flatMap((p) => p.toward);
+  const targets = uniq(parts.flatMap((p) => p.targets));
+  const toward = uniq(parts.flatMap((p) => p.toward));
   const wins = winsOf(targets, toward);
   const since = addDays(today(), -RECENT_DAYS);
   const parent = parentSlug(n);
@@ -150,8 +172,9 @@ export function goalView(notes: Note[], path: string): GoalView | undefined {
 
 /** Every top-level goal with its percent. A subgoal shows under its parent only. */
 export function goalList(notes: Note[]): GoalRef[] {
+  const links = projectLinks(notes);
   return notes
     .filter((n) => isGoal(n) && live(n) && !parentSlug(n))
-    .map((n) => goalRef(n, [ownOf(notes, n), ...subgoalsOf(notes, n).map((s) => ownOf(notes, s))]))
+    .map((n) => goalRef(n, [ownOf(notes, links, n), ...subgoalsOf(notes, n).map((s) => ownOf(notes, links, s))]))
     .sort((a, b) => a.title.localeCompare(b.title));
 }

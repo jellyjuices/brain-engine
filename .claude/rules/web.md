@@ -6,7 +6,7 @@ paths:
 
 # Web app
 
-Stack: Vite, React 19, TypeScript, plain CSS, Vitest (happy-dom, Testing Library), a Cloudflare Worker. Parts, styles and words: `web-ui.md`. Tests: `web-tests.md`. To review a change, use the `web-reviewer` agent.
+Stack: Vite, React 19, TypeScript, Linaria (plain CSS for the families not yet moved), Storybook, Vitest (happy-dom, Testing Library), a Cloudflare Worker. Parts, styles and words: `web-ui.md`. Tests: `web-tests.md`. To review a change, use the `web-reviewer` agent.
 
 ## Gates
 

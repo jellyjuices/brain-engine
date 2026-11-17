@@ -16,7 +16,7 @@ function doctorBrain(): string {
   const visit = addDays(today(), 3);
   note(root, "people/family-doctor.md", "type: Person\ntitle: Dr. Test, family doctor\ndescription: My GP.", "# Who\n\nMy GP.\n\n# Notes\n\n- 2026-01-02 · First visit.\n");
   note(root, `events/${visit}-family-doctor.md`, `type: Event\ntitle: Family doctor visit\ndescription: Advil and sleep.\ndate: ${visit}\nstatus: upcoming\nwith: people/family-doctor.md`,
-    "With [Dr. Test](../people/family-doctor.md). Background: [Health history](../resources/health-history.md).\n\n# To-dos\n\n- [ ] Ask about Advil\n\n# Outcome\n");
+    "With [Dr. Test](../people/family-doctor.md). Background: [Health history](../resources/health-history.md).\n\n# To-dos\n\n- [ ] Ask about Advil\n\n# What happened\n");
   note(root, "resources/health-history.md", "type: Note\ntitle: Health history\ndescription: Tests and meds.", "- 2026-01-01 · Fog since 2022.\n");
   note(root, "topics/sleep.md", "type: Topic\ntitle: Sleep\ndescription: Sleep.", "# Related\n\n- [Dr. Test](../people/family-doctor.md) · treats it\n\n# To-dos\n\n- [ ] Book the sleep test · re [Dr. Test](../people/family-doctor.md)\n");
   note(root, "areas/health.md", "type: Area\ntitle: Health\ndescription: Health.", "- [Dr. Test](../people/family-doctor.md)\n\n# To-dos\n\n- [ ] An area to-do\n");

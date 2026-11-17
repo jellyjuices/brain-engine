@@ -27,13 +27,16 @@ export interface AddRequest {
   text: string;
   created_at?: string;
   into?: string;
-  about?: string[];
+  /** Note paths for About what. With kind "feeling": the side, in the owner's words. */
+  about?: string[] | string;
   people?: string[];
   tags?: string[];
   by?: string;
   draft_id?: string;
-  /** "journal" writes the text whole as its own journal note, where it waits to be sorted. */
-  kind?: "todo" | "journal";
+  /** A When word or date, like tomorrow or 2026-11-20. The text stays as typed. */
+  when?: string;
+  /** "journal" writes the text whole as its own journal note, where it waits to be sorted. "fact" and "feeling" write one dated line into `into`. */
+  kind?: "todo" | "journal" | "fact" | "feeling";
   /** A journal note's title. With none, the first words of the text. */
   title?: string;
 }
@@ -41,6 +44,7 @@ export interface AddRequest {
 export interface AddResponse extends WriteResult {
   saved: "filed" | "inbox" | "journal" | "skipped";
   path?: string;
+  title?: string;
   client_id: string;
 }
 
@@ -148,13 +152,6 @@ export type GoalResponse = GoalView;
 export type DecisionResponse = DecisionView;
 
 export type NoteResponse = ReturnType<typeof fullNoteJson>;
-
-export interface MakeNoteRequest {
-  type: string;
-  title: string;
-  description?: string;
-  draft_id?: string;
-}
 
 export interface MadeResponse extends WriteResult {
   path: string;
