@@ -103,7 +103,7 @@ export function intakeSkip(c: Ctx) {
 }
 
 export function todayRoute(c: Ctx) {
-  const items = dayList(c.root, { save: false }).map((x) => ({ ...x, ref: x.kind === "event" ? x.path : ref(x.path, x.text) }));
+  const items = dayList(c.root).map((x) => ({ ...x, ref: x.kind === "event" ? x.path : ref(x.path, x.text) }));
   return { date: new Date().toLocaleDateString("en-CA"), items };
 }
 

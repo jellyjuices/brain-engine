@@ -72,10 +72,6 @@ export function meaningReady(root: string, model = MODEL): boolean {
   }
 }
 
-export async function meaningEmbedder(root: string): Promise<Embedder | null> {
-  return meaningReady(root) ? loadEmbedder() : null;
-}
-
 export async function embedPending(root: string, embedder: Embedder, batch = BATCH): Promise<number> {
   const db = openIndex(root);
   try {

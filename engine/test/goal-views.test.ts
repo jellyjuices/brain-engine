@@ -83,7 +83,7 @@ test("a decide_by decision is a to-do on its date, until it is decided", () => {
   goal(root, "run-far", "");
   decision(root, "shoes", "open", now);
   decision(root, "later", "open", tomorrow);
-  const texts = () => dayList(root, { save: false }).map((i) => [i.kind, i.text, i.group]);
+  const texts = () => dayList(root).map((i) => [i.kind, i.text, i.group]);
   assert.deepEqual(texts(), [["decision", "Decide: Pick shoes?", "today"]]);
   decision(root, "shoes", "decided", now);
   assert.deepEqual(texts(), []);
