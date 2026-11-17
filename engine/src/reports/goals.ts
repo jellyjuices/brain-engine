@@ -9,54 +9,14 @@
 
 import { addDays, areasOf, descOf, extractLinks, folderOf, slugOf, str, titleOf, today, typeOf, DIRS, type Note } from "../core/notes.ts";
 import { parentSlug } from "../core/schema-kinds.ts";
-import { decisionsUnder, type DecisionRef } from "./decisions.ts";
+import { decisionsUnder } from "./decisions.ts";
 import { fieldsOf, parseTodoLine, sectionRange } from "../../shared/line/index.ts";
+import { byDue, TARGETS_HEADING, type GoalRef, type GoalStep, type GoalView, type GoalWin } from "../../shared/todos/index.ts";
 import { relationsIn } from "../core/relations.ts";
 import { allLoops } from "../todos/todos.ts";
 import { ref } from "../todos/day-list.ts";
 
 export const RECENT_DAYS = 30;
-
-export interface GoalStep {
-  text: string;
-  done: boolean;
-  doneAt?: string;
-  due?: string;
-  path: string;
-  goal: string;
-  ref?: string;
-}
-
-export interface GoalWin {
-  date?: string;
-  text: string;
-  kind: "target" | "todo";
-  path: string;
-  goal: string;
-}
-
-export interface GoalRef {
-  path: string;
-  title: string;
-  status: string;
-  percent: number;
-  done: number;
-  total: number;
-}
-
-export interface GoalView extends GoalRef {
-  description: string;
-  why: string;
-  areas: string[];
-  parent?: string;
-  recent: number;
-  next?: GoalStep;
-  targets: GoalStep[];
-  toward: GoalStep[];
-  wins: GoalWin[];
-  subgoals: GoalRef[];
-  decisions: DecisionRef[];
-}
 
 const percentOf = (done: number, total: number) => (total ? Math.round((100 * done) / total) : 0);
 const isGoal = (n: Note) => typeOf(n) === "Goal" && n.path.startsWith("goals/");
@@ -64,7 +24,7 @@ const live = (n: Note) => folderOf(n) !== DIRS.archive;
 
 function targetsOf(n: Note): GoalStep[] {
   const lines = n.body.split("\n");
-  const range = sectionRange(lines, "# Targets");
+  const range = sectionRange(lines, TARGETS_HEADING);
   if (!range) return [];
   const out: GoalStep[] = [];
   for (const line of lines.slice(range[0], range[1])) {
@@ -116,7 +76,7 @@ function winsOf(targets: GoalStep[], toward: GoalStep[]): GoalWin[] {
 }
 
 function nextOf(targets: GoalStep[], toward: GoalStep[]): GoalStep | undefined {
-  const open = toward.filter((s) => !s.done).sort((a, b) => (a.due ?? "9999").localeCompare(b.due ?? "9999") || a.text.localeCompare(b.text));
+  const open = toward.filter((s) => !s.done).sort(byDue);
   return open[0] ?? targets.find((s) => !s.done);
 }
 

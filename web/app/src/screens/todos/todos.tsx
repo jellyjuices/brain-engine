@@ -5,13 +5,14 @@ import { ViewTabs } from "@/components/view-tabs/view-tabs.tsx";
 import { Pull } from "@/components/pull/pull.tsx";
 import { SyncLine } from "@/components/sync-line/sync-line.tsx";
 import { longDate } from "@/lib/notes/model.ts";
-import { isTodoView, TODO_VIEWS, type TodoViewId } from "@/lib/notes/todo-views.ts";
+import { isTodoView, type TodoView } from "@shared/todos/index.ts";
+import { TODO_VIEW_TABS } from "@/lib/notes/todo-views.ts";
 import { TodosList } from "./todos-list.tsx";
 import { useTodoView } from "./use-todo-view.ts";
 import * as styles from "./todos.styles.ts";
 import { copy } from "@/content/index.ts";
 
-const EMPTY: Record<TodoViewId, string> = {
+const EMPTY: Record<TodoView, string> = {
   today: copy.todos.emptyToday,
   soon: copy.todos.emptySoon,
   "no-date": copy.todos.emptyNoDate,
@@ -20,10 +21,10 @@ const EMPTY: Record<TodoViewId, string> = {
   all: copy.todos.emptyAll,
 };
 
-const TABS = TODO_VIEWS.map((v) => ({ value: v.id, label: v.label }));
+const TABS = TODO_VIEW_TABS.map((v) => ({ value: v.id, label: v.label }));
 
 export function TodosScreen() {
-  const [view, setView] = useState<TodoViewId>("today");
+  const [view, setView] = useState<TodoView>("today");
   const { now, items, noDate, refresh } = useTodoView(view);
 
   return (

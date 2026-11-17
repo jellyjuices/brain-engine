@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { crossTarget, linkedPaths, type GoalView } from "@/lib/notes/goals.ts";
+import type { GoalView } from "@shared/todos/index.ts";
+import { crossTarget, linkedPaths } from "@/lib/notes/goals.ts";
 
 const BODY = [
   "# Why",

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { groupView, localView, type TodoViewId } from "@/lib/notes/todo-views.ts";
+import type { TodoView } from "@shared/todos/index.ts";
+import { groupView, localView } from "@/lib/notes/todo-views.ts";
 import { fixture, NOW, note } from "../../helpers.ts";
 
 const NOTES = [
@@ -11,7 +12,7 @@ const NOTES = [
   ),
 ];
 
-function titles(view: TodoViewId) {
+function titles(view: TodoView) {
   return groupView(view, localView(NOTES, view, NOW), NOW).map((g) => [
     g.title,
     g.items.map((t) => t.text),

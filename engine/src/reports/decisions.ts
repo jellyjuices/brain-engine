@@ -3,14 +3,8 @@
 import { descOf, DIRS, folderOf, str, titleOf, typeOf, type Note } from "../core/notes.ts";
 import { relationsIn } from "../core/relations.ts";
 import { sectionRange } from "../../shared/line/index.ts";
+import type { DecisionRef } from "../../shared/todos/index.ts";
 import { ref } from "../todos/day-list.ts";
-
-export interface DecisionRef {
-  path: string;
-  title: string;
-  status: string;
-  decide_by?: string;
-}
 
 export interface DecisionView extends DecisionRef {
   description: string;

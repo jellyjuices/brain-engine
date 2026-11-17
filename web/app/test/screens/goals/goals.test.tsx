@@ -1,7 +1,7 @@
 import "fake-indexeddb/auto";
 import { cleanup, render, screen, within } from "@testing-library/react";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { GoalView } from "@/lib/notes/goals.ts";
+import type { GoalView } from "@shared/todos/index.ts";
 import { go } from "@/lib/platform/router.ts";
 import { GoalScreen } from "@/screens/goal/goal.tsx";
 import { GoalsScreen } from "@/screens/goals/goals.tsx";

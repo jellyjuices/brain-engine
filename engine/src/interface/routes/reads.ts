@@ -1,18 +1,18 @@
 // Find, the to-do views and the log.
 
-import { addDays, today } from "../../core/notes.ts";
+import { today } from "../../core/notes.ts";
+import { byDue, inTodoView, TODO_VIEWS, type TodoView } from "../../../shared/todos/index.ts";
 import { loadAll } from "../../core/files.ts";
 import { readLog } from "../../core/log.ts";
 import { find, findHits, type Filters, routeEmbedder, shortAnswer } from "../../core/search.ts";
 import { buildCard, matchSubject } from "../../reports/card.ts";
 import { ref } from "../../todos/day-list.ts";
 import { decideByLoops } from "../../todos/decide-by.ts";
-import { allLoops, type Loop } from "../../todos/todos.ts";
-import { type FindResponse, type LogResponse, TODO_VIEWS, type TodosResponse, type TodoView } from "../api-types.ts";
+import { allLoops } from "../../todos/todos.ts";
+import type { FindResponse, LogResponse, TodosResponse } from "../api-types.ts";
 import { HttpError } from "../server-auth.ts";
 import type { Ctx } from "../server-context.ts";
 
-const SOON_DAYS = 14;
 const MAX_LOG = 200;
 
 const FILTERS = ["type", "tag", "area", "status"] as const;
@@ -32,15 +32,6 @@ export async function findRoute(c: Ctx): Promise<FindResponse> {
   return subject ? { card: buildCard(c.root, notes, subject), ...found } : found;
 }
 
-const VIEW: Record<TodoView, (l: Loop, now: string) => boolean> = {
-  today: (l, now) => !!l.due && l.due <= now,
-  soon: (l, now) => !!l.due && l.due > now && l.due <= addDays(now, SOON_DAYS),
-  "no-date": (l) => !l.due && l.outcome !== "waiting",
-  "on-hold": (l) => l.outcome === "waiting",
-  "by-goal": (l) => !!l.toward?.length,
-  all: () => true,
-};
-
 /** One standard view of the open to-dos. Today reads `due` only, never a `· today` token. */
 export function todosRoute(c: Ctx): TodosResponse {
   const view = (c.url.searchParams.get("view") ?? "today") as TodoView;
@@ -48,8 +39,8 @@ export function todosRoute(c: Ctx): TodosResponse {
   const now = today();
   const notes = loadAll(c.root);
   const items = [...allLoops(notes, { done: false }), ...decideByLoops(notes)]
-    .filter((l) => !l.dropped && VIEW[view](l, now))
-    .sort((a, b) => (a.due ?? "9999").localeCompare(b.due ?? "9999") || a.text.localeCompare(b.text))
+    .filter((l) => !l.dropped && inTodoView(view, l, now))
+    .sort(byDue)
     .map((l) => ({ ...l, ref: ref(l.path, l.text) }));
   return { view, date: now, items };
 }

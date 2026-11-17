@@ -1,11 +1,9 @@
+import { byDue, inTodoView, type TodoView } from "@shared/todos/index.ts";
 import { allLoops, todoRef, type Loop } from "./todos.ts";
-import { addDays, longDate, type StoredNote } from "./model.ts";
+import { longDate, type StoredNote } from "./model.ts";
 import { copy } from "@/content/index.ts";
 
-const TODO_VIEW_IDS = ["today", "soon", "no-date", "on-hold", "by-goal", "all"] as const;
-export type TodoViewId = (typeof TODO_VIEW_IDS)[number];
-
-export const TODO_VIEWS: { id: TodoViewId; label: string }[] = [
+export const TODO_VIEW_TABS: { id: TodoView; label: string }[] = [
   { id: "today", label: copy.todos.viewToday },
   { id: "soon", label: copy.todos.viewSoon },
   { id: "no-date", label: copy.todos.viewNoDate },
@@ -25,28 +23,9 @@ export interface TodoGroup {
   items: ViewTodo[];
 }
 
-const SOON_DAYS = 14;
-
-const MATCH: Record<TodoViewId, (l: Loop, now: string) => boolean> = {
-  today: (l, now) => !!l.due && l.due <= now,
-  soon: (l, now) => !!l.due && l.due > now && l.due <= addDays(now, SOON_DAYS),
-  "no-date": (l) => !l.due && l.outcome !== "waiting",
-  "on-hold": (l) => l.outcome === "waiting",
-  "by-goal": (l) => !!l.toward?.length,
-  all: () => true,
-};
-
-export function isTodoView(value: string): value is TodoViewId {
-  return (TODO_VIEW_IDS as readonly string[]).includes(value);
-}
-
-function byDue(a: Loop, b: Loop) {
-  return (a.due ?? "9999").localeCompare(b.due ?? "9999") || a.text.localeCompare(b.text);
-}
-
-export function localView(notes: StoredNote[], view: TodoViewId, now: string): ViewTodo[] {
+export function localView(notes: StoredNote[], view: TodoView, now: string): ViewTodo[] {
   return allLoops(notes, { done: false })
-    .filter((l) => !l.dropped && MATCH[view](l, now))
+    .filter((l) => !l.dropped && inTodoView(view, l, now))
     .sort(byDue)
     .map((l) => ({ ...l, ref: todoRef(l.path, l.text) }));
 }
@@ -85,7 +64,7 @@ function heldBy(todo: Loop): string {
   return who ? linkLabel(who) : todo.noteTitle;
 }
 
-function keyFor(view: TodoViewId, todo: ViewTodo, now: string): [string, string, boolean] {
+function keyFor(view: TodoView, todo: ViewTodo, now: string): [string, string, boolean] {
   if (view === "today") {
     const late = (todo.due ?? now) < now;
     return late ? ["late", copy.today.overdue, true] : ["today", copy.today.dueToday, false];
@@ -99,9 +78,9 @@ function keyFor(view: TodoViewId, todo: ViewTodo, now: string): [string, string,
   return [todo.noteTitle, todo.noteTitle, false];
 }
 
-const KEEP_ORDER: readonly TodoViewId[] = ["today", "soon"];
+const KEEP_ORDER: readonly TodoView[] = ["today", "soon"];
 
-export function groupView(view: TodoViewId, items: ViewTodo[], now: string): TodoGroup[] {
+export function groupView(view: TodoView, items: ViewTodo[], now: string): TodoGroup[] {
   const groups = new Map<string, TodoGroup>();
   items.forEach((todo) => {
     const [key, title, late] = keyFor(view, todo, now);

@@ -1,5 +1,5 @@
 import { Bar } from "@/components/bar/bar.tsx";
-import type { GoalView } from "@/lib/notes/goals.ts";
+import type { GoalView } from "@shared/todos/index.ts";
 import { copy } from "@/content/index.ts";
 
 export function GoalBar({ goal }: { goal: GoalView }) {

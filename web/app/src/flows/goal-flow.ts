@@ -1,5 +1,6 @@
 import { toast } from "@/components/toast/toast-store.ts";
-import { crossTarget, type GoalStep } from "@/lib/notes/goals.ts";
+import type { GoalStep } from "@shared/todos/index.ts";
+import { crossTarget } from "@/lib/notes/goals.ts";
 import { todayIso } from "@/lib/notes/model.ts";
 import { makeTodo } from "@/lib/notes/todos.ts";
 import { getNote, putNotes } from "@/lib/storage/store.ts";

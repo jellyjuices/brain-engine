@@ -1,3 +1,7 @@
+import { addDays, isoDay as isoDate } from "@shared/todos/index.ts";
+
+export { addDays, isoDate };
+
 export interface StoredNote {
   path: string;
   type?: string;
@@ -93,23 +97,12 @@ export function noteHref(path: string) {
   return `/note/${path.split("/").map(encodeURIComponent).join("/")}`;
 }
 
-function pad(n: number) {
-  return String(n).padStart(2, "0");
-}
-export function isoDate(d: Date) {
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-}
 export function todayIso() {
   return isoDate(new Date());
 }
 
 function at(iso: string) {
   return new Date(`${iso}T12:00:00`);
-}
-export function addDays(iso: string, n: number): string {
-  const d = at(iso);
-  d.setDate(d.getDate() + n);
-  return isoDate(d);
 }
 
 export function niceDate(iso: string) {

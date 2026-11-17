@@ -1,6 +1,7 @@
 import { css } from "@linaria/core";
 import { Bar } from "@/components/bar/bar.tsx";
-import { goalHref, type GoalRef } from "@/lib/notes/goals.ts";
+import type { GoalRef } from "@shared/todos/index.ts";
+import { goalHref } from "@/lib/notes/goals.ts";
 
 const link = css`
   display: grid;

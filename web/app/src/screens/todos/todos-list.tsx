@@ -1,17 +1,18 @@
 import { SectionHeader } from "@/components/section-header/section-header.tsx";
 import { Empty } from "@/components/empty/empty.tsx";
-import { groupView, type TodoViewId, type ViewTodo } from "@/lib/notes/todo-views.ts";
+import type { TodoView } from "@shared/todos/index.ts";
+import { groupView, type ViewTodo } from "@/lib/notes/todo-views.ts";
 import { TodoLine } from "./todo-line.tsx";
 import * as styles from "./todos.styles.ts";
 
 export interface TodosListProps {
-  view: TodoViewId;
+  view: TodoView;
   items: ViewTodo[];
   now: string;
   empty: string;
 }
 
-const SUBJECT_GROUPS: readonly TodoViewId[] = ["no-date", "all"];
+const SUBJECT_GROUPS: readonly TodoView[] = ["no-date", "all"];
 
 export function TodosList({ view, items, now, empty }: TodosListProps) {
   if (!items.length) return <Empty title={empty} />;

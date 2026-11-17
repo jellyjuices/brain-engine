@@ -1,4 +1,5 @@
-import { goalRefsOf, isGoalView, type GoalView } from "@/lib/notes/goals.ts";
+import type { GoalView } from "@shared/todos/index.ts";
+import { goalRefsOf, isGoalView } from "@/lib/notes/goals.ts";
 import { api } from "./api.ts";
 import type { Loaded } from "./loaded.ts";
 

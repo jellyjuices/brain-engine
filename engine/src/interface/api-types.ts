@@ -5,7 +5,7 @@ import type { Issue } from "../core/schema.ts";
 import type { Relation } from "../core/relations.ts";
 import type { Card } from "../reports/card.ts";
 import type { DecisionView } from "../reports/decisions.ts";
-import type { GoalRef, GoalView } from "../reports/goals.ts";
+import type { GoalRef, GoalView, TodoView } from "../../shared/todos/index.ts";
 import type { Loop } from "../todos/todos.ts";
 import type { fullNoteJson, noteJson } from "./server-context.ts";
 
@@ -130,9 +130,6 @@ export interface NotesSinceResponse {
   model: string;
   vectors: FeedVector[];
 }
-
-export const TODO_VIEWS = ["today", "soon", "no-date", "on-hold", "by-goal", "all"] as const;
-export type TodoView = (typeof TODO_VIEWS)[number];
 
 export interface TodoRow extends Loop {
   ref: string;

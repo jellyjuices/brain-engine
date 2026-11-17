@@ -1,6 +1,7 @@
 import { GoalBar } from "@/components/goal-bar/goal-bar.tsx";
 import { GoalStep } from "@/components/goal-step/goal-step.tsx";
-import { openSteps, titleAt, type GoalView } from "@/lib/notes/goals.ts";
+import type { GoalView } from "@shared/todos/index.ts";
+import { openSteps, titleAt } from "@/lib/notes/goals.ts";
 import type { StoredNote } from "@/lib/notes/model.ts";
 import { GoalLinks } from "./goal-links.tsx";
 import { GoalSection } from "./goal-section.tsx";

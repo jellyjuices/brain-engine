@@ -2,17 +2,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { useOutboxCount } from "@/hooks/use-outbox-count.ts";
 import { todayIso, type StoredNote } from "@/lib/notes/model.ts";
-import {
-  fromTodosResponse,
-  localView,
-  type TodoViewId,
-  type ViewTodo,
-} from "@/lib/notes/todo-views.ts";
+import type { TodoView } from "@shared/todos/index.ts";
+import { fromTodosResponse, localView, type ViewTodo } from "@/lib/notes/todo-views.ts";
 import { api } from "@/lib/sync/api.ts";
 import { syncNow } from "@/lib/sync/sync.ts";
 
 interface Remote {
-  view: TodoViewId;
+  view: TodoView;
   date: string;
   basis: StoredNote[] | null;
   items: ViewTodo[];
@@ -25,7 +21,7 @@ export interface TodoViewState {
   refresh: () => Promise<void>;
 }
 
-export function useTodoView(view: TodoViewId): TodoViewState {
+export function useTodoView(view: TodoView): TodoViewState {
   const now = todayIso();
   const notes = useNotes();
   const pending = useOutboxCount();

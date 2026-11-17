@@ -37,21 +37,15 @@ export function today(): string {
   return localDate(new Date());
 }
 
-export function localDate(d: Date): string {
-  const pad2 = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
-}
+import { isoDay as localDate } from "../../shared/todos/index.ts";
+
+export { addDays } from "../../shared/todos/index.ts";
+export { localDate };
 
 export function nowStamp(): string {
   const date = new Date();
   const pad2 = (n: number) => String(n).padStart(2, "0");
   return `${localDate(date)}T${pad2(date.getHours())}:${pad2(date.getMinutes())}:${pad2(date.getSeconds())}`;
-}
-
-export function addDays(iso: string, days: number): string {
-  const date = new Date(`${iso}T12:00:00`);
-  date.setDate(date.getDate() + days);
-  return localDate(date);
 }
 
 /** YAML dates become Date objects; turn them back into ISO strings. */
