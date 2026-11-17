@@ -14,7 +14,10 @@
   },
   "scripts": {
     "prepare": "cp ops/hooks/pre-push \"$(git rev-parse --git-path hooks)/pre-push\" 2>/dev/null || true",
-    "test": "npm --prefix engine test",
+    "dev": "npm --prefix web/app run dev",
+    "build": "npm --prefix web/app run build",
+    "storybook": "npm --prefix web/app run storybook",
+    "test": "f=0; npm --prefix engine test || f=1; npm --prefix web/app test || f=1; npm --prefix web/worker test || f=1; exit $f",
     "deploy": "npm --prefix web/worker run deploy",
     "privacy": "node ops/scripts/privacy-check.mjs",
     "gates": "f=0; npm --prefix engine test || f=1; npm --prefix engine run check || f=1; npm run privacy || f=1; for d in web/app web/worker; do npm --prefix $d run typecheck || f=1; done; npm --prefix web/app test || f=1; npm --prefix web/app run lint || f=1; npm --prefix web/app run format:check || f=1; npm --prefix web/app run size || f=1; npm --prefix web/app run build || f=1; npm --prefix web/worker test || f=1; npm --prefix web/worker run lint || f=1; npm --prefix web/worker run size || f=1; exit $f"
