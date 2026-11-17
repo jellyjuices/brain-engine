@@ -7,7 +7,7 @@ paths:
 
 # Web app
 
-Stack: Vite, React 19, TypeScript, Linaria (plain CSS for the families not yet moved), Storybook, Vitest (happy-dom, Testing Library), a Cloudflare Worker. Parts, styles and words: `web-ui.md`. Tests: `web-tests.md`. To review a change, use the `web-reviewer` agent.
+Stack: Vite, React 19, TypeScript, CSS Modules on the design tokens, Storybook, Vitest (happy-dom, Testing Library), a Cloudflare Worker. Parts, styles and words: `web-ui.md`. Tests: `web-tests.md`. To review a change, use the `web-reviewer` agent.
 
 ## Gates
 
@@ -25,11 +25,11 @@ Run `npm run gates` from the repo root before you finish. All must pass.
 | --- | --- |
 | `lib/` | Logic with no React: `notes/`, `storage/`, `sync/`, `lock/`, `platform/` |
 | `hooks/` | Hooks that read the stores, and general hooks |
-| `components/<part>/` | Shared parts, each with its `.tsx` files and one `.css` |
-| `screens/<screen>/` | One folder per screen, with its own parts and `.css` |
+| `components/<part>/` | Shared parts, each with its `.tsx` files and one `<part>.module.css` |
+| `screens/<screen>/` | One folder per screen, with its own parts and CSS Modules |
 | `flows/` | Glue between parts and logic |
 | `shell/` | App frame, screen list, screen host |
-| `styles/` | `tokens.css`, `base.css`, `app.css` |
+| `styles/` | `global.css`, the one global stylesheet |
 
 `test/` mirrors `src/`.
 

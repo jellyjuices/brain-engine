@@ -12,5 +12,5 @@ paths:
 - Variants and states are classes in the module (`styles[variant]`, `styles.isDone`), set with `clsx`. Style a third-party part's classes with `:global(.name)` under a module class.
 - Name keyframes inside the module; CSS Modules scope them.
 - Run-time values are CSS variables set on the element `style`.
-- No Linaria `css` blocks and no `*.styles.ts` in new or changed parts. The old map from `src/styles/tokens.css` to the new tokens is in `docs/plan/one-system.md`.
+- CSS Modules on the new tokens are the only way to style. No `css` tagged templates, no `*.styles.ts`, no plain per-part `.css`. The one global file is `app/src/styles/global.css` (reset, `html`, `body`, fonts, `:focus-visible`, reduced motion). The map from the old tokens is in `docs/plan/one-system.md`.
 - `func-style` and three jsx-a11y rules are off for some parts (see `overrides` in `app/.oxlintrc.json`). Remove a folder from that list when you move it to function declarations.

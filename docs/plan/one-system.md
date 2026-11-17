@@ -1,6 +1,6 @@
 # One system: old to new
 
-The app moves to one token set (`app/tokens/design-tokens.css`) and one part per idea. Styles go in `<part>.module.css` next to the part. `app/src/styles/tokens.css` goes away once nothing reads it.
+The app moves to one token set (`app/tokens/design-tokens.css`) and one part per idea. Styles go in `<part>.module.css` next to the part. `app/src/styles/tokens.css` is gone. Every part, screen and shell piece is a CSS Module on these tokens. The one global file is `app/src/styles/global.css`.
 
 ## Colour
 
@@ -139,12 +139,7 @@ Neither set has z-index tokens. Raw numbers stay as they are.
 | Calendar | `Calendar` | `DayPicker` |
 | Sheet menu | `OptionsMenu` | `Menu` (drop-down) |
 | Notice line | `Banner` | `UnsortedBanner` draws `Banner` |
-| Group header on a screen | `SectionHeader` | `.section-label` on screen groups (second step; field and fact labels keep `.section-label`) |
-| Add button and tab bar | open: `PlusButton` and `components/tab-bar` are the new look; `AddPanel` and `shell/tab-bar` hold the working quick add | needs an owner call, see below |
-| Sheet menu items | `OptionsMenu` | `List variant="menu"` in `todo-menu`, `inbox-menu`; `Option` in `sheet/option.tsx` (second step) |
-
-## Still open
-
-- The add button. `PlusButton` and `components/tab-bar` have no callers. `AddPanel` in `shell/tab-bar` holds hold-to-pick and quick add. Folding them means rebuilding the add flow in the shell.
-- Context rules like `.sheet .panel`, `.sheet .tile`, `.sheet .input` and `.icon-btn` no longer match. The sheet is now `[role="dialog"]`. The second step converts those files.
+| Group header on a screen | `SectionHeader` | `.section-label` on screen groups (field and fact labels keep a label style in their part) |
+| Add button and tab bar | `AddPanel` in `shell/tab-bar` | `PlusButton` and `components/tab-bar` (no callers) |
+| Sheet menu items | `OptionsMenu` | `List variant="menu"` in `todo-menu`, `inbox-menu`; `Option` in `sheet/option.tsx` is gone |
 | Pick one | `Select` | nothing old |

@@ -16,7 +16,7 @@ The app must look like one app: one idea, one part, one size, one word. If you f
 
 1. Find it in the table. Use it.
 2. If it is close, add a prop or variant to it.
-3. Only if nothing fits, make `components/<part>/` with one `.css`, and add a row here.
+3. Only if nothing fits, make `components/<part>/` with one `<part>.module.css`, and add a row here.
 
 If a screen part is needed in a second place, move it to `components/` first. Reason: copies are the main cause of drift.
 
@@ -28,10 +28,10 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 | Kind of thing (to-do, journal, person, place...) | `Shape` (`name`, `icon`) or `Row shape`. One shape per kind. The `add` shape is only for the add button |
 | Add button and its quick add | `AddPanel` in `TabBar` |
 | Tappable line | `Row` (`title`, `sub`, `icon`, `end`, `variant`, `chevron`, `href` or `onClick`) |
-| Group of rows | `List` (`outlined` on a screen, `ghost` in a sheet, `menu` for a sheet menu) |
+| Group of rows | `List` (`outlined` on a screen, `plain` for to-do lines, `ghost` in a sheet, `menu` for a sheet menu). It draws a `<ul>` and wraps each child in an `<li>`. Rows never draw `<li>` |
 | Line between menu groups | `Divider` inside `List variant="menu"` |
 | Tag, count, removable value | `Chip` (`label`, `variant` `tag`/`check`/`accent`, `icon`, `areas`, `onClick`, `onRemove`) |
-| Quick choice in a grid | `Tile` inside `.tiles` |
+| Row of chips | `Chips` from `components/chip/` around `Chip`s |
 | Screen header | `PageHeader` (`title`, `kicker`, `fallback` or `onBack`, `action`, `areas`) |
 | Group header with a count | `SectionHeader` (`title`, `count`, `tone`, `action`) |
 | Notice with one action | `Banner` (`message`, `count`, `actionLabel`, `onAction`) |
@@ -50,7 +50,6 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 | Ask for a person, birthday or subject | `personSheet()`, `birthdaySheet()`, `subjectSheet()` |
 | Change a to-do or sort a capture | `todoSheet()`, `inboxSheet()` |
 | Suggest a note while typing `@` or `#` | `MentionDrawer` with `useMentions()` |
-| Search result line | `HitRow` (`path`, `title`, `type`, `sub`) |
 | Subject summary on a note | `SubjectCard` from `components/card/` |
 | Draw note text | `Markdown` (`src`, `path`) |
 | A person named in text (`@Name`, green) | `Mention` (`name`, `href`) |
@@ -59,12 +58,12 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 | Bottom tabs | `TabBar` |
 | Say when | `WhenPicker` (`choices`, `onPick`, `onNotTodo`) |
 | Pick a day only | `Calendar` (`today`, `value`, `min`, `max`, `yearSteps`, `onPick`) |
-| Long text | `<textarea className="composer">` |
+| Long text | `Composer` from `components/field/` |
 | Load a text file | `FilePicker` |
-| Label on a group | `.section-label` |
+| Label on a group | `SectionHeader`. A field or fact label keeps its own label style in its part |
 | Padded box | `Panel` |
 | Fact on a note | `Fact`, `AddFact` |
-| To-do line | `TodoRow` (`title`, `tag`, `when`, `checked`, `onCheckedChange`, `onOpen`, `onMenu`). For a `TodoRef` from `makeTodo()`, use `TodoRefRow` |
+| To-do line | `TodoRow` (`title`, `tag`, `when`, `checked`, `onCheckedChange`, `onOpen`, `onMenu`, `onLater` for the swipe-left Tomorrow). For a `TodoRef` from `makeTodo()`, use `TodoRefRow` |
 | When a to-do is due | `WhenChip` (`label`, `status`) |
 | A goal's target or step, with its tick box | `GoalStep` from `components/goal-step/` |
 | A goal's big percent, bar and "+N this month" | `GoalBar` from `components/goal-bar/` |
@@ -74,28 +73,28 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 ## Variants
 
 - Change a look with a prop, never a second part or a one-off class.
-- `size`: `sm`, `md`, `lg` (default `md`). `variant`: `primary` (main green `--accent`), `secondary` (light green `--accent-soft`), `outlined` (`--line` border), `ghost` (text only), `danger` (outlined, `--danger` text). No other names.
-- CSS for a variant is `<part>--<value>`, set with `clsx`. The base class holds what variants share.
+- `size`: `sm`, `md`, `lg` (default `md`). `variant`: `primary` (`--background-accent`), `secondary` (`--background-accent-soft`), `outlined` (`--border-primary` border), `ghost` (text only), `danger` (outlined, `--text-danger` text). No other names.
+- CSS for a variant is a class named for the value (`.primary`), set with `clsx`. The base class holds what variants share.
 - A part takes data (`title`, `sub`, `icon`, `end`) and draws its own layout. Callers do not pass hand-built markup.
 
 ## Look
 
-- Sizes, colours, spacing and radius come from tokens in `src/styles/tokens.css`. Add a token if none fits. No raw `px` or hex outside tokens. Stylelint blocks both outside `tokens.css`.
+- Sizes, colours, spacing and radius come from the tokens in `app/tokens/design-tokens.css`. Add a token to `app/tokens/*.ts` if none fits. No raw `px` or hex in any `*.module.css` or in `src/styles/global.css`. Stylelint blocks both.
 - Any group of items is a `List` of rows. Dividers come only from `List` or `Divider`. A row never draws its own border or box.
 - Sheet menus: no line inside a group, a `Divider` between groups. Archive, delete and cancel are last, `variant="danger"`.
-- A box is one step off what it sits on: `--surface` on a screen, `--bg` in a sheet.
+- A box is one step off what it sits on: `--background-secondary` on a screen, `--background-primary` in a sheet.
 - Icons: import the Phosphor `…Icon` part and pass it (`<Icon icon={PlusIcon} />`). Type props with `type Icon as PhosphorIcon`. No icon name strings. One meaning, one glyph.
 - A chevron means "opens a next step". Back is an arrow, top left. Close is ×, top right of a sheet. The primary action is last and full width. Other actions are `outlined`.
 - One surface at a time. Never stack a sheet on a sheet.
 - Dates: `longDate()`, `niceDate()` from `lib/notes/model.ts`, `quickDays()` from `lib/notes/due.ts`. Note-type lists and icons live in `lib/notes/`.
-- Hover: write `&:hover`, then undo it in a local `@media (hover: none)` below. No shared hover helper.
+- Hover: write `:hover`, then undo it in a local `@media (hover: none)` below. No shared hover helper.
 - No `text-transform: uppercase`. Values that change all the time go on the element `style`, not a CSS rule.
 
 ## Naming
 
 - Files and folders kebab-case (`todo-row/todo-row.tsx`). Components PascalCase. Sheet openers camelCase ending in `Sheet` (`todoSheet()`).
 - A folder is named after its main part. Sheet step files start with the sheet name (`todo-menu.tsx`).
-- CSS classes start with the part name (`.todo-due`). States use `is-` (`.is-late`). Variants use `--`.
+- Class names are camelCase in the part's CSS Module (`.todoDue`). States start with `is` (`.isLate`). Variants are the value (`.primary`).
 - Props say what they hold. Events start with `on`.
 
 ## Words on screen
