@@ -1,5 +1,6 @@
-import "@/styles/tokens.css";
-import "@/styles/base.css";
+import { useLayoutEffect, type ReactNode } from "react";
+import tokensCss from "@/styles/tokens.css?inline";
+import baseCss from "@/styles/base.css?inline";
 import "@/styles/app.css";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Card } from "@/lib/notes/card-types.ts";
@@ -63,6 +64,18 @@ const card: Card = {
   ],
 };
 
+const whitePage = "html, body { background: var(--background-primary); }";
+
+function AppStyles({ children }: { children: ReactNode }) {
+  useLayoutEffect(() => {
+    const style = document.createElement("style");
+    style.textContent = [tokensCss, baseCss, whitePage].join("\n");
+    document.head.append(style);
+    return () => style.remove();
+  }, []);
+  return children;
+}
+
 const meta = {
   title: "App/Subject card",
   component: SubjectCard,
@@ -70,9 +83,11 @@ const meta = {
   parameters: { layout: "padded" },
   decorators: [
     (Story) => (
-      <div style={{ maxWidth: 390 }}>
-        <Story />
-      </div>
+      <AppStyles>
+        <div style={{ maxWidth: 390 }}>
+          <Story />
+        </div>
+      </AppStyles>
     ),
   ],
 } satisfies Meta<typeof SubjectCard>;
