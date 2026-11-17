@@ -253,7 +253,9 @@
   --size-menu-min: 12rem;
   --size-day: 2.75rem;
   --size-control: 44px;
+  --size-control-sm: 36px;
   --size-target: 44px;
+  --size-blob: 520px;
   --size-plus: 58px;
   --size-tabbar: 64px;
   --size-glow: 260px;
@@ -280,7 +282,9 @@
   --motion-duration-fast: 160ms;
   --motion-duration-slow: 220ms;
   --motion-duration-pop: 600ms;
+  --motion-duration-spin: 40s;
   --motion-easing-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --motion-easing-in: cubic-bezier(0.5, 0, 0.75, 0);
   --motion-easing-linear: linear;
   --texture-noise-dark: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'200'%20height%3D'200'%3E%3Cfilter%20id%3D'n'%3E%3CfeTurbulence%20type%3D'fractalNoise'%20baseFrequency%3D'.8'%20numOctaves%3D'3'%20stitchTiles%3D'stitch'%2F%3E%3CfeColorMatrix%20type%3D'saturate'%20values%3D'0'%2F%3E%3CfeComponentTransfer%3E%3CfeFuncR%20type%3D'linear'%20slope%3D'0'%20intercept%3D'1'%2F%3E%3CfeFuncG%20type%3D'linear'%20slope%3D'0'%20intercept%3D'1'%2F%3E%3CfeFuncB%20type%3D'linear'%20slope%3D'0'%20intercept%3D'1'%2F%3E%3CfeFuncA%20type%3D'table'%20tableValues%3D'0%200%200.09%200.18'%2F%3E%3C%2FfeComponentTransfer%3E%3C%2Ffilter%3E%3Crect%20width%3D'100%25'%20height%3D'100%25'%20filter%3D'url(%23n)'%2F%3E%3C%2Fsvg%3E");
   --texture-noise-light: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'200'%20height%3D'200'%3E%3Cfilter%20id%3D'n'%3E%3CfeTurbulence%20type%3D'fractalNoise'%20baseFrequency%3D'.8'%20numOctaves%3D'3'%20stitchTiles%3D'stitch'%2F%3E%3CfeColorMatrix%20type%3D'saturate'%20values%3D'0'%2F%3E%3CfeComponentTransfer%3E%3CfeFuncR%20type%3D'linear'%20slope%3D'0'%20intercept%3D'0'%2F%3E%3CfeFuncG%20type%3D'linear'%20slope%3D'0'%20intercept%3D'0'%2F%3E%3CfeFuncB%20type%3D'linear'%20slope%3D'0'%20intercept%3D'0'%2F%3E%3CfeFuncA%20type%3D'table'%20tableValues%3D'0%200%200.06%200.12'%2F%3E%3C%2FfeComponentTransfer%3E%3C%2Ffilter%3E%3Crect%20width%3D'100%25'%20height%3D'100%25'%20filter%3D'url(%23n)'%2F%3E%3C%2Fsvg%3E");

@@ -163,7 +163,9 @@ export const size = {
   "menu-min": "12rem",
   day: "2.75rem",
   control: "44px",
+  "control-sm": "36px",
   target: "44px",
+  blob: "520px",
   plus: "58px",
   tabbar: "64px",
   glow: "260px",
@@ -194,8 +196,12 @@ export const mix = {
 } as const;
 
 export const motion = {
-  duration: { instant: "0ms", fast: "160ms", slow: "220ms", pop: "600ms" },
-  easing: { standard: "cubic-bezier(0.2, 0.7, 0.2, 1)", linear: "linear" },
+  duration: { instant: "0ms", fast: "160ms", slow: "220ms", pop: "600ms", spin: "40s" },
+  easing: {
+    standard: "cubic-bezier(0.2, 0.7, 0.2, 1)",
+    in: "cubic-bezier(0.5, 0, 0.75, 0)",
+    linear: "linear",
+  },
 } as const;
 
 export const texture = {
