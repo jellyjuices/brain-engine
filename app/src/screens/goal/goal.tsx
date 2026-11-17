@@ -1,5 +1,5 @@
 import { Empty } from "@/components/empty/empty.tsx";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { useLoaded } from "@/hooks/use-loaded.ts";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { useRoute } from "@/hooks/use-route.ts";
@@ -13,7 +13,7 @@ export function GoalScreen() {
   const notes = useNotes();
   return (
     <>
-      <ScreenHead
+      <PageHeader
         title={goal.kind === "ready" ? goal.data.title : copy.goals.kicker}
         kicker={copy.goals.kicker}
         fallback="/goals"

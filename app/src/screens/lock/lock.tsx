@@ -3,7 +3,7 @@ import { EyeIcon, EyeSlashIcon, FingerprintIcon } from "@phosphor-icons/react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import clsx from "clsx";
 import { Button } from "@/components/button/button.tsx";
-import { IconButton } from "@/components/button/icon-button.tsx";
+import { IconButton } from "@/components/icon-button/icon-button.tsx";
 import { isEnrolled, verify } from "@/lib/lock/fingerprint.ts";
 import { isSessionLapsed, writeUnlocked } from "@/lib/lock/session.ts";
 import { unlock } from "@/lib/lock/unlock.ts";

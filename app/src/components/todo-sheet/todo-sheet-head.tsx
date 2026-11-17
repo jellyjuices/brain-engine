@@ -23,7 +23,7 @@ export function TodoSheetHead({ todo, now, title, onBack }: TodoSheetHeadProps) 
       onBack={onBack}
       context={
         <>
-          <Chip size="sm">{todo.subject}</Chip>
+          <Chip label={todo.subject} />
           <span className={clsx("sheet-due", late && "is-late")}>
             <Icon icon={ClockIcon} />
             {dueText(todo.due, now)}

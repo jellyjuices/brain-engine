@@ -3,7 +3,7 @@ import { CaretLeftIcon } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import clsx from "clsx";
 import { cardType } from "@/components/card/card.styles.ts";
-import { IconButton } from "@/components/button/icon-button.tsx";
+import { IconButton } from "@/components/icon-button/icon-button.tsx";
 import { copy } from "@/content/index.ts";
 
 export interface NoteHeaderProps {

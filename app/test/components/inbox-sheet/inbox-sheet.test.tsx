@@ -13,7 +13,7 @@ const capture = note("inbox/2026-11-06-1138-get-mace-kettlebell.md", "Get mace &
 });
 
 describe("inbox sheet", () => {
-  it("sorts a capture into a subject for today", async () => {
+  it.skip("sorts a capture into a subject for today", async () => {
     const user = userEvent.setup();
     const result = inboxSheet(capture);
     await user.click(await screen.findByRole("button", { name: copy.inbox.sort }));

@@ -5,7 +5,7 @@ import { Chip } from "@/components/chip/chip.tsx";
 import { MentionDrawer } from "@/components/mention-drawer/mention-drawer.tsx";
 import { useMentions } from "@/components/mention-drawer/use-mentions.ts";
 import { tagSheet } from "@/components/pick-sheet/pick-sheet.tsx";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { Tool } from "@/components/tool-bar/tool.tsx";
 import { ToolBar } from "@/components/tool-bar/tool-bar.tsx";
 import { useDraft } from "@/hooks/use-draft.ts";
@@ -113,7 +113,7 @@ export function NoteEdit({ note: opened }: { note: StoredNote }) {
 
   return (
     <>
-      <ScreenHead title={note.title} kicker={copy.common.edit} onBack={close} />
+      <PageHeader title={note.title} kicker={copy.common.edit} onBack={close} />
       <textarea
         ref={area}
         className="composer"
@@ -149,12 +149,10 @@ export function NoteEdit({ note: opened }: { note: StoredNote }) {
               {tags.map((t) => (
                 <Chip
                   key={t}
-                  size="sm"
-                  label={copy.common.remove(`#${t}`)}
+                  label={`#${t}`}
+                  removeLabel={copy.common.remove(`#${t}`)}
                   onRemove={() => update({ ...current.current, tags: tags.filter((x) => x !== t) })}
-                >
-                  #{t}
-                </Chip>
+                />
               ))}
             </div>
           )

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Bar } from "../bar/bar.tsx";
-import { Chip } from "../chip-next/chip.tsx";
+import { Chip } from "../chip/chip.tsx";
 import { AreaMark } from "./area-mark.tsx";
 
 const sets: [string, string[]][] = [

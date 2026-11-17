@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/button/button.tsx";
+import { Calendar } from "@/components/calendar/calendar.tsx";
 import { DateField } from "@/components/date-field/date-field.tsx";
-import { DayPicker } from "@/components/day-picker/day-picker.tsx";
 import { TextField } from "@/components/field/text-field.tsx";
 import { openSheet } from "@/components/sheet/open-sheet.tsx";
 import { SheetActions } from "@/components/sheet/sheet-actions.tsx";
@@ -21,7 +21,7 @@ function BirthdayForm({ name, finish }: { name: string; finish: (v: string | nul
   return (
     <>
       <SheetHead title={copy.add.birthdayOf(name)} />
-      <DayPicker today={today} max={today} yearSteps onPick={setDay} />
+      <Calendar today={today} value={day || undefined} max={today} yearSteps onPick={setDay} />
       <SheetActions>
         <Button disabled={!day} onClick={() => finish(day)}>
           {copy.common.save}
@@ -61,7 +61,7 @@ function PersonForm({ finish }: { finish: (v: NewPerson | null) => void }) {
       />
       <DateField
         label={copy.add.birthdayOptional}
-        value={day}
+        value={day || undefined}
         onChange={setDay}
         max={todayIso()}
         yearSteps

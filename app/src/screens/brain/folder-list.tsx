@@ -1,7 +1,7 @@
 import { ArchiveIcon, CalendarCheckIcon, CalendarDotsIcon } from "@phosphor-icons/react";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { SyncLine } from "@/components/sync-line/sync-line.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { folderSummaries } from "@/lib/notes/folders.ts";
@@ -14,7 +14,7 @@ export function FolderList() {
   const rows = notes ? folderSummaries(notes, FOLDERS) : [];
   return (
     <>
-      <ScreenHead title={copy.nav.brain} />
+      <PageHeader title={copy.nav.brain} />
       <SyncLine />
       <List>
         {rows.map((f) => (

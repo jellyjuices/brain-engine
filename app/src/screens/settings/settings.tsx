@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/button/button.tsx";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { useOutboxCount } from "@/hooks/use-outbox-count.ts";
 import { useOutboxItems } from "@/hooks/use-outbox-items.ts";
 import { useSyncState } from "@/hooks/use-sync-state.ts";
@@ -28,7 +28,7 @@ export function SettingsScreen() {
   const [updating, setUpdating] = useState(false);
   return (
     <>
-      <ScreenHead title={copy.settings.title} />
+      <PageHeader title={copy.settings.title} />
       <List>
         <FingerprintRow />
         {waiting > 0 && (

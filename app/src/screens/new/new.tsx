@@ -12,7 +12,7 @@ import { Row } from "@/components/row/row.tsx";
 import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 import type { ShapeName } from "@/components/shape/shape.tsx";
 import { FilePicker } from "@/components/file-picker/file-picker.tsx";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { addFile, addPersonFlow, addSubjectFlow } from "@/flows/new-flow.ts";
 import { copy } from "@/content/index.ts";
 
@@ -44,7 +44,7 @@ export function NewScreen() {
 
   return (
     <>
-      <ScreenHead title={copy.add.newTitle} />
+      <PageHeader title={copy.add.newTitle} />
       <List>
         {CHOICES.map((c) => (
           <Row

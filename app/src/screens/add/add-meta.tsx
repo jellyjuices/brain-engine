@@ -38,19 +38,22 @@ export function AddMeta({
   return (
     <div className="add-meta">
       {shown && (
-        <Chip icon={CHIP_ICON[shown.kind] ?? ClockIcon} label={copy.add.whenIs(shown.label)}>
-          {shown.label}
-        </Chip>
+        <Chip
+          icon={CHIP_ICON[shown.kind] ?? ClockIcon}
+          variant="accent"
+          label={shown.label}
+          ariaLabel={copy.add.whenIs(shown.label)}
+        />
       )}
       {tags.map((t) => (
         <Chip
           key={t}
           icon={HashIcon}
-          label={copy.common.remove(`#${t}`)}
+          variant="accent"
+          label={`#${t}`}
+          removeLabel={copy.common.remove(`#${t}`)}
           onRemove={() => onRemoveTag(t)}
-        >
-          {`#${t}`}
-        </Chip>
+        />
       ))}
       {waiting > 0 && (
         <a

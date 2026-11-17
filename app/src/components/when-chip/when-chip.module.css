@@ -1,0 +1,32 @@
+.whenChip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-body-xs);
+  line-height: var(--font-leading-snug);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.glyph {
+  flex: none;
+  width: var(--font-size-body-sm);
+  height: var(--font-size-body-sm);
+}
+
+.overdue {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.overdue .glyph {
+  color: var(--status-late);
+}
+
+.waiting .glyph {
+  color: var(--status-waiting);
+}
+
+.today {
+  color: var(--text-primary);
+}

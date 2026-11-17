@@ -1,5 +1,5 @@
 import { Button } from "@/components/button/button.tsx";
-import { DayPicker } from "@/components/day-picker/day-picker.tsx";
+import { Calendar } from "@/components/calendar/calendar.tsx";
 import { SheetActions } from "@/components/sheet/sheet-actions.tsx";
 import { Chip } from "@/components/chip/chip.tsx";
 import { quickChoices, type QuickId } from "@/lib/notes/due.ts";
@@ -19,12 +19,10 @@ export function WhenPicker({ now, choices, value, onPick, onNotTodo, onClear }: 
     <>
       <div className="chips">
         {quickChoices(now, choices).map((q) => (
-          <Chip key={q.id} variant="outlined" onClick={() => onPick(q.value)}>
-            {q.label}
-          </Chip>
+          <Chip key={q.id} label={q.label} onClick={() => onPick(q.value)} />
         ))}
       </div>
-      <DayPicker min={now} today={now} value={value} onPick={onPick} />
+      <Calendar min={now} today={now} value={value} onPick={onPick} />
       {(onNotTodo || onClear) && (
         <SheetActions>
           {onNotTodo && (

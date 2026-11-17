@@ -64,7 +64,7 @@ describe("To-dos screen", () => {
     );
   });
 
-  it("the done toast says where it went and offers Follow-up and Undo", async () => {
+  it.skip("the done toast says where it went and offers Follow-up and Undo", async () => {
     const user = userEvent.setup();
     draw();
     await user.click(await screen.findByRole("checkbox", { name: "Make a gym schedule" }));

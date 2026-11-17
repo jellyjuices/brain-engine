@@ -1,8 +1,8 @@
 import "./today.css";
 import { TrayIcon } from "@phosphor-icons/react";
 import { useCallback, useEffect, useState } from "react";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
-import { IconButton } from "@/components/button/icon-button.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
+import { IconButton } from "@/components/icon-button/icon-button.tsx";
 import { Pull } from "@/components/pull/pull.tsx";
 import { SyncLine } from "@/components/sync-line/sync-line.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
@@ -51,7 +51,7 @@ export function TodayScreen() {
   return (
     <>
       <Pull onRefresh={refresh} />
-      <ScreenHead
+      <PageHeader
         title={longDate(now)}
         action={
           <span className="inbox-btn">

@@ -59,7 +59,7 @@ export function NoteIntro({ note, notes }: { note: StoredNote; notes: StoredNote
       {(nick || pronouns) && (
         <p className="note-who">
           {nick && <span className="note-nick">{nick}</span>}
-          {pronouns && <Chip size="sm">{pronouns}</Chip>}
+          {pronouns && <Chip label={pronouns} />}
         </p>
       )}
       {note.description && note.description.trim() !== title.trim() && (

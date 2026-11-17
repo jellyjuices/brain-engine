@@ -9,7 +9,8 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
-import * as styles from "./toast.styles.ts";
+import type { ToastAction } from "./toast-store.ts";
+import styles from "./toast.module.css";
 
 export type ToastVariant = "success" | "error" | "warning" | "info" | "neutral";
 
@@ -21,18 +22,14 @@ const icons: Record<ToastVariant, Icon> = {
   neutral: BellSimpleIcon,
 };
 
-export const ToastProvider = ({
-  children,
-  label = "Notices",
-}: {
-  children: ReactNode;
-  label?: string;
-}) => (
-  <RadixToast.Provider swipeDirection="right" label={label}>
-    {children}
-    <RadixToast.Viewport className={styles.viewport} />
-  </RadixToast.Provider>
-);
+export function ToastProvider({ children, label }: { children: ReactNode; label?: string }) {
+  return (
+    <RadixToast.Provider swipeDirection="right" label={label}>
+      {children}
+      <RadixToast.Viewport className={styles.viewport} />
+    </RadixToast.Provider>
+  );
+}
 
 export type ToastProps = {
   open: boolean;
@@ -41,26 +38,24 @@ export type ToastProps = {
   detail?: string;
   variant?: ToastVariant;
   icon?: Icon;
-  actionLabel?: string;
-  onAction?: () => void;
+  actions?: ToastAction[];
   duration?: number;
 };
 
-export const Toast = ({
+export function Toast({
   open,
   onOpenChange,
   message,
   detail,
   variant = "success",
   icon,
-  actionLabel,
-  onAction,
+  actions = [],
   duration = 5000,
-}: ToastProps) => {
+}: ToastProps) {
   const Glyph = icon ?? icons[variant];
   return (
     <RadixToast.Root
-      className={clsx(styles.toast, styles.variants[variant])}
+      className={clsx(styles.toast, styles[variant])}
       open={open}
       onOpenChange={onOpenChange}
       duration={duration}
@@ -76,11 +71,16 @@ export const Toast = ({
           <RadixToast.Description className={styles.detail}>{detail}</RadixToast.Description>
         )}
       </div>
-      {actionLabel && (
-        <RadixToast.Action className={styles.action} altText={actionLabel} onClick={onAction}>
-          {actionLabel}
+      {actions.map((a) => (
+        <RadixToast.Action
+          key={a.label}
+          className={styles.action}
+          altText={a.label}
+          onClick={a.onClick}
+        >
+          {a.label}
         </RadixToast.Action>
-      )}
+      ))}
     </RadixToast.Root>
   );
-};
+}

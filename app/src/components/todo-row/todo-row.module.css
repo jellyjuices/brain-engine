@@ -1,0 +1,194 @@
+.row {
+  position: relative;
+  overflow: hidden;
+  list-style: none;
+  background: var(--background-primary);
+}
+
+.actions {
+  position: absolute;
+  inset: 0 0 0 auto;
+  display: flex;
+}
+
+.action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  width: var(--size-action);
+  border: 0;
+  color: var(--action-ink);
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.action svg {
+  width: var(--size-icon);
+  height: var(--size-icon);
+}
+
+.action:focus-visible {
+  outline-color: var(--action-ink);
+  outline-offset: calc(var(--size-focus) * -2);
+}
+
+.actionSort {
+  background: var(--action-sort);
+}
+
+.actionDrop {
+  background: var(--action-drop);
+}
+
+.tick {
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--size-tick);
+  height: var(--size-tick);
+  margin-top: var(--space-2xs);
+  padding: 0;
+  border: var(--size-focus) solid var(--border-strong);
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--text-on-accent);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast) var(--motion-easing),
+    border-color var(--motion-fast) var(--motion-easing),
+    scale var(--motion-fast) var(--motion-easing);
+}
+
+.tick:active:not(:disabled) {
+  scale: 0.9;
+}
+
+.tick[data-state="checked"] {
+  border-color: var(--status-done);
+  background: var(--status-done);
+}
+
+.content {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--background-primary);
+  touch-action: pan-y;
+  transition: transform var(--motion-slow) var(--motion-easing);
+}
+
+.content:has(.tick:active),
+.isPressed .content {
+  background:
+    linear-gradient(var(--background-pressed), var(--background-pressed)), var(--background-primary);
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  animation: pop var(--motion-pop) var(--motion-easing) 1;
+}
+
+.mark svg {
+  width: var(--font-size-body-xs);
+  height: var(--font-size-body-xs);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  display: block;
+  font-size: var(--font-size-body-md);
+  line-height: var(--font-leading-snug);
+  cursor: pointer;
+}
+
+.open {
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: start;
+}
+
+.open::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.open:focus-visible {
+  outline: none;
+}
+
+.open:focus-visible::after {
+  outline: var(--size-focus) solid var(--border-focus);
+  outline-offset: calc(var(--size-focus) * -1);
+}
+
+.isDragging .content {
+  transition: none;
+  user-select: none;
+}
+
+.isDone .title {
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+
+.isDisabled .content {
+  background: var(--background-primary);
+}
+
+.isDisabled .tick {
+  border-style: dashed;
+  border-color: var(--text-disabled);
+  background: var(--background-disabled);
+  cursor: not-allowed;
+}
+
+.isDisabled .title {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+@keyframes pop {
+  0% {
+    scale: 0.4;
+  }
+  60% {
+    scale: 1.15;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+@media (hover: hover) {
+  .tick:hover:not(:disabled) {
+    border-color: var(--status-done);
+  }
+
+  .content:hover {
+    background:
+      linear-gradient(var(--background-hover), var(--background-hover)), var(--background-primary);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tick:active:not(:disabled) {
+    scale: 1;
+  }
+
+  .mark {
+    animation: none;
+  }
+}

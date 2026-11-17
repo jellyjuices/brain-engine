@@ -18,9 +18,7 @@ export function RecentChips({ onPick }: { onPick: (q: string) => void }) {
       <p className="section-label">{copy.notes.recent}</p>
       <div className="chips">
         {recent.map((r) => (
-          <Chip key={r} icon={MagnifyingGlassIcon} onClick={() => onPick(r)}>
-            {r}
-          </Chip>
+          <Chip key={r} icon={MagnifyingGlassIcon} label={r} onClick={() => onPick(r)} />
         ))}
       </div>
     </>

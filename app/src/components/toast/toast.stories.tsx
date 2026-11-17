@@ -4,24 +4,19 @@ import { ArrowsLeftRightIcon } from "@phosphor-icons/react";
 import { Button } from "../button/button.tsx";
 import { Toast, ToastProvider, type ToastProps } from "./toast.tsx";
 
-const Live = (args: ToastProps) => {
+function Live(args: ToastProps) {
   const [open, setOpen] = useState(args.open);
-  const [undone, setUndone] = useState(0);
   return (
     <ToastProvider>
       <Button onClick={() => setOpen(true)}>Show toast</Button>
-      <p style={{ color: "var(--text-secondary)" }}>
-        Swipe it right to close. Undo pressed: {undone}
-      </p>
-      <Toast
-        {...args}
-        open={open}
-        onOpenChange={setOpen}
-        onAction={() => setUndone((n) => n + 1)}
-      />
+      <Toast {...args} open={open} onOpenChange={setOpen} />
     </ToastProvider>
   );
-};
+}
+
+function act(label: string) {
+  return [{ label, onClick: () => {} }];
+}
 
 const meta = {
   title: "Components/Toast",
@@ -33,7 +28,7 @@ const meta = {
     message: "Done",
     detail: "Send the sample invoice",
     variant: "success",
-    actionLabel: "Undo",
+    actions: act("Undo"),
     duration: 6000,
   },
   argTypes: {
@@ -55,7 +50,6 @@ export const Moved: Story = {
     variant: "neutral",
     message: "Moved to Home",
     detail: undefined,
-    actionLabel: "Undo",
     icon: ArrowsLeftRightIcon,
   },
 };
@@ -64,22 +58,17 @@ export const Failed: Story = {
     variant: "error",
     message: "Could not add",
     detail: "The Mac mini is out of reach",
-    actionLabel: "Try again",
+    actions: act("Try again"),
   },
 };
 export const Warning: Story = {
-  args: {
-    variant: "warning",
-    message: "Added, waiting to sync",
-    detail: undefined,
-    actionLabel: undefined,
-  },
+  args: { variant: "warning", message: "Added, waiting to sync", detail: undefined, actions: [] },
 };
 export const Info: Story = {
   args: {
     variant: "info",
     message: "3 new entries to sort",
     detail: undefined,
-    actionLabel: "Sort",
+    actions: act("Sort"),
   },
 };

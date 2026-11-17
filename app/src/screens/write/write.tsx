@@ -5,7 +5,7 @@ import { DateField } from "@/components/date-field/date-field.tsx";
 import { PickField } from "@/components/field/pick-field.tsx";
 import { TextField } from "@/components/field/text-field.tsx";
 import { FilePicker } from "@/components/file-picker/file-picker.tsx";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { Tool } from "@/components/tool-bar/tool.tsx";
 import { ToolBar } from "@/components/tool-bar/tool-bar.tsx";
 import { pickAbout, readTextFile, saveJournal } from "@/flows/new-flow.ts";
@@ -64,7 +64,7 @@ export function WriteScreen() {
 
   return (
     <>
-      <ScreenHead title={copy.nav.journal} fallback="/new" />
+      <PageHeader title={copy.nav.journal} fallback="/new" />
       <TextField
         label={copy.add.writeTitleLabel}
         hideLabel

@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeftIcon, CaretRightIcon, CheckIcon } from "@phosphor-icons/react";
 import { IconButton } from "../icon-button/icon-button.tsx";
-import { Sheet } from "../sheet-next/sheet.tsx";
+import { Sheet } from "../sheet/sheet.tsx";
 import type { Option } from "./types.ts";
 import { useHeight } from "./use-height.ts";
 import * as styles from "./options-menu.styles.ts";

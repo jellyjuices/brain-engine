@@ -41,10 +41,8 @@
         "src/components/bar/**",
         "src/components/builder-step/**",
         "src/components/calendar/**",
-        "src/components/goal-progress/**",
         "src/components/hit-area/**",
         "src/components/icon-button/**",
-        "src/components/menu/**",
         "src/components/options-menu/**",
         "src/components/page-header/**",
         "src/components/plus-button/**",
@@ -56,11 +54,11 @@
         "src/components/view-tabs/**",
         "src/components/visually-hidden/**",
         "src/components/when-chip/**",
-        "src/components/chip-next/**",
-        "src/components/date-field-next/**",
-        "src/components/sheet-next/**",
-        "src/components/toast-next/**",
-        "src/components/todo-row-next/**"
+        "src/components/chip/**",
+        "src/components/date-field/**",
+        "src/components/sheet/**",
+        "src/components/toast/**",
+        "src/components/todo-row/**"
       ],
       "rules": {
         "func-style": "off",

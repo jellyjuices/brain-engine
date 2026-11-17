@@ -1,6 +1,6 @@
 import "./today.css";
 import { List } from "@/components/row/list.tsx";
-import { TodoRow } from "@/components/todo-row/todo-row.tsx";
+import { TodoRefRow } from "@/components/todo-row/todo-ref-row.tsx";
 import { makeTodo } from "@/lib/notes/todos.ts";
 import { GROUPS, type TodayData } from "@/lib/notes/today.ts";
 import { Empty } from "@/components/empty/empty.tsx";
@@ -18,7 +18,7 @@ export function TodayList({ data }: { data: TodayData }) {
             <h2 className="section-label">{g.label}</h2>
             <List>
               {items.map((i) => (
-                <TodoRow key={i.ref} todo={makeTodo(i)} overdue={g.id === "overdue"} />
+                <TodoRefRow key={i.ref} todo={makeTodo(i)} />
               ))}
             </List>
           </section>

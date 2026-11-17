@@ -1,89 +1,57 @@
-import { css } from "@linaria/core";
 import clsx from "clsx";
 import type { CSSProperties, ReactNode } from "react";
+import { ArrowLeftIcon } from "@phosphor-icons/react";
 import { mixGlow } from "@/lib/design/area-mix.ts";
-
-const pageHeader = css`
-  position: relative;
-  isolation: isolate;
-  padding-top: var(--space-2xl);
-`;
-
-const hasGlow = css`
-  .${pageHeader}&::before, .${pageHeader}&::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: -1;
-    width: var(--size-glow);
-    height: var(--size-glow);
-    pointer-events: none;
-  }
-
-  .${pageHeader}&::before {
-    background: var(--page-glow, var(--glow-corner));
-    mask-image: var(--glow-corner-mask);
-    opacity: var(--glow-corner-opacity);
-  }
-
-  .${pageHeader}&::after {
-    background-image: var(--texture-noise);
-    mask-image: var(--texture-noise-mask);
-  }
-`;
-
-const top = css`
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--space-md);
-  padding: 0 var(--space-lg) var(--space-md);
-`;
-
-const kickerText = css`
-  margin: 0 0 var(--space-xs);
-  font-size: var(--font-size-body-sm);
-  color: var(--text-secondary);
-`;
-
-const titleText = css`
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: var(--font-size-display-2xl);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-leading-tight);
-  letter-spacing: var(--font-tracking-tight);
-`;
+import { back } from "@/lib/platform/router.ts";
+import { copy } from "@/content/index.ts";
+import { IconButton } from "../icon-button/icon-button.tsx";
+import styles from "./page-header.module.css";
 
 export type PageHeaderProps = {
-  title: string;
+  title?: string;
   kicker?: string;
   action?: ReactNode;
   glow?: boolean;
   children?: ReactNode;
   areas?: string[];
+  fallback?: string;
+  onBack?: () => void;
+  backLabel?: string;
 };
 
-export const PageHeader = ({
+export function PageHeader({
   title,
   kicker,
   action,
   glow = true,
   children,
   areas,
-}: PageHeaderProps) => (
-  <header
-    className={clsx(pageHeader, glow && hasGlow)}
-    style={areas?.length ? ({ "--page-glow": mixGlow(areas) } as CSSProperties) : undefined}
-  >
-    <div className={top}>
-      <div>
-        {kicker && <p className={kickerText}>{kicker}</p>}
-        <h1 className={titleText}>{title}</h1>
+  fallback,
+  onBack,
+  backLabel = copy.common.back,
+}: PageHeaderProps) {
+  const hasBack = !!onBack || fallback !== undefined;
+  return (
+    <header
+      className={clsx(styles.pageHeader, glow && styles.glow)}
+      style={areas?.length ? ({ "--page-glow": mixGlow(areas) } as CSSProperties) : undefined}
+    >
+      <div className={styles.top}>
+        {hasBack && (
+          <IconButton
+            icon={ArrowLeftIcon}
+            label={backLabel}
+            className={styles.back}
+            onClick={onBack ?? (() => back(fallback))}
+          />
+        )}
+        <div className={styles.main}>
+          {kicker && <p className={styles.kicker}>{kicker}</p>}
+          {title && <h1 className={styles.title}>{title}</h1>}
+        </div>
+        {action && <div className={styles.action}>{action}</div>}
       </div>
-      {action && <div>{action}</div>}
-    </div>
-    {children}
-  </header>
-);
+      {children}
+    </header>
+  );
+}

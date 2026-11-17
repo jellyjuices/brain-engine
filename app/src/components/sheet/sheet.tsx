@@ -1,50 +1,72 @@
-import "./sheet.css";
-import { XIcon } from "@phosphor-icons/react";
-import { useEffect, useRef, useState, type ReactNode } from "react";
 import clsx from "clsx";
-import { Icon } from "@/components/icon/icon.tsx";
-import { copy } from "@/content/index.ts";
-import { useSwipeToClose } from "./use-swipe-to-close.ts";
+import { Dialog } from "radix-ui";
+import type { ReactNode } from "react";
+import { XIcon } from "@phosphor-icons/react";
+import { IconButton } from "../icon-button/icon-button.tsx";
+import visually from "../visually-hidden/visually-hidden.module.css";
+import { useDragClose } from "./use-drag-close.ts";
+import styles from "./sheet.module.css";
 
-export interface SheetProps {
+export type SheetProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   title: string;
-  leaving: boolean;
-  onClose: () => void;
+  hideTitle?: boolean;
+  description?: string;
+  header?: ReactNode;
+  closeLabel?: string;
   children: ReactNode;
-}
+};
 
-export function Sheet({ title, leaving, onClose, children }: SheetProps) {
-  const panel = useRef<HTMLDivElement>(null);
-  const [swiped, setSwiped] = useState(false);
-  useSwipeToClose(panel, () => {
-    setSwiped(true);
-    onClose();
-  });
-
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
-    }
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [onClose]);
-
+export function Sheet({
+  open,
+  onOpenChange,
+  title,
+  hideTitle,
+  description,
+  header,
+  closeLabel,
+  children,
+}: SheetProps) {
+  const drag = useDragClose(() => onOpenChange(false));
   return (
-    <div
-      className={clsx("sheet-scrim", leaving && "leaving", swiped && "swiped")}
-      onClick={(e) => e.target === e.currentTarget && onClose()}
+    <Dialog.Root
+      open={open}
+      onOpenChange={(next) => {
+        if (next) drag.reset();
+        onOpenChange(next);
+      }}
     >
-      <div ref={panel} className="sheet stack" role="dialog" aria-modal="true" aria-label={title}>
-        <button
-          type="button"
-          className="sheet-close"
-          aria-label={copy.common.close}
-          onClick={onClose}
+      <Dialog.Portal>
+        <Dialog.Overlay className={styles.scrim} />
+        <Dialog.Content
+          className={clsx(styles.sheet, drag.dragging && styles.isDragging)}
+          style={{ transform: drag.offset ? `translateY(${drag.offset}px)` : undefined }}
+          onAnimationEnd={drag.reset}
+          {...(description ? {} : { "aria-describedby": undefined })}
         >
-          <Icon icon={XIcon} />
-        </button>
-        {children}
-      </div>
-    </div>
+          <div className={styles.grip} {...drag.handlers}>
+            <span className={styles.handle} aria-hidden />
+          </div>
+          <div className={styles.head} {...drag.handlers}>
+            {header ?? (
+              <Dialog.Title className={clsx(styles.title, hideTitle && visually.hidden)}>
+                {title}
+              </Dialog.Title>
+            )}
+            {header && <Dialog.Title className={visually.hidden}>{title}</Dialog.Title>}
+            {closeLabel && (
+              <Dialog.Close asChild>
+                <IconButton icon={XIcon} label={closeLabel} className={styles.close} />
+              </Dialog.Close>
+            )}
+          </div>
+          {description && (
+            <Dialog.Description className={styles.description}>{description}</Dialog.Description>
+          )}
+          <div className={styles.body}>{children}</div>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }

@@ -1,4 +1,4 @@
-import { TodoRow } from "@/components/todo-row-next/todo-row.tsx";
+import { TodoRow } from "@/components/todo-row/todo-row.tsx";
 import type { WhenChipProps } from "@/components/when-chip/when-chip.tsx";
 import { whenStatus } from "@/lib/design/when.ts";
 import { openTodo, tickTodo } from "@/flows/todo-flow.ts";
