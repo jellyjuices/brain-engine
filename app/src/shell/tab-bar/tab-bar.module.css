@@ -1,0 +1,22 @@
+.tabbar {
+  position: relative;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  min-height: calc(var(--size-tabbar) + env(safe-area-inset-bottom));
+  padding: var(--space-xs) calc(var(--space-sm) + env(safe-area-inset-right))
+    calc(var(--space-xs) + env(safe-area-inset-bottom))
+    calc(var(--space-sm) + env(safe-area-inset-left));
+  border-top: var(--size-hair) solid var(--border-primary);
+  background: var(--background-secondary);
+}
+
+[data-layout="popover"] .tabbar {
+  min-height: var(--size-control);
+  padding: 0 var(--space-sm);
+}
+
+[data-keyboard] .tabbar:not(:has([data-mode="todo"], [data-mode="journal"])) {
+  display: none;
+}

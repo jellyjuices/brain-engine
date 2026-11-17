@@ -1,0 +1,22 @@
+.inboxBtn {
+  position: relative;
+  flex: none;
+}
+
+.inboxBadge {
+  position: absolute;
+  top: var(--space-2xs);
+  right: var(--space-2xs);
+  min-width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  padding: 0 var(--space-xs);
+  border-radius: var(--radius-full);
+  background: var(--background-accent);
+  color: var(--text-on-accent);
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--size-icon-sm);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}

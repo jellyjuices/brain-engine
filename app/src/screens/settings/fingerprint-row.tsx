@@ -1,4 +1,4 @@
-import "./settings.css";
+import styles from "./fingerprint-row.module.css";
 import { useEffect, useState } from "react";
 import { Row } from "@/components/row/row.tsx";
 import { confirmSheet } from "@/components/sheet/confirm-sheet.tsx";
@@ -40,7 +40,7 @@ export function FingerprintRow() {
       sub={copy.settings.fingerprintHint}
       end={
         <button
-          className="switch"
+          className={styles.switch}
           type="button"
           role="switch"
           aria-checked={on}

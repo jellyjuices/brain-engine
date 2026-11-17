@@ -1,4 +1,5 @@
 import { ArchiveIcon, CalendarCheckIcon, CalendarDotsIcon } from "@phosphor-icons/react";
+import { SectionHeader } from "@/components/section-header/section-header.tsx";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
@@ -29,7 +30,7 @@ export function FolderList() {
           />
         ))}
       </List>
-      <p className="section-label">{copy.report.title}</p>
+      <SectionHeader title={copy.report.title} />
       <List>
         <Row
           href="/report/today"

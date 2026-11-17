@@ -9,7 +9,7 @@ import { isTodoView, type TodoView } from "@shared/todos/index.ts";
 import { TODO_VIEW_TABS } from "@/lib/notes/todo-views.ts";
 import { TodosList } from "./todos-list.tsx";
 import { useTodoView } from "./use-todo-view.ts";
-import * as styles from "./todos.styles.ts";
+import styles from "./todos.module.css";
 import { copy } from "@/content/index.ts";
 
 const EMPTY: Record<TodoView, string> = {

@@ -1,0 +1,6 @@
+.writeMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  margin: var(--space-lg) 0;
+}

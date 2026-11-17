@@ -4,28 +4,12 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
-import wyw from "@wyw-in-js/vite";
 import { loadEnv, type Plugin } from "vite";
 import { defineConfig } from "vitest/config";
 
 const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as {
   version: string;
 };
-
-function linariaCssInTests(): Plugin {
-  const prefix = "\0linaria-css:";
-  return {
-    name: "brain-linaria-css-in-tests",
-    enforce: "pre",
-    apply: () => Boolean(process.env.VITEST),
-    resolveId(id) {
-      if (id.endsWith(".wyw-in-js.css")) return prefix + id;
-    },
-    load(id) {
-      if (id.startsWith(prefix)) return "";
-    },
-  };
-}
 
 function serviceWorker(): Plugin {
   return {
@@ -97,7 +81,7 @@ export default defineConfig({
       "@shared": fileURLToPath(new URL("../engine/shared", import.meta.url)),
     },
   },
-  plugins: [linariaCssInTests(), react(), wyw(), serviceWorker()],
+  plugins: [react(), serviceWorker()],
   server: {
     proxy: apiProxy,
     fs: {

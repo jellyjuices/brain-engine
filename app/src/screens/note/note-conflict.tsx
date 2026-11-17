@@ -1,4 +1,4 @@
-import "./note.css";
+import styles from "./note.module.css";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { Button } from "@/components/button/button.tsx";
 import { toast } from "@/components/toast/toast-store.ts";
@@ -27,14 +27,14 @@ export function NoteConflict({ note, conflict }: { note: StoredNote; conflict: C
   return (
     <>
       <PageHeader title={copy.notes.conflictTitle} kicker={note.type} onBack={() => back()} />
-      <p className="lede">{copy.notes.editConflict}</p>
+      <p className={styles.lede}>{copy.notes.editConflict}</p>
       <VersionCopy
         label={copy.notes.macVersion}
         text={conflict.current.body}
         sub={modified ? longDate(modified) : undefined}
       />
       <VersionCopy label={copy.notes.yourVersion} text={conflict.mine} />
-      <div className="version-buttons">
+      <div className={styles.versionButtons}>
         <Button variant="outlined" block onClick={() => void keep(false)}>
           {copy.notes.keepMac}
         </Button>

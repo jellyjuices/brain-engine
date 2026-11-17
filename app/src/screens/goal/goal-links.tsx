@@ -8,7 +8,7 @@ import { niceDate, noteHref, type StoredNote } from "@/lib/notes/model.ts";
 import { plainText } from "@/lib/notes/search.ts";
 import { go } from "@/lib/platform/router.ts";
 import { GoalSection } from "./goal-section.tsx";
-import * as styles from "./goal.styles.ts";
+import styles from "./goal.module.css";
 import { copy } from "@/content/index.ts";
 
 export interface GoalLinksProps {
@@ -31,7 +31,7 @@ export function GoalLinks({ goal, notes }: GoalLinksProps) {
       )}
       {goal.wins.length > 0 && (
         <GoalSection title={copy.goals.wins} count={goal.wins.length}>
-          <ul className={styles.list}>
+          <List variant="plain">
             {goal.wins.map((win) => (
               <TimelineLine
                 key={`${win.path}::${win.text}`}
@@ -42,7 +42,7 @@ export function GoalLinks({ goal, notes }: GoalLinksProps) {
                 onOpen={() => go(noteHref(win.path))}
               />
             ))}
-          </ul>
+          </List>
         </GoalSection>
       )}
       {goal.subgoals.length > 0 && (

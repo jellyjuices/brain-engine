@@ -1,4 +1,4 @@
-import "./add.css";
+import styles from "./add-meta.module.css";
 import {
   CalendarCheckIcon,
   CalendarDotsIcon,
@@ -36,7 +36,7 @@ export function AddMeta({
 }) {
   if (!shown && tags.length === 0 && waiting === 0) return null;
   return (
-    <div className="add-meta">
+    <div className={styles.addMeta}>
       {shown && (
         <Chip
           icon={CHIP_ICON[shown.kind] ?? ClockIcon}
@@ -57,7 +57,7 @@ export function AddMeta({
       ))}
       {waiting > 0 && (
         <a
-          className="waiting"
+          className={styles.waiting}
           href="/settings"
           onClick={(e) => {
             e.preventDefault();

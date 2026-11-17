@@ -1,6 +1,4 @@
-import "@/styles/tokens.css";
-import "@/styles/base.css";
-import "@/styles/app.css";
+import "@/styles/global.css";
 import {
   BookOpenIcon,
   ChatCircleDotsIcon,

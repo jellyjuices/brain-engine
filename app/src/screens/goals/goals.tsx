@@ -4,7 +4,7 @@ import { useLoaded } from "@/hooks/use-loaded.ts";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { fetchGoals } from "@/lib/sync/goals-api.ts";
 import { GoalCard } from "./goal-card.tsx";
-import * as styles from "./goals.styles.ts";
+import styles from "./goals.module.css";
 import { copy } from "@/content/index.ts";
 
 export function GoalsScreen() {

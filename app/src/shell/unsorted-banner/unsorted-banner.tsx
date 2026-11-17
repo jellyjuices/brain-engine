@@ -1,4 +1,4 @@
-import "./unsorted-banner.css";
+import styles from "./unsorted-banner.module.css";
 import { Banner } from "@/components/banner/banner.tsx";
 import { useRoute } from "@/hooks/use-route.ts";
 import { DEFAULT_ROUTE, navigate } from "@/lib/platform/router.ts";
@@ -11,7 +11,7 @@ export function UnsortedBanner() {
   const count = useUnsortedCount(route.name === DEFAULT_ROUTE, route.key);
   if (count === 0) return null;
   return (
-    <div className="unsorted-banner">
+    <div className={styles.unsortedBanner}>
       <Banner
         message={copy.nav.toSort(count)}
         actionLabel={copy.nav.sort}

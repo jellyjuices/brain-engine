@@ -1,3 +1,4 @@
+import { List } from "@/components/row/list.tsx";
 import { GoalBar } from "@/components/goal-bar/goal-bar.tsx";
 import { GoalStep } from "@/components/goal-step/goal-step.tsx";
 import type { GoalView } from "@shared/todos/index.ts";
@@ -5,7 +6,7 @@ import { openSteps, titleAt } from "@/lib/notes/goals.ts";
 import type { StoredNote } from "@/lib/notes/model.ts";
 import { GoalLinks } from "./goal-links.tsx";
 import { GoalSection } from "./goal-section.tsx";
-import * as styles from "./goal.styles.ts";
+import styles from "./goal.module.css";
 import { copy } from "@/content/index.ts";
 
 export interface GoalBodyProps {
@@ -21,19 +22,19 @@ export function GoalBody({ goal, notes }: GoalBodyProps) {
       <GoalBar goal={goal} />
       {goal.next && (
         <GoalSection title={copy.goals.nextStep}>
-          <ul className={styles.list}>
+          <List variant="plain">
             <GoalStep
               step={goal.next}
               goal={goal.title}
               subject={titleAt(notes, goal.next.path)}
               showSubject={goal.next.path !== goal.path}
             />
-          </ul>
+          </List>
         </GoalSection>
       )}
       {goal.targets.length > 0 && (
         <GoalSection title={copy.goals.targets} count={goal.targets.length}>
-          <ul className={styles.list}>
+          <List variant="plain">
             {goal.targets.map((step) => (
               <GoalStep
                 key={`${step.path}::${step.text}`}
@@ -42,12 +43,12 @@ export function GoalBody({ goal, notes }: GoalBodyProps) {
                 subject={titleAt(notes, step.path)}
               />
             ))}
-          </ul>
+          </List>
         </GoalSection>
       )}
       {steps.length > 0 && (
         <GoalSection title={copy.goals.todos} count={steps.length}>
-          <ul className={styles.list}>
+          <List variant="plain">
             {steps.map((step) => (
               <GoalStep
                 key={`${step.path}::${step.text}`}
@@ -57,7 +58,7 @@ export function GoalBody({ goal, notes }: GoalBodyProps) {
                 showSubject={step.path !== goal.path}
               />
             ))}
-          </ul>
+          </List>
         </GoalSection>
       )}
       <GoalLinks goal={goal} notes={notes} />

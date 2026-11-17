@@ -1,4 +1,4 @@
-import "./place-link.css";
+import styles from "./place-link.module.css";
 import clsx from "clsx";
 import { Icon } from "@/components/icon/icon.tsx";
 import { useRoute } from "@/hooks/use-route.ts";
@@ -15,7 +15,7 @@ export function PlaceLink({ place, variant }: PlaceLinkProps) {
   const iconOnly = variant === "icon";
   return (
     <a
-      className={clsx("place-link", `place-link--${variant}`)}
+      className={clsx(styles.placeLink, styles[variant])}
       href={place.href}
       onClick={(e) => {
         e.preventDefault();

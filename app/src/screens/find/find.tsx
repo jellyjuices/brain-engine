@@ -1,4 +1,4 @@
-import "./find.css";
+import styles from "./find.module.css";
 import { useEffect, useRef, useState } from "react";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { SearchInput } from "@/components/field/search-input.tsx";
@@ -65,7 +65,7 @@ export function FindScreen() {
         }}
       />
       <SyncLine />
-      <div className="results" aria-live="polite">
+      <div className={styles.results} aria-live="polite">
         {!q ? (
           <RecentChips
             onPick={(r) => {

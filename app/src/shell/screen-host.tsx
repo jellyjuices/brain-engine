@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import clsx from "clsx";
+import styles from "./screen-host.module.css";
 import { useRoute } from "@/hooks/use-route.ts";
 import { DEFAULT_ROUTE, type Route } from "@/lib/platform/router.ts";
 import { SCREENS } from "./screens.ts";
 import { copy } from "@/content/index.ts";
 
 const LEAVE_MS = 160;
+const PADDED = new Set(["today", "find", "areas", "note"]);
+const FLUSH = new Set(["add", "write"]);
 
 function screenKey(route: Route): string {
   return `${route.name}/${route.rest}?${route.params}`;
@@ -13,13 +16,15 @@ function screenKey(route: Route): string {
 
 function ScreenFrame({ route, leaving }: { route: Route; leaving?: boolean }) {
   const { title, Component } = SCREENS[route.name];
+  const editing = route.name === "note" && route.params.has("edit");
   return (
     <main
       className={clsx(
-        "screen",
-        `screen--${route.name}`,
-        route.name === "note" && route.params.has("edit") && "screen--editor",
-        leaving && "leaving",
+        styles.screen,
+        PADDED.has(route.name) && styles.padded,
+        (FLUSH.has(route.name) || editing) && styles.flush,
+        route.name === "add" && styles.clip,
+        leaving && styles.leaving,
       )}
       aria-label={title}
     >
@@ -52,7 +57,7 @@ export function ScreenHost() {
   }, [route.name]);
 
   return (
-    <div className="screen-host">
+    <div className={styles.screenHost}>
       {leaving && <ScreenFrame key={leaving.key} route={leaving.route} leaving />}
       <ScreenFrame key={shown.key} route={shown.route} />
     </div>

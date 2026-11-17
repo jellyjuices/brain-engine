@@ -1,6 +1,4 @@
-import "../tokens/design-tokens.css";
-import "./styles/tokens.css";
-import "./styles/base.css";
+import "./styles/global.css";
 
 import { LOCKED_EVENT } from "./lib/sync/api.ts";
 import { mountLock } from "./screens/lock/mount-lock.tsx";

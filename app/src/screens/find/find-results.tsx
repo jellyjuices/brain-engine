@@ -1,5 +1,5 @@
-import "./find.css";
 import { SubjectCard } from "@/components/card/subject-card.tsx";
+import { SectionHeader } from "@/components/section-header/section-header.tsx";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
 import { noteHref, todayIso, type StoredNote } from "@/lib/notes/model.ts";
@@ -45,7 +45,7 @@ export function FindResults({ q, notes, remote }: FindResultsProps) {
       )}
       {others.length > 0 && (
         <>
-          <p className="section-label">{card ? copy.notes.more : copy.notes.notes}</p>
+          <SectionHeader title={card ? copy.notes.more : copy.notes.notes} />
           <List>
             {others.map((x) => (
               <Row

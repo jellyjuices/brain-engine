@@ -1,4 +1,4 @@
-import "./intake.css";
+import styles from "./intake.module.css";
 import { useState } from "react";
 import { Empty } from "@/components/empty/empty.tsx";
 import { Panel } from "@/components/panel/panel.tsx";
@@ -49,7 +49,7 @@ export function IntakeScreen() {
       {current && (
         <>
           <Panel>
-            <p className="intake-question serif">{current.question}</p>
+            <p className={styles.intakeQuestion}>{current.question}</p>
           </Panel>
           {draft ? (
             <IntakeCheck

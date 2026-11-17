@@ -1,0 +1,9 @@
+.unsortedBanner {
+  margin: calc(var(--space-lg) + env(safe-area-inset-top))
+    calc(var(--space-lg) + env(safe-area-inset-right)) 0
+    calc(var(--space-lg) + env(safe-area-inset-left));
+}
+
+:not([data-layout="wide"]) > .unsortedBanner {
+  margin-top: 0;
+}

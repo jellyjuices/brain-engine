@@ -1,4 +1,4 @@
-import "./lock.css";
+import styles from "./lock.module.css";
 import { EyeIcon, EyeSlashIcon, FingerprintIcon } from "@phosphor-icons/react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import clsx from "clsx";
@@ -29,9 +29,9 @@ export function LockScreen() {
   function shake() {
     const el = panel.current;
     if (!el) return;
-    el.classList.remove("shake");
+    el.classList.remove(styles.shake!);
     void el.offsetWidth;
-    el.classList.add("shake");
+    el.classList.add(styles.shake!);
   }
 
   async function tryFingerprint(auto = false) {
@@ -72,10 +72,10 @@ export function LockScreen() {
   }
 
   return (
-    <div className="lock" role="dialog" aria-modal="true" aria-label={copy.lock.dialog}>
-      <form ref={panel} className="lock-panel" noValidate onSubmit={(e) => void onSubmit(e)}>
-        <h1 className="wordmark serif">brain</h1>
-        <div className="field">
+    <div className={styles.lock} role="dialog" aria-modal="true" aria-label={copy.lock.dialog}>
+      <form ref={panel} className={styles.lockPanel} noValidate onSubmit={(e) => void onSubmit(e)}>
+        <h1 className={styles.wordmark}>brain</h1>
+        <div className={styles.field}>
           <input
             ref={input}
             id="unlock-password"
@@ -98,7 +98,7 @@ export function LockScreen() {
             }}
           />
         </div>
-        <p className={clsx("lock-error", message.info && "info")} role="alert">
+        <p className={clsx(styles.lockError, message.info && styles.info)} role="alert">
           {message.text}
         </p>
         <Button type="submit" block disabled={busy}>

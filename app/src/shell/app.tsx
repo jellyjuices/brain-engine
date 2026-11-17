@@ -1,4 +1,3 @@
-import "@/styles/app.css";
 import { useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { clearToasts, toast } from "@/components/toast/toast-store.ts";

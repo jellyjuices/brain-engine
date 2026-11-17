@@ -1,4 +1,4 @@
-import "./skip-link.css";
+import styles from "./skip-link.module.css";
 import type { MouseEvent } from "react";
 import { useRoute } from "@/hooks/use-route.ts";
 import { placeOf } from "@/shell/places.ts";
@@ -16,7 +16,7 @@ export function SkipLink() {
   }
 
   return (
-    <a className="skip-link" href={`#${MAIN_ID}`} onClick={handleClick}>
+    <a className={styles.skipLink} href={`#${MAIN_ID}`} onClick={handleClick}>
       {copy.nav.skipTo(target)}
     </a>
   );

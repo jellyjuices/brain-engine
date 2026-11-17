@@ -1,0 +1,6 @@
+.topBar {
+  display: flex;
+  justify-content: flex-end;
+  padding: env(safe-area-inset-top) calc(var(--space-sm) + env(safe-area-inset-right)) 0
+    calc(var(--space-sm) + env(safe-area-inset-left));
+}

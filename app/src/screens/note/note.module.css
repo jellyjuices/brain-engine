@@ -1,0 +1,44 @@
+.pending {
+  margin: 0 0 var(--space-sm);
+  color: var(--text-secondary);
+  font-size: var(--font-size-body-sm);
+}
+
+.addHere {
+  margin: var(--space-xl) 0;
+}
+
+.lede {
+  color: var(--text-secondary);
+}
+
+.version {
+  margin-bottom: var(--space-sm);
+}
+
+.versionText {
+  max-height: 28dvh;
+  margin: 0;
+  overflow: auto;
+  font:
+    var(--font-size-body-sm) / 1.5 ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.versionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.noteEditTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-sm);
+}

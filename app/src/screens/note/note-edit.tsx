@@ -1,4 +1,5 @@
-import "./note.css";
+import { Composer } from "@/components/field/composer.tsx";
+import styles from "./note.module.css";
 import { useEffect, useRef, useState } from "react";
 import { AtIcon, CalendarBlankIcon, CheckSquareIcon, HashIcon } from "@phosphor-icons/react";
 import { Chip } from "@/components/chip/chip.tsx";
@@ -114,9 +115,8 @@ export function NoteEdit({ note: opened }: { note: StoredNote }) {
   return (
     <>
       <PageHeader title={note.title} kicker={copy.common.edit} onBack={close} />
-      <textarea
+      <Composer
         ref={area}
-        className="composer"
         aria-label={copy.notes.editNote}
         spellCheck
         autoCapitalize="sentences"
@@ -145,7 +145,7 @@ export function NoteEdit({ note: opened }: { note: StoredNote }) {
         label={copy.add.details}
         meta={
           tags.length > 0 && (
-            <div className="note-edit-tags" aria-label={copy.notes.tagList}>
+            <div className={styles.noteEditTags} aria-label={copy.notes.tagList}>
               {tags.map((t) => (
                 <Chip
                   key={t}

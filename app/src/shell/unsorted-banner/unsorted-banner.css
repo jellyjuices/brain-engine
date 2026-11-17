@@ -1,4 +1,0 @@
-.unsorted-banner {
-  margin: calc(var(--s2) + env(safe-area-inset-top)) calc(var(--s2) + env(safe-area-inset-right)) 0
-    calc(var(--s2) + env(safe-area-inset-left));
-}

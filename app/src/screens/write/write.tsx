@@ -1,4 +1,5 @@
-import "./write.css";
+import { Composer } from "@/components/field/composer.tsx";
+import styles from "./write.module.css";
 import { FileTextIcon, UserIcon } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 import { DateField } from "@/components/date-field/date-field.tsx";
@@ -72,7 +73,7 @@ export function WriteScreen() {
         value={form.title}
         onChange={(title) => update({ title })}
       />
-      <div className="write-meta">
+      <div className={styles.writeMeta}>
         <DateField
           label={copy.add.day}
           value={form.date}
@@ -89,8 +90,7 @@ export function WriteScreen() {
           onClear={() => update({ about: null })}
         />
       </div>
-      <textarea
-        className="composer"
+      <Composer
         placeholder={copy.add.writePlaceholder}
         aria-label={copy.nav.journal}
         autoCapitalize="sentences"

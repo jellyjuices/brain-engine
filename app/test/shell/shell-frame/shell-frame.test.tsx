@@ -96,7 +96,7 @@ describe("ShellFrame", () => {
 
   it("the popover layout draws the compact shell with every place", () => {
     const { container } = renderShell("popover");
-    expect(container.firstElementChild).toHaveClass("shell--popover");
+    expect(container.firstElementChild).toHaveAttribute("data-layout", "popover");
     expect(
       within(mainNav())
         .getAllByRole("link")
