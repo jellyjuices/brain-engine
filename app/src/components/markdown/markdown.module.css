@@ -1,7 +1,7 @@
 .md {
   overflow-wrap: anywhere;
-  font-size: var(--font-size-body-md);
-  line-height: 1.55;
+  font-size: var(--type-reading-size);
+  line-height: var(--type-reading-leading);
 }
 
 .md p,
@@ -22,30 +22,31 @@
 }
 
 .mdH {
-  margin: var(--space-xl) 0 var(--space-sm);
+  margin: var(--space-lg) 0 var(--space-sm);
   font-family: var(--font-display);
-
-  font-weight: 600;
-  line-height: 1.2;
 }
 
 h2.mdH {
-  margin-top: var(--space-2xl);
+  margin-top: var(--space-xl);
   padding-top: var(--space-lg);
   border-top: var(--size-hair) solid var(--border-primary);
-  font-size: var(--font-size-body-xl);
+  font-size: var(--type-title-section-size);
+  font-weight: var(--type-title-section-weight);
+  line-height: var(--type-title-section-leading);
 }
 
 h3.mdH {
-  margin-top: var(--space-xl);
-  font-size: var(--font-size-body-lg);
+  font-size: var(--type-title-item-size);
+  font-weight: var(--type-title-item-weight);
+  line-height: var(--type-title-item-leading);
 }
 
 h4.mdH,
 h5.mdH {
   font-family: var(--font-body);
-  font-size: var(--font-size-body-sm);
-  font-weight: 600;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
   color: var(--text-secondary);
 }
 

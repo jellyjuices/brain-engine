@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-md);
-  padding: var(--space-xl) var(--space-lg) var(--space-sm);
+  padding: var(--space-section-top) var(--space-row-x) var(--space-section-bottom);
 }
 
 .title {
@@ -12,9 +12,9 @@
   gap: var(--space-sm);
   margin: 0;
   font-family: var(--font-display);
-  font-size: var(--font-size-display-md);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-leading-snug);
+  font-size: var(--type-title-section-size);
+  font-weight: var(--type-title-section-weight);
+  line-height: var(--type-title-section-leading);
   color: var(--text-primary);
 }
 
@@ -30,8 +30,9 @@
   border-radius: var(--radius-control);
   background: var(--background-tag);
   font-family: var(--font-number);
-  line-height: var(--font-leading-tight);
-  font-size: var(--font-size-body-xs);
+  font-size: var(--type-number-size);
+  font-weight: var(--type-number-weight);
+  line-height: var(--type-number-leading);
   color: var(--text-secondary);
 }
 

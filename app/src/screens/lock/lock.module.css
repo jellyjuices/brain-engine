@@ -26,8 +26,8 @@
   color: var(--text-primary);
   font-family: var(--font-display);
   font-size: var(--font-size-display-3xl);
-  font-weight: var(--font-weight-regular);
-  line-height: 1;
+  font-weight: var(--type-title-page-weight);
+  line-height: var(--type-title-page-leading);
   text-align: center;
 }
 
@@ -42,7 +42,7 @@
   border: var(--size-hair) solid var(--border-primary);
   border-radius: var(--radius-md);
   background: var(--background-secondary);
-  font-size: var(--font-size-body-md);
+  font-size: var(--type-body-size);
   transition: border-color var(--motion-fast) var(--motion-easing);
 }
 
@@ -60,7 +60,7 @@
 .lockError {
   min-height: var(--space-xl);
   color: var(--text-danger);
-  font-size: var(--font-size-body-sm);
+  font-size: var(--type-secondary-size);
   text-align: center;
 }
 

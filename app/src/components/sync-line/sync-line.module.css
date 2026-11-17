@@ -3,7 +3,7 @@
   margin: var(--space-xl) 0 0;
   color: var(--text-secondary);
   opacity: 0.7;
-  font-size: var(--font-size-body-xs);
+  font-size: var(--type-caption-size);
   text-align: center;
 }
 

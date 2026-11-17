@@ -17,8 +17,8 @@ body {
   background: var(--background-primary);
   color: var(--text-primary);
   font-family: var(--font-body);
-  font-size: var(--font-size-body-md);
-  line-height: var(--font-leading-normal);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-leading);
   overscroll-behavior: none;
   text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;

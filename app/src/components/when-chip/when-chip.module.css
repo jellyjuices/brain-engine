@@ -2,16 +2,17 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
-  font-size: var(--font-size-body-xs);
-  line-height: var(--font-leading-snug);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
   color: var(--text-secondary);
   white-space: nowrap;
 }
 
 .glyph {
   flex: none;
-  width: var(--font-size-body-sm);
-  height: var(--font-size-body-sm);
+  width: var(--type-secondary-size);
+  height: var(--type-secondary-size);
 }
 
 .overdue {

@@ -39,7 +39,9 @@
   justify-content: center;
   gap: var(--space-xs);
   padding: var(--space-xs) 0;
-  font-size: var(--font-size-body-xs);
+  font-size: var(--type-tab-size);
+  font-weight: var(--type-tab-weight);
+  line-height: var(--type-tab-leading);
 }
 
 .tab svg {
@@ -50,7 +52,7 @@
 .rail {
   gap: var(--space-md);
   padding: 0 var(--space-md);
-  font-size: var(--font-size-body-md);
+  font-size: var(--type-nav-size);
 }
 
 .rail[aria-current="page"] {

@@ -9,9 +9,9 @@
 .label {
   margin: 0;
   color: var(--text-secondary);
-  font-size: var(--font-size-body-xs);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-leading-snug);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
 }
 
 .input {
@@ -23,7 +23,7 @@
   background: var(--background-secondary);
   color: inherit;
   font: inherit;
-  font-size: var(--font-size-body-md);
+  font-size: var(--type-body-size);
   resize: none;
   -webkit-appearance: none;
   appearance: none;

@@ -1,6 +1,6 @@
 .label {
-  font-size: var(--font-size-body-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
   color: var(--text-secondary);
 }
 
@@ -17,7 +17,7 @@
   height: 100%;
   border: 0;
   background: none;
-  font-size: var(--font-size-body-md);
+  font-size: var(--type-body-size);
   outline: none;
 }
 
@@ -91,7 +91,7 @@
   align-items: center;
   justify-content: space-between;
   min-height: var(--size-control);
-  line-height: var(--font-leading-snug);
+  line-height: var(--type-body-leading);
   gap: var(--space-md);
   padding: 0 var(--space-md);
   border-radius: var(--radius-sm);
@@ -107,6 +107,6 @@
 }
 
 .hint {
-  font-size: var(--font-size-body-xs);
+  font-size: var(--type-caption-size);
   color: var(--text-secondary);
 }

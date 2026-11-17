@@ -29,8 +29,9 @@
   border-radius: var(--radius-control);
   background: none;
   color: var(--text-secondary);
-  font-size: var(--font-size-body-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--type-nav-size);
+  font-weight: var(--type-nav-weight);
+  line-height: var(--type-nav-leading);
   white-space: nowrap;
   cursor: pointer;
   transition:

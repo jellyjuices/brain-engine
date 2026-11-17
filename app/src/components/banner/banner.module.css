@@ -23,6 +23,7 @@
 .message {
   flex: 1;
   margin: 0;
-  font-size: var(--font-size-body-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
 }

@@ -1,7 +1,7 @@
 .pending {
   margin: 0 0 var(--space-sm);
   color: var(--text-secondary);
-  font-size: var(--font-size-body-sm);
+  font-size: var(--type-secondary-size);
 }
 
 .addHere {
@@ -21,7 +21,7 @@
   margin: 0;
   overflow: auto;
   font:
-    var(--font-size-body-sm) / 1.5 ui-monospace,
+    var(--type-secondary-size) / var(--type-reading-leading) ui-monospace,
     SFMono-Regular,
     Menlo,
     monospace;

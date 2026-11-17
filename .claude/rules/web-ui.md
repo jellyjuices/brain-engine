@@ -79,6 +79,8 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 
 ## Look
 
+- Type comes from a role, never a raw `--font-size-*`. Set all three: `font-size: var(--type-<role>-size)`, `line-height: var(--type-<role>-leading)`, `font-weight: var(--type-<role>-weight)`. The same role looks the same everywhere. Add a role in `app/tokens/semantic.ts` before you add a one-off size.
+- Spacing for screens, headers, rows, chips and buttons comes from the `--space-*` roles below. Every row uses the row padding. Touch targets stay at least 44px tall.
 - Sizes, colours, spacing and radius come from the tokens in `app/tokens/design-tokens.css`. Add a token to `app/tokens/*.ts` if none fits. No raw `px` or hex in any `*.module.css` or in `src/styles/global.css`. Stylelint blocks both.
 - Any group of items is a `List` of rows. Dividers come only from `List` or `Divider`. A row never draws its own border or box.
 - Sheet menus: no line inside a group, a `Divider` between groups. Archive, delete and cancel are last, `variant="danger"`.
@@ -89,6 +91,44 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 - Dates: `longDate()`, `niceDate()` from `lib/notes/model.ts`, `quickDays()` from `lib/notes/due.ts`. Note-type lists and icons live in `lib/notes/`.
 - Hover: write `:hover`, then undo it in a local `@media (hover: none)` below. No shared hover helper.
 - No `text-transform: uppercase`. Values that change all the time go on the element `style`, not a CSS rule.
+
+## Type roles
+
+Atkinson is the body font, Hedvig the title font, Space Mono the number font.
+
+| Role | Size | Line height | Weight | Font | Used for |
+| --- | --- | --- | --- | --- | --- |
+| `title-page` | 34px | 1.1 | 400 | Hedvig | `PageHeader` title |
+| `title-note` | 28px | 1.1 | 400 | Hedvig | Note title, builder question |
+| `title-section` | 21px | 1.25 | 400 | Hedvig | `SectionHeader`, sheet titles, card title, `Empty` title, markdown `h2` |
+| `title-item` | 18px | 1.25 | 400 | Hedvig | Goal name, bar label, calendar month, markdown `h3` |
+| `body` | 15px | 1.35 | 400 | Atkinson | Row and to-do titles, inputs, banner, timeline text |
+| `reading` | 15px | 1.55 | 400 | Atkinson | Note text (`Markdown`), `Composer` |
+| `action` | 15px | 1.25 | 600 | Atkinson | `Button` |
+| `action-sm` | 14px | 1.25 | 600 | Atkinson | Small `Button`, swipe action |
+| `nav` | 14px | 1.25 | 500 | Atkinson | `ViewTabs`, rail links |
+| `secondary` | 14px | 1.35 | 400 | Atkinson | Row sub, kicker, hints, sheet description |
+| `label` | 13px | 1.25 | 500 | Atkinson | `Chip`, `WhenChip`, to-do meta, field and fact labels, row end |
+| `caption` | 12px | 1.25 | 400 | Atkinson | `SyncLine`, `Pull`, input hint |
+| `tab` | 12px | 1.1 | 600 | Atkinson | `TabBar` labels, add panel labels, tool bar |
+| `number-big` | 40px | 1.1 | 700 | Space Mono | `GoalBar` percent |
+| `number` | 13px | 1.25 | 400 | Space Mono | Counts, calendar days |
+
+## Spacing roles
+
+| Token | Value | Used for |
+| --- | --- | --- |
+| `--space-screen-x` | 16px | Screen side padding, page header sides |
+| `--space-header-top` | 24px | Above the page header |
+| `--space-header-bottom` | 8px | Below the page header |
+| `--space-section-top` | 16px | Above a `SectionHeader` |
+| `--space-section-bottom` | 8px | Below a `SectionHeader` |
+| `--space-row-x` / `--space-row-y` | 16px / 8px | `Row` and `TodoRow` padding |
+| `--space-row-gap` | 12px | Icon or tick to text in a row |
+| `--space-row-min` | 52px | `Row` minimum height |
+| `--space-chip-x` / `--space-chip-y` | 8px / 2px | `Chip` padding |
+| `--space-button-x` / `--space-button-sm-x` | 16px / 12px | `Button` side padding |
+| `--space-stack` | 8px | Gap between groups in a list screen |
 
 ## Naming
 

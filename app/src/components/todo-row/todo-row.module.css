@@ -19,8 +19,8 @@
   width: var(--size-action);
   border: 0;
   color: var(--action-ink);
-  font-size: var(--font-size-body-xs);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
   cursor: pointer;
 }
 
@@ -79,8 +79,8 @@
   position: relative;
   display: flex;
   align-items: flex-start;
-  gap: var(--space-md);
-  padding: var(--space-md) var(--space-lg);
+  gap: var(--space-row-gap);
+  padding: var(--space-row-y) var(--space-row-x);
   background: var(--background-primary);
   touch-action: pan-y;
   transition: transform var(--motion-slow) var(--motion-easing);
@@ -110,8 +110,9 @@
 
 .title {
   display: block;
-  font-size: var(--font-size-body-md);
-  line-height: var(--font-leading-snug);
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
   cursor: pointer;
 }
 

@@ -1,7 +1,7 @@
 .calendar {
   position: relative;
   width: max-content;
-  font-size: var(--font-size-body-sm);
+  font-size: var(--type-secondary-size);
 }
 
 .calendar :global(.rdp-month_caption) {
@@ -13,7 +13,7 @@
 
 .calendar :global(.rdp-caption_label) {
   font-family: var(--font-display);
-  font-size: var(--font-size-display-sm);
+  font-size: var(--type-title-item-size);
 }
 
 .calendar :global(.rdp-dropdowns) {
@@ -61,8 +61,8 @@
 
 .calendar :global(.rdp-weekday) {
   height: var(--size-day);
-  font-size: var(--font-size-body-xs);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
   color: var(--text-secondary);
 }
 
@@ -81,7 +81,7 @@
   border-radius: var(--radius-control);
   background: none;
   font-family: var(--font-number);
-  font-size: var(--font-size-number-sm);
+  font-size: var(--type-number-size);
   cursor: pointer;
   transition: background-color var(--motion-fast) var(--motion-easing);
 }

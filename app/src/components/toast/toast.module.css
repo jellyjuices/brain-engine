@@ -102,7 +102,7 @@
 }
 
 .detail {
-  font-size: var(--font-size-body-sm);
+  font-size: var(--type-secondary-size);
 }
 
 .action {

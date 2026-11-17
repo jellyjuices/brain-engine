@@ -7,7 +7,8 @@
 
 .title {
   font-family: var(--font-display);
-  font-size: var(--font-size-display-md);
+  font-size: var(--type-title-section-size);
+  line-height: var(--type-title-section-leading);
 }
 
 .frame {
@@ -73,7 +74,7 @@
 }
 
 .hint {
-  font-size: var(--font-size-body-sm);
+  font-size: var(--type-secondary-size);
   color: var(--text-secondary);
 }
 

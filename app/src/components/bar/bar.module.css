@@ -25,22 +25,23 @@
   grid-area: label;
   margin: 0;
   font-family: var(--font-display);
-  font-size: var(--font-size-display-sm);
-  line-height: var(--font-leading-snug);
+  font-size: var(--type-title-item-size);
+  font-weight: var(--type-title-item-weight);
+  line-height: var(--type-title-item-leading);
 }
 
 .number {
   grid-area: number;
   margin: 0;
   font-family: var(--font-number);
-  font-size: var(--font-size-number-2xl);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--font-leading-tight);
+  font-size: var(--type-number-big-size);
+  font-weight: var(--type-number-big-weight);
+  line-height: var(--type-number-big-leading);
   color: var(--text-primary);
 }
 
 .unit {
-  font-size: var(--font-size-number-lg);
+  font-size: var(--type-title-item-size);
 }
 
 .facts {
@@ -49,7 +50,8 @@
   justify-items: end;
   gap: var(--space-2xs);
   margin: 0;
-  font-size: var(--font-size-body-sm);
+  font-size: var(--type-secondary-size);
+  line-height: var(--type-secondary-leading);
   color: var(--text-secondary);
 }
 

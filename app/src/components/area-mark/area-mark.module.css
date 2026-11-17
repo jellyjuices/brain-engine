@@ -7,11 +7,11 @@
 
 .extra {
   font-family: var(--font-number);
-  font-size: var(--font-size-number-xs);
-  line-height: var(--font-leading-tight);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-leading);
   color: var(--text-secondary);
 }
 
 .md .extra {
-  font-size: var(--font-size-number-sm);
+  font-size: var(--type-number-size);
 }

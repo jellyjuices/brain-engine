@@ -15,8 +15,9 @@
 .title {
   margin: 0;
   font-family: var(--font-family-display);
-  font-size: var(--font-size-display-sm);
-  font-weight: var(--font-weight-regular);
+  font-size: var(--type-title-item-size);
+  font-weight: var(--type-title-item-weight);
+  line-height: var(--type-title-item-leading);
 }
 
 .title a {

@@ -5,5 +5,5 @@
 }
 
 :not([data-layout="wide"]) > .unsortedBanner {
-  margin-top: 0;
+  margin: 0;
 }

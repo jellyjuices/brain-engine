@@ -13,8 +13,8 @@
   border-radius: var(--radius-full);
   background: var(--background-accent);
   color: var(--text-on-accent);
-  font-size: var(--font-size-body-xs);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--type-tab-size);
+  font-weight: var(--type-tab-weight);
   line-height: var(--size-icon-sm);
   text-align: center;
   font-variant-numeric: tabular-nums;

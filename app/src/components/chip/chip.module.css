@@ -2,16 +2,16 @@
   display: inline-flex;
   align-items: center;
   border-radius: var(--radius-control);
-  font-size: var(--font-size-body-xs);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--font-leading-snug);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
   white-space: nowrap;
 }
 
 .slot {
   display: inline-flex;
   align-items: center;
-  padding: var(--space-2xs) var(--space-sm);
+  padding: var(--space-chip-y) var(--space-chip-x);
   border: 0;
   background: none;
   border-radius: var(--radius-control);
@@ -25,8 +25,8 @@
 }
 
 .labelSlot svg {
-  width: var(--font-size-body-sm);
-  height: var(--font-size-body-sm);
+  width: var(--type-secondary-size);
+  height: var(--type-secondary-size);
 }
 
 button.labelSlot,
@@ -45,8 +45,8 @@ button.labelSlot:active,
 }
 
 .removeSlot svg {
-  width: var(--font-size-body-xs);
-  height: var(--font-size-body-xs);
+  width: var(--type-label-size);
+  height: var(--type-label-size);
 }
 
 .dots {
@@ -67,7 +67,7 @@ button.labelSlot:active,
 .dotsExtra {
   margin-left: var(--space-2xs);
   font-family: var(--font-number);
-  font-size: var(--font-size-number-xs);
+  font-size: var(--type-number-size);
 }
 
 .tag {

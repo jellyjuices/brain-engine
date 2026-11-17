@@ -4,8 +4,8 @@
 }
 
 .label {
-  font-size: var(--font-size-body-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
   color: var(--text-secondary);
 }
 

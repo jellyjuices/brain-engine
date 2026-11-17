@@ -27,8 +27,9 @@
   align-items: center;
   gap: 0 var(--space-xs);
   margin: 0;
-  font-size: var(--font-size-body-xs);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
   color: var(--text-secondary);
 }
 
@@ -39,14 +40,14 @@
 }
 
 .glyph {
-  width: var(--font-size-body-sm);
-  height: var(--font-size-body-sm);
+  width: var(--type-secondary-size);
+  height: var(--type-secondary-size);
 }
 
 .text {
   margin: 0;
-  font-size: var(--font-size-body-sm);
-  line-height: var(--font-leading-normal);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-leading);
   color: var(--text-primary);
 }
 
@@ -75,6 +76,6 @@
 
 .beforeText {
   margin: 0;
-  font-size: var(--font-size-body-xs);
+  font-size: var(--type-secondary-size);
   color: var(--text-secondary);
 }

@@ -15,8 +15,9 @@
   background: transparent;
   color: var(--text-on-accent);
   font: inherit;
-  font-size: var(--font-size-body-xs);
-  font-weight: 600;
+  font-size: var(--type-tab-size);
+  font-weight: var(--type-tab-weight);
+  line-height: var(--type-tab-leading);
   translate: -50% 0;
   animation: add-arc-pop var(--motion-fast) var(--motion-easing) both;
 }

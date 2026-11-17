@@ -26,8 +26,9 @@
   border-radius: var(--radius-md);
   background: transparent;
   color: var(--text-secondary);
-  font-size: var(--font-size-body-xs);
-  font-weight: 600;
+  font-size: var(--type-tab-size);
+  font-weight: var(--type-tab-weight);
+  line-height: var(--type-tab-leading);
   transition: color var(--motion-fast) var(--motion-easing);
 }
 

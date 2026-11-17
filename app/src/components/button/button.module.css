@@ -6,13 +6,14 @@
   flex: none;
   white-space: nowrap;
   min-height: var(--size-target);
-  padding: 0 var(--space-xl);
+  padding: 0 var(--space-button-x);
   border: var(--size-hair) solid transparent;
   border-radius: var(--radius-control);
   background: transparent;
   color: var(--text-primary);
-  font-size: var(--font-size-body-md);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--type-action-size);
+  font-weight: var(--type-action-weight);
+  line-height: var(--type-action-leading);
   transition:
     transform var(--motion-fast) var(--motion-easing),
     opacity var(--motion-fast) var(--motion-easing),
@@ -73,13 +74,12 @@
 
 .sm {
   min-height: var(--size-control-sm);
-  padding: 0 var(--space-lg);
-  font-size: var(--font-size-body-sm);
+  padding: 0 var(--space-button-sm-x);
+  font-size: var(--type-action-sm-size);
 }
 
 .lg {
   min-height: var(--size-plus);
-  font-size: var(--font-size-body-lg);
 }
 
 .iconOnly {

@@ -21,8 +21,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--space-xl);
-  font-weight: 600;
-  font-size: var(--font-size-body-sm);
+  font-weight: var(--type-action-sm-weight);
+  font-size: var(--type-action-sm-size);
   color: var(--text-on-accent);
   visibility: hidden;
 }

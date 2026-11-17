@@ -6,7 +6,7 @@
 }
 
 .screen {
-  --screen-pad-x: var(--space-lg);
+  --screen-pad-x: var(--space-screen-x);
   --screen-pad-top: calc(var(--space-xl) + env(safe-area-inset-top));
   position: absolute;
   inset: 0;

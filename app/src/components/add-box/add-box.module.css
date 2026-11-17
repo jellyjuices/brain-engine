@@ -16,8 +16,8 @@
   inset-inline: calc((var(--add-blob-w) - 100vw) / 2 + var(--space-xl));
   overflow-y: auto;
   color: var(--text-on-accent);
-  font-size: var(--font-size-body-md);
-  line-height: var(--font-leading-normal);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-leading);
   white-space: pre-wrap;
   outline: none;
   transition: inset var(--motion-slow) var(--motion-easing);

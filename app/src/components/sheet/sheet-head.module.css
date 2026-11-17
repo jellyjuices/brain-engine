@@ -18,9 +18,9 @@
 .title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: var(--font-size-display-md);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-leading-snug);
+  font-size: var(--type-title-section-size);
+  font-weight: var(--type-title-section-weight);
+  line-height: var(--type-title-section-leading);
 }
 
 .quote {
@@ -29,6 +29,6 @@
   border-left: var(--size-focus) solid var(--border-primary);
   color: var(--text-secondary);
   font-family: var(--font-display);
-  font-size: var(--font-size-body-md);
-  line-height: var(--font-leading-snug);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-leading);
 }
