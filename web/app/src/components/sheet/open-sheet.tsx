@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { createRoot } from "react-dom/client";
+import { openLayer } from "@/lib/platform/back-stack.ts";
 import { Sheet } from "./sheet.tsx";
 
 const LEAVE_MS = 160;
@@ -16,10 +17,12 @@ export function openSheet<T>(
     document.body.append(host);
     const root = createRoot(host);
     let closed = false;
+    const release = openLayer(() => finish(null));
 
     function finish(value: T | null) {
       if (closed) return;
       closed = true;
+      release();
       draw(true);
       setTimeout(() => {
         root.unmount();

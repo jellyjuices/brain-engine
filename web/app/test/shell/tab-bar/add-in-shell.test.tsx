@@ -52,6 +52,17 @@ describe("Add in the shell", () => {
     expect(screen.queryByRole("menu")).toBeNull();
   });
 
+  it("back closes the Add panel and stays on the screen", async () => {
+    const user = userEvent.setup();
+    renderShell("phone");
+    await user.click(addButton());
+    const popped = new Promise((resolve) => addEventListener("popstate", resolve, { once: true }));
+    history.back();
+    await act(() => popped);
+    finishClosing();
+    expect([screen.queryByRole("menu"), location.pathname]).toEqual([null, "/today"]);
+  });
+
   it("holding Add opens the kinds before the finger lifts", async () => {
     vi.useFakeTimers();
     renderShell("phone");
