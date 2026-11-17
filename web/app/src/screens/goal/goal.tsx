@@ -1,0 +1,30 @@
+import { Empty } from "@/components/empty/empty.tsx";
+import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { useLoaded } from "@/hooks/use-loaded.ts";
+import { useNotes } from "@/hooks/use-notes.ts";
+import { useRoute } from "@/hooks/use-route.ts";
+import { fetchGoal } from "@/lib/sync/goals-api.ts";
+import { GoalBody } from "./goal-body.tsx";
+import { copy } from "@/content/index.ts";
+
+export function GoalScreen() {
+  const { rest } = useRoute();
+  const goal = useLoaded(() => fetchGoal(rest), rest);
+  const notes = useNotes();
+  return (
+    <>
+      <ScreenHead
+        title={goal.kind === "ready" ? goal.data.title : copy.goals.kicker}
+        kicker={copy.goals.kicker}
+        fallback="/goals"
+      />
+      {goal.kind === "offline" && (
+        <Empty title={copy.goals.offlineTitle} body={copy.goals.offlineBody} />
+      )}
+      {goal.kind === "missing" && (
+        <Empty title={copy.goals.missingTitle} body={copy.goals.missingBody} />
+      )}
+      {goal.kind === "ready" && <GoalBody goal={goal.data} notes={notes} />}
+    </>
+  );
+}

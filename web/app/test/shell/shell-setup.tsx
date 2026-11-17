@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import { vi } from "vitest";
-import { startRouter, stopRouter } from "@/lib/platform/router.ts";
+import { HOME, startRouter, stopRouter } from "@/lib/platform/router.ts";
 import { ShellFrame } from "@/shell/shell-frame/shell-frame.tsx";
 import { POPOVER_QUERY, WIDE_QUERY, type ShellLayout } from "@/shell/use-shell-layout.ts";
 
@@ -30,7 +30,7 @@ export function stubUnsorted(count: number) {
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue(reply(200, { count, items: [] })));
 }
 
-export function renderShell(layout: ShellLayout, path = "/today") {
+export function renderShell(layout: ShellLayout, path = HOME) {
   stubLayout(layout);
   history.replaceState(null, "", path);
   startRouter();

@@ -7,6 +7,7 @@ import { AddArc } from "@/components/add-arc/add-arc.tsx";
 import { AddBox } from "@/components/add-box/add-box.tsx";
 import { AddFull } from "./add-full.tsx";
 import { useHoldToPick } from "./use-hold-to-pick.ts";
+import { useBackLayer } from "@/hooks/use-back-layer.ts";
 import { keepCaretInView } from "@/lib/platform/caret.ts";
 import { saveJournal } from "@/flows/new-flow.ts";
 import { saveFlow } from "@/flows/save-flow.ts";
@@ -24,6 +25,7 @@ export function AddPanel() {
   const [full, setFull] = useState(false);
   const box = useRef<HTMLDivElement>(null);
   const editing = mode === "todo" || mode === "journal";
+  const releaseBack = useBackLayer(mode !== "closed" && !closing, () => close());
   const hold = useHoldToPick(
     mode === "closed" && !busy,
     () => setMode("open"),
@@ -34,10 +36,15 @@ export function AddPanel() {
     if (editing) requestAnimationFrame(() => box.current?.focus());
   }, [editing]);
 
+  const latestClose = useRef(close);
+  useEffect(() => {
+    latestClose.current = close;
+  });
+
   useEffect(() => {
     if (mode === "closed") return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") close();
+      if (e.key === "Escape") latestClose.current();
     }
     addEventListener("keydown", onKey);
     return () => removeEventListener("keydown", onKey);
@@ -63,6 +70,7 @@ export function AddPanel() {
 
   function close() {
     if (mode === "closed") return;
+    releaseBack();
     box.current?.blur();
     setClosing(true);
   }

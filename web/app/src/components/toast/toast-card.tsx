@@ -30,7 +30,7 @@ export function ToastCard({ item }: { item: ToastItem }) {
     <div
       className={clsx(
         "toast",
-        item.action && "toast--action",
+        item.actions.length > 0 && "toast--action",
         item.tone && `toast--${item.tone}`,
         item.leaving && "leaving",
         dx !== 0 && "is-dragging",
@@ -46,18 +46,19 @@ export function ToastCard({ item }: { item: ToastItem }) {
       onPointerCancel={onPointerEnd}
     >
       <span>{item.message}</span>
-      {item.action && (
+      {item.actions.map((action) => (
         <button
+          key={action.label}
           className="toast-btn"
           type="button"
           onClick={() => {
             closeToast(item.id);
-            item.action?.onClick();
+            action.onClick();
           }}
         >
-          {item.action.label}
+          {action.label}
         </button>
-      )}
+      ))}
     </div>
   );
 }

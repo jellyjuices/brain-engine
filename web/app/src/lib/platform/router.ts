@@ -1,5 +1,18 @@
-export const DEFAULT_ROUTE = "today";
+import {
+  closeAllLayers,
+  isLayerEntry,
+  resetLayers,
+  skipLayerEntry,
+  takePop,
+  whenSettled,
+} from "./back-stack.ts";
+
+export const DEFAULT_ROUTE = "todos";
+export const HOME = `/${DEFAULT_ROUTE}`;
 export const SCREEN_NAMES = [
+  "todos",
+  "goals",
+  "goal",
   "today",
   "find",
   "add",
@@ -22,6 +35,7 @@ export interface Route {
 }
 
 const listeners = new Set<() => void>();
+let pendingTab: string | null = null;
 
 function here(): string {
   return location.pathname + location.search;
@@ -53,18 +67,45 @@ function notify() {
   listeners.forEach((fn) => fn());
 }
 
+function storedDepth(): number | null {
+  const value = (history.state as { depth?: unknown } | null)?.depth;
+  return typeof value === "number" ? value : null;
+}
+
+function depth(): number {
+  return storedDepth() ?? 0;
+}
+
 export function go(url: string, replace = false) {
-  history[replace ? "replaceState" : "pushState"](null, "", url);
-  notify();
+  whenSettled(() => {
+    const next = replace ? depth() : depth() + 1;
+    history[replace ? "replaceState" : "pushState"]({ depth: next }, "", url);
+    notify();
+  });
 }
 
 export function navigate(name: ScreenName, params?: Record<string, string>) {
   go(`/${name}${params ? `?${new URLSearchParams(params)}` : ""}`);
 }
 
-export function back(fallback = "/brain") {
-  if (history.length > 1) history.back();
-  else go(fallback);
+export function back(fallback = HOME) {
+  whenSettled(() => {
+    if (depth() > 0) history.back();
+    else go(fallback, true);
+  });
+}
+
+export function goTab(url: string) {
+  closeAllLayers();
+  whenSettled(() => {
+    const steps = depth();
+    if (steps === 0) {
+      if (url !== here()) go(url, url === HOME);
+      return;
+    }
+    pendingTab = url;
+    history.go(-steps);
+  });
 }
 
 export function subscribeRoute(fn: () => void): () => void {
@@ -93,13 +134,37 @@ function onClick(e: MouseEvent) {
   go(href);
 }
 
+function onPop() {
+  if (takePop()) return;
+  if (isLayerEntry()) {
+    skipLayerEntry();
+    return;
+  }
+  const tab = pendingTab;
+  pendingTab = null;
+  if (tab !== null && tab !== here()) history.pushState({ depth: depth() + 1 }, "", tab);
+  notify();
+}
+
+function seedHistory() {
+  if (storedDepth() !== null) return;
+  const url = here();
+  const atHome = parse(url).name === DEFAULT_ROUTE && !routeRest(url) && !location.search;
+  history.replaceState({ depth: 0 }, "", atHome ? url : HOME);
+  if (!atHome) history.pushState({ depth: 1 }, "", url);
+}
+
 export function startRouter() {
   if (location.hash.startsWith("#/")) history.replaceState(null, "", location.hash.slice(1));
-  window.addEventListener("popstate", notify);
+  seedHistory();
+  window.addEventListener("popstate", onPop);
+  if (isLayerEntry()) skipLayerEntry();
   document.addEventListener("click", onClick);
 }
 
 export function stopRouter() {
-  window.removeEventListener("popstate", notify);
+  window.removeEventListener("popstate", onPop);
   document.removeEventListener("click", onClick);
+  pendingTab = null;
+  resetLayers();
 }

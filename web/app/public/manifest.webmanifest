@@ -3,7 +3,7 @@
   "short_name": "Brain",
   "description": "Add to your brain from your phone.",
   "id": "/",
-  "start_url": "/#/add",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",

@@ -1,5 +1,6 @@
 import { add } from "./add.ts";
 import { common } from "./common.ts";
+import { goals } from "./goals.ts";
 import { inbox } from "./inbox.ts";
 import { intake } from "./intake.ts";
 import { lock } from "./lock.ts";
@@ -11,10 +12,12 @@ import { settings } from "./settings.ts";
 import { sync } from "./sync.ts";
 import { today } from "./today.ts";
 import { todo } from "./todo.ts";
+import { todos } from "./todos.ts";
 
 export const copy = {
   add,
   common,
+  goals,
   inbox,
   intake,
   lock,
@@ -26,4 +29,5 @@ export const copy = {
   sync,
   today,
   todo,
+  todos,
 };

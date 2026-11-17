@@ -25,7 +25,7 @@ export function InboxScreen() {
   const sending = useOutboxItems().filter((item) => item.kind === "inbox");
   return (
     <>
-      <ScreenHead title={copy.nav.inbox} onBack={() => back("/today")} />
+      <ScreenHead title={copy.nav.inbox} onBack={() => back()} />
       <SyncLine />
       {notes && !items.length && !sending.length ? (
         <Empty title={copy.inbox.empty} />
