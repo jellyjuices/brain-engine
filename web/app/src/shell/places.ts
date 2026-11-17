@@ -26,8 +26,8 @@ export const TODOS: Place = {
 export const GOALS: Place = {
   label: copy.nav.goals,
   icon: TargetIcon,
-  href: "/report",
-  screens: ["report"],
+  href: "/goals",
+  screens: ["goals", "goal"],
 };
 
 export const FIND: Place = {

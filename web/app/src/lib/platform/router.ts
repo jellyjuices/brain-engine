@@ -4,6 +4,8 @@ export const DEFAULT_ROUTE = "todos";
 export const HOME = `/${DEFAULT_ROUTE}`;
 export const SCREEN_NAMES = [
   "todos",
+  "goals",
+  "goal",
   "today",
   "find",
   "add",

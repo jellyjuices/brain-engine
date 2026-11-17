@@ -59,6 +59,7 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 | Padded box | `Panel` |
 | Fact on a note | `Fact`, `AddFact` |
 | To-do line | `TodoRow`, with `makeTodo()` from `lib/notes/todos.ts` |
+| A goal's target or step, with its tick box | `GoalStep` from `components/goal-step/` |
 | Nothing to show | `Empty` (`title`, `body`, `size`) |
 
 ## Variants
