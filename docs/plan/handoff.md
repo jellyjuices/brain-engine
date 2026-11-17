@@ -14,7 +14,7 @@ Written 2026-11-16 by Claude. It replaces the earlier handoff of the same day. T
 | After the Mac mini: move, MCP, meaning search | [post-mac-mini.md](post-mac-mini.md) |
 | Add flows per kind, with the owner's answers | [add-flows.md](add-flows.md) |
 | Layout for the UI | [docs/design/concept-a.md](../design/concept-a.md). The wireframe pictures stay in `<notes>/.reports/design-v2-2026-11-12/` because they show real notes |
-| Add panel behaviour list | [web/app/docs/add-panel-behaviours.md](../../web/app/docs/add-panel-behaviours.md) |
+| Add panel behaviour list | [docs/design/add-panel-behaviours.md](../design/add-panel-behaviours.md) |
 | Test rules for agents | `.claude/skills/write-tests/` |
 
 What stays in the notes folder: its own `AGENTS.md`, `.claude/` rules and skills, and the reports the `brain` command makes. Nothing about the engine's code lives there.
@@ -36,7 +36,8 @@ What stays in the notes folder: its own `AGENTS.md`, `.claude/` rules and skills
 | Shared to-do line module, `npm run gates`, pre-push hook | Done |
 | Today reads real dates. Goal and Decision types. Areas: 1 or more, no upper limit | Done |
 | API routes, drafts, helper token, one undo per sort | Done |
-| MCP server at `/mcp` | Built and tested. Not running. Waits for the Mac mini |
+| Mac mini | The brain and the engine are on the mini. `ops/setup.sh` ran there. All four jobs are loaded and `brain serve` answers |
+| MCP server at `/mcp` | Built and tested. The tool list is cut from 39 to 22. `/mcp` answers 401 with no token. No helper token exists yet and no client has connected |
 | Data changes (`area` to `areas`, General) | Applied to the notes |
 | Goal percent, wins, decide-by | Done |
 | Journal: one note per journal, title from first words, `sorted` field | Done |
@@ -54,7 +55,6 @@ What stays in the notes folder: its own `AGENTS.md`, `.claude/` rules and skills
 
 | Branch | Worktree | State |
 | --- | --- | --- |
-| `repo-layout` | `brain-engine-wt/cleanup` | The folder layout: `engine/`, `web/`, `ops/`, `starter/`, `docs/`. Gates pass. Waits for the owner to look and merge |
 | `private-history` | none | 61 commits that are not on `main`. Kept until the owner says what it is for |
 | `ccr-e18c5284-k7y85f` | none | 9 commits of Find work from a cloud session, not on `main`. Kept until the owner looks |
 
@@ -82,7 +82,7 @@ Small = Sonnet, under 1 hour, a few files. Medium = Sonnet, half a day. Large = 
 | 10 | Sorter (plan 2.11): rules, fuzzy names, `· check` when unsure | Large | journal is done | The nearest-neighbour step (S5) waits for the Mac mini |
 | 11 | Dead code (plan 3.2) with fallow | Medium | no other agent in `src/` | 100 unused items were found on 2026-11-12; run fallow again first |
 | 12 | Test cleanup: `if` and `for` in tests, files with no failure case | Small | none | Low value until the UI screens settle |
-| 13 | Mac mini move, MCP roll-out, old commands removed, meaning search | See [post-mac-mini.md](post-mac-mini.md) | the Mac mini | |
+| 13 | Mac mini: helper token, first MCP client, MCP in the docs, old commands removed, meaning search | See [post-mac-mini.md](post-mac-mini.md) | the owner makes the token and approves the model download | The move and the tool list cut are done |
 
 Items 4, 10 and 11 do not touch the app's styles. Never run two agents in the same folder: each one gets its own git worktree.
 
@@ -113,7 +113,8 @@ Install once, at the root: `npm install`. It covers the engine, the app, the Wor
 
 ## 8. Leftovers
 
-- After the layout merge, the owner runs `ops/setup.sh` once. Reason: the jobs and the `brain` command on the Mac still point at the old paths.
+- Work happens in the main checkout, on `main`, with no worktrees. The owner said so on 2026-11-16. A worktree is only for two agents that write code at the same time.
+- `brain serve` and the jobs run from this checkout on the mini. Keep the gates passing between commits. Restart the server after a server change: `launchctl kickstart -k gui/$(id -u)/com.brain.serve`.
 - Paths in [plan.md](plan.md), [search.md](search.md) and [add-flows.md](add-flows.md) are from before the layout change: `src/` is now `engine/src/`, `shared/` is `engine/shared/`, `design-system/` is `web/design-system/`.
 - `~/.config/brain/privacy-words.txt` does not exist, so the privacy scan checks nothing.
 - TypeScript and `@types/node` come in two versions: 5.9 and 22 for the engine and the Worker, 7.0 and 26 for the app and the design system. One version for all is a tech change for the owner to approve.

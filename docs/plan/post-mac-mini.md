@@ -1,5 +1,7 @@
 # After the Mac mini arrives
 
+State on 2026-11-16: the mini is here. Done: section 1 steps 1, 2 and 4 (jobs loaded, `brain serve` answers), and section 2 step 2 (39 tools cut to 22). Not checked: section 1 step 3, the jobs on the MacBook. Next: section 2 step 1, the helper token. Paths below are from before the layout change: `setup.sh` and `launchd/` are in `ops/`, `src/` is `engine/src/`.
+
 Written 2026-11-14 by Claude. The owner approves each step. This is step 2.7 of [plan.md](plan.md), plus the items the owner moved here.
 
 Rule until then: no doc tells a helper to use MCP. Helpers use the `brain` command.
