@@ -1,6 +1,6 @@
 # Search: recommended design
 
-Research for D6 and steps 2.11 and 2.12 of [plan.md](plan.md). Written 2026-11-13, updated the same day for the owner's Pixel and his answers.
+Search design. The sorter step S5 is still to do: see [handoff.md](handoff.md). Written 2026-11-13, updated the same day for the owner's Pixel and his answers.
 
 Today: 168 notes, 263 KB, about 3,800 lines. One FTS5 table in `.brain/index.db`. The app keeps every note in IndexedDB with a plain substring search.
 
