@@ -1,6 +1,6 @@
 # After the Mac mini arrives
 
-State on 2026-11-16: the mini is here. Done: section 1 steps 1, 2 and 4 (jobs loaded, `brain serve` answers), and section 2 step 2 (39 tools cut to 22). Not checked: section 1 step 3, the jobs on the MacBook. Next: section 2 step 1, the helper token. Paths below are from before the layout change: `setup.sh` and `launchd/` are in `ops/`, `src/` is `engine/src/`.
+State on 2026-11-16: the mini is here. Done: section 1 steps 1, 2 and 4 (jobs loaded, `brain serve` answers), and section 2 steps 1 to 3: the helper token exists, 39 tools are cut to 22, and `/mcp` on the mini lists the 22 tools and runs a read with the helper token. It answers 401 with no token and with the owner token. The helper token gets 403 on an owner route. Not checked: section 1 step 3, the jobs on the MacBook. Next: section 2 step 4, the first real client. Paths below are from before the layout change: `setup.sh` and `launchd/` are in `ops/`, `src/` is `engine/src/`.
 
 Written 2026-11-14 by Claude. The owner approves each step. This is step 2.7 of [plan.md](plan.md), plus the items the owner moved here.
 

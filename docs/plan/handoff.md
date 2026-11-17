@@ -37,7 +37,7 @@ What stays in the notes folder: its own `AGENTS.md`, `.claude/` rules and skills
 | Today reads real dates. Goal and Decision types. Areas: 1 or more, no upper limit | Done |
 | API routes, drafts, helper token, one undo per sort | Done |
 | Mac mini | The brain and the engine are on the mini. `ops/setup.sh` ran there. All four jobs are loaded and `brain serve` answers |
-| MCP server at `/mcp` | Built and tested. The tool list is cut from 39 to 22. `/mcp` answers 401 with no token. No helper token exists yet and no client has connected |
+| MCP server at `/mcp` | Built and tested. The tool list is cut from 39 to 22. The helper token exists. `/mcp` lists the tools and runs a read with it, and answers 401 with no token. No real client has connected yet |
 | Data changes (`area` to `areas`, General) | Applied to the notes |
 | Goal percent, wins, decide-by | Done |
 | Journal: one note per journal, title from first words, `sorted` field | Done |
