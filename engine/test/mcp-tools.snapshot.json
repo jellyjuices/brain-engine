@@ -21,11 +21,19 @@
           "description": "A note path to file it in."
         },
         "about": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Note paths."
+          "description": "Note paths. With kind feeling, the side: what it is about, in the owner's words.",
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Note paths."
+            },
+            {
+              "type": "string"
+            }
+          ]
         },
         "people": {
           "type": "array",
@@ -47,13 +55,19 @@
         "draft_id": {
           "type": "string"
         },
+        "when": {
+          "type": "string",
+          "description": "today, tomorrow, someday, waiting, note, or a date like 2026-05-04."
+        },
         "kind": {
           "type": "string",
           "enum": [
             "todo",
-            "journal"
+            "journal",
+            "fact",
+            "feeling"
           ],
-          "description": "journal keeps the text whole as its own note, to sort later."
+          "description": "todo writes a to-do line. journal keeps the text whole as its own note, to sort later. fact and feeling write one dated line into into."
         },
         "title": {
           "type": "string",
@@ -447,6 +461,98 @@
         },
         "draft_id": {
           "type": "string"
+        },
+        "fields": {
+          "type": "object",
+          "description": "Any of why, when, date, with, decide_by, subjects, birthday, from, renews, status. Text, or a list of text.",
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        },
+        "areas": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Area slugs, like health."
+        },
+        "parent": {
+          "type": "string",
+          "description": "A goal path or slug. The new goal is its subgoal."
+        },
+        "sections": {
+          "type": "object",
+          "description": "Lines under headings, like { \"# Targets\": [\"- [ ] Run 5 km\"] }.",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "relations": {
+          "type": "array",
+          "description": "Links written in the new note.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "to": {
+                "type": "string",
+                "description": "A note path, like people/dana-cole.md."
+              },
+              "role": {
+                "type": "string"
+              },
+              "time": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "to"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "todos": {
+          "type": "array",
+          "description": "To-dos under # To-dos. Text, or an object.",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  },
+                  "when": {
+                    "type": "string",
+                    "description": "today, tomorrow, someday, waiting, note, or a date like 2026-05-04."
+                  },
+                  "toward": {
+                    "type": "string",
+                    "description": "A goal path this to-do is toward."
+                  }
+                },
+                "required": [
+                  "text"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
         }
       },
       "required": [
@@ -472,7 +578,8 @@
           "description": "A note path, like people/dana-cole.md."
         },
         "body": {
-          "type": "string"
+          "type": "string",
+          "description": "The whole new body. Leave it out to keep the body."
         },
         "base": {
           "type": "string",
@@ -483,11 +590,18 @@
           "items": {
             "type": "string"
           }
+        },
+        "title": {
+          "type": "string",
+          "description": "A new title. Journal notes only. The path stays."
+        },
+        "status": {
+          "type": "string",
+          "description": "A new status the note type allows, like finished for a Project."
         }
       },
       "required": [
         "path",
-        "body",
         "base"
       ],
       "additionalProperties": false

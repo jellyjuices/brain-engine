@@ -3,14 +3,19 @@ type: Project
 title: "{{title}}"
 description: ""
 tags: []
-status: stable
+status: active
+areas: [general]
 ---
 
 # Goal
 
+# To-dos
+
 # Status
 
 # Next step
+
+# Goals
 
 # People
 

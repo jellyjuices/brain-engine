@@ -18,6 +18,7 @@ export function statusesFor(type: string | undefined, schema: Schema): string[] 
   if (type === "Thread") return schema.threadStatus;
   if (type === "Event") return schema.eventStatus;
   if (type === "Goal") return schema.goalStatus;
+  if (type === "Project") return schema.projectStatus;
   if (type === "Decision") return schema.decisionStatus;
   return schema.status;
 }

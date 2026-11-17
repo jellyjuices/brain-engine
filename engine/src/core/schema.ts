@@ -24,6 +24,8 @@ export interface Schema {
   lenses: string[];
   eventStatus: string[];
   goalStatus: string[];
+  projectStatus: string[];
+  areaColors: string[];
   decisionStatus: string[];
 }
 
@@ -59,6 +61,8 @@ export function loadSchema(root: string): Schema {
     lenses: list(types.lenses),
     eventStatus: list(types.event_status ?? ["upcoming", "done", "cancelled"]),
     goalStatus: list(types.goal_status ?? ["active", "later", "done"]),
+    projectStatus: list(types.project_status ?? ["active", "finished", "stable", "draft", "deprecated"]),
+    areaColors: list(types.area_colors),
     decisionStatus: list(types.decision_status ?? ["open", "decided", "dropped"]),
   };
 }

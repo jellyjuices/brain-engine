@@ -2,15 +2,16 @@
 
 import { posix } from "node:path";
 import { appendToSection } from "../../../shared/line/index.ts";
-import { newNote } from "../../capture/actions.ts";
+import { buildNote } from "../../capture/build.ts";
 import { loadAll, moveNote, readNote, slugify, uniquePath, writeNote } from "../../core/files.ts";
 import { changeFiles } from "../../core/log.ts";
 import { DIRS, type Meta, nowStamp, titleOf, typeOf } from "../../core/notes.ts";
-import { relationsIn } from "../../core/relations.ts";
+import { headingForType, relationsIn } from "../../core/relations.ts";
 import { change } from "../../todos/undo.ts";
 import type { AddRelationResponse, DeleteNoteResponse, MadeResponse, RelationsResponse } from "../api-types.ts";
 import { HttpError } from "../server-auth.ts";
 import { afterWrite, asUserError, type Ctx, existingNote, safeNotePath, text } from "../server-context.ts";
+import { specParts } from "./build-input.ts";
 import { clearDraft } from "./drafts.ts";
 
 const NOT_MADE_HERE = ["Capture"];
@@ -24,8 +25,8 @@ export function makeNote(c: Ctx): MadeResponse {
   const description = text(c.body.description, "description", false)?.trim().slice(0, 150) ?? "";
   const same = loadAll(c.root).find((n) => typeOf(n) === type && titleOf(n).toLowerCase() === title.toLowerCase());
   if (same) return { path: same.path, created: false };
-  const extra: Meta = { description, ...(c.caller === "agent" && { generated: { by: "agent", at: nowStamp() } }) };
-  const note = afterWrite(c.root, () => asUserError(() => newNote(c.root, type, title, extra)));
+  const extra: Meta = c.caller === "agent" ? { generated: { by: "agent", at: nowStamp() } } : {};
+  const note = afterWrite(c.root, () => asUserError(() => buildNote(c.root, { type, title, description, extra, ...specParts(c.body) })));
   clearDraft(c.root, c.body.draft_id);
   return { path: note.path, created: true };
 }
@@ -46,8 +47,6 @@ export function relationsRoute(c: Ctx): RelationsResponse {
   return { path, out: relationsIn(note), in: incoming };
 }
 
-const HEADING: Record<string, string> = { Person: "# People", Group: "# Groups", Project: "# Projects", Place: "# Places", Thing: "# Things", Topic: "# Topics" };
-
 /** Link two notes with an optional role and time. A relation is written on one side only, so a link either way counts. */
 export function addRelation(c: Ctx): AddRelationResponse {
   const from = safeNotePath(text(c.body.from, "from")!, true);
@@ -60,7 +59,7 @@ export function addRelation(c: Ctx): AddRelationResponse {
   const line = [`- [${titleOf(target).split(",")[0]}](${posix.relative(posix.dirname(from), to)})`, role, time].filter(Boolean).join(" · ");
   const linked = [...relationsIn(readNote(c.root, from)), ...relationsIn(target)].some((r) => (r.from === from && r.to === to) || (r.from === to && r.to === from));
   if (linked) return { from, to, line, created: false };
-  const heading = HEADING[typeOf(target) ?? ""] ?? "# Related";
+  const heading = headingForType(typeOf(target));
   afterWrite(c.root, () =>
     change(c.root, from, `linked ${from} to ${to}`, () => {
       const n = readNote(c.root, from);
