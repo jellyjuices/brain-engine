@@ -45,10 +45,12 @@ function isScreen(name: string): name is ScreenName {
   return (SCREEN_NAMES as readonly string[]).includes(name);
 }
 
+const OLD_NAMES: Record<string, ScreenName> = { areas: "brain", today: "todos", report: "goals" };
+
 export function parse(url = here()): { name: ScreenName; params: URLSearchParams } {
   const [path = "", query = ""] = url.replace(/^#?\/?/, "").split("?");
   const first = path.split("/")[0] || DEFAULT_ROUTE;
-  const name = first === "areas" ? "brain" : first;
+  const name = OLD_NAMES[first] ?? first;
   return { name: isScreen(name) ? name : DEFAULT_ROUTE, params: new URLSearchParams(query) };
 }
 

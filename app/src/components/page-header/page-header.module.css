@@ -1,6 +1,7 @@
 .pageHeader {
   position: relative;
   isolation: isolate;
+  margin-inline: calc(-1 * var(--screen-pad-x, 0%));
   padding-top: var(--space-2xl);
 }
 

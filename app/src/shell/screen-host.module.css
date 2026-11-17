@@ -6,13 +6,14 @@
 }
 
 .screen {
+  --screen-pad-x: var(--space-lg);
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
   padding: calc(var(--space-xl) + env(safe-area-inset-top))
-    calc(var(--space-lg) + env(safe-area-inset-right)) var(--space-lg)
-    calc(var(--space-lg) + env(safe-area-inset-left));
+    calc(var(--screen-pad-x) + env(safe-area-inset-right)) var(--space-lg)
+    calc(var(--screen-pad-x) + env(safe-area-inset-left));
   overflow-y: auto;
   overscroll-behavior: contain;
   animation: screen-in var(--motion-slow) var(--motion-easing) both;
@@ -36,12 +37,12 @@
 }
 
 [data-layout="wide"] .screen {
-  padding-left: var(--space-2xl);
-  padding-right: calc(var(--space-2xl) + env(safe-area-inset-right));
+  --screen-pad-x: var(--space-2xl);
 }
 
 [data-layout="popover"] .screen {
   padding: var(--space-lg);
+  scrollbar-width: none;
 }
 
 @keyframes screen-in {

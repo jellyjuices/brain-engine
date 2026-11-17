@@ -309,6 +309,7 @@
   --shape-toast-warning: var(--shape-triad);
   --shape-toast-info: var(--shape-blossom);
   --shape-toast-neutral: var(--shape-squircle);
+  --shape-kind-add: var(--shape-plus);
   --shape-kind-todo: var(--shape-scallop);
   --shape-kind-journal: var(--shape-house);
   --shape-kind-person: var(--shape-pentagon);

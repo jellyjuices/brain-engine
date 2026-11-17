@@ -49,7 +49,7 @@ Updated 2026-11-17. This lists only work still to do. The intent for every part 
 | 16 | Goal API gaps | Small | none | A list of linked projects in `GoalView`; subgoals and decisions in `/api/goals`; a route to cross off a target (today the app edits the note) |
 | 17 | One home for shared app and engine code | Small | none | The view rules (`engine/src/interface/routes/reads.ts`) and goal types (`engine/src/reports/goals.ts`) are copied in the app. Move them to `engine/shared` |
 | 6 | Dead code, rest | Small | none | fallow still lists 21 unused exports in `engine/` |
-| 8 | Test cleanup | Small | after the UI settles | `if` and `for` in tests, files with no failure case. Skipped against the new criteria: `app/test/shell/shell-frame/shell-frame.test.tsx`, the tab bar and rail rows for To-dos and Goals. Delete the scratch folder `app/test/tmpx/` in the app worktree |
+| 8 | Test cleanup | Small | after the UI settles | `if` and `for` in tests, files with no failure case. Skipped against the new criteria: `app/test/shell/shell-frame/shell-frame.test.tsx` (the tab bar and rail rows for To-dos and Goals; "the phone layout reaches Settings from To-dos", Settings is now in the To-dos header); `app/test/shell/unsorted-banner/unsorted-banner.test.tsx` (the whole file: the banner now sits inside the To-dos screen, not the shell). Brittle after the CSS Modules move: the Add panel tests find the blob by part of a class name; `mention.test.tsx` no longer checks the look |
 
 ## App
 

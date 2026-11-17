@@ -21,5 +21,5 @@ export function inboxCount(root: string): number {
 /** The menu bar line: the count (none when the inbox is empty), the icon, and the popover to open on click. */
 export function render(root: string): string {
   const count = inboxCount(root);
-  return `${count || ""} | sfimage=scribble href=${WEB_URL}/today webview=true webvieww=${POPOVER.w} webviewh=${POPOVER.h}`;
+  return `${count || ""} | sfimage=scribble href=${WEB_URL}/todos webview=true webvieww=${POPOVER.w} webviewh=${POPOVER.h}`;
 }

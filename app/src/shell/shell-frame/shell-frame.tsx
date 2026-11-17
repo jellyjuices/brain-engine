@@ -4,8 +4,6 @@ import clsx from "clsx";
 import { Rail } from "@/shell/rail/rail.tsx";
 import { MAIN_ID, SkipLink } from "@/shell/skip-link/skip-link.tsx";
 import { TabBar } from "@/shell/tab-bar/tab-bar.tsx";
-import { TopBar } from "@/shell/top-bar/top-bar.tsx";
-import { UnsortedBanner } from "@/shell/unsorted-banner/unsorted-banner.tsx";
 import { useShellLayout } from "@/shell/use-shell-layout.ts";
 
 export function ShellFrame({ children }: { children: ReactNode }) {
@@ -16,8 +14,6 @@ export function ShellFrame({ children }: { children: ReactNode }) {
       <SkipLink />
       {wide && <Rail />}
       <div id={MAIN_ID} className={styles.main} tabIndex={-1}>
-        {!wide && <TopBar />}
-        <UnsortedBanner />
         {children}
       </div>
       {!wide && <TabBar />}

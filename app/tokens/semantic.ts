@@ -126,6 +126,7 @@ export const shared: Record<string, string> = {
   "shape-toast-warning": "shape-triad",
   "shape-toast-info": "shape-blossom",
   "shape-toast-neutral": "shape-squircle",
+  "shape-kind-add": "shape-plus",
   "shape-kind-todo": "shape-scallop",
   "shape-kind-journal": "shape-house",
   "shape-kind-person": "shape-pentagon",
