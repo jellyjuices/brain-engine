@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { archiveRows } from "@/lib/notes/folders.ts";
 import { noteHref } from "@/lib/notes/model.ts";
+import { typeLook } from "@/lib/notes/kinds.ts";
 import { copy } from "@/content/index.ts";
 
 export function ArchiveView() {
@@ -18,7 +19,14 @@ export function ArchiveView() {
       ) : (
         <List>
           {rows.map((n) => (
-            <Row key={n.path} href={noteHref(n.path)} title={n.title} sub={n.description} chevron />
+            <Row
+              key={n.path}
+              {...typeLook(n.type)}
+              href={noteHref(n.path)}
+              title={n.title}
+              sub={n.description}
+              chevron
+            />
           ))}
         </List>
       )}

@@ -1,5 +1,5 @@
 import { Button } from "@/components/button/button.tsx";
-import { typeIcon } from "@/components/icon/icons.ts";
+import { typeLook } from "@/lib/notes/kinds.ts";
 import { SearchList } from "@/components/search-list/search-list.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { isFiled } from "@/lib/notes/capture.ts";
@@ -21,7 +21,7 @@ export function InboxAbout({ item, show, onPick }: InboxAboutProps) {
       key: n.path,
       value: n.path,
       match: n.title,
-      row: { icon: typeIcon(n.type), title: n.title, sub: n.type ?? copy.common.note },
+      row: { ...typeLook(n.type), title: n.title, sub: n.type ?? copy.common.note },
     }));
   return (
     <>

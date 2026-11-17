@@ -1,4 +1,6 @@
 import { List } from "@/components/row/list.tsx";
+import { Shape } from "@/components/shape/shape.tsx";
+import { typeLook } from "@/lib/notes/kinds.ts";
 import { Panel } from "@/components/panel/panel.tsx";
 import styles from "./card.module.css";
 import { CardSection } from "./card-section.tsx";
@@ -30,6 +32,7 @@ export function SubjectCard({ card, heading, bare }: SubjectCardProps) {
       {heading && (
         <>
           <a className={styles.cardHead} href={noteHref(subject.path)}>
+            <Shape name={typeLook(subject.type).shape} icon={typeLook(subject.type).icon} />
             <span className={styles.cardTitle}>{subject.title}</span>
             <span className={styles.cardType}>{subject.type ?? copy.common.note}</span>
           </a>

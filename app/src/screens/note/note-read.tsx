@@ -10,6 +10,7 @@ import { SectionHeader } from "@/components/section-header/section-header.tsx";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
+import { typeLook } from "@/lib/notes/kinds.ts";
 import { noteHref, todayIso } from "@/lib/notes/model.ts";
 import { backlinksOf, buildCard, cardHasContent, isSubject } from "@/lib/notes/subject-card.ts";
 import { back, go, navigate } from "@/lib/platform/router.ts";
@@ -72,7 +73,13 @@ export function NoteRead({ path }: { path: string }) {
           <SectionHeader title={copy.notes.linkedFrom} />
           <List>
             {links.map((l) => (
-              <Row key={l.path} href={noteHref(l.path)} title={l.title} end={l.type} />
+              <Row
+                key={l.path}
+                {...typeLook(l.type)}
+                href={noteHref(l.path)}
+                title={l.title}
+                end={l.type}
+              />
             ))}
           </List>
         </section>

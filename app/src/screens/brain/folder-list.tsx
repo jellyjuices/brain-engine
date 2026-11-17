@@ -7,7 +7,8 @@ import { SyncLine } from "@/components/sync-line/sync-line.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { folderSummaries } from "@/lib/notes/folders.ts";
 import { copy } from "@/content/index.ts";
-import { FOLDER_ICON, FOLDERS, type Folder } from "./folders.ts";
+import { folderLook } from "@/lib/notes/kinds.ts";
+import { FOLDERS, type Folder } from "./folders.ts";
 import { OpenChip } from "./open-chip.tsx";
 
 export function FolderList() {
@@ -22,7 +23,7 @@ export function FolderList() {
           <Row
             key={f.folder}
             href={`/brain/${f.folder}`}
-            icon={FOLDER_ICON[f.folder as Folder]}
+            {...folderLook(f.folder)}
             title={copy.notes.folders[f.folder as Folder]}
             sub={f.count === 1 ? copy.common.oneNote : copy.common.noteCount(f.count)}
             end={<OpenChip open={f.open} />}

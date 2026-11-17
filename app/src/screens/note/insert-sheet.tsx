@@ -1,4 +1,4 @@
-import { typeIcon } from "@/components/icon/icons.ts";
+import { typeLook } from "@/lib/notes/kinds.ts";
 import { Calendar } from "@/components/calendar/calendar.tsx";
 import { SearchList } from "@/components/search-list/search-list.tsx";
 import { openSheet } from "@/components/sheet/open-sheet.tsx";
@@ -22,7 +22,7 @@ export async function pickReference(from: string): Promise<Insertion | null> {
           key: n.path,
           value: n,
           match: n.title,
-          row: { icon: typeIcon(n.type), title: n.title, sub: n.type },
+          row: { ...typeLook(n.type), title: n.title, sub: n.type },
         }))}
         onPick={(n) => finish(referenceText(from, n))}
       />

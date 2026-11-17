@@ -2,9 +2,9 @@ import styles from "./shape.module.css";
 import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 import clsx from "clsx";
 import { Icon } from "@/components/icon/icon.tsx";
+import type { KindName } from "@/lib/notes/kinds.ts";
 
-export type ShapeName =
-  "add" | "todo" | "journal" | "person" | "place" | "thing" | "file" | "intake" | "other";
+export type ShapeName = "add" | KindName;
 
 export interface ShapeProps {
   name: ShapeName;

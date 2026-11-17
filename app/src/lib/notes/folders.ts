@@ -5,6 +5,7 @@ export interface FolderRow {
   path: string;
   title: string;
   description: string;
+  type?: string;
   open: number;
 }
 
@@ -36,7 +37,13 @@ export function folderRows(notes: StoredNote[], folder: string): FolderRow[] {
               .filter((m) => m.path === n.path || m.meta.area === slug)
               .reduce((sum, m) => sum + openIn(m), 0)
           : openIn(n);
-      return { path: n.path, title: n.title, description: n.description, open };
+      return {
+        path: n.path,
+        title: n.title,
+        description: n.description,
+        ...(n.type && { type: n.type }),
+        open,
+      };
     })
     .sort((a, b) => a.title.localeCompare(b.title));
 }
@@ -56,6 +63,12 @@ export function folderSummaries(notes: StoredNote[], folders: readonly string[])
 export function archiveRows(notes: StoredNote[]): FolderRow[] {
   return notes
     .filter(isArchived)
-    .map((n) => ({ path: n.path, title: n.title, description: n.description, open: 0 }))
+    .map((n) => ({
+      path: n.path,
+      title: n.title,
+      description: n.description,
+      ...(n.type && { type: n.type }),
+      open: 0,
+    }))
     .sort((a, b) => a.title.localeCompare(b.title));
 }

@@ -6,6 +6,7 @@ import { noteHref, todayIso, type StoredNote } from "@/lib/notes/model.ts";
 import { rememberSearch } from "@/lib/notes/recent-searches.ts";
 import type { RemoteSearch } from "@/lib/notes/server-search.ts";
 import { buildCard, cardHasContent, matchSubject } from "@/lib/notes/subject-card.ts";
+import { typeLook } from "@/lib/notes/kinds.ts";
 import { Empty } from "@/components/empty/empty.tsx";
 import { AnswerRow } from "./answer-row.tsx";
 import { useDeviceFind } from "./use-device-find.ts";
@@ -50,6 +51,7 @@ export function FindResults({ q, notes, remote }: FindResultsProps) {
             {others.map((x) => (
               <Row
                 key={x.path}
+                {...typeLook(x.type)}
                 href={noteHref(x.path)}
                 title={x.title}
                 end={x.type}

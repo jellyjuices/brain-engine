@@ -170,6 +170,16 @@ export const shared: Record<string, string> = {
   "shape-kind-file": "shape-hexagon",
   "shape-kind-intake": "shape-flower",
   "shape-kind-other": "shape-circle",
+  "shape-kind-area": "shape-pebble",
+  "shape-kind-project": "shape-squircle",
+  "shape-kind-group": "shape-blossom",
+  "shape-kind-topic": "shape-triad",
+  "shape-kind-event": "shape-burst",
+  "shape-kind-note": "shape-diamond",
+  "shape-kind-goal": "shape-star",
+  "shape-kind-decision": "shape-octagon",
+  "shape-kind-capture": "shape-shield",
+  "shape-kind-lens": "shape-arch",
 };
 
 export const composed: Record<string, string> = {

@@ -26,6 +26,7 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 | Icon-only button | `IconButton` (always with `label`) |
 | Icon | `Icon` from `components/icon/` |
 | Kind of thing (to-do, journal, person, place...) | `Shape` (`name`, `icon`) or `Row shape`. One shape per kind. The `add` shape is only for the add button |
+| Kinds: which shape and icon each kind has | `KIND_ICON`, `typeLook(type)`, `folderLook(folder)`, `kindLook(kind)` in `lib/notes/kinds.ts`. Spread the result into `Row` (`shape`, `icon`) or `Shape`. Add a new kind there, with its `--shape-kind-<kind>` token. Two kinds never share a shape |
 | Add button and its quick add | `AddPanel` in `TabBar` |
 | Tappable line | `Row` (`title`, `sub`, `icon`, `end`, `variant`, `chevron`, `href` or `onClick`) |
 | Group of rows | `List` (`outlined` on a screen, `plain` for to-do lines, `ghost` in a sheet, `menu` for a sheet menu). It draws a `<ul>` and wraps each child in an `<li>`. Rows never draw `<li>` |

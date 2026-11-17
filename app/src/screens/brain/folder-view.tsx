@@ -7,6 +7,7 @@ import { useNotes } from "@/hooks/use-notes.ts";
 import { folderRows } from "@/lib/notes/folders.ts";
 import { noteHref } from "@/lib/notes/model.ts";
 import { copy } from "@/content/index.ts";
+import { folderLook } from "@/lib/notes/kinds.ts";
 import { ADD_IN, type Folder } from "./folders.ts";
 import { Empty } from "@/components/empty/empty.tsx";
 import { OpenChip } from "./open-chip.tsx";
@@ -36,6 +37,7 @@ export function FolderView({ folder }: { folder: Folder }) {
           {rows.map((n) => (
             <Row
               key={n.path}
+              {...folderLook(folder)}
               href={noteHref(n.path)}
               title={n.title}
               sub={n.description}

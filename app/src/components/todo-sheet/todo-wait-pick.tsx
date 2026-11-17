@@ -1,4 +1,4 @@
-import { typeIcon } from "@/components/icon/icons.ts";
+import { typeLook } from "@/lib/notes/kinds.ts";
 import { SearchList } from "@/components/search-list/search-list.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { WAIT_ON_TYPES } from "@/lib/notes/types.ts";
@@ -20,7 +20,7 @@ export function TodoWaitPick({ todo, now, finish, show, kind }: TodoWaitPickProp
       key: n.path,
       value: n.title,
       match: n.title,
-      row: { icon: typeIcon(n.type), title: n.title, sub: n.type },
+      row: { ...typeLook(n.type), title: n.title, sub: n.type },
     }));
 
   function save(name: string) {
