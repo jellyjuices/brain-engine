@@ -27,8 +27,8 @@ Updated 2026-11-17. This lists only work still to do. The intent for every part 
 | # | Task | Notes |
 | --- | --- | --- |
 | A | Make `~/.config/brain/privacy-words.txt` | Template: `ops/config/privacy-words.example.txt`. Your surname, street, company and client names. Without it the privacy scan checks nothing |
-| B | Merge, deploy and look at the app branch | Branch `worktree-agent-a20820768b9c32f85`: opens on To-dos, back closes sheets first, To-dos views, Goals tab, goal page. Reinstall the app for the new start page. Check back swipes, the Add panel close, sharing into the app, the done toast, the Goals look |
-| C | Look at the new styles | Every part, screen and shell piece is on CSS Modules and the new tokens. Look at each screen, the Add panel most of all |
+| B | Look at the app on the phone | The quick add tools (bold, italic, list, tag, mention) above the keyboard; paste into a journal; a note page's one to-do list and its Soon line; repeating to-dos once #20 lands; back swipes; dark mode, the goal page and the wide layout were never seen in a screenshot |
+| C | Approve the new words | On screen but not in the allowed list: Format, Bold, Italic, List, Mention, Soon, Edit, Not done, and the repeat words from #20 |
 | D | Soon: 7 or 14 days | The concept says 7, the API says 14. The app uses 14 for now |
 | E | Say yes to the intake and sorter plans | See #2 and #5 |
 
@@ -47,7 +47,8 @@ Updated 2026-11-17. This lists only work still to do. The intent for every part 
 | 5 | Sorter | Large | owner yes | Inside `brain serve`, as [helpers.md](../intent/helpers.md) says, so it reuses the loaded search model. Rules plus learned moves, fuzzy names, then the nearest-neighbour step (S5 in [search.md](search.md)). Unsure: best guess plus `· check`. A sorted capture is deleted. A feeling line gets `· about <words>`. Also: `saveItem` in `engine/src/capture/pull.ts` now files a `kind: "todo"` with no subject into `areas/general.md`; it must wait for the sorter instead. Test: pure layers on fixture notes, a fake model, a hand-run check for a 95% hit rate |
 | 15 | Sort routes | Medium | 5 | `GET /api/sorted` (lines by subject, with kind and `· check`), and routes to move a filed line and change its tag. Each logged, undoable, and teaches the sorter |
 | 16 | Goal API gaps | Small | none | A list of linked projects in `GoalView`; subgoals and decisions in `/api/goals`; a route to cross off a target (today the app edits the note) |
-| 17 | One home for shared app and engine code | Small | none | The view rules (`engine/src/interface/routes/reads.ts`) and goal types (`engine/src/reports/goals.ts`) are copied in the app. Move them to `engine/shared` |
+| 20 | Repeating to-dos roll forward | Medium | none | In progress. Rule in [to-dos.md](../intent/to-dos.md) outcome 10: one line, Done for now moves the date and adds a history line, Skip this time, Stop repeating. No copies. Restart `brain serve` after it lands |
+| 21 | Reopen a repeating to-do's old copies | Small | 20 | Done copies made before #20 stay as history. Check they read well on a note page |
 | 6 | Dead code, rest | Small | none | fallow still lists 21 unused exports in `engine/` |
 | 8 | Test cleanup | Small | after the UI settles | `if` and `for` in tests, files with no failure case. Skipped against the new criteria: `app/test/shell/shell-frame/shell-frame.test.tsx` (the tab bar and rail rows for To-dos and Goals; "the phone layout reaches Settings from To-dos", Settings is now in the To-dos header); `app/test/shell/unsorted-banner/unsorted-banner.test.tsx` (the whole file: the banner now sits inside the To-dos screen, not the shell). Brittle after the CSS Modules move: the Add panel tests find the blob by part of a class name; `mention.test.tsx` no longer checks the look |
 
@@ -57,10 +58,9 @@ Design: [concept-a.md](../design/concept-a.md). Add flows: [add-flows.md](add-fl
 
 | # | Task | Size | Needs | Notes |
 | --- | --- | --- | --- | --- |
-| 9 | Styles | Medium each | none | Styles: CSS Modules on the new tokens, done |
 | 10 | Sort screen | Medium | 15 | Grouped by subject. Tap a tag to change it, + to add one. Long-press, then Move to, first. Drag by a handle is its own task after |
 | 18 | Saved own views and the Edit view sheet | Medium | an API for saved views | The To-dos screen has the standard views only |
-| 12 | Page, decision page, Connections | Large | none | The goal page is on the app branch |
+| 12 | Page, decision page, Connections | Large | none | The goal page and the note page's to-do list are done |
 | 13 | Find with the answer card, Brain tab, Settings | Medium | none | |
 | 19 | Drafts kept on the device (G12) | Small | none | The device keeps its own draft copy and syncs it with `save_draft` |
 | 14 | Delete old screens: `inbox`, `today`, `report`, `write`, `new` | Small | 10, 12, 13 | No tab points at `today` or `report` now. The owner runs any `rm` |
