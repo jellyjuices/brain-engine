@@ -18,6 +18,13 @@ export interface DropPayload {
   ref: string;
   why?: string;
 }
+export interface RefPayload {
+  ref: string;
+}
+export interface TodoTextPayload {
+  ref: string;
+  text: string;
+}
 export interface EditPayload {
   path: string;
   body: string;

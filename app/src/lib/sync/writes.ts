@@ -9,6 +9,8 @@ import type {
   DonePayload,
   MovePayload,
   DropPayload,
+  RefPayload,
+  TodoTextPayload,
   EditPayload,
   PersonPayload,
   JournalPayload,
@@ -58,6 +60,10 @@ export function registerWrites() {
   registerHandler("done", (item) => api("/api/done", { body: item.payload as DonePayload }));
   registerHandler("move", (item) => api("/api/move", { body: item.payload as MovePayload }));
   registerHandler("drop", (item) => api("/api/drop", { body: item.payload as DropPayload }));
+  registerHandler("reopen", (item) => api("/api/reopen", { body: item.payload as RefPayload }));
+  registerHandler("edit-todo", (item) =>
+    api("/api/edit-todo", { body: item.payload as TodoTextPayload }),
+  );
   registerHandler("person", (item) => api("/api/people", { body: item.payload as PersonPayload }));
   registerHandler("journal", (item) =>
     api("/api/journal", { body: item.payload as JournalPayload }),
@@ -111,6 +117,9 @@ export async function queueDecision(ref: string, d: Decision): Promise<string> {
         clean({ ref, when: d.when, who: d.who?.trim(), what: d.what?.trim() }),
       )
     ).id;
+  if (d.kind === "reopen") return (await enqueue<RefPayload>("reopen", { ref })).id;
+  if (d.kind === "edit")
+    return (await enqueue<TodoTextPayload>("edit-todo", { ref, text: d.text.trim() })).id;
   return (await enqueue<DropPayload>("drop", clean({ ref, why: d.why?.trim() }))).id;
 }
 

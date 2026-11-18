@@ -82,6 +82,21 @@ describe("outbox kinds", () => {
     expect(bodyOf(3)).toEqual({ ref: "areas/fitness.md::Bare" });
   });
 
+  it("reopen and edit post to their routes with the stable ref", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockImplementation(async () => reply(200, {})),
+    );
+    await queueDecision("areas/fitness.md::Gym", { kind: "reopen" });
+    await queueDecision("areas/fitness.md::Mat", { kind: "edit", text: " Buy a new mat " });
+    await flush();
+    expect(calls().map((c) => c[0])).toEqual(["/api/reopen", "/api/edit-todo"]);
+    expect([bodyOf(0), bodyOf(1)]).toEqual([
+      { ref: "areas/fitness.md::Gym" },
+      { ref: "areas/fitness.md::Mat", text: "Buy a new mat" },
+    ]);
+  });
+
   it("waits offline and lands, in order, once the Mac answers", async () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("offline")));
     await queueDecision("a.md::One", { kind: "done" });

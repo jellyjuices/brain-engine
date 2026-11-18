@@ -6,6 +6,8 @@ import {
   formatTodoLine,
   newTodoLine,
   parseTodoLine,
+  reopenTodoIn,
+  retextTodoIn,
   sectionRange,
   tickTodo,
   updateTodo,
@@ -18,7 +20,9 @@ import { splitWhen } from "@/lib/notes/when.ts";
 export type Decision =
   | { kind: "done"; happened?: string; follow_up?: string }
   | { kind: "move"; when: string; who?: string; what?: string }
-  | { kind: "drop"; why?: string };
+  | { kind: "drop"; why?: string }
+  | { kind: "reopen" }
+  | { kind: "edit"; text: string };
 
 export interface TodoRef {
   text: string;
@@ -73,6 +77,14 @@ export function applyDecision(
   d: Decision,
   now: string,
 ): StoredNote | null {
+  if (d.kind === "reopen" || d.kind === "edit") {
+    if (todo.kind === "event") return null;
+    const body =
+      d.kind === "reopen"
+        ? reopenTodoIn(note.body, todo.text)
+        : retextTodoIn(note.body, todo.text, d.text);
+    return body === null ? null : { ...note, body };
+  }
   if (todo.kind === "event") {
     const meta = { ...note.meta };
     if (d.kind === "done") meta.status = "done";

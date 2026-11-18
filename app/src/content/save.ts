@@ -22,7 +22,7 @@ export const save = {
   changeDropped: (text: string) => `Deleted: ${text}`,
   changeEdited: (text: string) => `Edited: ${text}`,
   changeUndo: "Undo",
-  changeToast: { done: "Done", move: "Moved", drop: "Deleted", edit: "Edited" },
+  changeToast: { done: "Done", move: "Moved", drop: "Deleted", edit: "Edited", reopen: "Not done" },
   changeOffline: (word: string) => `${word} offline`,
   conflict: "Your Mac changed it too. Choose a version",
   emptyAdd: "Empty note",
