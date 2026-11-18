@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { Shape } from "@/components/shape/shape.tsx";
 import { AddArc } from "@/components/add-arc/add-arc.tsx";
-import { AddBox } from "@/components/add-box/add-box.tsx";
-import { AddFull } from "./add-full.tsx";
+import { AddEditor } from "./add-editor.tsx";
+import type { Saved } from "./use-add-text.ts";
 import { useHoldToPick } from "./use-hold-to-pick.ts";
 import { useBackLayer } from "@/hooks/use-back-layer.ts";
 import { keepCaretInView } from "@/lib/platform/caret.ts";
@@ -25,6 +25,8 @@ export function AddPanel({ layout = "tab" }: { layout?: "tab" | "rail" }) {
   const [full, setFull] = useState(false);
   const box = useRef<HTMLDivElement>(null);
   const editing = mode === "todo" || mode === "journal";
+  const reader = useRef<(() => Saved) | null>(null);
+  const [host, setHost] = useState<HTMLDivElement | null>(null);
   const releaseBack = useBackLayer(mode !== "closed" && !closing, () => close());
   const hold = useHoldToPick(
     mode === "closed" && !busy,
@@ -44,14 +46,14 @@ export function AddPanel({ layout = "tab" }: { layout?: "tab" | "rail" }) {
   useEffect(() => {
     if (mode === "closed") return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") latestClose.current();
+      if (e.key === "Escape" && !e.defaultPrevented) latestClose.current();
     }
     addEventListener("keydown", onKey);
     return () => removeEventListener("keydown", onKey);
   }, [mode]);
 
   async function save() {
-    const text = box.current?.innerText.trim() ?? "";
+    const { text, tags } = reader.current?.() ?? { text: "", tags: [] };
     if (!text) {
       close();
       return;
@@ -60,7 +62,7 @@ export function AddPanel({ layout = "tab" }: { layout?: "tab" | "rail" }) {
     try {
       const ok =
         mode === "todo"
-          ? await saveFlow(() => queueInbox(text), copy.save.saved)
+          ? await saveFlow(() => queueInbox(text, undefined, tags), copy.save.saved)
           : await saveJournal({ title: "", text, date: todayIso() });
       if (ok) close();
     } finally {
@@ -103,6 +105,7 @@ export function AddPanel({ layout = "tab" }: { layout?: "tab" | "rail" }) {
 
   return (
     <div
+      ref={setHost}
       className={clsx(
         styles.addPanel,
         layout === "rail" && styles.rail,
@@ -139,10 +142,20 @@ export function AddPanel({ layout = "tab" }: { layout?: "tab" | "rail" }) {
               onOther={other}
             />
           )}
-          {editing && <AddBox ref={box} kind={mode} full={full} />}
+          {editing && (
+            <AddEditor
+              key={mode}
+              box={box}
+              reader={reader}
+              kind={mode}
+              full={full}
+              host={host}
+              showBar={!closing}
+              onToggleFull={toggleFull}
+            />
+          )}
         </div>
       )}
-      {mode === "journal" && !closing && <AddFull full={full} onToggle={toggleFull} />}
       <button
         type="button"
         className={styles.addMain}

@@ -11,8 +11,9 @@
 }
 
 .addBox {
+  --add-tools: calc(var(--size-control) + var(--space-sm) * 2 + var(--size-hair));
   position: absolute;
-  inset-block: 22% 58%;
+  inset-block: 16% calc(50% + var(--size-tabbar) / 2 + var(--add-tools));
   inset-inline: calc((var(--add-blob-w) - 100vw) / 2 + var(--space-xl));
   overflow-y: auto;
   color: var(--text-on-accent);
@@ -29,7 +30,7 @@
 }
 
 .addBoxJournal {
-  inset-block: 30% calc(20% + var(--size-tabbar));
+  inset-block: 30% calc(20% + var(--size-tabbar) / 2 + var(--add-tools));
   mask-image: linear-gradient(
     transparent,
     black var(--add-fade-top),
@@ -59,6 +60,6 @@
 .addBox.isFull {
   inset-block: calc(30% + var(--space-3xl))
     calc(
-      70% - var(--vvh, 100dvh) + var(--size-tabbar) + env(safe-area-inset-bottom) + var(--space-3xl)
+      70% - var(--vvh, 100dvh) + var(--size-tabbar) + env(safe-area-inset-bottom) + var(--add-tools)
     );
 }

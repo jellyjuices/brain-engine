@@ -139,13 +139,10 @@
 }
 
 .addFull {
-  position: fixed;
-  top: calc(
-    var(--vvt, 0) + var(--vvh, 100dvh) - var(--size-tabbar) - env(safe-area-inset-bottom) -
-      var(--size-control-sm) - var(--space-lg)
-  );
-  right: calc(var(--space-xl) + env(safe-area-inset-right));
-  z-index: 3;
+  display: grid;
+  place-items: center;
+  min-width: var(--size-target);
+  min-height: var(--size-target);
   padding: 0;
   border: 0;
   background: transparent;

@@ -1,5 +1,5 @@
 import styles from "./add-box.module.css";
-import type { Ref } from "react";
+import type { KeyboardEvent, Ref } from "react";
 import clsx from "clsx";
 import { copy } from "@/content/index.ts";
 
@@ -7,9 +7,12 @@ export interface AddBoxProps {
   ref: Ref<HTMLDivElement>;
   kind: "todo" | "journal";
   full: boolean;
+  onInput: () => void;
+  onSelect: () => void;
+  onKeyDown: (e: KeyboardEvent) => void;
 }
 
-export function AddBox({ ref, kind, full }: AddBoxProps) {
+export function AddBox({ ref, kind, full, onInput, onSelect, onKeyDown }: AddBoxProps) {
   const todo = kind === "todo";
   return (
     <div
@@ -22,6 +25,10 @@ export function AddBox({ ref, kind, full }: AddBoxProps) {
       data-placeholder={todo ? copy.add.todoHint : copy.add.writePlaceholder}
       contentEditable="plaintext-only"
       suppressContentEditableWarning
+      onInput={onInput}
+      onSelect={onSelect}
+      onKeyUp={onSelect}
+      onKeyDown={onKeyDown}
     />
   );
 }

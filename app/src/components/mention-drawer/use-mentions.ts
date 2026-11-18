@@ -9,9 +9,10 @@ import {
   type Suggestion,
 } from "@/lib/notes/mention.ts";
 import { todayIso } from "@/lib/notes/model.ts";
+import type { CaretField } from "@/lib/platform/editable.ts";
 
 interface Options {
-  area: RefObject<HTMLTextAreaElement | null>;
+  area: RefObject<CaretField | null>;
   from: string;
   text: string;
   setText: (next: string) => void;
@@ -22,7 +23,7 @@ interface Options {
 }
 
 function asLink(s: Suggestion) {
-  return s.value;
+  return s.kind === "tag" ? "" : s.value;
 }
 
 function asIs(_s: Suggestion, value: string) {
@@ -60,7 +61,7 @@ export function useMentions({
 
   function pick(s: Suggestion) {
     if (!open || caret === null) return;
-    const next = replaceTrigger(text, open, caret, s.kind === "tag" ? "" : insert(s));
+    const next = replaceTrigger(text, open, caret, insert(s));
     if (s.kind === "tag") setTags([...tags, s.value]);
     const value = finish(s, next.value);
     const at = next.caret + value.length - next.value.length;

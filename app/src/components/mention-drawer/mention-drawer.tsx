@@ -1,15 +1,15 @@
 import styles from "./mention-drawer.module.css";
 import { CalendarDotsIcon, HashIcon } from "@phosphor-icons/react";
-import { typeIcon } from "@/components/icon/icons.ts";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
+import { typeLook } from "@/lib/notes/kinds.ts";
 import type { Suggestion, TriggerKind } from "@/lib/notes/mention.ts";
 import { copy } from "@/content/index.ts";
 
 function iconOf(s: Suggestion) {
   if (s.kind === "date") return CalendarDotsIcon;
   if (s.kind === "tag") return HashIcon;
-  return typeIcon(s.type);
+  return typeLook(s.type).icon;
 }
 
 export function MentionDrawer({
