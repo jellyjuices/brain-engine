@@ -7,7 +7,7 @@ import type { KindName } from "@/lib/notes/kinds.ts";
 export type ShapeName = "add" | KindName;
 
 const KIND_SHAPE: Record<string, string> = {
-  add: "plus",
+  add: "cookie",
   todo: "scallop",
   journal: "house",
   person: "pentagon",
