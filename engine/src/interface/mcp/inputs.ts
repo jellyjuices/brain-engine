@@ -61,6 +61,8 @@ export const INPUTS: Record<string, Input> = {
   delete_todo: obj<DeleteTodoRequest>({ ref: req(str(REF)), why: str() }),
   edit_todo: obj<TodoWords>({ ref: req(str(REF)), text: req(str("The new words, with no date or tags.")) }),
   reopen: obj<{ ref: string }>({ ref: req(str(REF)) }),
+  skip: obj<{ ref: string }>({ ref: req(str(REF)) }),
+  stop_repeat: obj<{ ref: string }>({ ref: req(str(REF)) }),
   undo: NONE,
   find: obj<Filters & Words>({ q: req(str()), ...filters }),
   todos: obj<{ view?: TodoView }>({ view: oneOf(TODO_VIEWS) }),

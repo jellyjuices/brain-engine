@@ -5,7 +5,7 @@ import { resolve } from "./day-list.ts";
 
 const REF = "::";
 
-function splitRef(root: string, ref: string): { path: string; text: string } {
+export function splitRef(root: string, ref: string): { path: string; text: string } {
   const needle = ref.trim();
   const at = needle.indexOf(REF);
   const path = needle.slice(0, Math.max(at, 0));
@@ -16,7 +16,7 @@ function splitRef(root: string, ref: string): { path: string; text: string } {
   return { path: item.path, text: item.text };
 }
 
-function rewrite(root: string, path: string, msg: string, fn: (body: string) => string | null, missing: string): void {
+export function rewrite(root: string, path: string, msg: string, fn: (body: string) => string | null, missing: string): void {
   const note = readNote(root, path);
   const body = fn(note.body);
   if (body === null) throw new Error(missing);

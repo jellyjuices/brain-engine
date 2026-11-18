@@ -4,8 +4,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { applyTriage, capture } from "../src/capture/actions.ts";
 import { addLoop, allLoops, completeLoop } from "../src/todos/todos.ts";
-import { nextDue } from "../src/todos/repeat.ts";
-import { appendToSection, fieldsOf, formatTodoLine, parseEvery, parseTodoLine } from "../shared/line/index.ts";
+import { appendToSection, fieldsOf, formatTodoLine, nextDue, parseEvery, parseTodoLine } from "../shared/line/index.ts";
 
 const fieldsFor = (line: string) => fieldsOf(parseTodoLine(line)!);
 import { absorb, newSubject, planAbsorb, suggestTarget } from "../src/todos/absorb.ts";
@@ -117,17 +116,14 @@ test("repeat rules parse, and the next due date steps forward", () => {
   assert.equal(fieldsFor("- [ ] Water plants · due 2026-11-06 · every 3 days when done").every, "3 days when done");
 });
 
-test("done on a repeating loop ticks it and adds the next one", () => {
+test("done on a repeating loop moves its date and makes no copy", () => {
   const root = fixture();
   addLoop(root, "areas/health.md", { text: "Refill meds", due: "2000-01-01", every: "week" });
   const l = completeLoop(root, "refill");
-  assert.equal(typeof l.next, "string");
   assert.ok((l.next ?? "") > "2000-01-01", `got ${l.next}`);
   const open = allLoops(loadAll(root), { done: false }).filter((x) => x.text === "Refill meds");
-  assert.equal(open.length, 1);
-  assert.equal(open[0].due, l.next);
-  assert.equal(open[0].every, "week");
-  assert.equal(allLoops(loadAll(root), { done: true }).filter((x) => x.text === "Refill meds")[0].every, undefined);
+  assert.deepEqual(open.map((x) => [x.due, x.every]), [[l.next, "week"]]);
+  assert.equal(allLoops(loadAll(root), { done: true }).filter((x) => x.text === "Refill meds").length, 0);
 });
 
 test("old When words and the old heading still read as the new words", () => {

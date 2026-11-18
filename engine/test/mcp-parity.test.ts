@@ -33,6 +33,7 @@ const STEPS: Step[] = [
   ["sort", (s) => ({ path: s.add.path, into: SHED, when: "tomorrow" })],
   ["done", (s) => ({ ref: refOf(s, "cedar"), happened: "Got them cheap." })],
   ["move", (s) => ({ ref: refOf(s, "roof"), when: "someday" })],
+  ["skip", (s) => ({ ref: refOf(s, "Oil the shed hinges") })],
   ["edit_todo", (s) => ({ ref: refOf(s, "roof"), text: "Fix the roof before the rain" })],
   ["delete_todo", (s) => ({ ref: refOf(s, "base") })],
   ["undo", () => ({})],
@@ -65,6 +66,7 @@ async function viaTool(name: string, args: Record<string, unknown>, root: string
 function seedGoals(root: string) {
   mkdirSync(join(root, "goals"), { recursive: true });
   mkdirSync(join(root, "decisions"), { recursive: true });
+  writeFileSync(join(root, "projects/shed-upkeep.md"), `---\ntype: Project\ntitle: Shed upkeep\ndescription: Keep the shed in shape.\n---\n\n# To-dos\n\n- [ ] Oil the shed hinges · due ${now} · every month\n\n# Notes\n`);
   writeFileSync(join(root, "goals/run-far.md"), "---\ntype: Goal\ntitle: Run far\nstatus: active\nareas: [health]\n---\n\n# Why\n\n# Targets\n\n- [x] Run 5 km · done 2026-03-05\n- [ ] Run 10 km\n\n# Wins\n\n# Notes\n");
   writeFileSync(join(root, "decisions/pick-shoes.md"), `---\ntype: Decision\ntitle: Pick shoes?\nstatus: open\ndecide_by: ${now}\nareas: [health]\n---\n\n# Rants\n\n# Buckets\n\n# Options\n\n# Decided\n\n# Goals\n\n- [Run far](../goals/run-far.md)\n`);
 }

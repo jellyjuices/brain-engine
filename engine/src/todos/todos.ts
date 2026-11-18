@@ -7,8 +7,10 @@ import {
   formatTodoLine,
   LOOPS_HEADING,
   newTodoLine,
+  nextDue,
   NOTES_HEADING,
   parseTodoLine,
+  rollTodoIn,
   SEP,
   tickTodo,
   todoSectionRange,
@@ -16,7 +18,6 @@ import {
   type TodoPatch,
   updateTodo,
 } from "../../shared/line/index.ts";
-import { nextDue } from "./repeat.ts";
 
 export function whenWord(outcome: string | undefined): string | undefined {
   if (!outcome) return undefined;
@@ -99,14 +100,14 @@ export function completeLoop(root: string, words: string): Loop & { next?: strin
     const todo = parseTodoLine(line);
     return todo && !todo.done && todo.text === hit.text;
   });
-  const open = parseTodoLine(lines[i])!;
-  lines[i] = formatTodoLine(tickTodo(open, today()));
-  let next: string | undefined;
   if (hit.every) {
-    next = nextDue(hit.every, hit.due ?? today());
-    lines.splice(i + 1, 0, formatTodoLine(updateTodo(open, { due: next })));
+    const next = nextDue(hit.every, hit.due ?? today(), today());
+    writeNote(root, hit.path, note.meta, rollTodoIn(note.body, hit.text, today(), true)!);
+    log(root, `done: ${hit.text} (${hit.path}), next due ${next}`);
+    return { ...hit, due: next, next };
   }
+  lines[i] = formatTodoLine(tickTodo(parseTodoLine(lines[i])!, today()));
   writeNote(root, hit.path, note.meta, lines.join("\n"));
-  log(root, `done: ${hit.text} (${hit.path})${next ? `, next due ${next}` : ""}`);
-  return { ...hit, done: true, doneAt: today(), next };
+  log(root, `done: ${hit.text} (${hit.path})`);
+  return { ...hit, done: true, doneAt: today() };
 }

@@ -33,7 +33,7 @@ test("T4: one tool per route, and owner-only and hidden routes have none", () =>
   assert.deepEqual(TOOLS.map((t) => t.route), ROUTES.filter((r) => !r.owner && r.mcp !== false));
   const names = new Set(TOOLS.map((t) => t.def.name));
   for (const r of ROUTES.filter((x) => x.owner || x.mcp === false)) assert.equal(names.has(r.tool), false, r.tool);
-  assert.equal(TOOLS.length, 23);
+  assert.equal(TOOLS.length, 24);
   for (const t of TOOLS) assert.equal(t.def.annotations.readOnlyHint, t.route.method === "GET", t.def.name);
 });
 

@@ -88,7 +88,7 @@
   },
   {
     "name": "done",
-    "description": "Tick a to-do, with an optional note and follow-up. Use when a to-do is finished.",
+    "description": "Tick a to-do, with an optional note and follow-up. A repeating one moves to its next date. Use when a to-do is finished.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -193,6 +193,28 @@
       "required": [
         "ref",
         "text"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "skip",
+    "description": "Move a repeating to-do to its next date without marking it done. Use when the owner skips one time.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "description": "A to-do ref from todos or today."
+        }
+      },
+      "required": [
+        "ref"
       ],
       "additionalProperties": false
     },

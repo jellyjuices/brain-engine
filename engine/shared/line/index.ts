@@ -11,6 +11,7 @@ export {
 } from "./fields.ts";
 export { formatTodoLine, parseTodoLine, type TodoLine } from "./line.ts";
 export { dropDoneTodoIn, reopenTodo, reopenTodoIn, retextTodoIn } from "./reopen.ts";
+export { doneHistoryLine, nextDue, rollTodo, rollTodoIn, stopRepeatIn } from "./repeat.ts";
 export {
   appendToSection,
   LOOPS_HEADING,

@@ -7,6 +7,7 @@ import { statusesFor } from "../core/schema-kinds.ts";
 import { move } from "../todos/verbs.ts";
 import { change } from "../todos/undo.ts";
 import { dropDone, editTodoText, reopen } from "../todos/reopen.ts";
+import { skip, stopRepeat } from "../todos/repeat.ts";
 import { inboxPath } from "./routes/capture.ts";
 import { doneWith, dropWith } from "../todos/wrapup.ts";
 import { HttpError, MAX_FILE } from "./server-auth.ts";
@@ -92,7 +93,11 @@ export const dropRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => 
 
 export const reopenRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => reopen(c.root, text(c.body.ref, "ref")!)));
 
-export const editTodoRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => editTodoText(c.root, text(c.body.ref, "ref")!, text(c.body.text, "text")!)));
+export const skipRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => skip(c.root, text(c.body.ref, "ref")!)));
+
+export const stopRepeatRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => stopRepeat(c.root, text(c.body.ref, "ref")!)));
+
+export const editTodoRoute =(c: Ctx) => afterWrite(c.root, () => asUserError(() => editTodoText(c.root, text(c.body.ref, "ref")!, text(c.body.text, "text")!)));
 
 export const undoRoute =(c: Ctx) => afterWrite(c.root, () => asUserError(() => undoLast(c.root)));
 

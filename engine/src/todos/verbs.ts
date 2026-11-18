@@ -13,8 +13,7 @@ import { loadAll, readNote, writeNote } from "../core/files.ts";
 import { log, type UndoStep } from "../core/log.ts";
 import { newNote } from "../capture/actions.ts";
 import { addNoteLine } from "./todos.ts";
-import { dropTodo, fieldsOf, formatTodoLine, parseTodoLine, tickTodo, type TodoLine, updateTodo } from "../../shared/line/index.ts";
-import { nextDue } from "./repeat.ts";
+import { doneHistoryLine, dropTodo, fieldsOf, formatTodoLine, parseTodoLine, rollTodo, tickTodo, type TodoLine, updateTodo } from "../../shared/line/index.ts";
 import { parseWhen, personNamed, subjectTitled } from "./when-words.ts";
 import { change, diffLines } from "./undo.ts";
 import { type Item, resolve } from "./day-list.ts";
@@ -69,12 +68,11 @@ export function done(root: string, ref: string, extra: Extra = {}): { item: Item
       return extra.also?.();
     }
     editTodo(root, item, (l) => {
-      const ticked = formatTodoLine(tickTodo(l, today()));
       const note = noteLineFor(extra.note);
-      const { every, due } = fieldsOf(l);
-      if (!every) return [ticked, ...(note ? [note] : [])];
-      next = nextDue(every, due ?? today());
-      return [ticked, ...(note ? [note] : []), formatTodoLine(updateTodo(l, { due: next }))];
+      const rolled = rollTodo(l, today());
+      if (!rolled) return [formatTodoLine(tickTodo(l, today())), ...(note ? [note] : [])];
+      next = fieldsOf(rolled).due;
+      return [formatTodoLine(rolled), doneHistoryLine(l.text, today()), ...(note ? [note] : [])];
     });
     extra.also?.();
   });
