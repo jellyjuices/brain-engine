@@ -113,6 +113,7 @@ export function AddPanel({ layout = "tab" }: { layout?: "tab" | "rail" }) {
         mode === "open" && styles.isOpen,
         closing && styles.isClosing,
       )}
+      data-mode={mode}
     >
       {mode !== "closed" && (
         <button
