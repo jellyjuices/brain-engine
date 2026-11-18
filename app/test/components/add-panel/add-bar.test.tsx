@@ -87,6 +87,14 @@ describe("quick add tool bar", () => {
     expect(screen.getByRole("textbox", { name: "To-do" })).toBeInTheDocument();
   });
 
+  it("pastes plain text at the caret as one line break per line", async () => {
+    const { box } = await openTodo("Call  now");
+    selectEditable(box, 5, 5);
+    fireEvent.paste(box, { clipboardData: { getData: () => "mom\r\nand dad" } });
+    expect(box.textContent).toBe("Call mom\nand dad now");
+    expect(box.childNodes).toHaveLength(1);
+  });
+
   it("typing @ opens note suggestions", async () => {
     await openTodo("Call @Ai");
     expect(await screen.findByRole("button", { name: /Aisha/ })).toBeInTheDocument();

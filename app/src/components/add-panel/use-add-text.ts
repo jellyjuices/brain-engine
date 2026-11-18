@@ -1,7 +1,20 @@
-import { useState, type KeyboardEvent, type RefObject } from "react";
+import {
+  useState,
+  type ClipboardEvent,
+  type FormEvent,
+  type KeyboardEvent,
+  type RefObject,
+} from "react";
 import { useMentions } from "@/components/mention-drawer/use-mentions.ts";
 import { mentionName, setWhenWord } from "@/lib/notes/capture.ts";
-import { insertTrigger, prefixLines, pullTags, wrapMarks, type Edit } from "@/lib/notes/markers.ts";
+import {
+  insertTrigger,
+  pasteText,
+  prefixLines,
+  pullTags,
+  wrapMarks,
+  type Edit,
+} from "@/lib/notes/markers.ts";
 import type { Suggestion } from "@/lib/notes/mention.ts";
 import { editableField, editableText, writeEditable } from "@/lib/platform/editable.ts";
 
@@ -46,9 +59,21 @@ export function useAddText(box: RefObject<HTMLDivElement | null>, kind: AddKind)
     mentions.track();
   }
 
-  function onInput() {
-    setText(box.current ? editableText(box.current) : "");
+  function onInput(e: FormEvent) {
+    const root = box.current;
+    const composing = (e.nativeEvent as InputEvent).isComposing;
+    if (root && !composing && [...root.childNodes].some((n) => n.nodeType !== Node.TEXT_NODE)) {
+      apply((v, s, en) => ({ value: v, start: s, end: en }));
+      return;
+    }
+    setText(root ? editableText(root) : "");
     mentions.track();
+  }
+
+  function onPaste(e: ClipboardEvent) {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData("text/plain");
+    apply((v, s, en) => pasteText(v, s, en, pasted));
   }
 
   function onKeyDown(e: KeyboardEvent) {
@@ -65,7 +90,7 @@ export function useAddText(box: RefObject<HTMLDivElement | null>, kind: AddKind)
 
   return {
     mentions,
-    events: { onInput, onSelect: mentions.track, onKeyDown },
+    events: { onInput, onPaste, onSelect: mentions.track, onKeyDown },
     saved,
     bold: () => apply((v, s, e) => wrapMarks(v, s, e, "**")),
     italic: () => apply((v, s, e) => wrapMarks(v, s, e, "_")),

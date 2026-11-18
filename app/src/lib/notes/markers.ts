@@ -60,6 +60,12 @@ export function prefixLines(value: string, start: number, end: number, prefix: s
   };
 }
 
+export function pasteText(value: string, start: number, end: number, pasted: string): Edit {
+  const clean = pasted.replace(/\r\n?/g, "\n").replace(/ /g, " ");
+  const at = start + clean.length;
+  return { value: value.slice(0, start) + clean + value.slice(end), start: at, end: at };
+}
+
 export function insertTrigger(value: string, start: number, end: number, char: string): Edit {
   const before = value.slice(0, start);
   const pad = before && !/\s$/.test(before) ? " " : "";
