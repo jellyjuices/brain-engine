@@ -12,10 +12,10 @@ type Story = StoryObj<typeof meta>;
 
 export const All: Story = {
   render: () => (
-    <div style={{ display: "grid", gap: "var(--space-xl)", maxWidth: "var(--size-max-width)" }}>
+    <div style={{ display: "grid", gap: "var(--space-xl)", maxWidth: "var(--layout-max-width)" }}>
       <p style={label}>
         One hue per area in tokens/areas.ts. A new area needs only a hue. Roles: accent, fill, text,
-        surface, glow.
+        glow.
       </p>
       {areaSlugs.map((slug) => (
         <KeyRow key={slug} slug={slug} />

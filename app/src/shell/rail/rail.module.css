@@ -5,11 +5,11 @@
   flex: none;
   flex-direction: column;
   gap: var(--space-xs);
-  width: var(--size-glow);
+  width: 16.25rem;
   padding: calc(var(--space-xl) + env(safe-area-inset-top)) var(--space-md) var(--space-lg)
     calc(var(--space-md) + env(safe-area-inset-left));
   overflow-y: auto;
-  border-right: var(--size-hair) solid var(--border-primary);
+  border-right: 0.0625rem solid var(--border-primary);
   background: var(--background-secondary);
 }
 

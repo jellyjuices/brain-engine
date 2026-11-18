@@ -7,25 +7,25 @@
 .kicker {
   margin: 0 0 var(--space-sm);
   color: var(--text-secondary);
-  font-size: var(--type-label-size);
-  font-weight: var(--type-label-weight);
-  line-height: var(--type-label-leading);
+  font-size: var(--font-size-body-sm);
+  font-weight: 500;
+  line-height: var(--font-leading-snug);
 }
 
 .noteTitle {
   margin: 0;
   font-family: var(--font-display);
-  font-weight: var(--font-weight-regular);
-  font-size: var(--type-title-note-size);
-  line-height: var(--type-title-note-leading);
+  font-weight: 400;
+  font-size: var(--font-size-display-xl);
+  line-height: var(--font-leading-tight);
   text-wrap: balance;
 }
 
 .noteWho {
   margin-top: var(--space-sm);
   font-family: var(--font-display);
-  font-size: var(--type-title-item-size);
-  line-height: var(--type-title-item-leading);
+  font-size: var(--font-size-display-sm);
+  line-height: var(--font-leading-snug);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -40,8 +40,8 @@
   margin: var(--space-lg) 0 0;
   color: var(--text-secondary);
   font-family: var(--font-display);
-  font-size: var(--type-body-size);
-  line-height: var(--type-body-leading);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--font-leading-normal);
   text-wrap: pretty;
 }
 
@@ -54,13 +54,13 @@
 
 .fact {
   display: flex;
-  flex: 1 1 var(--size-menu-min);
+  flex: 1 1 12rem;
   align-items: center;
   gap: var(--space-md);
   min-width: 0;
-  min-height: var(--size-tabbar);
+  min-height: var(--layout-tabbar);
   padding: var(--space-md) var(--space-lg);
-  border: var(--size-hair) solid var(--border-primary);
+  border: 0.0625rem solid var(--border-primary);
   border-radius: var(--radius-md);
   background: var(--background-secondary);
   color: inherit;
@@ -78,8 +78,8 @@ button.fact:active {
 
 .factAddLabel {
   color: var(--text-accent);
-  font-size: var(--type-action-size);
-  font-weight: var(--type-action-weight);
+  font-size: var(--font-size-body-lg);
+  font-weight: 600;
 }
 
 .factIcon {
@@ -94,23 +94,23 @@ button.fact:active {
 }
 
 .factIcon svg {
-  width: var(--size-icon);
-  height: var(--size-icon);
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .factText {
   display: flex;
   flex-direction: column;
-  gap: var(--size-hair);
+  gap: 0.0625rem;
   min-width: 0;
 }
 
 .factLabel {
   margin: 0;
   color: var(--text-secondary);
-  font-size: var(--type-label-size);
-  font-weight: var(--type-label-weight);
-  line-height: var(--type-label-leading);
+  font-size: var(--font-size-body-sm);
+  font-weight: 500;
+  line-height: var(--font-leading-snug);
 }
 
 .factMain {
@@ -118,17 +118,17 @@ button.fact:active {
   flex-direction: column;
   margin: 0;
   font-family: var(--font-display);
-  font-size: var(--type-body-size);
-  font-weight: var(--type-action-weight);
-  line-height: var(--type-body-leading);
+  font-size: var(--font-size-body-lg);
+  font-weight: 600;
+  line-height: var(--font-leading-normal);
   overflow-wrap: anywhere;
 }
 
 .factSub {
   color: var(--text-secondary);
   font-family: var(--font-body);
-  font-size: var(--type-secondary-size);
-  font-weight: var(--type-secondary-weight);
+  font-size: var(--font-size-body-md);
+  font-weight: 400;
 }
 
 .factLink {

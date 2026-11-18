@@ -5,15 +5,15 @@
   gap: var(--space-sm);
   flex: none;
   white-space: nowrap;
-  min-height: var(--size-target);
-  padding: 0 var(--space-button-x);
-  border: var(--size-hair) solid transparent;
-  border-radius: var(--radius-control);
+  min-height: var(--size-control);
+  padding: 0 var(--space-lg);
+  border: 0.0625rem solid transparent;
+  border-radius: var(--radius-full);
   background: transparent;
   color: var(--text-primary);
-  font-size: var(--type-action-size);
-  font-weight: var(--type-action-weight);
-  line-height: var(--type-action-leading);
+  font-size: var(--font-size-body-lg);
+  font-weight: 600;
+  line-height: var(--font-leading-snug);
   transition:
     transform var(--motion-fast) var(--motion-easing),
     opacity var(--motion-fast) var(--motion-easing),
@@ -30,8 +30,8 @@
 }
 
 .button svg {
-  width: var(--size-icon);
-  height: var(--size-icon);
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .block {
@@ -74,12 +74,12 @@
 
 .sm {
   min-height: var(--size-control-sm);
-  padding: 0 var(--space-button-sm-x);
-  font-size: var(--type-action-sm-size);
+  padding: 0 var(--space-md);
+  font-size: var(--font-size-body-md);
 }
 
 .lg {
-  min-height: var(--size-plus);
+  min-height: 3.625rem;
 }
 
 .iconOnly {

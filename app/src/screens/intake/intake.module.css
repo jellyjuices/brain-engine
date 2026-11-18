@@ -1,8 +1,8 @@
 .intakeQuestion {
   font-family: var(--font-display);
-  font-size: var(--type-title-section-size);
-  font-weight: var(--type-title-section-weight);
-  line-height: var(--type-title-section-leading);
+  font-size: var(--font-size-display-md);
+  font-weight: 400;
+  line-height: var(--font-leading-snug);
 }
 
 .intakeStep {
@@ -13,5 +13,5 @@
 
 .intakeHint {
   color: var(--text-secondary);
-  font-size: var(--type-secondary-size);
+  font-size: var(--font-size-body-md);
 }

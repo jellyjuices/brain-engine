@@ -1,11 +1,11 @@
-import { contrastPairs, primitiveNames, shared, themed } from "../../tokens/index.ts";
+import { contrastPairs, themed } from "../../tokens/index.ts";
 import { ratio } from "../../tokens/contrast.ts";
 import { hexOf, isColour, type Mode } from "../../tokens/resolve.ts";
 import type { Value } from "../../tokens/semantic.ts";
 import { Block, cell, label } from "./token-parts.tsx";
 
-const show = (v: Value) => (typeof v === "string" ? v : `${v.mix} at ${primitiveNames[v.amount]}`);
-const ratioFor = (fg: string, bg: string[], mode: Mode) =>
+const show = (v: Value) => (typeof v === "string" ? v : `${v.mix} at ${v.amount}`);
+const ratioFor = (fg: string, bg: Value[], mode: Mode) =>
   ratio(hexOf([...bg, fg], mode), hexOf(bg, mode)).toFixed(2);
 
 export const Semantic = () => (
@@ -34,7 +34,7 @@ export const Semantic = () => (
                     height: "var(--space-lg)",
                     borderRadius: "var(--radius-sm)",
                     background: `var(--${name})`,
-                    border: "var(--size-hair) solid var(--border-primary)",
+                    border: "1px solid var(--border-primary)",
                   }}
                 />
               )}
@@ -43,24 +43,13 @@ export const Semantic = () => (
             <td style={{ ...cell, ...label }}>{show(p.light)}</td>
           </tr>
         ))}
-        {Object.entries(shared).map(([name, r]) => (
-          <tr key={name}>
-            <td style={cell}>
-              <code>--{name}</code>
-            </td>
-            <td style={cell} />
-            <td style={{ ...cell, ...label }} colSpan={2}>
-              {r}
-            </td>
-          </tr>
-        ))}
       </tbody>
     </table>
     <h3
       style={{
         margin: 0,
         fontFamily: "var(--font-display)",
-        fontWeight: "var(--font-weight-regular)",
+        fontWeight: "400",
       }}
     >
       Text pairs (WCAG 2.1 AA)
@@ -96,7 +85,7 @@ export const Semantic = () => (
               {p.label}
               <br />
               <code style={label}>
-                {p.fg} / {p.bg.join(" + ")}
+                {p.fg} / {p.bg.map(show).join(" + ")}
               </code>
             </td>
             <td style={{ ...cell, ...label }}>{ratioFor(p.fg, p.bg, "dark")}:1</td>

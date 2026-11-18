@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: var(--space-lg);
   padding: var(--space-lg);
-  border: var(--size-hair) solid var(--border-primary);
+  border: 0.0625rem solid var(--border-primary);
   border-radius: var(--radius-md);
   background: var(--background-secondary);
 }

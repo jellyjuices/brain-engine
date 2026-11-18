@@ -19,7 +19,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <div style={{ maxWidth: "var(--size-max-width)" }}>
+      <div style={{ maxWidth: "var(--layout-max-width)" }}>
         <Story />
       </div>
     ),

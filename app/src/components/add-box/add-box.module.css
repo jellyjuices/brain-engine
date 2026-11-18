@@ -11,14 +11,14 @@
 }
 
 .addBox {
-  --add-tools: calc(var(--size-control) + var(--space-sm) * 2 + var(--size-hair));
+  --add-tools: calc(var(--size-control) + var(--space-sm) * 2 + 0.0625rem);
   position: absolute;
-  inset-block: 16% calc(50% + var(--size-tabbar) / 2 + var(--add-tools));
+  inset-block: 16% calc(50% + var(--layout-tabbar) / 2 + var(--add-tools));
   inset-inline: calc((var(--add-blob-w) - 100vw) / 2 + var(--space-xl));
   overflow-y: auto;
   color: var(--text-on-accent);
-  font-size: var(--type-body-size);
-  line-height: var(--type-body-leading);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--font-leading-normal);
   white-space: pre-wrap;
   outline: none;
   transition: inset var(--motion-slow) var(--motion-easing);
@@ -30,11 +30,11 @@
 }
 
 .addBoxJournal {
-  inset-block: 30% calc(20% + var(--size-tabbar) / 2 + var(--add-tools));
+  inset-block: 30% calc(20% + var(--layout-tabbar) / 2 + var(--add-tools));
   mask-image: linear-gradient(
     transparent,
-    black var(--add-fade-top),
-    black calc(100% - var(--add-fade-bottom)),
+    var(--color-neutral-900) var(--add-fade-top),
+    var(--color-neutral-900) calc(100% - var(--add-fade-bottom)),
     transparent
   );
   animation: add-edges linear both;
@@ -60,6 +60,6 @@
 .addBox.isFull {
   inset-block: calc(30% + var(--space-3xl))
     calc(
-      70% - var(--vvh, 100dvh) + var(--size-tabbar) + env(safe-area-inset-bottom) + var(--add-tools)
+      70% - var(--vvh, 100dvh) + var(--layout-tabbar) + env(safe-area-inset-bottom) + var(--add-tools)
     );
 }

@@ -1,8 +1,8 @@
 .cardType {
   flex: none;
   color: var(--text-secondary);
-  font-size: var(--type-label-size);
-  font-weight: var(--type-label-weight);
+  font-size: var(--font-size-body-sm);
+  font-weight: 500;
 }
 
 .cardHead {
@@ -15,16 +15,16 @@
 
 .cardTitle {
   font-family: var(--font-display);
-  font-size: var(--type-title-section-size);
-  font-weight: var(--type-title-section-weight);
-  line-height: var(--type-title-section-leading);
+  font-size: var(--font-size-display-md);
+  font-weight: 400;
+  line-height: var(--font-leading-snug);
 }
 
 .cardDesc {
   margin-top: calc(-1 * var(--space-sm));
   color: var(--text-secondary);
-  font-size: var(--type-secondary-size);
-  line-height: var(--type-secondary-leading);
+  font-size: var(--font-size-body-md);
+  line-height: var(--font-leading-normal);
 }
 
 .cardBody {
@@ -33,7 +33,7 @@
 
 .cardBody p {
   margin: 0 0 var(--space-sm);
-  line-height: var(--type-body-leading);
+  line-height: var(--font-leading-normal);
 }
 
 .cardBody p:last-child {
@@ -48,9 +48,9 @@
 
 .sectionLabel {
   color: var(--text-secondary);
-  font-size: var(--type-label-size);
-  font-weight: var(--type-label-weight);
-  line-height: var(--type-label-leading);
+  font-size: var(--font-size-body-sm);
+  font-weight: 500;
+  line-height: var(--font-leading-snug);
 }
 
 .cardSection .sectionLabel {
@@ -63,7 +63,7 @@
 
 .cardLink {
   color: var(--text-accent);
-  font-weight: var(--type-action-weight);
+  font-weight: 600;
   text-decoration: none;
 }
 

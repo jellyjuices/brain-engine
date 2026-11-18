@@ -1,10 +1,10 @@
 .placeLink {
   display: flex;
   align-items: center;
-  min-height: var(--size-target);
+  min-height: var(--size-control);
   border-radius: var(--radius-md);
   color: var(--text-secondary);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   text-decoration: none;
   transition:
     color var(--motion-fast) var(--motion-easing),
@@ -16,8 +16,8 @@
 }
 
 .placeLink:focus-visible {
-  outline: var(--size-focus) solid var(--border-focus);
-  outline-offset: var(--size-focus);
+  outline: 0.125rem solid var(--border-focus);
+  outline-offset: 0.125rem;
 }
 
 .placeLink[aria-current="page"] {
@@ -39,20 +39,20 @@
   justify-content: center;
   gap: var(--space-xs);
   padding: var(--space-xs) 0;
-  font-size: var(--type-tab-size);
-  font-weight: var(--type-tab-weight);
-  line-height: var(--type-tab-leading);
+  font-size: var(--font-size-body-xs);
+  font-weight: 600;
+  line-height: var(--font-leading-tight);
 }
 
 .tab svg {
-  width: var(--size-icon);
-  height: var(--size-icon);
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .rail {
   gap: var(--space-md);
   padding: 0 var(--space-md);
-  font-size: var(--type-nav-size);
+  font-size: var(--font-size-body-md);
 }
 
 .rail[aria-current="page"] {
@@ -60,16 +60,16 @@
 }
 
 .rail svg {
-  width: var(--size-icon);
-  height: var(--size-icon);
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .icon {
   justify-content: center;
-  min-width: var(--size-target);
+  min-width: var(--size-control);
 }
 
 .icon svg {
-  width: var(--size-icon);
-  height: var(--size-icon);
+  width: 1.5rem;
+  height: 1.5rem;
 }

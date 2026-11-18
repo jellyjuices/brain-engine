@@ -21,8 +21,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--space-xl);
-  font-weight: var(--type-action-sm-weight);
-  font-size: var(--type-action-sm-size);
+  font-weight: 600;
+  font-size: var(--font-size-body-md);
   color: var(--text-on-accent);
   visibility: hidden;
 }
@@ -49,8 +49,8 @@
 }
 
 .swipeBg svg {
-  width: var(--size-icon);
-  height: var(--size-icon);
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .swipe[data-dir="right"] .swipeBgRight,

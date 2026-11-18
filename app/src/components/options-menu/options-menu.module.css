@@ -7,8 +7,8 @@
 
 .title {
   font-family: var(--font-display);
-  font-size: var(--type-title-section-size);
-  line-height: var(--type-title-section-leading);
+  font-size: var(--font-size-display-md);
+  line-height: var(--font-leading-snug);
 }
 
 .frame {
@@ -34,8 +34,8 @@
 .check,
 .caret {
   flex: none;
-  width: var(--size-icon-sm);
-  height: var(--size-icon-sm);
+  width: 1rem;
+  height: 1rem;
   color: var(--text-secondary);
 }
 
@@ -51,7 +51,7 @@
   min-height: var(--size-control);
   padding: 0 var(--space-md);
   border: 0;
-  border-radius: var(--radius-input);
+  border-radius: var(--radius-md);
   background: none;
   text-align: left;
   cursor: pointer;
@@ -74,7 +74,7 @@
 }
 
 .hint {
-  font-size: var(--type-secondary-size);
+  font-size: var(--font-size-body-md);
   color: var(--text-secondary);
 }
 

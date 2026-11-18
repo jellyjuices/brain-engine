@@ -7,7 +7,7 @@
 .why {
   margin: 0;
   color: var(--text-secondary);
-  font-size: var(--type-body-size);
+  font-size: var(--font-size-body-lg);
 }
 
 .subs {

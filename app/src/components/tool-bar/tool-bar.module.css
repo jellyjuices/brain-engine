@@ -4,7 +4,7 @@
     calc(-1 * (var(--space-lg) + env(safe-area-inset-left)));
   padding: var(--space-sm) calc(var(--space-lg) + env(safe-area-inset-right)) var(--space-sm)
     calc(var(--space-lg) + env(safe-area-inset-left));
-  border-top: var(--size-hair) solid var(--border-primary);
+  border-top: 0.0625rem solid var(--border-primary);
   background: var(--background-secondary);
 }
 
@@ -20,21 +20,21 @@
   justify-content: center;
   gap: var(--space-xs);
   min-width: 0;
-  min-height: var(--size-target);
+  min-height: var(--size-control);
   padding: var(--space-xs) 0;
   border: 0;
   border-radius: var(--radius-md);
   background: transparent;
   color: var(--text-secondary);
-  font-size: var(--type-tab-size);
-  font-weight: var(--type-tab-weight);
-  line-height: var(--type-tab-leading);
+  font-size: var(--font-size-body-xs);
+  font-weight: 600;
+  line-height: var(--font-leading-tight);
   transition: color var(--motion-fast) var(--motion-easing);
 }
 
 .tool svg {
-  width: var(--size-icon);
-  height: var(--size-icon);
+  width: 1.5rem;
+  height: 1.5rem;
   color: var(--text-accent);
 }
 

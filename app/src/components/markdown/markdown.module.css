@@ -1,7 +1,7 @@
 .md {
   overflow-wrap: anywhere;
-  font-size: var(--type-reading-size);
-  line-height: var(--type-reading-leading);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--font-leading-relaxed);
 }
 
 .md p,
@@ -37,36 +37,36 @@
 h2.mdH {
   margin-top: var(--space-xl);
   padding-top: var(--space-lg);
-  border-top: var(--size-hair) solid var(--border-primary);
-  font-size: var(--type-title-section-size);
-  font-weight: var(--type-title-section-weight);
-  line-height: var(--type-title-section-leading);
+  border-top: 0.0625rem solid var(--border-primary);
+  font-size: var(--font-size-display-md);
+  font-weight: 400;
+  line-height: var(--font-leading-snug);
 }
 
 h3.mdH {
-  font-size: var(--type-title-item-size);
-  font-weight: var(--type-title-item-weight);
-  line-height: var(--type-title-item-leading);
+  font-size: var(--font-size-display-sm);
+  font-weight: 400;
+  line-height: var(--font-leading-snug);
 }
 
 h4.mdH,
 h5.mdH {
   font-family: var(--font-body);
-  font-size: var(--type-label-size);
-  font-weight: var(--type-label-weight);
-  line-height: var(--type-label-leading);
+  font-size: var(--font-size-body-sm);
+  font-weight: 500;
+  line-height: var(--font-leading-snug);
   color: var(--text-secondary);
 }
 
 .mdNoteLink,
 .md a {
   color: var(--text-accent);
-  text-decoration-thickness: var(--size-hair);
+  text-decoration-thickness: 0.0625rem;
   text-underline-offset: var(--space-2xs);
 }
 
 .md code {
-  padding: var(--size-hair) var(--space-xs);
+  padding: 0.0625rem var(--space-xs);
   border-radius: var(--radius-sm);
   background: var(--background-accent-soft);
   font-size: 0.92em;
@@ -75,7 +75,7 @@ h5.mdH {
 .md pre {
   padding: var(--space-lg);
   overflow-x: auto;
-  border: var(--size-hair) solid var(--border-primary);
+  border: 0.0625rem solid var(--border-primary);
   border-radius: var(--radius-md);
   background: var(--background-secondary);
 }
@@ -87,14 +87,14 @@ h5.mdH {
 
 .md blockquote {
   padding-left: var(--space-lg);
-  border-left: var(--size-focus) solid var(--border-primary);
+  border-left: 0.125rem solid var(--border-primary);
   color: var(--text-secondary);
 }
 
 .md hr {
   margin: var(--space-lg) 0;
   border: 0;
-  border-top: var(--size-hair) solid var(--border-primary);
+  border-top: 0.0625rem solid var(--border-primary);
 }
 
 .mdList {
@@ -104,23 +104,23 @@ h5.mdH {
 .mdCheck {
   display: flex;
   align-items: center;
-  gap: var(--space-row-gap);
-  min-height: var(--size-row);
-  padding: var(--space-row-y) var(--space-row-x);
+  gap: var(--space-md);
+  min-height: 3.25rem;
+  padding: var(--space-sm) var(--space-lg);
 }
 
 .mdBox {
   flex: none;
-  width: var(--size-icon);
-  height: var(--size-icon);
+  width: 1.5rem;
+  height: 1.5rem;
   margin-top: var(--space-xs);
-  border: var(--size-focus) solid var(--text-secondary);
+  border: 0.125rem solid var(--text-secondary);
   border-radius: var(--radius-sm);
 }
 
 .mdBox.isOn {
-  border-color: var(--border-selected);
-  background: var(--background-accent) center / var(--size-icon-sm) no-repeat
+  border-color: var(--border-focus);
+  background: var(--background-accent) center / 1rem no-repeat
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256' fill='white'%3E%3Cpath d='M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z'/%3E%3C/svg%3E");
 }
 

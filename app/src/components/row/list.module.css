@@ -9,7 +9,7 @@
 
 .outlined {
   overflow: hidden;
-  border: var(--size-hair) solid var(--border-primary);
+  border: 0.0625rem solid var(--border-primary);
   border-radius: var(--radius-md);
   background: var(--background-secondary);
 }
@@ -32,7 +32,7 @@
 }
 
 .list:not(.menu) > .item:not(:first-child) {
-  border-top: var(--size-hair) solid var(--border-primary);
+  border-top: 0.0625rem solid var(--border-primary);
 }
 
 .divider {
@@ -40,5 +40,5 @@
   height: 0;
   margin: var(--space-xs) 0;
   border: 0;
-  border-top: var(--size-hair) solid var(--border-primary);
+  border-top: 0.0625rem solid var(--border-primary);
 }

@@ -1,10 +1,10 @@
 .row {
   display: flex;
   align-items: center;
-  gap: var(--space-row-gap);
+  gap: var(--space-md);
   width: 100%;
-  min-height: var(--space-row-min);
-  padding: var(--space-row-y) var(--space-row-x);
+  min-height: 3.25rem;
+  padding: var(--space-sm) var(--space-lg);
   border: 0;
   background: transparent;
   color: inherit;
@@ -33,8 +33,8 @@
 }
 
 .icon svg {
-  width: var(--size-icon);
-  height: var(--size-icon);
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .main {
@@ -46,9 +46,9 @@
 }
 
 .title {
-  font-size: var(--type-body-size);
-  font-weight: var(--type-body-weight);
-  line-height: var(--type-body-leading);
+  font-size: var(--font-size-body-lg);
+  font-weight: 400;
+  line-height: var(--font-leading-normal);
   overflow-wrap: anywhere;
 }
 
@@ -58,9 +58,9 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   color: var(--text-secondary);
-  font-size: var(--type-secondary-size);
-  font-weight: var(--type-secondary-weight);
-  line-height: var(--type-secondary-leading);
+  font-size: var(--font-size-body-md);
+  font-weight: 400;
+  line-height: var(--font-leading-normal);
 }
 
 .end {
@@ -69,13 +69,13 @@
   align-items: center;
   gap: var(--space-sm);
   color: var(--text-secondary);
-  font-size: var(--type-label-size);
-  font-weight: var(--type-label-weight);
+  font-size: var(--font-size-body-sm);
+  font-weight: 500;
 }
 
 .end > svg {
-  width: var(--size-icon);
-  height: var(--size-icon);
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .primary .icon {

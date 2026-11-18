@@ -3,7 +3,7 @@
   isolation: isolate;
   margin-top: calc(-1 * var(--screen-pad-top, 0%));
   margin-inline: calc(-1 * var(--screen-pad-x, 0%));
-  padding-top: calc(var(--space-header-top) + env(safe-area-inset-top));
+  padding-top: calc(var(--space-xl) + env(safe-area-inset-top));
 }
 
 .glow::before,
@@ -13,27 +13,27 @@
   top: 0;
   right: 0;
   z-index: -1;
-  width: var(--size-glow);
-  height: var(--size-glow);
+  width: 16.25rem;
+  height: 16.25rem;
   pointer-events: none;
 }
 
 .glow::before {
-  background: var(--page-glow, var(--glow-corner));
-  mask-image: var(--glow-corner-mask);
+  background: var(--page-glow, conic-gradient(from 200deg at 100% 0%, var(--glow-corner-start), var(--glow-corner-end), var(--glow-corner-start)));
+  mask-image: radial-gradient(circle at 100% 0%, var(--color-neutral-900) 0%, color-mix(in oklch, var(--color-neutral-900) 50%, transparent) 35%, transparent 70%);
   opacity: var(--glow-corner-opacity);
 }
 
 .glow::after {
   background-image: var(--texture-noise);
-  mask-image: var(--texture-noise-mask);
+  mask-image: radial-gradient(circle at 100% 0%, var(--color-neutral-900), transparent 70%);
 }
 
 .top {
   display: flex;
   align-items: flex-start;
   gap: var(--space-md);
-  padding: 0 var(--space-screen-x) var(--space-header-bottom);
+  padding: 0 var(--layout-gutter) var(--space-sm);
 }
 
 .main {
@@ -54,19 +54,18 @@
 
 .kicker {
   margin: 0 0 var(--space-xs);
-  font-size: var(--type-secondary-size);
-  font-weight: var(--type-secondary-weight);
-  line-height: var(--type-secondary-leading);
+  font-size: var(--font-size-body-md);
+  font-weight: 400;
+  line-height: var(--font-leading-normal);
   color: var(--text-secondary);
 }
 
 .title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: var(--type-title-page-size);
-  font-weight: var(--type-title-page-weight);
-  line-height: var(--type-title-page-leading);
-  letter-spacing: var(--font-tracking-tight);
+  font-size: var(--font-size-display-2xl);
+  font-weight: 400;
+  line-height: var(--font-leading-tight);
 }
 
 .kicker,

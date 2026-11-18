@@ -1,7 +1,7 @@
 .switch {
   position: relative;
   flex: none;
-  width: calc(var(--size-icon) * 2 + var(--space-xs));
+  width: calc(1.5rem * 2 + var(--space-xs));
   height: var(--space-2xl);
   border: 0;
   border-radius: var(--radius-full);
@@ -14,11 +14,11 @@
   position: absolute;
   top: var(--space-xs);
   left: var(--space-xs);
-  width: var(--size-icon);
-  height: var(--size-icon);
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: var(--radius-full);
   background: var(--background-secondary);
-  box-shadow: var(--shadow-sm-light);
+  box-shadow: 0 0.0625rem 0.125rem color-mix(in oklch, var(--color-neutral-900) 4%, transparent);
   transition: transform var(--motion-fast) var(--motion-easing);
 }
 
@@ -27,5 +27,5 @@
 }
 
 .switch[aria-checked="true"]::after {
-  transform: translateX(var(--size-icon));
+  transform: translateX(1.5rem);
 }

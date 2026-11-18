@@ -39,7 +39,7 @@ export const GoalPage: Story = {
   render: ({ first, second, value }) => {
     const areas = [first, second];
     return (
-      <div style={{ maxWidth: "var(--size-max-width)", margin: "0 auto" }}>
+      <div style={{ maxWidth: "var(--layout-max-width)", margin: "0 auto" }}>
         <PageHeader title="Run a sample 10K" kicker="Goal" areas={areas}>
           <div
             style={{

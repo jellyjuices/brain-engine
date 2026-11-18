@@ -32,15 +32,15 @@ describe("mixes for many areas", () => {
     assert.equal(
       mixGradient(["health", "fitness"], "fill", 90),
       "linear-gradient(in oklch 90deg, " +
-        "color-mix(in oklch, var(--area-health-fill), oklch(from var(--area-health-fill) l 0.3 h) var(--mix-vivid)), " +
-        "color-mix(in oklch, var(--area-fitness-fill), oklch(from var(--area-fitness-fill) l 0.3 h) var(--mix-vivid)))",
+        "color-mix(in oklch, var(--area-health-fill), oklch(from var(--area-health-fill) l 0.3 h) 35%), " +
+        "color-mix(in oklch, var(--area-fitness-fill), oklch(from var(--area-fitness-fill) l 0.3 h) 35%))",
     );
   });
 
-  it("leaves the glow and surface roles as they are", () => {
+  it("leaves the glow role as it is", () => {
     assert.equal(
-      mixGradient(["health", "fitness"], "surface", 90),
-      "linear-gradient(in oklch 90deg, var(--area-health-surface), var(--area-fitness-surface))",
+      mixGradient(["health", "fitness"], "glow", 90),
+      "linear-gradient(in oklch 90deg, var(--area-health-glow), var(--area-fitness-glow))",
     );
   });
 

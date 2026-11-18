@@ -23,7 +23,7 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {};
 export const Counts: Story = {
   render: () => (
-    <div style={{ display: "grid", gap: "var(--space-lg)", maxWidth: "var(--size-max-width)" }}>
+    <div style={{ display: "grid", gap: "var(--space-lg)", maxWidth: "var(--layout-max-width)" }}>
       {sets.map(([name, areas]) => (
         <section
           key={name}
@@ -32,7 +32,7 @@ export const Counts: Story = {
             display: "grid",
             gap: "var(--space-sm)",
             padding: "var(--space-lg)",
-            borderRadius: "var(--radius-card)",
+            borderRadius: "var(--radius-lg)",
             background: "var(--background-secondary)",
           }}
         >

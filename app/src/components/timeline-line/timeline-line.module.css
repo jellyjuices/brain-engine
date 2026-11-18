@@ -2,13 +2,13 @@
   position: relative;
   display: grid;
   gap: var(--space-2xs);
-  min-height: var(--size-target);
+  min-height: var(--size-control);
   padding: var(--space-sm) var(--space-lg);
   list-style: none;
 }
 
 .timelineLine + .timelineLine {
-  border-top: var(--size-hair) solid var(--border-primary);
+  border-top: 0.0625rem solid var(--border-primary);
 }
 
 .timelineLine.isLink:active {
@@ -27,9 +27,9 @@
   align-items: center;
   gap: 0 var(--space-xs);
   margin: 0;
-  font-size: var(--type-label-size);
-  font-weight: var(--type-label-weight);
-  line-height: var(--type-label-leading);
+  font-size: var(--font-size-body-sm);
+  font-weight: 500;
+  line-height: var(--font-leading-snug);
   color: var(--text-secondary);
 }
 
@@ -40,14 +40,14 @@
 }
 
 .glyph {
-  width: var(--type-secondary-size);
-  height: var(--type-secondary-size);
+  width: var(--font-size-body-md);
+  height: var(--font-size-body-md);
 }
 
 .text {
   margin: 0;
-  font-size: var(--type-body-size);
-  line-height: var(--type-body-leading);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--font-leading-normal);
   color: var(--text-primary);
 }
 
@@ -70,12 +70,12 @@
 }
 
 .open:focus-visible::after {
-  outline: var(--size-focus) solid var(--border-focus);
-  outline-offset: calc(var(--size-focus) * -1);
+  outline: 0.125rem solid var(--border-focus);
+  outline-offset: calc(0.125rem * -1);
 }
 
 .beforeText {
   margin: 0;
-  font-size: var(--type-secondary-size);
+  font-size: var(--font-size-body-md);
   color: var(--text-secondary);
 }

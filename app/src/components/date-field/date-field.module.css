@@ -4,8 +4,8 @@
 }
 
 .label {
-  font-size: var(--type-label-size);
-  font-weight: var(--type-label-weight);
+  font-size: var(--font-size-body-sm);
+  font-weight: 500;
   color: var(--text-secondary);
 }
 
@@ -15,8 +15,8 @@
   gap: var(--space-sm);
   height: var(--size-control);
   padding: 0 var(--space-md);
-  border: var(--size-hair) solid var(--border-strong);
-  border-radius: var(--radius-input);
+  border: 0.0625rem solid var(--border-strong);
+  border-radius: var(--radius-md);
   background: var(--background-secondary);
   color: var(--text-primary);
   text-align: left;
@@ -36,8 +36,8 @@
 }
 
 .icon {
-  width: var(--size-icon-sm);
-  height: var(--size-icon-sm);
+  width: 1rem;
+  height: 1rem;
   color: var(--text-secondary);
 }
 
@@ -48,8 +48,8 @@
 .popover {
   z-index: 40;
   padding: var(--space-sm);
-  border: var(--size-hair) solid var(--border-primary);
-  border-radius: var(--radius-card);
+  border: 0.0625rem solid var(--border-primary);
+  border-radius: var(--radius-lg);
   background: var(--background-raised);
   color: var(--text-primary);
   box-shadow: var(--shadow-raised);

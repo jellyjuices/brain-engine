@@ -5,14 +5,14 @@
     var(--background-secondary)
   );
   position: fixed;
-  top: calc(var(--vvt, 0) + var(--vvh, 100dvh) - var(--size-tabbar) - env(safe-area-inset-bottom));
+  top: calc(var(--vvt, 0) + var(--vvh, 100dvh) - var(--layout-tabbar) - env(safe-area-inset-bottom));
   right: 0;
   left: 0;
   z-index: 3;
   padding-inline: var(--space-lg);
-  font-size: var(--type-tab-size);
-  line-height: var(--type-tab-leading);
-  font-weight: var(--type-tab-weight);
+  font-size: var(--font-size-body-xs);
+  line-height: var(--font-leading-tight);
+  font-weight: 600;
   translate: 0 -100%;
 }
 

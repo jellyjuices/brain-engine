@@ -1,11 +1,6 @@
 import { shapes } from "./shapes.ts";
 import { areaColours } from "./areas.ts";
 
-const noise = (ink: number, alpha: string) =>
-  `url("data:image/svg+xml,${encodeURIComponent(
-    `<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncR type='linear' slope='0' intercept='${ink}'/><feFuncG type='linear' slope='0' intercept='${ink}'/><feFuncB type='linear' slope='0' intercept='${ink}'/><feFuncA type='table' tableValues='${alpha}'/></feComponentTransfer></filter><rect width='100%' height='100%' filter='url(#n)'/></svg>`,
-  )}")`;
-
 const ramp = (v: string[]) =>
   Object.fromEntries(v.map((hex, i) => [String((i + 1) * 100), hex])) as Record<string, string>;
 
@@ -117,9 +112,7 @@ export const font = {
       "3xl": "3rem",
     },
   },
-  weight: { light: "300", regular: "400", medium: "500", semibold: "600", bold: "700" },
   leading: { tight: "1.1", snug: "1.25", normal: "1.35", relaxed: "1.55" },
-  tracking: { tight: "-0.015em", normal: "0" },
 };
 
 export const space = {
@@ -135,8 +128,8 @@ export const space = {
 
 export const radius = {
   sm: "8px",
-  md: "14px",
-  lg: "18px",
+  md: "16px",
+  lg: "20px",
   xl: "26px",
   full: "999px",
 } as const;
@@ -144,69 +137,24 @@ export const radius = {
 export const shape = shapes;
 
 export const size = {
-  hair: "1px",
-  focus: "2px",
-  tick: "22px",
-  icon: "22px",
-  dot: "8px",
-  "icon-sm": "18px",
-  bar: "10px",
-  "bar-thick": "24px",
-  panel: "26rem",
-  ring: "7rem",
-  "ring-stroke": "10px",
-  "toast-shape": "2rem",
-  action: "4.5rem",
-  handle: "2.5rem",
-  "handle-height": "5px",
-  "sheet-max": "85dvh",
-  "menu-min": "12rem",
-  day: "2.75rem",
   control: "44px",
   "control-sm": "36px",
-  target: "44px",
-  blob: "520px",
-  plus: "58px",
-  "kind-pick": "48px",
-  row: "52px",
-  tabbar: "64px",
-  glow: "260px",
+} as const;
+
+export const layout = {
+  gutter: "16px",
   "max-width": "420px",
-} as const;
-
-export const shadow = {
-  "sm-light": "0 1px 2px rgb(0 0 0 / 0.04)",
-  "md-light": "0 12px 32px rgb(0 0 0 / 0.16)",
-  "md-dark": "0 12px 32px rgb(0 0 0 / 0.5)",
-  "halo-light": "0 6px 18px rgb(108 195 176 / 0.6)",
-  "halo-dark": "0 6px 18px rgb(134 217 198 / 0.6)",
-} as const;
-
-export const opacity = { "glow-dark": "0.38", "glow-light": "0.5", "noise-text": "0.25" } as const;
-
-export const mix = {
-  hover: "8%",
-  tag: "9%",
-  "accent-hover": "14%",
-  pressed: "15%",
-  soft: "16%",
-  track: "10%",
-  vivid: "35%",
-  "accent-pressed": "24%",
-  "scrim-light": "35%",
-  "scrim-dark": "60%",
+  tabbar: "64px",
 } as const;
 
 export const motion = {
-  duration: { instant: "0ms", fast: "160ms", slow: "220ms", pop: "600ms", spin: "40s" },
-  easing: {
-    standard: "cubic-bezier(0.2, 0.7, 0.2, 1)",
-    in: "cubic-bezier(0.5, 0, 0.75, 0)",
-    linear: "linear",
-  },
+  fast: "160ms",
+  slow: "220ms",
+  pop: "600ms",
+  easing: "cubic-bezier(0.2, 0.7, 0.2, 1)",
 } as const;
 
-export const texture = {
-  "noise-dark": noise(1, "0 0 0.09 0.18"),
-  "noise-light": noise(0, "0 0 0.06 0.12"),
-} as const;
+export const noise = (ink: number, alpha: string) =>
+  `url("data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncR type='linear' slope='0' intercept='${ink}'/><feFuncG type='linear' slope='0' intercept='${ink}'/><feFuncB type='linear' slope='0' intercept='${ink}'/><feFuncA type='table' tableValues='${alpha}'/></feComponentTransfer></filter><rect width='100%' height='100%' filter='url(#n)'/></svg>`,
+  )}")`;

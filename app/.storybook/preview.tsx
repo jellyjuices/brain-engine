@@ -2,27 +2,7 @@ import type { Preview } from "@storybook/react-vite";
 import "../src/styles/global.css";
 
 const preview: Preview = {
-  globalTypes: {
-    theme: {
-      description: "Theme",
-      toolbar: {
-        title: "Theme",
-        icon: "mirror",
-        items: [
-          { value: "dark", title: "Dark" },
-          { value: "light", title: "Light" },
-        ],
-        dynamicTitle: true,
-      },
-    },
-  },
-  initialGlobals: { theme: "dark", viewport: { value: "phone", isRotated: false } },
-  decorators: [
-    (Story, context) => {
-      document.documentElement.dataset.theme = context.globals.theme;
-      return <Story />;
-    },
-  ],
+  initialGlobals: { viewport: { value: "phone", isRotated: false } },
   parameters: {
     layout: "padded",
     controls: { expanded: true },

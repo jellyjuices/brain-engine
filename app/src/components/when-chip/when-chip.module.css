@@ -2,22 +2,22 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
-  font-size: var(--type-label-size);
-  font-weight: var(--type-label-weight);
-  line-height: var(--type-label-leading);
+  font-size: var(--font-size-body-sm);
+  font-weight: 500;
+  line-height: var(--font-leading-snug);
   color: var(--text-secondary);
   white-space: nowrap;
 }
 
 .glyph {
   flex: none;
-  width: var(--type-secondary-size);
-  height: var(--type-secondary-size);
+  width: var(--font-size-body-md);
+  height: var(--font-size-body-md);
 }
 
 .overdue {
   color: var(--text-primary);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
 }
 
 .overdue .glyph {

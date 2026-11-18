@@ -10,9 +10,9 @@
 .title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: var(--type-title-section-size);
-  font-weight: var(--type-title-section-weight);
-  line-height: var(--type-title-section-leading);
+  font-size: var(--font-size-display-md);
+  font-weight: 400;
+  line-height: var(--font-leading-snug);
   text-align: center;
 }
 
@@ -30,5 +30,5 @@
 .small .title {
   color: var(--text-secondary);
   font-family: var(--font-body);
-  font-size: var(--type-body-size);
+  font-size: var(--font-size-body-lg);
 }

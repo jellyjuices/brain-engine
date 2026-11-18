@@ -12,7 +12,7 @@
   top: var(--space-xs);
   bottom: var(--space-sm);
   left: 0;
-  border-radius: var(--radius-control);
+  border-radius: var(--radius-full);
   background: var(--background-accent-soft);
   pointer-events: none;
   transition:
@@ -23,15 +23,15 @@
 .trigger {
   position: relative;
   flex: none;
-  min-height: var(--size-target);
+  min-height: var(--size-control);
   padding: 0 var(--space-md);
   border: 0;
-  border-radius: var(--radius-control);
+  border-radius: var(--radius-full);
   background: none;
   color: var(--text-secondary);
-  font-size: var(--type-nav-size);
-  font-weight: var(--type-nav-weight);
-  line-height: var(--type-nav-leading);
+  font-size: var(--font-size-body-md);
+  font-weight: 500;
+  line-height: var(--font-leading-snug);
   white-space: nowrap;
   cursor: pointer;
   transition:
@@ -50,7 +50,7 @@
 
 .trigger:focus-visible {
   outline: none;
-  box-shadow: inset 0 0 0 var(--size-focus) var(--border-focus);
+  box-shadow: inset 0 0 0 0.125rem var(--border-focus);
 }
 
 .trigger:disabled {
@@ -67,6 +67,6 @@
 
 .panel:focus-visible {
   outline: none;
-  box-shadow: inset 0 0 0 var(--size-focus) var(--border-focus);
-  border-radius: var(--radius-card);
+  box-shadow: inset 0 0 0 0.125rem var(--border-focus);
+  border-radius: var(--radius-lg);
 }

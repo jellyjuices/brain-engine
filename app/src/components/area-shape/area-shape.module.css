@@ -1,16 +1,16 @@
 .areaShape {
   display: inline-block;
   flex: none;
-  width: var(--size-toast-shape);
-  height: var(--size-toast-shape);
+  width: 2rem;
+  height: 2rem;
 }
 
 .sm {
-  width: var(--size-icon-sm);
-  height: var(--size-icon-sm);
+  width: 1rem;
+  height: 1rem;
 }
 
 .lg {
-  width: var(--size-plus);
-  height: var(--size-plus);
+  width: 3.625rem;
+  height: 3.625rem;
 }

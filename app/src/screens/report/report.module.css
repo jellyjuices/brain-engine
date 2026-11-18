@@ -6,5 +6,5 @@
 
 .reportNote {
   color: var(--text-secondary);
-  font-size: var(--type-secondary-size);
+  font-size: var(--font-size-body-md);
 }

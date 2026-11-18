@@ -18,7 +18,7 @@
   flex-direction: column;
   gap: var(--space-lg);
   width: 100%;
-  max-width: var(--size-max-width);
+  max-width: var(--layout-max-width);
 }
 
 .wordmark {
@@ -26,8 +26,8 @@
   color: var(--text-primary);
   font-family: var(--font-display);
   font-size: var(--font-size-display-3xl);
-  font-weight: var(--type-title-page-weight);
-  line-height: var(--type-title-page-leading);
+  font-weight: 400;
+  line-height: var(--font-leading-tight);
   text-align: center;
 }
 
@@ -37,17 +37,17 @@
 
 .field input {
   width: 100%;
-  min-height: var(--size-plus);
-  padding: 0 calc(var(--size-target) + var(--space-sm)) 0 var(--space-lg);
-  border: var(--size-hair) solid var(--border-primary);
+  min-height: 3.625rem;
+  padding: 0 calc(var(--size-control) + var(--space-sm)) 0 var(--space-lg);
+  border: 0.0625rem solid var(--border-primary);
   border-radius: var(--radius-md);
   background: var(--background-secondary);
-  font-size: var(--type-body-size);
+  font-size: var(--font-size-body-lg);
   transition: border-color var(--motion-fast) var(--motion-easing);
 }
 
 .field input:focus-visible {
-  border-color: var(--border-selected);
+  border-color: var(--border-focus);
   outline-offset: 0;
 }
 
@@ -60,7 +60,7 @@
 .lockError {
   min-height: var(--space-xl);
   color: var(--text-danger);
-  font-size: var(--type-secondary-size);
+  font-size: var(--font-size-body-md);
   text-align: center;
 }
 

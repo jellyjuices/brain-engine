@@ -14,7 +14,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <ul style={{ margin: 0, padding: 0, maxWidth: "var(--size-max-width)" }}>
+      <ul style={{ margin: 0, padding: 0, maxWidth: "var(--layout-max-width)" }}>
         <Story />
       </ul>
     ),

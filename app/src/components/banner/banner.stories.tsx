@@ -8,7 +8,7 @@ const meta = {
   args: { count: 3, message: "to sort", actionLabel: "Sort", onAction: fn() },
   decorators: [
     (Story) => (
-      <div style={{ maxWidth: "var(--size-max-width)" }}>
+      <div style={{ maxWidth: "var(--layout-max-width)" }}>
         <Story />
       </div>
     ),

@@ -21,22 +21,22 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-xs);
-  width: var(--size-action);
+  width: 4.5rem;
   border: 0;
   color: var(--action-ink);
-  font-size: var(--type-label-size);
-  font-weight: var(--type-label-weight);
+  font-size: var(--font-size-body-sm);
+  font-weight: 500;
   cursor: pointer;
 }
 
 .action svg {
-  width: var(--size-icon);
-  height: var(--size-icon);
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .action:focus-visible {
   outline-color: var(--action-ink);
-  outline-offset: calc(var(--size-focus) * -2);
+  outline-offset: calc(0.125rem * -2);
 }
 
 .actionLater {
@@ -44,7 +44,7 @@
 }
 
 .actionSort {
-  background: var(--action-sort);
+  background: var(--background-accent);
 }
 
 .actionDrop {
@@ -56,12 +56,12 @@
   display: grid;
   place-items: center;
   flex: none;
-  width: var(--size-tick);
-  height: var(--size-tick);
+  width: 1.5rem;
+  height: 1.5rem;
   margin-top: var(--space-2xs);
   padding: 0;
-  border: var(--size-focus) solid var(--border-strong);
-  border-radius: var(--radius-control);
+  border: 0.125rem solid var(--border-strong);
+  border-radius: var(--radius-full);
   background: transparent;
   color: var(--text-on-accent);
   cursor: pointer;
@@ -84,8 +84,8 @@
   position: relative;
   display: flex;
   align-items: flex-start;
-  gap: var(--space-row-gap);
-  padding: var(--space-row-y) var(--space-row-x);
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-lg);
   touch-action: pan-y;
   transition: transform var(--motion-slow) var(--motion-easing);
 }
@@ -113,9 +113,9 @@
 
 .title {
   display: block;
-  font-size: var(--type-body-size);
-  font-weight: var(--type-body-weight);
-  line-height: var(--type-body-leading);
+  font-size: var(--font-size-body-lg);
+  font-weight: 400;
+  line-height: var(--font-leading-normal);
   cursor: pointer;
 }
 
@@ -137,8 +137,8 @@
 }
 
 .open:focus-visible::after {
-  outline: var(--size-focus) solid var(--border-focus);
-  outline-offset: calc(var(--size-focus) * -1);
+  outline: 0.125rem solid var(--border-focus);
+  outline-offset: calc(0.125rem * -1);
 }
 
 .isDragging .content {

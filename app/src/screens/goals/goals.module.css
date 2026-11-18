@@ -8,16 +8,16 @@
   display: grid;
   gap: var(--space-md);
   padding: var(--space-lg);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-lg);
   background: var(--background-secondary);
 }
 
 .title {
   margin: 0;
-  font-family: var(--font-family-display);
-  font-size: var(--type-title-item-size);
-  font-weight: var(--type-title-item-weight);
-  line-height: var(--type-title-item-leading);
+  font-family: var(--font-display);
+  font-size: var(--font-size-display-sm);
+  font-weight: 400;
+  line-height: var(--font-leading-snug);
 }
 
 .title a {

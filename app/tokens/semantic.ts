@@ -1,4 +1,5 @@
 import { areaSlugs } from "./areas.ts";
+import { noise } from "./primitives.ts";
 
 export type Mix = { mix: string; amount: string };
 export type Value = string | Mix;
@@ -10,45 +11,35 @@ const tint = (token: string, amount: string): Mix => ({ mix: token, amount });
 export const themed: Record<string, Pair> = {
   "background-primary": pair("color-neutral-900", "color-neutral-0"),
   "background-secondary": pair("color-neutral-800", "color-neutral-100"),
-  "background-tertiary": pair("color-neutral-700", "color-neutral-200"),
   "background-raised": pair("color-neutral-800", "color-neutral-0"),
-  "background-hover": pair(tint("text-primary", "mix-hover"), tint("text-primary", "mix-hover")),
+  "background-hover": pair(tint("text-primary", "8%"), tint("text-primary", "8%")),
   "background-pressed": pair(
-    tint("text-primary", "mix-pressed"),
-    tint("text-primary", "mix-pressed"),
+    tint("text-primary", "15%"),
+    tint("text-primary", "15%"),
   ),
   "background-disabled": pair("color-neutral-700", "color-neutral-200"),
   "background-accent": pair("color-seafoam-300", "color-seafoam-700"),
   "background-accent-hover": pair(
-    tint("text-on-accent", "mix-accent-hover"),
-    tint("color-neutral-900", "mix-accent-hover"),
+    tint("text-on-accent", "14%"),
+    tint("color-neutral-900", "14%"),
   ),
   "background-accent-pressed": pair(
-    tint("text-on-accent", "mix-accent-pressed"),
-    tint("color-neutral-900", "mix-accent-pressed"),
+    tint("text-on-accent", "24%"),
+    tint("color-neutral-900", "24%"),
   ),
   "background-accent-soft": pair(
-    tint("color-seafoam-300", "mix-soft"),
-    tint("color-seafoam-400", "mix-soft"),
+    tint("color-seafoam-300", "16%"),
+    tint("color-seafoam-400", "16%"),
   ),
   "background-accent-soft-hover": pair(
-    tint("text-accent", "mix-hover"),
-    tint("color-seafoam-400", "mix-soft"),
+    tint("text-accent", "8%"),
+    tint("color-seafoam-400", "16%"),
   ),
   "background-inverse": pair("color-neutral-100", "color-neutral-900"),
-  "background-inverse-hover": pair(
-    tint("text-inverse", "mix-hover"),
-    tint("text-inverse", "mix-hover"),
-  ),
-  "background-inverse-pressed": pair(
-    tint("text-inverse", "mix-pressed"),
-    tint("text-inverse", "mix-pressed"),
-  ),
-  "background-tag": pair(tint("text-primary", "mix-tag"), tint("text-primary", "mix-tag")),
   "background-check": pair("color-yellow-900", "color-yellow-100"),
   "background-scrim": pair(
-    tint("color-neutral-900", "mix-scrim-dark"),
-    tint("color-neutral-900", "mix-scrim-light"),
+    tint("color-neutral-900", "60%"),
+    tint("color-neutral-900", "35%"),
   ),
   "text-primary": pair("color-neutral-100", "color-neutral-900"),
   "text-secondary": pair("color-neutral-400", "color-neutral-600"),
@@ -58,24 +49,18 @@ export const themed: Record<string, Pair> = {
   "text-inverse": pair("color-neutral-900", "color-neutral-100"),
   "text-inverse-accent": pair("color-seafoam-700", "color-seafoam-300"),
   "text-tag": pair("color-neutral-200", "color-neutral-700"),
-  "text-number": pair("color-seafoam-300", "color-seafoam-700"),
   "text-danger": pair("color-coral-300", "color-coral-700"),
   "border-primary": pair("color-neutral-700", "color-neutral-200"),
   "border-strong": pair("color-neutral-500", "color-neutral-500"),
   "border-focus": pair("color-seafoam-300", "color-seafoam-700"),
-  "border-selected": pair("color-seafoam-300", "color-seafoam-700"),
   "status-late": pair("color-amber-300", "color-amber-700"),
   "status-done": pair("color-seafoam-400", "color-seafoam-600"),
   "status-check": pair("color-yellow-300", "color-yellow-700"),
   "status-waiting": pair("color-sky-300", "color-sky-700"),
-  "action-sort": pair("color-seafoam-300", "color-seafoam-700"),
   "action-drop": pair("color-coral-400", "color-coral-700"),
   "action-ink": pair("color-neutral-900", "color-neutral-0"),
-  "progress-track": pair(tint("text-primary", "mix-track"), tint("text-primary", "mix-track")),
   "progress-fill-start": pair("color-seafoam-400", "color-seafoam-600"),
   "progress-fill-end": pair("color-seafoam-200", "color-seafoam-400"),
-  "plus-fill": pair("color-seafoam-300", "color-seafoam-700"),
-  "plus-ink": pair("color-seafoam-900", "color-neutral-0"),
   "toast-success": pair("color-seafoam-700", "color-seafoam-300"),
   "toast-error": pair("color-coral-600", "color-coral-300"),
   "toast-warning": pair("color-amber-700", "color-amber-300"),
@@ -84,10 +69,9 @@ export const themed: Record<string, Pair> = {
   "toast-icon": pair("color-neutral-0", "color-neutral-900"),
   "glow-corner-start": pair("color-seafoam-500", "color-seafoam-300"),
   "glow-corner-end": pair("color-seafoam-200", "color-seafoam-100"),
-  "glow-corner-opacity": pair("opacity-glow-dark", "opacity-glow-light"),
-  "texture-noise": pair("texture-noise-dark", "texture-noise-light"),
-  "shadow-raised": pair("shadow-md-dark", "shadow-md-light"),
-  "shadow-halo": pair("shadow-halo-dark", "shadow-halo-light"),
+  "glow-corner-opacity": pair("0.38", "0.5"),
+  "texture-noise": pair(noise(1, "0 0 0.09 0.18"), noise(0, "0 0 0.06 0.12")),
+  "shadow-raised": pair("0 12px 32px color-mix(in oklch, var(--color-neutral-900) 50%, transparent)", "0 12px 32px color-mix(in oklch, var(--color-neutral-900) 16%, transparent)"),
 };
 
 const areaRoles = (slug: string): Record<string, Pair> => {
@@ -96,106 +80,20 @@ const areaRoles = (slug: string): Record<string, Pair> => {
     [`area-${slug}-accent`]: pair(step(300), step(700)),
     [`area-${slug}-fill`]: pair(step(400), step(600)),
     [`area-${slug}-text`]: pair(step(200), step(800)),
-    [`area-${slug}-surface`]: pair(tint(step(300), "mix-soft"), tint(step(400), "mix-soft")),
     [`area-${slug}-glow`]: pair(step(600), step(300)),
   };
 };
 
 for (const slug of areaSlugs) Object.assign(themed, areaRoles(slug));
 
-export const areaRoleNames = ["accent", "fill", "text", "surface", "glow"] as const;
-
-const typeRole = (role: string, size: string, leading: string, weight: string) => ({
-  [`type-${role}-size`]: `font-size-${size}`,
-  [`type-${role}-leading`]: `font-leading-${leading}`,
-  [`type-${role}-weight`]: `font-weight-${weight}`,
-});
-
-export const shared: Record<string, string> = {
-  "font-display": "font-family-display",
-  "font-body": "font-family-body",
-  "font-number": "font-family-number",
-  ...typeRole("title-page", "display-2xl", "tight", "regular"),
-  ...typeRole("title-note", "display-xl", "tight", "regular"),
-  ...typeRole("title-section", "display-md", "snug", "regular"),
-  ...typeRole("title-item", "display-sm", "snug", "regular"),
-  ...typeRole("body", "body-lg", "normal", "regular"),
-  ...typeRole("reading", "body-lg", "relaxed", "regular"),
-  ...typeRole("secondary", "body-md", "normal", "regular"),
-  ...typeRole("action", "body-lg", "snug", "semibold"),
-  ...typeRole("action-sm", "body-md", "snug", "semibold"),
-  ...typeRole("label", "body-sm", "snug", "medium"),
-  ...typeRole("caption", "body-xs", "snug", "regular"),
-  ...typeRole("nav", "body-md", "snug", "medium"),
-  ...typeRole("tab", "body-xs", "tight", "semibold"),
-  ...typeRole("number-big", "number-2xl", "tight", "bold"),
-  ...typeRole("number", "number-sm", "snug", "regular"),
-  "space-screen-x": "space-lg",
-  "space-header-top": "space-xl",
-  "space-header-bottom": "space-sm",
-  "space-section-top": "space-lg",
-  "space-section-bottom": "space-sm",
-  "space-row-x": "space-lg",
-  "space-row-y": "space-sm",
-  "space-row-gap": "space-md",
-  "space-row-min": "size-row",
-  "space-chip-x": "space-sm",
-  "space-chip-y": "space-2xs",
-  "space-button-x": "space-lg",
-  "space-button-sm-x": "space-md",
-  "space-stack": "space-sm",
-  "motion-fast": "motion-duration-fast",
-  "motion-slow": "motion-duration-slow",
-  "motion-pop": "motion-duration-pop",
-  "motion-easing": "motion-easing-standard",
-  "radius-control": "radius-full",
-  "radius-input": "radius-md",
-  "radius-card": "radius-lg",
-  "radius-sheet": "radius-xl",
-  "bar-goal": "size-bar-thick",
-  "bar-step": "size-bar",
-  "panel-width": "size-panel",
-  "shape-plus": "shape-cookie",
-  "shape-toast-success": "shape-cookie",
-  "shape-toast-error": "shape-burst",
-  "shape-toast-warning": "shape-triad",
-  "shape-toast-info": "shape-blossom",
-  "shape-toast-neutral": "shape-squircle",
-  "shape-kind-add": "shape-plus",
-  "shape-kind-todo": "shape-scallop",
-  "shape-kind-journal": "shape-house",
-  "shape-kind-person": "shape-pentagon",
-  "shape-kind-place": "shape-clover",
-  "shape-kind-thing": "shape-puff",
-  "shape-kind-file": "shape-hexagon",
-  "shape-kind-intake": "shape-flower",
-  "shape-kind-other": "shape-circle",
-  "shape-kind-area": "shape-pebble",
-  "shape-kind-project": "shape-squircle",
-  "shape-kind-group": "shape-blossom",
-  "shape-kind-topic": "shape-triad",
-  "shape-kind-event": "shape-burst",
-  "shape-kind-note": "shape-diamond",
-  "shape-kind-goal": "shape-star",
-  "shape-kind-decision": "shape-octagon",
-  "shape-kind-capture": "shape-shield",
-  "shape-kind-lens": "shape-arch",
-};
-
-export const composed: Record<string, string> = {
-  "glow-corner":
-    "conic-gradient(from 200deg at 100% 0%, var(--glow-corner-start), var(--glow-corner-end), var(--glow-corner-start))",
-  "glow-corner-mask":
-    "radial-gradient(circle at 100% 0%, #000 0%, rgb(0 0 0 / 0.5) 35%, transparent 70%)",
-  "texture-noise-mask": "radial-gradient(circle at 100% 0%, #000, transparent 70%)",
-  "gradient-progress":
-    "linear-gradient(90deg, var(--progress-fill-start), var(--progress-fill-end))",
-};
+export const areaRoleNames = ["accent", "fill", "text", "glow"] as const;
 
 export const reducedMotion = ["motion-fast", "motion-slow", "motion-pop"];
 
-type Check = { label: string; fg: string; bg: string[]; min: number };
-const c = (label: string, fg: string, bg: string | string[], min = 4.5): Check => ({
+export const surface = (slug: string): Mix => tint(`area-${slug}-accent`, "16%");
+
+type Check = { label: string; fg: string; bg: Value[]; min: number };
+const c = (label: string, fg: string, bg: Value | Value[], min = 4.5): Check => ({
   label,
   fg,
   bg: Array.isArray(bg) ? bg : [bg],
@@ -220,8 +118,8 @@ export const contrastPairs: Check[] = [
     "background-accent-soft",
     "background-accent-soft-hover",
   ]),
-  c("Tag chip on card", "text-tag", ["background-secondary", "background-tag"]),
-  c("Tag chip on page", "text-tag", ["background-primary", "background-tag"]),
+  c("Tag chip on card", "text-tag", ["background-secondary", tint("text-primary", "9%")]),
+  c("Tag chip on page", "text-tag", ["background-primary", tint("text-primary", "9%")]),
   c("Check chip", "status-check", "background-check"),
   c("Late date on page", "status-late", "background-primary"),
   c("Late date on card", "status-late", "background-secondary"),
@@ -235,12 +133,10 @@ export const contrastPairs: Check[] = [
   c("Toast button", "text-inverse-accent", "background-inverse"),
   c("Toast button pressed", "text-inverse-accent", [
     "background-inverse",
-    "background-inverse-pressed",
+    tint("text-inverse", "15%"),
   ]),
-  c("Swipe action: sort", "action-ink", "action-sort"),
+  c("Swipe action: sort", "action-ink", "background-accent"),
   c("Swipe action: drop", "action-ink", "action-drop"),
-  c("Goal number on card", "text-number", "background-secondary", 3),
-  c("Plus icon on shape", "plus-ink", "plus-fill", 3),
   ...["success", "error", "warning", "info", "neutral"].flatMap((v) => [
     c(`Toast ${v} shape on toast`, `toast-${v}`, "background-inverse", 3),
     c(`Toast ${v} icon on shape`, "toast-icon", `toast-${v}`, 3),
@@ -250,21 +146,21 @@ export const contrastPairs: Check[] = [
   c("Focus ring on page", "border-focus", "background-primary", 3),
   c("Focus ring on card", "border-focus", "background-secondary", 3),
   c("Done tick on card", "status-done", "background-secondary", 3),
-  c("Bar fill on track", "progress-fill-start", ["background-secondary", "progress-track"], 3),
+  c("Bar fill on track", "progress-fill-start", ["background-secondary", tint("text-primary", "10%")], 3),
   ...areaSlugs.flatMap((a) => [
     c(`${a}: area text on its surface`, `area-${a}-text`, [
       "background-secondary",
-      `area-${a}-surface`,
+      surface(a),
     ]),
     c(`${a}: body text on its surface`, "text-primary", [
       "background-secondary",
-      `area-${a}-surface`,
+      surface(a),
     ]),
     c(`${a}: muted text on its surface`, "text-secondary", [
       "background-secondary",
-      `area-${a}-surface`,
+      surface(a),
     ]),
     c(`${a}: accent on card`, `area-${a}-accent`, "background-secondary", 3),
-    c(`${a}: ring fill on track`, `area-${a}-fill`, ["background-secondary", "progress-track"], 3),
+    c(`${a}: ring fill on track`, `area-${a}-fill`, ["background-secondary", tint("text-primary", "10%")], 3),
   ]),
 ];

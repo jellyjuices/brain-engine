@@ -6,6 +6,28 @@ import type { KindName } from "@/lib/notes/kinds.ts";
 
 export type ShapeName = "add" | KindName;
 
+const KIND_SHAPE: Record<string, string> = {
+  add: "plus",
+  todo: "scallop",
+  journal: "house",
+  person: "pentagon",
+  place: "clover",
+  thing: "puff",
+  file: "hexagon",
+  intake: "flower",
+  other: "circle",
+  area: "pebble",
+  project: "squircle",
+  group: "blossom",
+  topic: "triad",
+  event: "burst",
+  note: "diamond",
+  goal: "star",
+  decision: "octagon",
+  capture: "shield",
+  lens: "arch",
+};
+
 export interface ShapeProps {
   name: ShapeName;
   icon?: PhosphorIcon;
@@ -25,7 +47,7 @@ export function Shape({ name, icon, size = "md", variant = "default" }: ShapePro
         variant === "secondary" && styles.shapeSecondary,
       )}
     >
-      <span className={styles.shapeBg} style={{ clipPath: `var(--shape-kind-${name})` }} />
+      <span className={styles.shapeBg} style={{ clipPath: `var(--shape-${KIND_SHAPE[name] ?? "circle"})` }} />
       {icon && <Icon icon={icon} />}
     </span>
   );

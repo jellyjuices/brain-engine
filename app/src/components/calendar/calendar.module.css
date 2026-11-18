@@ -1,7 +1,7 @@
 .calendar {
   position: relative;
   width: max-content;
-  font-size: var(--type-secondary-size);
+  font-size: var(--font-size-body-md);
 }
 
 .calendar :global(.rdp-month_caption) {
@@ -13,7 +13,7 @@
 
 .calendar :global(.rdp-caption_label) {
   font-family: var(--font-display);
-  font-size: var(--type-title-item-size);
+  font-size: var(--font-size-display-sm);
 }
 
 .calendar :global(.rdp-dropdowns) {
@@ -37,7 +37,7 @@
   height: var(--size-control);
   padding: 0;
   border: 0;
-  border-radius: var(--radius-control);
+  border-radius: var(--radius-full);
   background: none;
   color: var(--text-primary);
   cursor: pointer;
@@ -51,8 +51,8 @@
 
 .calendar :global(.rdp-chevron),
 .calendar :global(.rdp-nav) svg {
-  width: var(--size-icon-sm);
-  height: var(--size-icon-sm);
+  width: 1rem;
+  height: 1rem;
 }
 
 .calendar :global(.rdp-month_grid) {
@@ -60,9 +60,9 @@
 }
 
 .calendar :global(.rdp-weekday) {
-  height: var(--size-day);
-  font-size: var(--type-label-size);
-  font-weight: var(--type-label-weight);
+  height: 2.75rem;
+  font-size: var(--font-size-body-sm);
+  font-weight: 500;
   color: var(--text-secondary);
 }
 
@@ -74,14 +74,14 @@
 .calendar :global(.rdp-day_button) {
   display: grid;
   place-items: center;
-  width: var(--size-day);
-  height: var(--size-day);
+  width: 2.75rem;
+  height: 2.75rem;
   padding: 0;
   border: 0;
-  border-radius: var(--radius-control);
+  border-radius: var(--radius-full);
   background: none;
   font-family: var(--font-number);
-  font-size: var(--type-number-size);
+  font-size: var(--font-size-number-sm);
   cursor: pointer;
   transition: background-color var(--motion-fast) var(--motion-easing);
 }
@@ -92,8 +92,8 @@
 
 .calendar :global(.rdp-today:not(.rdp-selected) .rdp-day_button) {
   color: var(--text-accent);
-  font-weight: var(--font-weight-bold);
-  box-shadow: inset 0 0 0 var(--size-hair) var(--border-selected);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 0.0625rem var(--border-focus);
 }
 
 .calendar :global(.rdp-outside .rdp-day_button) {
@@ -113,7 +113,7 @@
 .calendar :global(.rdp-selected .rdp-day_button) {
   background: var(--background-accent);
   color: var(--text-on-accent);
-  font-weight: var(--font-weight-bold);
+  font-weight: 700;
 }
 
 @media (hover: hover) {

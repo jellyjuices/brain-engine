@@ -22,7 +22,7 @@ const meta = {
   decorators: [
     (Story) => (
       <div
-        style={{ maxWidth: "var(--size-max-width)", minHeight: "calc(var(--size-control) * 7)" }}
+        style={{ maxWidth: "var(--layout-max-width)", minHeight: "calc(var(--size-control) * 7)" }}
       >
         <Story />
       </div>

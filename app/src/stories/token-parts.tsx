@@ -9,7 +9,7 @@ export const label: CSSProperties = {
 const grid: CSSProperties = { display: "grid", gap: "var(--space-lg)" };
 export const cell: CSSProperties = {
   padding: "var(--space-xs) var(--space-sm)",
-  borderBottom: "var(--size-hair) solid var(--border-primary)",
+  borderBottom: "1px solid var(--border-primary)",
   textAlign: "left",
 };
 
@@ -19,7 +19,7 @@ export const Block = ({ title, children }: { title: string; children: ReactNode 
       style={{
         margin: 0,
         fontFamily: "var(--font-display)",
-        fontWeight: "var(--font-weight-regular)",
+        fontWeight: "400",
         fontSize: "var(--font-size-display-lg)",
       }}
     >
@@ -38,13 +38,13 @@ export const Ramps = () => (
           <p style={label}>{name}</p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-xs)" }}>
             {Object.entries(ramp).map(([step, hex]) => (
-              <div key={step} style={{ width: "var(--size-tabbar)" }}>
+              <div key={step} style={{ width: "var(--layout-tabbar)" }}>
                 <div
                   style={{
                     height: "var(--size-control)",
                     borderRadius: "var(--radius-sm)",
                     background: `var(--color-${name}-${step})`,
-                    border: "var(--size-hair) solid var(--border-primary)",
+                    border: "1px solid var(--border-primary)",
                   }}
                 />
                 <div style={label}>{step}</div>
@@ -71,7 +71,7 @@ export const TypeScale = () => (
             key={step}
             style={{ display: "flex", alignItems: "baseline", gap: "var(--space-lg)" }}
           >
-            <span style={{ ...label, width: "var(--size-tabbar)", flex: "none" }}>
+            <span style={{ ...label, width: "var(--layout-tabbar)", flex: "none" }}>
               {step} {rem}
             </span>
             <span
@@ -94,7 +94,7 @@ export const Spacing = () => (
   <Block title="Spacing">
     {Object.entries(space).map(([step, px]) => (
       <div key={step} style={{ display: "flex", alignItems: "center", gap: "var(--space-lg)" }}>
-        <span style={{ ...label, width: "var(--size-plus)" }}>
+        <span style={{ ...label, width: "58px" }}>
           {step} {px}
         </span>
         <span
@@ -117,10 +117,10 @@ export const Shapes = () => (
         <div key={step}>
           <div
             style={{
-              width: "var(--size-tabbar)",
-              height: "var(--size-tabbar)",
+              width: "var(--layout-tabbar)",
+              height: "var(--layout-tabbar)",
               background: "var(--background-accent-soft)",
-              border: "var(--size-hair) solid var(--border-strong)",
+              border: "1px solid var(--border-strong)",
               borderRadius: `var(--radius-${step})`,
             }}
           />
@@ -131,8 +131,8 @@ export const Shapes = () => (
         <div key={name}>
           <div
             style={{
-              width: "var(--size-tabbar)",
-              height: "var(--size-tabbar)",
+              width: "var(--layout-tabbar)",
+              height: "var(--layout-tabbar)",
               background: "var(--background-accent)",
               clipPath: `var(--shape-${name})`,
             }}

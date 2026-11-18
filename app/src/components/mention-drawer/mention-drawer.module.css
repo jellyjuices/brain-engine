@@ -5,7 +5,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   background: var(--background-secondary);
-  border-top: var(--size-hair) solid var(--border-primary);
+  border-top: 0.0625rem solid var(--border-primary);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   box-shadow: var(--shadow-raised);
 }

@@ -1,9 +1,9 @@
 .track {
   position: relative;
   overflow: hidden;
-  height: var(--bar-goal);
-  border-radius: var(--radius-control);
-  background: var(--progress-track);
+  height: 1.5rem;
+  border-radius: var(--radius-full);
+  background: color-mix(in oklch, var(--text-primary) 10%, transparent);
 }
 
 .bar {
@@ -25,23 +25,23 @@
   grid-area: label;
   margin: 0;
   font-family: var(--font-display);
-  font-size: var(--type-title-item-size);
-  font-weight: var(--type-title-item-weight);
-  line-height: var(--type-title-item-leading);
+  font-size: var(--font-size-display-sm);
+  font-weight: 400;
+  line-height: var(--font-leading-snug);
 }
 
 .number {
   grid-area: number;
   margin: 0;
   font-family: var(--font-number);
-  font-size: var(--type-number-big-size);
-  font-weight: var(--type-number-big-weight);
-  line-height: var(--type-number-big-leading);
+  font-size: var(--font-size-number-2xl);
+  font-weight: 700;
+  line-height: var(--font-leading-tight);
   color: var(--text-primary);
 }
 
 .unit {
-  font-size: var(--type-title-item-size);
+  font-size: var(--font-size-display-sm);
 }
 
 .facts {
@@ -50,8 +50,8 @@
   justify-items: end;
   gap: var(--space-2xs);
   margin: 0;
-  font-size: var(--type-secondary-size);
-  line-height: var(--type-secondary-leading);
+  font-size: var(--font-size-body-md);
+  line-height: var(--font-leading-normal);
   color: var(--text-secondary);
 }
 
@@ -61,16 +61,16 @@
 
 .gainNumber {
   font-family: var(--font-number);
-  font-weight: var(--font-weight-bold);
+  font-weight: 700;
 }
 
 .fillBar {
   height: 100%;
   border-radius: inherit;
-  background: var(--gradient-progress);
+  background: linear-gradient(90deg, var(--progress-fill-start), var(--progress-fill-end));
   transition: width var(--motion-slow) var(--motion-easing);
 }
 
 .step .track {
-  height: var(--bar-step);
+  height: 0.5rem;
 }

@@ -3,5 +3,5 @@
   gap: var(--space-xs);
   color: var(--text-primary);
   text-decoration: none;
-  font-size: var(--type-secondary-size);
+  font-size: var(--font-size-body-md);
 }

@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import { areaKeys } from "../../tokens/areas.ts";
 import { Chip } from "../components/chip/chip.tsx";
 import { AreaShape } from "../components/area-shape/area-shape.tsx";
-import { areaVar, mixGlow, mixGradient } from "@/lib/design/area-mix.ts";
+import { areaSurface, areaVar, mixGlow, mixGradient } from "@/lib/design/area-mix.ts";
 
 export const label: CSSProperties = {
   margin: 0,
@@ -40,13 +40,11 @@ export const KeyRow = ({ slug }: { slug: string }) => (
         alignItems: "center",
         gap: "var(--space-sm)",
         padding: "var(--space-sm) var(--space-md)",
-        borderRadius: "var(--radius-input)",
-        background: `linear-gradient(${areaVar(slug, "surface")}, ${areaVar(slug, "surface")}), var(--background-secondary)`,
+        borderRadius: "var(--radius-md)",
+        background: `linear-gradient(${areaSurface(slug)}, ${areaSurface(slug)}), var(--background-secondary)`,
       }}
     >
-      <span style={{ color: areaVar(slug, "text"), fontWeight: "var(--font-weight-semibold)" }}>
-        Area text
-      </span>
+      <span style={{ color: areaVar(slug, "text"), fontWeight: "600" }}>Area text</span>
       <span>Body text</span>
       <Chip label={areaKeys[slug].label} areas={[slug]} />
     </div>
@@ -62,8 +60,8 @@ export const MixCell = ({ areas }: { areas: string[] }) => (
       display: "grid",
       gap: "var(--space-sm)",
       padding: "var(--space-md)",
-      borderRadius: "var(--radius-card)",
-      border: "var(--size-hair) solid var(--border-primary)",
+      borderRadius: "var(--radius-lg)",
+      border: "1px solid var(--border-primary)",
       background: "var(--background-secondary)",
     }}
   >
@@ -74,7 +72,8 @@ export const MixCell = ({ areas }: { areas: string[] }) => (
         inset: 0,
         zIndex: -1,
         background: mixGlow(areas),
-        maskImage: "var(--glow-corner-mask)",
+        maskImage:
+          "radial-gradient(circle at 100% 0%, var(--color-neutral-900) 0%, color-mix(in oklch, var(--color-neutral-900) 50%, transparent) 35%, transparent 70%)",
         opacity: "var(--glow-corner-opacity)",
       }}
     />
@@ -85,7 +84,7 @@ export const MixCell = ({ areas }: { areas: string[] }) => (
         inset: 0,
         zIndex: -1,
         backgroundImage: "var(--texture-noise)",
-        opacity: "var(--opacity-noise-text)",
+        opacity: "0.25",
       }}
     />
     <div style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)" }}>
@@ -94,8 +93,8 @@ export const MixCell = ({ areas }: { areas: string[] }) => (
     </div>
     <div
       style={{
-        height: "var(--size-bar)",
-        borderRadius: "var(--radius-control)",
+        height: "8px",
+        borderRadius: "var(--radius-full)",
         background: mixGradient(areas, "fill", 90),
       }}
     />

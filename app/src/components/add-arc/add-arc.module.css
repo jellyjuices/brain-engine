@@ -15,34 +15,34 @@
   background: transparent;
   color: var(--text-on-accent);
   font: inherit;
-  font-size: var(--type-tab-size);
-  font-weight: var(--type-tab-weight);
-  line-height: var(--type-tab-leading);
+  font-size: var(--font-size-body-xs);
+  font-weight: 600;
+  line-height: var(--font-leading-tight);
   translate: -50% 0;
   animation: add-arc-pop var(--motion-fast) var(--motion-easing) both;
 }
 
 .addArcPick > :first-child {
-  width: var(--size-kind-pick);
-  height: var(--size-kind-pick);
+  width: 3rem;
+  height: 3rem;
   color: var(--text-accent);
 }
 
 .addArcPick > :first-child > :first-child {
-  animation: add-arc-spin var(--motion-duration-spin) linear infinite;
+  animation: add-arc-spin 40s linear infinite;
   background: var(--background-secondary);
 }
 
 .addArcPick1 {
-  transform: translate(calc(var(--size-ring) * -0.87), calc(var(--size-ring) * -0.5));
+  transform: translate(calc(7rem * -0.87), calc(7rem * -0.5));
 }
 
 .addArcPick2 {
-  transform: translate(0, calc(var(--size-ring) * -1));
+  transform: translate(0, calc(7rem * -1));
 }
 
 .addArcPick3 {
-  transform: translate(calc(var(--size-ring) * 0.87), calc(var(--size-ring) * -0.5));
+  transform: translate(calc(7rem * 0.87), calc(7rem * -0.5));
 }
 
 @keyframes add-arc-pop {

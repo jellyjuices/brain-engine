@@ -6,7 +6,7 @@ import { TodoRow, type TodoRowProps } from "./todo-row.tsx";
 const Live = (args: TodoRowProps) => {
   const [checked, setChecked] = useState(args.checked ?? false);
   return (
-    <ul style={{ margin: 0, padding: 0, maxWidth: "var(--size-max-width)" }}>
+    <ul style={{ margin: 0, padding: 0, maxWidth: "var(--layout-max-width)" }}>
       <TodoRow {...args} checked={checked} onCheckedChange={setChecked} />
     </ul>
   );
@@ -85,7 +85,7 @@ export const Swiped: Story = { args: { defaultSwiped: true } };
 export const Disabled: Story = { args: { disabled: true } };
 export const List: Story = {
   render: (args) => (
-    <ul style={{ margin: 0, padding: 0, maxWidth: "var(--size-max-width)" }}>
+    <ul style={{ margin: 0, padding: 0, maxWidth: "var(--layout-max-width)" }}>
       <TodoRow
         {...args}
         title="Book the sample appointment"

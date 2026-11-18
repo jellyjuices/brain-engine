@@ -7,7 +7,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: max(100%, var(--size-target));
-  height: max(100%, var(--size-target));
+  width: max(100%, var(--size-control));
+  height: max(100%, var(--size-control));
   translate: -50% -50%;
 }

@@ -4,11 +4,11 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   align-items: center;
-  min-height: calc(var(--size-tabbar) + env(safe-area-inset-bottom));
+  min-height: calc(var(--layout-tabbar) + env(safe-area-inset-bottom));
   padding: var(--space-xs) calc(var(--space-sm) + env(safe-area-inset-right))
     calc(var(--space-xs) + env(safe-area-inset-bottom))
     calc(var(--space-sm) + env(safe-area-inset-left));
-  border-top: var(--size-hair) solid var(--border-primary);
+  border-top: 0.0625rem solid var(--border-primary);
   background: var(--background-secondary);
 }
 

@@ -12,17 +12,17 @@ const hex = (h: string) => {
 const toHex = (rgb: number[]) =>
   `#${rgb.map((c) => Math.round(c).toString(16).padStart(2, "0")).join("")}`.toUpperCase();
 
-export const resolve = (token: string, mode: Mode): Rgba => {
-  const v: Value | undefined = themed[token]?.[mode] ?? token;
+export const resolve = (token: Value, mode: Mode): Rgba => {
+  const v: Value = (typeof token === "string" && themed[token]?.[mode]) || token;
   if (typeof v === "string") {
     if (themed[v]) return resolve(v, mode);
     return { rgb: hex(primitiveNames[v]), alpha: 1 };
   }
   const base = resolve(v.mix, mode);
-  return { rgb: base.rgb, alpha: parseFloat(primitiveNames[v.amount]) / 100 };
+  return { rgb: base.rgb, alpha: parseFloat(v.amount) / 100 };
 };
 
-export const flatten = (layers: string[], mode: Mode) =>
+export const flatten = (layers: Value[], mode: Mode) =>
   layers.reduce<number[]>(
     (under, token) => {
       const { rgb, alpha } = resolve(token, mode);
@@ -31,7 +31,7 @@ export const flatten = (layers: string[], mode: Mode) =>
     [0, 0, 0],
   );
 
-export const hexOf = (layers: string[], mode: Mode) => toHex(flatten(layers, mode));
+export const hexOf = (layers: Value[], mode: Mode) => toHex(flatten(layers, mode));
 
 export const isColour = (token: string) => {
   const v = themed[token]?.dark;

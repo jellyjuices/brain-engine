@@ -13,7 +13,7 @@
   flex-direction: row;
   gap: var(--space-md);
   color: var(--text-primary);
-  font-size: var(--type-body-size);
+  font-size: var(--font-size-body-lg);
 }
 
 .rail .addMain > :first-child {
@@ -27,28 +27,28 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-xs);
-  min-height: var(--size-target);
+  min-height: var(--size-control);
   padding: var(--space-xs) 0;
   border: 0;
   background: transparent;
   color: var(--text-secondary);
   font: inherit;
-  font-size: var(--type-tab-size);
-  font-weight: var(--type-tab-weight);
-  line-height: var(--type-tab-leading);
+  font-size: var(--font-size-body-xs);
+  font-weight: 600;
+  line-height: var(--font-leading-tight);
   touch-action: none;
   user-select: none;
   -webkit-touch-callout: none;
 }
 
 .addMain > :first-child {
-  margin-top: calc(var(--size-icon) * -1);
+  margin-top: calc(1.5rem * -1);
   transition: transform var(--motion-fast) var(--motion-easing);
 }
 
 .addPanel.isOpen .addMain > :first-child {
-  width: var(--size-kind-pick);
-  height: var(--size-kind-pick);
+  width: 3rem;
+  height: 3rem;
 }
 
 .addMain > :first-child > svg {
@@ -73,10 +73,10 @@
 
 .addBlob {
   position: fixed;
-  --add-blob-w: var(--size-blob);
-  --add-blob-h: var(--size-blob);
+  --add-blob-w: 32.5rem;
+  --add-blob-h: 32.5rem;
   top: calc(
-    var(--vvt, 0) + var(--vvh, 100dvh) - var(--size-tabbar) / 2 - env(safe-area-inset-bottom) -
+    var(--vvt, 0) + var(--vvh, 100dvh) - var(--layout-tabbar) / 2 - env(safe-area-inset-bottom) -
       var(--add-blob-h) / 2
   );
   left: 50%;
@@ -97,8 +97,8 @@
   position: absolute;
   inset: 0;
   background: var(--background-accent);
-  clip-path: var(--shape-plus);
-  animation: add-spin var(--motion-duration-spin) linear infinite;
+  clip-path: var(--shape-cookie);
+  animation: add-spin 40s linear infinite;
 }
 
 @keyframes add-spin {
@@ -119,14 +119,14 @@
 }
 
 .addBlobTodo::before {
-  clip-path: var(--shape-kind-todo);
+  clip-path: var(--shape-scallop);
 }
 
 .addBlobJournal {
   --add-blob-w: 120vw;
   --add-blob-h: 120vw;
   top: calc(
-    var(--vvt, 0) + var(--vvh, 100dvh) - var(--size-tabbar) / 2 - env(safe-area-inset-bottom) -
+    var(--vvt, 0) + var(--vvh, 100dvh) - var(--layout-tabbar) / 2 - env(safe-area-inset-bottom) -
       var(--add-blob-h) * 0.8
   );
   transform-origin: 50% 80%;
@@ -141,15 +141,15 @@
 .addFull {
   display: grid;
   place-items: center;
-  min-width: var(--size-target);
-  min-height: var(--size-target);
+  min-width: var(--size-control);
+  min-height: var(--size-control);
   padding: 0;
   border: 0;
   background: transparent;
 }
 
 .addBlobJournal::before {
-  clip-path: var(--shape-kind-journal);
+  clip-path: var(--shape-house);
   animation: none;
 }
 
@@ -170,11 +170,11 @@
 }
 
 .addPanel.isClosing .addBlob {
-  animation: add-deflate var(--motion-fast) var(--motion-easing-in) both;
+  animation: add-deflate var(--motion-fast) cubic-bezier(0.5, 0, 0.75, 0) both;
 }
 
 .addPanel.isClosing .addScrim {
-  animation: add-fade var(--motion-fast) var(--motion-easing-in) both;
+  animation: add-fade var(--motion-fast) cubic-bezier(0.5, 0, 0.75, 0) both;
 }
 
 .addPanel.isClosing .addMain > :first-child > svg {

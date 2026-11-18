@@ -1,7 +1,8 @@
 import { areaSlugs } from "./areas.ts";
 import { ratio } from "./contrast.ts";
 import { mixLch, rgbToLch, lchToSrgb, toHex } from "./oklch.ts";
-import { primitiveNames, themed } from "./index.ts";
+import { themed } from "./index.ts";
+import { surface } from "./semantic.ts";
 import { flatten, resolve, type Mode } from "./resolve.ts";
 
 const noise = {
@@ -41,15 +42,15 @@ export type MixResult = {
 
 export const checkMix = (areas: string[], mode: Mode): MixResult[] => {
   const results: MixResult[] = [];
-  const textNoise = parseFloat(primitiveNames["opacity-noise-text"]);
-  const glowAlpha = parseFloat(primitiveNames[themed["glow-corner-opacity"][mode] as string]);
+  const textNoise = 0.25;
+  const glowAlpha = parseFloat(themed["glow-corner-opacity"][mode] as string);
   const parts = [
     { part: "surface", role: "surface", base: "background-secondary" },
     { part: "surface on page", role: "surface", base: "background-primary" },
     { part: "corner glow", role: "glow", base: "background-primary" },
   ];
   for (const { part, role, base } of parts) {
-    const layers = areas.map((a) => resolve(`area-${a}-${role}`, mode));
+    const layers = areas.map((a) => resolve(role === "surface" ? surface(a) : `area-${a}-${role}`, mode));
     const alpha = role === "glow" ? glowAlpha : layers[0].alpha;
     const under = flatten([base], mode);
     for (const text of ["text-primary", "text-secondary"]) {

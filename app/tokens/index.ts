@@ -1,49 +1,32 @@
-import {
-  color,
-  font,
-  mix,
-  motion,
-  opacity,
-  radius,
-  shadow,
-  shape,
-  size,
-  space,
-  texture,
-} from "./primitives.ts";
+import { color, font, layout, motion, radius, shape, size, space } from "./primitives.ts";
 
 type Tree = { [key: string]: string | Tree };
 
 const flatten = (prefix: string, tree: Tree, out: Record<string, string>) => {
   for (const [key, value] of Object.entries(tree)) {
-    const name = `${prefix}-${key}`;
+    const name = prefix ? `${prefix}-${key}` : key;
     if (typeof value === "string") out[name] = value;
     else flatten(name, value, out);
   }
   return out;
 };
 
-export const primitives: Record<string, string> = flatten(
+const { family, ...fontScales } = font;
+
+export const primitiveNames: Record<string, string> = flatten(
   "",
   {
     color,
-    font,
+    font: { ...family, ...fontScales },
     space,
     radius,
     shape,
     size,
-    shadow,
-    opacity,
-    mix,
+    layout,
     motion,
-    texture,
   } as unknown as Tree,
   {},
 );
 
-export const primitiveNames = Object.fromEntries(
-  Object.entries(primitives).map(([name, value]) => [name.slice(1), value]),
-);
-
-export { themed, shared, composed, reducedMotion, contrastPairs } from "./semantic.ts";
-export { color, font, space, radius, shape, size, shadow, motion } from "./primitives.ts";
+export { themed, reducedMotion, contrastPairs } from "./semantic.ts";
+export { color, font, space, radius, shape, size, layout, motion } from "./primitives.ts";

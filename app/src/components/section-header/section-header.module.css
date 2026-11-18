@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-md);
-  padding: var(--space-section-top) var(--space-row-x) var(--space-section-bottom);
+  padding: var(--space-lg) var(--space-lg) var(--space-sm);
 }
 
 .title {
@@ -12,9 +12,9 @@
   gap: var(--space-sm);
   margin: 0;
   font-family: var(--font-display);
-  font-size: var(--type-title-section-size);
-  font-weight: var(--type-title-section-weight);
-  line-height: var(--type-title-section-leading);
+  font-size: var(--font-size-display-md);
+  font-weight: 400;
+  line-height: var(--font-leading-snug);
   color: var(--text-primary);
 }
 
@@ -27,12 +27,12 @@
   place-items: center;
   min-width: var(--space-xl);
   padding: var(--space-2xs) var(--space-xs);
-  border-radius: var(--radius-control);
-  background: var(--background-tag);
+  border-radius: var(--radius-full);
+  background: color-mix(in oklch, var(--text-primary) 9%, transparent);
   font-family: var(--font-number);
-  font-size: var(--type-number-size);
-  font-weight: var(--type-number-weight);
-  line-height: var(--type-number-leading);
+  font-size: var(--font-size-number-sm);
+  font-weight: 400;
+  line-height: var(--font-leading-snug);
   color: var(--text-secondary);
 }
 

@@ -7,7 +7,7 @@
   border-radius: var(--radius-md);
   background: var(--background-accent);
   color: var(--text-on-accent);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   text-decoration: none;
   translate: 0 calc(-100% - var(--space-2xl));
 }

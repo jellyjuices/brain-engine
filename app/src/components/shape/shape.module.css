@@ -9,8 +9,8 @@
 }
 
 .shapeLg {
-  width: var(--size-plus);
-  height: var(--size-plus);
+  width: 3.625rem;
+  height: 3.625rem;
 }
 
 .shapeBg {
@@ -21,13 +21,13 @@
 
 .shape > svg {
   position: relative;
-  width: var(--size-icon);
-  height: var(--size-icon);
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .shapeLg > svg {
-  width: var(--size-icon);
-  height: var(--size-icon);
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .shapeJournal .shapeBg {

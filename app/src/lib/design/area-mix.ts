@@ -1,4 +1,4 @@
-export type AreaRole = "accent" | "fill" | "text" | "surface" | "glow";
+export type AreaRole = "accent" | "fill" | "text" | "glow";
 
 export const MAX_MIXED_AREAS = 3;
 
@@ -14,10 +14,13 @@ export const shownAreas = (areas: string[] = []) => splitAreas(areas).shown;
 
 export const areaVar = (slug: string, role: AreaRole) => `var(--area-${slug}-${role})`;
 
+export const areaSurface = (slug: string) =>
+  `color-mix(in oklch, ${areaVar(slug, "accent")} 16%, transparent)`;
+
 const VIVID_CHROMA = 0.3;
 
 const vivid = (colour: string) =>
-  `color-mix(in oklch, ${colour}, oklch(from ${colour} l ${VIVID_CHROMA} h) var(--mix-vivid))`;
+  `color-mix(in oklch, ${colour}, oklch(from ${colour} l ${VIVID_CHROMA} h) 35%)`;
 
 const colours = (areas: string[], role: AreaRole) => {
   const list = shownAreas(areas).map((a) => areaVar(a, role));

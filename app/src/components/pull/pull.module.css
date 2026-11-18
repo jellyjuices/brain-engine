@@ -8,7 +8,7 @@
   margin: 0 calc(-1 * var(--space-lg));
   overflow: hidden;
   color: var(--text-secondary);
-  font-size: var(--type-caption-size);
+  font-size: var(--font-size-body-xs);
 }
 
 .pull.isSettling {
@@ -16,8 +16,8 @@
 }
 
 .pullDot {
-  width: var(--size-dot);
-  height: var(--size-dot);
+  width: 0.5rem;
+  height: 0.5rem;
   border-radius: var(--radius-full);
   background: var(--background-accent);
 }

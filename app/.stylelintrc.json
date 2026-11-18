@@ -2,11 +2,16 @@
   "rules": {
     "color-no-hex": true,
     "declaration-property-value-disallowed-list": {
-      "text-transform": ["uppercase"]
+      "text-transform": [
+        "uppercase"
+      ]
     },
     "block-no-empty": true,
     "declaration-block-no-duplicate-properties": true,
     "no-duplicate-selectors": true,
-    "unit-disallowed-list": ["px"]
+    "unit-disallowed-list": [
+      "px"
+    ],
+    "color-named": "never"
   }
 }

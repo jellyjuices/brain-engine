@@ -5,7 +5,7 @@ import { DateField, type DateFieldProps } from "./date-field.tsx";
 function Live(args: DateFieldProps) {
   const [date, setDate] = useState(args.value);
   return (
-    <div style={{ maxWidth: "var(--size-max-width)", minHeight: "calc(var(--size-control) * 9)" }}>
+    <div style={{ maxWidth: "var(--layout-max-width)", minHeight: "calc(var(--size-control) * 9)" }}>
       <DateField {...args} value={date} onChange={setDate} />
     </div>
   );

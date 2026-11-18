@@ -17,8 +17,8 @@ body {
   background: var(--background-primary);
   color: var(--text-primary);
   font-family: var(--font-body);
-  font-size: var(--type-body-size);
-  line-height: var(--type-body-leading);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--font-leading-normal);
   overscroll-behavior: none;
   text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
@@ -74,7 +74,7 @@ p {
 }
 
 :focus-visible {
-  outline: var(--size-focus) solid var(--border-focus);
+  outline: 0.125rem solid var(--border-focus);
   outline-offset: var(--space-2xs);
 }
 

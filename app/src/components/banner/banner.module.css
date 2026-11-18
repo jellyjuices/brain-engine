@@ -3,27 +3,27 @@
   align-items: center;
   gap: var(--space-md);
   padding: var(--space-md) var(--space-md) var(--space-md) var(--space-lg);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-lg);
   background: var(--background-accent-soft);
   color: var(--text-accent);
 }
 
 .icon {
   flex: none;
-  width: var(--size-icon);
-  height: var(--size-icon);
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .count {
   margin-right: var(--space-xs);
   font-family: var(--font-number);
-  font-weight: var(--font-weight-bold);
+  font-weight: 700;
 }
 
 .message {
   flex: 1;
   margin: 0;
-  font-size: var(--type-body-size);
-  font-weight: var(--type-body-weight);
-  line-height: var(--type-body-leading);
+  font-size: var(--font-size-body-lg);
+  font-weight: 400;
+  line-height: var(--font-leading-normal);
 }
