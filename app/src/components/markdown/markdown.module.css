@@ -21,6 +21,14 @@
   margin: var(--space-xs) 0;
 }
 
+.mdChecks ul {
+  padding-left: 0;
+}
+
+.mdChecks li {
+  margin: 0;
+}
+
 .mdH {
   margin: var(--space-lg) 0 var(--space-sm);
   font-family: var(--font-display);
@@ -96,9 +104,9 @@ h5.mdH {
 .mdCheck {
   display: flex;
   align-items: center;
-  gap: var(--space-md);
-  min-height: var(--size-plus);
-  padding: var(--space-md) var(--space-lg);
+  gap: var(--space-row-gap);
+  min-height: var(--size-row);
+  padding: var(--space-row-y) var(--space-row-x);
 }
 
 .mdBox {

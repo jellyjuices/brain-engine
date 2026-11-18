@@ -48,15 +48,17 @@ export function MarkdownBlock({
     <div className={styles.mdList}>
       {checkGroups(block.items).map((group, i) =>
         group.kind === "checks" ? (
-          <List key={i}>
-            {group.items.map((item, j) => (
-              <Fragment key={j}>
-                {renderTodo?.(item) ?? (
-                  <PlainCheck text={item.text} checked={!!item.checked} from={path} />
-                )}
-              </Fragment>
-            ))}
-          </List>
+          <div key={i} className={styles.mdChecks}>
+            <List>
+              {group.items.map((item, j) => (
+                <Fragment key={j}>
+                  {renderTodo?.(item) ?? (
+                    <PlainCheck text={item.text} checked={!!item.checked} from={path} />
+                  )}
+                </Fragment>
+              ))}
+            </List>
+          </div>
         ) : (
           <ListNodes key={i} nodes={group.nodes} ordered={group.ordered} from={path} />
         ),

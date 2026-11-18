@@ -1,13 +1,18 @@
 .row {
   position: relative;
   overflow: hidden;
-  background: var(--background-primary);
 }
 
 .actions {
   position: absolute;
   inset: 0 0 0 auto;
   display: flex;
+  visibility: hidden;
+}
+
+.isDragging .actions,
+.isSwiped .actions {
+  visibility: visible;
 }
 
 .action {
@@ -81,15 +86,13 @@
   align-items: flex-start;
   gap: var(--space-row-gap);
   padding: var(--space-row-y) var(--space-row-x);
-  background: var(--background-primary);
   touch-action: pan-y;
   transition: transform var(--motion-slow) var(--motion-easing);
 }
 
 .content:has(.tick:active),
 .isPressed .content {
-  background:
-    linear-gradient(var(--background-pressed), var(--background-pressed)), var(--background-primary);
+  background: var(--background-pressed);
 }
 
 .mark {
@@ -148,10 +151,6 @@
   text-decoration: line-through;
 }
 
-.isDisabled .content {
-  background: var(--background-primary);
-}
-
 .isDisabled .tick {
   border-style: dashed;
   border-color: var(--text-disabled);
@@ -182,8 +181,7 @@
   }
 
   .content:hover {
-    background:
-      linear-gradient(var(--background-hover), var(--background-hover)), var(--background-primary);
+    background: var(--background-hover);
   }
 }
 

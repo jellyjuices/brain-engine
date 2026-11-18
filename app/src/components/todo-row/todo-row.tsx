@@ -102,6 +102,7 @@ export function TodoRow(props: TodoRowProps) {
         checked && styles.isDone,
         disabled && styles.isDisabled,
         swipe.dragging && styles.isDragging,
+        swipe.offset !== 0 && styles.isSwiped,
         (pressed || hold.holding) && styles.isPressed,
       )}
       onKeyDown={onKeyDown}

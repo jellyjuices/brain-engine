@@ -15,7 +15,8 @@
   display: flex;
   flex: 1;
   align-items: center;
-  gap: var(--space-xs);
+  gap: var(--space-sm);
+  padding-block: var(--space-sm);
 }
 
 .end {
