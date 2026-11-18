@@ -30,14 +30,9 @@
   height: 1.5rem;
 }
 
-.shapeJournal .shapeBg {
+.shapeHouse .shapeBg {
   translate: 0 -7%;
   transform-origin: 50% 57%;
-}
-
-.shapePerson .shapeBg {
-  translate: 0 -5%;
-  transform-origin: 50% 55%;
 }
 
 .shapePrimary {

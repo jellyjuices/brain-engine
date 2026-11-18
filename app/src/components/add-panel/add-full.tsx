@@ -1,23 +1,14 @@
-import styles from "./add-panel.module.css";
 import { ArrowsInSimpleIcon, ArrowsOutSimpleIcon } from "@phosphor-icons/react";
-import { Shape } from "@/components/shape/shape.tsx";
+import { AddTool } from "./add-tool.tsx";
 import { copy } from "@/content/index.ts";
 
 export function AddFull({ full, onToggle }: { full: boolean; onToggle: () => void }) {
   return (
-    <button
-      type="button"
-      className={styles.addFull}
-      aria-label={full ? copy.add.smaller : copy.add.fullScreen}
-      aria-pressed={full}
-      onMouseDown={(e) => e.preventDefault()}
+    <AddTool
+      icon={full ? ArrowsInSimpleIcon : ArrowsOutSimpleIcon}
+      label={full ? copy.add.smaller : copy.add.fullScreen}
+      pressed={full}
       onClick={onToggle}
-    >
-      <Shape
-        name="other"
-        icon={full ? ArrowsInSimpleIcon : ArrowsOutSimpleIcon}
-        variant="secondary"
-      />
-    </button>
+    />
   );
 }

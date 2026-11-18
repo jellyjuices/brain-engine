@@ -11,7 +11,7 @@
 }
 
 .addBox {
-  --add-tools: calc(var(--size-control) + var(--space-sm) * 2 + 0.0625rem);
+  --add-tools: calc(var(--size-control) + var(--space-sm) * 2 + var(--space-md) + 0.0625rem);
   position: absolute;
   inset-block: 21% calc(50% + var(--layout-tabbar) / 2 + var(--add-tools));
   inset-inline: max(calc((var(--add-blob-w) - 100vw) / 2 + var(--space-xl)), 22%);

@@ -6,7 +6,8 @@
   );
   position: fixed;
   top: calc(
-    var(--vvt, 0) + var(--vvh, 100dvh) - var(--layout-tabbar) - env(safe-area-inset-bottom)
+    var(--vvt, 0) + var(--vvh, 100dvh) - var(--layout-tabbar) - env(safe-area-inset-bottom) -
+      var(--space-md)
   );
   right: 0;
   left: 0;
@@ -22,7 +23,7 @@
   display: flex;
   flex: 1;
   align-items: center;
-  gap: var(--space-sm);
+  gap: 0;
   padding-block: var(--space-sm);
 }
 

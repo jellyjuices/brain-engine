@@ -9,8 +9,8 @@ export type ShapeName = "add" | KindName;
 const KIND_SHAPE: Record<string, string> = {
   add: "cookie",
   todo: "scallop",
-  journal: "house",
-  person: "pentagon",
+  journal: "blossom",
+  person: "egg",
   place: "clover",
   thing: "puff",
   file: "hexagon",
@@ -18,7 +18,7 @@ const KIND_SHAPE: Record<string, string> = {
   other: "circle",
   area: "pebble",
   project: "squircle",
-  group: "blossom",
+  group: "house",
   topic: "triad",
   event: "burst",
   note: "diamond",
@@ -40,8 +40,7 @@ export function Shape({ name, icon, size = "md", variant = "default" }: ShapePro
     <span
       className={clsx(
         styles.shape,
-        name === "journal" && styles.shapeJournal,
-        name === "person" && styles.shapePerson,
+        name === "group" && styles.shapeHouse,
         size === "lg" && styles.shapeLg,
         variant === "primary" && styles.shapePrimary,
         variant === "secondary" && styles.shapeSecondary,

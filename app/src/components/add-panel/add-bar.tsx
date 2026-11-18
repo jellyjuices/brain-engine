@@ -7,7 +7,7 @@ import {
   TextItalicIcon,
 } from "@phosphor-icons/react";
 import type { ReactNode, SyntheticEvent } from "react";
-import { IconButton } from "@/components/icon-button/icon-button.tsx";
+import { AddTool } from "./add-tool.tsx";
 import { copy } from "@/content/index.ts";
 
 export interface AddBarActions {
@@ -37,38 +37,11 @@ export function AddBar({
     <div className={styles.addBar} onPointerDown={keepFocus} onMouseDown={keepFocus}>
       {drawer}
       <div className={styles.tools} role="toolbar" aria-label={copy.add.format}>
-        <IconButton
-          icon={TextBIcon}
-          label={copy.add.bold}
-          variant="secondary"
-          onClick={actions.bold}
-        />
-        <IconButton
-          icon={TextItalicIcon}
-          label={copy.add.italic}
-          variant="secondary"
-          onClick={actions.italic}
-        />
-        {journal && (
-          <IconButton
-            icon={ListBulletsIcon}
-            label={copy.add.list}
-            variant="secondary"
-            onClick={actions.list}
-          />
-        )}
-        <IconButton
-          icon={HashIcon}
-          label={copy.common.tag}
-          variant="secondary"
-          onClick={actions.tag}
-        />
-        <IconButton
-          icon={AtIcon}
-          label={copy.add.mention}
-          variant="secondary"
-          onClick={actions.link}
-        />
+        <AddTool icon={TextBIcon} label={copy.add.bold} onClick={actions.bold} />
+        <AddTool icon={TextItalicIcon} label={copy.add.italic} onClick={actions.italic} />
+        {journal && <AddTool icon={ListBulletsIcon} label={copy.add.list} onClick={actions.list} />}
+        <AddTool icon={HashIcon} label={copy.common.tag} onClick={actions.tag} />
+        <AddTool icon={AtIcon} label={copy.add.mention} onClick={actions.link} />
         <div className={styles.end}>{end}</div>
       </div>
     </div>
