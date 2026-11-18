@@ -65,7 +65,7 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 | Padded box | `Panel` |
 | Fact on a note | `Fact`, `AddFact` |
 | To-do line | `TodoRow` (`title`, `tag`, `when`, `checked`, `onCheckedChange`, `onOpen`, `onMenu`, `onLater` for the swipe-left Tomorrow). For a `TodoRef` from `makeTodo()`, use `TodoRefRow` (`done` for a ticked one: a tap opens Mark not done, Edit, Delete; `tickNow` ticks at once) |
-| When a to-do is due | `WhenChip` (`label`, `status`) |
+| When a to-do is due | `WhenChip` (`label`, `status`). Build both with `whenLabel()` from `lib/notes/when-label.ts`, which also says "Every week · Tue" for a repeating one |
 | A goal's target or step, with its tick box | `GoalStep` from `components/goal-step/` |
 | A goal's big percent, bar and "+N this month" | `GoalBar` from `components/goal-bar/` |
 | A subgoal: its name and small bar, as a link | `SubgoalLink` from `components/subgoal-link/` |

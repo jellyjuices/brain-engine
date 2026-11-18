@@ -18,6 +18,10 @@ export const todos = {
   doneOn: (subject: string) => `Done. It's on the ${subject} timeline.`,
   doneOnGoal: (subject: string, goal: string) =>
     `Done. It's on the ${subject} timeline and counts toward ${goal}.`,
+  doneBack: (day: string) => `Done. Back ${day}`,
+  skippedBack: (day: string) => `Skipped. Back ${day}`,
+  every: (rule: string) => `Every ${rule}`,
+  everyOn: (rule: string, day: string) => `Every ${rule} · ${day}`,
   followUp: "Follow-up",
   waiting: "On hold",
 };

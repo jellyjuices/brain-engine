@@ -1,5 +1,5 @@
 import type { Card, CardLine, CardRelation, CardSummary, CardTodo } from "./card-types.ts";
-import { loopsIn, todoRef } from "./todos.ts";
+import { loopsIn, todoRef, type Loop } from "./todos.ts";
 import { relationsIn } from "./relations.ts";
 import {
   eventDue,
@@ -24,6 +24,10 @@ export const SUBJECT_TYPES = [
   "Lens",
 ];
 const NOT_LINKED = ["Area", "Lens", "Journal", "Capture"];
+
+function cardTodo({ text, path, noteTitle, due, every }: Loop): CardTodo {
+  return { text, path, noteTitle, ...(due && { due }), ...(every && { every }) };
+}
 const RANK = [
   "Person",
   "Group",
@@ -85,15 +89,10 @@ export function buildCard(notes: StoredNote[], n: StoredNote, now: string): Card
       todo.push({ ...t, ref: todoRef(t.path, t.text) });
     }
   }
-  for (const x of [n, ...close])
-    for (const l of loopsIn(x))
-      if (!l.done)
-        push({ text: l.text, path: l.path, noteTitle: l.noteTitle, ...(l.due && { due: l.due }) });
+  for (const x of [n, ...close]) for (const l of loopsIn(x)) if (!l.done) push(cardTodo(l));
   for (const x of live) {
     if (x.path === n.path || !isLive(x)) continue;
-    for (const l of loopsIn(x))
-      if (!l.done && l.subjects?.includes(n.path))
-        push({ text: l.text, path: l.path, noteTitle: l.noteTitle, ...(l.due && { due: l.due }) });
+    for (const l of loopsIn(x)) if (!l.done && l.subjects?.includes(n.path)) push(cardTodo(l));
   }
 
   const dated = [

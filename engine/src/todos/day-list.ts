@@ -14,6 +14,7 @@ export interface Item {
   path: string;
   subject: string;
   due?: string;
+  every?: string;
 }
 
 const ORDER: Group[] = ["overdue", "today", "waiting"];
@@ -32,7 +33,7 @@ export function dayList(root: string): Item[] {
   const raw: Omit<Item, "n">[] = [];
   for (const todo of allLoops(notes, { done: false })) {
     const group = groupOf(todo.due, todo.outcome, now);
-    if (group) raw.push({ group, kind: "todo", text: todo.text, path: todo.path, subject: todo.noteTitle, ...(todo.due && { due: todo.due }) });
+    if (group) raw.push({ group, kind: "todo", text: todo.text, path: todo.path, subject: todo.noteTitle, ...(todo.due && { due: todo.due }), ...(todo.every && { every: todo.every }) });
   }
   for (const todo of decideByLoops(notes)) {
     const group = groupOf(todo.due, undefined, now);

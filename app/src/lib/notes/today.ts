@@ -16,6 +16,7 @@ export interface TodayItem {
   path: string;
   subject: string;
   due?: string;
+  every?: string;
   ref: string;
 }
 
@@ -59,6 +60,7 @@ export function computeToday(notes: StoredNote[], now: string): TodayData {
         path: l.path,
         subject: l.noteTitle,
         ...(l.due && { due: l.due }),
+        ...(l.every && { every: l.every }),
         ref: todoRef(l.path, l.text),
       });
   }
@@ -93,6 +95,7 @@ export function fromServer(data: unknown): { date: string; items: TodayItem[] } 
     path: String(x.path),
     subject: String(x.subject),
     ...(typeof x.due === "string" && { due: x.due }),
+    ...(typeof x.every === "string" && { every: x.every }),
     ref: String(x.ref),
   }));
   return { date: d.date, items: sortItems(items) };

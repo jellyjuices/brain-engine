@@ -49,9 +49,10 @@ export interface TodoSource {
   kind?: TodoRef["kind"];
   ref?: string;
   due?: string | null;
+  every?: string;
 }
 
-export function makeTodo({ text, path, subject, kind, ref, due }: TodoSource): TodoRef {
+export function makeTodo({ text, path, subject, kind, ref, due, every }: TodoSource): TodoRef {
   return {
     text,
     path,
@@ -59,5 +60,6 @@ export function makeTodo({ text, path, subject, kind, ref, due }: TodoSource): T
     kind: kind ?? "todo",
     ref: ref ?? todoRef(path, text),
     ...(due && { due }),
+    ...(every && { every }),
   };
 }

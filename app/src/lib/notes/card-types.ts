@@ -3,6 +3,7 @@ export interface CardTodo {
   path: string;
   noteTitle: string;
   due?: string;
+  every?: string;
   ref?: string;
 }
 export interface CardLine {

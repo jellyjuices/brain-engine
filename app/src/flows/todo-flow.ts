@@ -42,6 +42,13 @@ export async function commit(
 export async function tickTodo(todo: TodoRef, goal?: string): Promise<void> {
   try {
     const change = await applyChange(todo, { kind: "done" }, todayIso());
+    if (change.next) {
+      toast(change.label, {
+        ...(isOffline() && { tone: "offline" as const }),
+        action: undoAction(change),
+      });
+      return;
+    }
     const message = goal
       ? copy.todos.doneOnGoal(todo.subject, goal)
       : copy.todos.doneOn(todo.subject);

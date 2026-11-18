@@ -58,7 +58,7 @@ function stepsOf(notes: Note[], links: ProjectLinks, goal: string): GoalStep[] {
   for (const l of allLoops(notes)) {
     const mine = l.path === goal || projects?.has(l.path) || l.toward?.some((v) => extractLinks(l.path, v).includes(goal));
     if (l.dropped || !mine) continue;
-    out.push({ text: l.text, done: l.done, ...(l.doneAt && { doneAt: l.doneAt }), ...(l.due && { due: l.due }), path: l.path, goal, ref: ref(l.path, l.text) });
+    out.push({ text: l.text, done: l.done, ...(l.doneAt && { doneAt: l.doneAt }), ...(l.due && { due: l.due }), ...(l.every && { every: l.every }), path: l.path, goal, ref: ref(l.path, l.text) });
   }
   return out;
 }

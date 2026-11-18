@@ -18,7 +18,13 @@ export function NoteBody({ note }: { note: StoredNote }) {
     const loop = fieldsOf(parsed);
     return (
       <TodoRefRow
-        todo={makeTodo({ text: loop.text, path: note.path, subject: note.title, due: loop.due })}
+        todo={makeTodo({
+          text: loop.text,
+          path: note.path,
+          subject: note.title,
+          due: loop.due,
+          every: loop.every,
+        })}
         showSubject={false}
         done={loop.done}
         tickNow

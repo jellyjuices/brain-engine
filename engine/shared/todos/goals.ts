@@ -3,6 +3,7 @@ export interface GoalStep {
   done: boolean;
   doneAt?: string;
   due?: string;
+  every?: string;
   path: string;
   goal: string;
   ref?: string;

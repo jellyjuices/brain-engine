@@ -243,6 +243,20 @@ describe("a change, its Undo and the local copy", () => {
     expect((await getNote(todo.path))!.body).toContain("- [ ] Make a gym schedule");
   });
 
+  it.each([
+    [{ kind: "done" as const }, "Done. Back Thu", "done"],
+    [{ kind: "skip" as const }, "Skipped. Back Thu", "skip"],
+  ])("a repeating to-do: %o says when it comes back", async (decision, label, queued) => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("offline")));
+    const hinges = { ...todo, text: "Oil the shed hinges", due: NOW, every: "week" };
+    const change = await applyChange(hinges, decision, NOW);
+    expect([change.label, change.next, (await list()).map((i) => i.kind)]).toEqual([
+      label,
+      "2026-11-12",
+      [queued],
+    ]);
+  });
+
   it("Undo after it landed queues /api/undo", async () => {
     vi.stubGlobal(
       "fetch",

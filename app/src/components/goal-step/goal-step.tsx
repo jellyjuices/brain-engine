@@ -1,7 +1,8 @@
 import { TodoRow } from "@/components/todo-row/todo-row.tsx";
 import { doneStep } from "@/flows/goal-flow.ts";
 import type { GoalStep as Step } from "@shared/todos/index.ts";
-import { niceDate, noteHref } from "@/lib/notes/model.ts";
+import { niceDate, noteHref, todayIso } from "@/lib/notes/model.ts";
+import { whenLabel } from "@/lib/notes/when-label.ts";
 import { plainText } from "@/lib/notes/search.ts";
 import { go } from "@/lib/platform/router.ts";
 
@@ -18,7 +19,13 @@ export function GoalStep({ step, goal, subject, showSubject = false }: GoalStepP
     <TodoRow
       title={plainText(step.text)}
       tag={showSubject ? subject : undefined}
-      when={date ? { label: niceDate(date), status: "due" } : undefined}
+      when={
+        step.every && !step.done
+          ? whenLabel(step, todayIso())
+          : date
+            ? { label: niceDate(date), status: "due" }
+            : undefined
+      }
       checked={step.done}
       disabled={step.done}
       onCheckedChange={() => void doneStep(step, subject, goal)}

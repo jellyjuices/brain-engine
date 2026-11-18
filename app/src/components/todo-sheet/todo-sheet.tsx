@@ -8,6 +8,7 @@ import { TodoDoneMenu } from "./todo-done-menu.tsx";
 import { TodoEdit } from "./todo-edit.tsx";
 import { TodoHold } from "./todo-hold.tsx";
 import { TodoMenu } from "./todo-menu.tsx";
+import { TodoRepeatMenu } from "./todo-repeat-menu.tsx";
 import { TodoWaitPick } from "./todo-wait-pick.tsx";
 
 export type SheetResult = Decision | { kind: "open" } | { kind: "doneThenAdd"; happened?: string };
@@ -25,6 +26,9 @@ export function TodoSheet({ todo, start, now, finish }: TodoSheetProps) {
   const [step, setStep] = useState<Step>(start);
   const props = { todo, now, finish, show: setStep };
 
+  const repeats = todo.every !== undefined && todo.kind === "todo";
+  if (repeats && (step === "menu" || step === "doneMenu" || step === "done"))
+    return <TodoRepeatMenu {...props} />;
   if (step === "menu") return <TodoMenu {...props} />;
   if (step === "doneMenu") return <TodoDoneMenu {...props} />;
   if (step === "edit")

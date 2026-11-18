@@ -13,7 +13,7 @@ import { relationsOf, todosNaming } from "../core/index-links.ts";
 export const SUBJECT_TYPES = ["Area", "Project", "Person", "Group", "Place", "Thing", "Topic", "Event", "Note", "Lens"];
 const NOT_LINKED = ["Area", "Lens", "Journal", "Capture"];
 
-export interface CardTodo { text: string; path: string; noteTitle: string; due?: string }
+export interface CardTodo { text: string; path: string; noteTitle: string; due?: string; every?: string }
 export interface CardLine { date: string; text: string; path: string }
 export interface CardRelation { direction: "out" | "in"; path: string; title: string; role?: string; heading: string; time?: string }
 
@@ -31,7 +31,7 @@ const live = (n: Note) => folderOf(n) !== DIRS.archive;
 const DATED = /^- (\d{4}-\d{2}-\d{2}) · (.+)$/;
 
 function todoOf(l: Loop): CardTodo {
-  return { text: l.text, path: l.path, noteTitle: l.noteTitle, ...(l.due && { due: l.due }) };
+  return { text: l.text, path: l.path, noteTitle: l.noteTitle, ...(l.due && { due: l.due }), ...(l.every && { every: l.every }) };
 }
 
 export function isSubject(n: Note): boolean {

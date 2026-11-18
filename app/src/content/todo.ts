@@ -24,6 +24,9 @@ export const todo = {
   whatWaiting: "What are you waiting on?",
   searchPeople: "Search or add a name",
   searchNotes: "Search or add a thing",
+  doneForNow: "Done for now",
+  skipThisTime: "Skip this time",
+  stopRepeating: "Stop repeating",
   swipeDone: "Done",
   swipeLater: "Tomorrow",
 };

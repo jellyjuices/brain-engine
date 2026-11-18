@@ -23,7 +23,14 @@ async function crossTargetFlow(step: GoalStep): Promise<void> {
 export function doneStep(step: GoalStep, subject: string, goal: string): Promise<void> {
   if (!step.ref) return crossTargetFlow(step);
   return tickTodo(
-    makeTodo({ text: step.text, path: step.path, subject, ref: step.ref, due: step.due }),
+    makeTodo({
+      text: step.text,
+      path: step.path,
+      subject,
+      ref: step.ref,
+      due: step.due,
+      every: step.every,
+    }),
     goal,
   );
 }

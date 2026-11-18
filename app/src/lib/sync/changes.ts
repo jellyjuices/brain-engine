@@ -4,12 +4,15 @@ import { flush, has, remove } from "./outbox.ts";
 import { getNote, putNotes } from "@/lib/storage/store.ts";
 import { syncNow } from "./sync.ts";
 import { queueDecision, queueUndo } from "./writes.ts";
+import { nextDue } from "@shared/line/index.ts";
+import { dayLabel } from "@/lib/notes/when-label.ts";
 import { copy } from "@/content/index.ts";
 
 export interface Change {
   id: string;
   label: string;
   before: StoredNote | undefined;
+  next?: string;
 }
 
 let last: Change | null = null;
@@ -17,8 +20,16 @@ export function lastChange() {
   return last;
 }
 
-export function labelFor(d: Decision) {
-  return copy.save.changeToast[d.kind];
+function rolledTo(todo: TodoRef, d: Decision, now: string): string | undefined {
+  if (!todo.every || (d.kind !== "done" && d.kind !== "skip")) return undefined;
+  const due = todo.due && todo.due !== "someday" ? todo.due : now;
+  return nextDue(todo.every, due, now);
+}
+
+function labelFor(d: Decision, now: string, next: string | undefined) {
+  if (!next) return copy.save.changeToast[d.kind];
+  const day = dayLabel(next, now);
+  return d.kind === "skip" ? copy.todos.skippedBack(day) : copy.todos.doneBack(day);
 }
 
 export function settle(): void {
@@ -32,7 +43,8 @@ export async function applyChange(todo: TodoRef, d: Decision, now: string): Prom
   const after = before && applyDecision(before, todo, d, now);
   if (after) await putNotes([after]);
   const id = await queueDecision(todo.ref, d);
-  last = { id, label: labelFor(d), before };
+  const next = rolledTo(todo, d, now);
+  last = { id, label: labelFor(d, now, next), before, ...(next && { next }) };
   settle();
   return last;
 }
