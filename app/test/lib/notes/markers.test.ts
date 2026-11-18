@@ -21,6 +21,13 @@ describe("wrapMarks", () => {
       end: 8,
     });
   });
+
+  it.each([
+    ["inside a word", "snake_case_word", 6, 10, "_", "snake__case__word"],
+    ["inside a longer bold run", "***x***", 3, 4, "**", "*****x*****"],
+  ])("adds marks instead of unwrapping %s", (_, value, start, end, mark, wrapped) => {
+    expect(wrapMarks(value, start, end, mark).value).toBe(wrapped);
+  });
 });
 
 describe("prefixLines", () => {
@@ -34,6 +41,15 @@ describe("prefixLines", () => {
 
   it("moves the caret with the line", () => {
     expect(prefixLines("a\nbc", 3, 3, "- ")).toEqual({ value: "a\n- bc", start: 5, end: 5 });
+  });
+
+  it.each([
+    ["a text that starts with a blank line", "\none", 0, 4, "\n- one"],
+    ["a whole-line selection that ends after the line break", "one\ntwo", 0, 4, "- one\ntwo"],
+    ["blank lines inside the selection", "one\n\ntwo", 0, 8, "- one\n\n- two"],
+    ["a caret inside an existing mark", "- one", 1, 1, "one"],
+  ])("handles %s", (_, value, start, end, result) => {
+    expect(prefixLines(value, start, end, "- ").value).toBe(result);
   });
 });
 
@@ -57,5 +73,12 @@ describe("pullTags", () => {
 
   it("leaves a tag word that is part of another word", () => {
     expect(pullTags("a#money b", ["money"])).toEqual({ text: "a#money b", tags: [] });
+  });
+
+  it("keeps the owner's own double spaces and line breaks", () => {
+    expect(pullTags("Pay  rent #money\nsoon", ["money"])).toEqual({
+      text: "Pay  rent\nsoon",
+      tags: ["money"],
+    });
   });
 });
