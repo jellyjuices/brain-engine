@@ -41,4 +41,18 @@ describe("AddPanel", () => {
     expect(screen.getByRole("textbox", { name: "To-do" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
   });
+
+  it.each(["To-do", "Journal"])(
+    "tells the tab bar it is writing a %s, so the keyboard does not hide it",
+    async (kind) => {
+      const user = userEvent.setup();
+      const { container } = render(<AddPanel />);
+      await user.click(screen.getByRole("button", { name: "Add" }));
+      await user.click(screen.getByRole("menuitem", { name: kind }));
+      expect(container.firstElementChild).toHaveAttribute(
+        "data-mode",
+        kind === "To-do" ? "todo" : "journal",
+      );
+    },
+  );
 });
