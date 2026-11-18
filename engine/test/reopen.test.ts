@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { today } from "../src/core/notes.ts";
 import { readLog } from "../src/core/log.ts";
 import { done } from "../src/todos/verbs.ts";
-import { editTodoText, reopen } from "../src/todos/reopen.ts";
+import { dropDone, editTodoText, reopen } from "../src/todos/reopen.ts";
 import { ref } from "../src/todos/day-list.ts";
 import { undo } from "../src/todos/undo.ts";
 import { reopenTodoIn, retextTodoIn } from "../shared/line/index.ts";
@@ -62,6 +62,13 @@ test("edit works on a done to-do and keeps it done", () => {
 test("edit with no words is refused", () => {
   const root = brainWith(`- [ ] Book the sleep test`);
   assert.throws(() => editTodoText(root, ref(PATH, "Book the sleep test"), "  "), /new words/);
+});
+
+test("delete on a done to-do marks it dropped and keeps its done date; an open one is left to drop", () => {
+  const root = brainWith(`- [x] Call Omar · done 2026-10-01\n- [ ] Book the sleep test`);
+  assert.equal(dropDone(root, ref(PATH, "Book the sleep test")), null);
+  dropDone(root, ref(PATH, "Call Omar"));
+  assert.match(file(root), /- \[x\] Call Omar · done 2026-10-01 · dropped\n- \[ \] Book the sleep test\n/);
 });
 
 test("a ref outside the brain is refused", () => {

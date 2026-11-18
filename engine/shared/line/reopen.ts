@@ -26,6 +26,15 @@ export function reopenTodoIn(body: string, text: string): string | null {
   return lines.join("\n");
 }
 
+export function dropDoneTodoIn(body: string, text: string): string | null {
+  const lines = body.split("\n");
+  if (findTodo(lines, text, false) !== -1) return null;
+  const at = findTodo(lines, text, true);
+  if (at === -1) return null;
+  lines[at] = formatTodoLine(updateTodo(parseTodoLine(lines[at]!)!, { dropped: true }));
+  return lines.join("\n");
+}
+
 export function retextTodoIn(body: string, text: string, next: string): string | null {
   const lines = body.split("\n");
   const open = findTodo(lines, text, false);

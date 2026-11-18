@@ -10,7 +10,7 @@ export {
   type TodoPatch,
 } from "./fields.ts";
 export { formatTodoLine, parseTodoLine, type TodoLine } from "./line.ts";
-export { reopenTodo, reopenTodoIn, retextTodoIn } from "./reopen.ts";
+export { dropDoneTodoIn, reopenTodo, reopenTodoIn, retextTodoIn } from "./reopen.ts";
 export {
   appendToSection,
   LOOPS_HEADING,

@@ -6,7 +6,7 @@ import { loadSchema } from "../core/schema.ts";
 import { statusesFor } from "../core/schema-kinds.ts";
 import { move } from "../todos/verbs.ts";
 import { change } from "../todos/undo.ts";
-import { editTodoText, reopen } from "../todos/reopen.ts";
+import { dropDone, editTodoText, reopen } from "../todos/reopen.ts";
 import { inboxPath } from "./routes/capture.ts";
 import { doneWith, dropWith } from "../todos/wrapup.ts";
 import { HttpError, MAX_FILE } from "./server-auth.ts";
@@ -88,7 +88,7 @@ export const doneRoute = (c: Ctx) =>
 
 export const moveRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => move(c.root, text(c.body.ref, "ref")!, text(c.body.when, "when")!, { who: text(c.body.who, "who", false), what: text(c.body.what, "what", false) })));
 
-export const dropRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => dropWith(c.root, text(c.body.ref, "ref")!, text(c.body.why, "why", false))));
+export const dropRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => dropDone(c.root, text(c.body.ref, "ref")!) ?? dropWith(c.root, text(c.body.ref, "ref")!, text(c.body.why, "why", false))));
 
 export const reopenRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => reopen(c.root, text(c.body.ref, "ref")!)));
 

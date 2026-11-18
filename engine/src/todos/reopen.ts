@@ -1,5 +1,5 @@
 import { readNote, writeNote } from "../core/files.ts";
-import { reopenTodoIn, retextTodoIn, tidyText } from "../../shared/line/index.ts";
+import { dropDoneTodoIn, reopenTodoIn, retextTodoIn, tidyText } from "../../shared/line/index.ts";
 import { change } from "./undo.ts";
 import { resolve } from "./day-list.ts";
 
@@ -27,6 +27,14 @@ export function reopen(root: string, ref: string): { path: string; text: string;
   const { path, text } = splitRef(root, ref);
   rewrite(root, path, `reopen: ${text} (${path})`, (body) => reopenTodoIn(body, text), `"${text}" is not a done to-do in ${path}.`);
   return { path, text, line: `Not done: ${text} · undo` };
+}
+
+export function dropDone(root: string, ref: string): { path: string; text: string; line: string } | null {
+  if (!ref.includes(REF)) return null;
+  const { path, text } = splitRef(root, ref);
+  if (dropDoneTodoIn(readNote(root, path).body, text) === null) return null;
+  rewrite(root, path, `drop: ${text} (${path})`, (body) => dropDoneTodoIn(body, text), `"${text}" is gone from ${path}.`);
+  return { path, text, line: `Deleted: ${text} · undo` };
 }
 
 export function editTodoText(root: string, ref: string, next: string): { path: string; text: string; line: string } {
