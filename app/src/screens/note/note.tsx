@@ -1,4 +1,3 @@
-import "./note.css";
 import { useEffect } from "react";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { useRoute } from "@/hooks/use-route.ts";

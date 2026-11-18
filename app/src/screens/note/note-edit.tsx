@@ -1,11 +1,12 @@
-import "./note.css";
+import { Composer } from "@/components/field/composer.tsx";
+import styles from "./note.module.css";
 import { useEffect, useRef, useState } from "react";
 import { AtIcon, CalendarBlankIcon, CheckSquareIcon, HashIcon } from "@phosphor-icons/react";
 import { Chip } from "@/components/chip/chip.tsx";
 import { MentionDrawer } from "@/components/mention-drawer/mention-drawer.tsx";
 import { useMentions } from "@/components/mention-drawer/use-mentions.ts";
 import { tagSheet } from "@/components/pick-sheet/pick-sheet.tsx";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { Tool } from "@/components/tool-bar/tool.tsx";
 import { ToolBar } from "@/components/tool-bar/tool-bar.tsx";
 import { useDraft } from "@/hooks/use-draft.ts";
@@ -113,10 +114,9 @@ export function NoteEdit({ note: opened }: { note: StoredNote }) {
 
   return (
     <>
-      <ScreenHead title={note.title} kicker={copy.common.edit} onBack={close} />
-      <textarea
+      <PageHeader title={note.title} kicker={copy.common.edit} onBack={close} />
+      <Composer
         ref={area}
-        className="composer"
         aria-label={copy.notes.editNote}
         spellCheck
         autoCapitalize="sentences"
@@ -145,16 +145,14 @@ export function NoteEdit({ note: opened }: { note: StoredNote }) {
         label={copy.add.details}
         meta={
           tags.length > 0 && (
-            <div className="note-edit-tags" aria-label={copy.notes.tagList}>
+            <div className={styles.noteEditTags} aria-label={copy.notes.tagList}>
               {tags.map((t) => (
                 <Chip
                   key={t}
-                  size="sm"
-                  label={copy.common.remove(`#${t}`)}
+                  label={`#${t}`}
+                  removeLabel={copy.common.remove(`#${t}`)}
                   onRemove={() => update({ ...current.current, tags: tags.filter((x) => x !== t) })}
-                >
-                  #{t}
-                </Chip>
+                />
               ))}
             </div>
           )

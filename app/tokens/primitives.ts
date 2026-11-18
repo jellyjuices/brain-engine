@@ -91,34 +91,34 @@ export const font = {
   size: {
     display: {
       xs: "1rem",
-      sm: "1.1875rem",
-      md: "1.375rem",
-      lg: "1.625rem",
-      xl: "2rem",
-      "2xl": "2.5rem",
-      "3xl": "3.75rem",
+      sm: "1.125rem",
+      md: "1.3125rem",
+      lg: "1.5rem",
+      xl: "1.75rem",
+      "2xl": "2.125rem",
+      "3xl": "2.75rem",
     },
     body: {
       xs: "0.75rem",
-      sm: "0.875rem",
-      md: "1.0625rem",
-      lg: "1.1875rem",
-      xl: "1.375rem",
-      "2xl": "1.625rem",
-      "3xl": "2rem",
+      sm: "0.8125rem",
+      md: "0.875rem",
+      lg: "0.9375rem",
+      xl: "1.125rem",
+      "2xl": "1.25rem",
+      "3xl": "1.5rem",
     },
     number: {
       xs: "0.75rem",
-      sm: "0.875rem",
-      md: "1.125rem",
-      lg: "1.5rem",
-      xl: "2rem",
-      "2xl": "2.75rem",
-      "3xl": "3.5rem",
+      sm: "0.8125rem",
+      md: "0.875rem",
+      lg: "1.25rem",
+      xl: "1.5rem",
+      "2xl": "2.5rem",
+      "3xl": "3rem",
     },
   },
   weight: { light: "300", regular: "400", medium: "500", semibold: "600", bold: "700" },
-  leading: { tight: "1.1", snug: "1.3", normal: "1.45", relaxed: "1.6" },
+  leading: { tight: "1.1", snug: "1.25", normal: "1.35", relaxed: "1.55" },
   tracking: { tight: "-0.015em", normal: "0" },
 };
 
@@ -163,8 +163,12 @@ export const size = {
   "menu-min": "12rem",
   day: "2.75rem",
   control: "44px",
+  "control-sm": "36px",
   target: "44px",
+  blob: "520px",
   plus: "58px",
+  "kind-pick": "48px",
+  row: "52px",
   tabbar: "64px",
   glow: "260px",
   "max-width": "420px",
@@ -194,8 +198,12 @@ export const mix = {
 } as const;
 
 export const motion = {
-  duration: { instant: "0ms", fast: "160ms", slow: "220ms", pop: "600ms" },
-  easing: { standard: "cubic-bezier(0.2, 0.7, 0.2, 1)", linear: "linear" },
+  duration: { instant: "0ms", fast: "160ms", slow: "220ms", pop: "600ms", spin: "40s" },
+  easing: {
+    standard: "cubic-bezier(0.2, 0.7, 0.2, 1)",
+    in: "cubic-bezier(0.5, 0, 0.75, 0)",
+    linear: "linear",
+  },
 } as const;
 
 export const texture = {

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { openLayer } from "@/lib/platform/back-stack.ts";
+import { copy } from "@/content/index.ts";
 import { Sheet } from "./sheet.tsx";
 
 const LEAVE_MS = 160;
@@ -34,7 +35,13 @@ export function openSheet<T>(
 
     function draw(leaving: boolean) {
       root.render(
-        <Sheet title={title} leaving={leaving} onClose={() => finish(null)}>
+        <Sheet
+          open={!leaving}
+          onOpenChange={(open) => open || finish(null)}
+          title={title}
+          hideTitle
+          closeLabel={copy.common.close}
+        >
           {render(finish)}
         </Sheet>,
       );

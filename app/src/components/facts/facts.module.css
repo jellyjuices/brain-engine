@@ -1,0 +1,137 @@
+.noteIntro {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--space-xl);
+}
+
+.kicker {
+  margin: 0 0 var(--space-sm);
+  color: var(--text-secondary);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+}
+
+.noteTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--type-title-note-size);
+  line-height: var(--type-title-note-leading);
+  text-wrap: balance;
+}
+
+.noteWho {
+  margin-top: var(--space-sm);
+  font-family: var(--font-display);
+  font-size: var(--type-title-item-size);
+  line-height: var(--type-title-item-leading);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm) var(--space-md);
+}
+
+.noteNick {
+  font-style: italic;
+}
+
+.noteDesc {
+  margin: var(--space-lg) 0 0;
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-leading);
+  text-wrap: pretty;
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin: var(--space-lg) 0 0;
+}
+
+.fact {
+  display: flex;
+  flex: 1 1 var(--size-menu-min);
+  align-items: center;
+  gap: var(--space-md);
+  min-width: 0;
+  min-height: var(--size-tabbar);
+  padding: var(--space-md) var(--space-lg);
+  border: var(--size-hair) solid var(--border-primary);
+  border-radius: var(--radius-md);
+  background: var(--background-secondary);
+  color: inherit;
+  text-align: left;
+}
+
+.factAdd {
+  border-style: dashed;
+  background: transparent;
+}
+
+button.fact:active {
+  background: var(--background-accent-soft);
+}
+
+.factAddLabel {
+  color: var(--text-accent);
+  font-size: var(--type-action-size);
+  font-weight: var(--type-action-weight);
+}
+
+.factIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--space-3xl);
+  height: var(--space-3xl);
+  border-radius: var(--radius-md);
+  background: var(--background-accent-soft);
+  color: var(--text-accent);
+}
+
+.factIcon svg {
+  width: var(--size-icon);
+  height: var(--size-icon);
+}
+
+.factText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-hair);
+  min-width: 0;
+}
+
+.factLabel {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+}
+
+.factMain {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-body-size);
+  font-weight: var(--type-action-weight);
+  line-height: var(--type-body-leading);
+  overflow-wrap: anywhere;
+}
+
+.factSub {
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: var(--type-secondary-size);
+  font-weight: var(--type-secondary-weight);
+}
+
+.factLink {
+  color: var(--text-accent);
+  text-decoration: none;
+}

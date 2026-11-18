@@ -1,96 +1,11 @@
-import { css } from "@linaria/core";
 import clsx from "clsx";
 import type { ButtonHTMLAttributes } from "react";
 import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 import { Icon } from "@/components/icon/icon.tsx";
+import styles from "./button.module.css";
 
-const button = css`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--s1);
-  flex: none;
-  white-space: nowrap;
-  min-height: var(--touch);
-  padding: 0 var(--s3);
-  border: var(--hair) solid transparent;
-  border-radius: var(--pill);
-  background: transparent;
-  color: var(--ink);
-  font-size: var(--t-md);
-  font-weight: 600;
-  transition:
-    transform var(--fast) var(--ease),
-    opacity var(--fast) var(--ease),
-    background var(--fast) var(--ease);
-
-  &:active:not(:disabled) {
-    transform: scale(0.98);
-  }
-
-  &:disabled {
-    opacity: 0.45;
-    cursor: default;
-  }
-
-  & svg {
-    width: var(--icon);
-    height: var(--icon);
-  }
-`;
-
-const isBlock = css`
-  flex: auto;
-  width: 100%;
-`;
-
-const isBusy = css`
-  & svg {
-    animation: spin 0.8s linear infinite;
-  }
-`;
-
-const variants = {
-  primary: css`
-    background: var(--accent);
-    color: var(--accent-ink);
-  `,
-  secondary: css`
-    background: var(--accent-soft);
-    color: var(--accent);
-  `,
-  outlined: css`
-    border-color: var(--line);
-  `,
-  ghost: css`
-    color: var(--accent);
-  `,
-  danger: css`
-    border-color: var(--line);
-    color: var(--danger);
-  `,
-};
-
-const sizes = {
-  sm: css`
-    min-height: var(--control-sm);
-    padding: 0 var(--s2);
-    font-size: var(--t-sm);
-  `,
-  md: "",
-  lg: css`
-    min-height: var(--row);
-    font-size: var(--t-lg);
-  `,
-};
-
-const isIconOnly = css`
-  padding: 0;
-  aspect-ratio: 1;
-`;
-
-export type ButtonVariant = keyof typeof variants;
-export type Size = keyof typeof sizes;
+export type ButtonVariant = "primary" | "secondary" | "outlined" | "ghost" | "danger";
+export type Size = "sm" | "md" | "lg";
 
 export type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> & {
   children?: ButtonHTMLAttributes<HTMLButtonElement>["children"];
@@ -116,12 +31,12 @@ export function Button({
     <button
       type={type}
       className={clsx(
-        button,
-        variants[variant],
-        sizes[size],
-        block && isBlock,
-        !children && isIconOnly,
-        busy && isBusy,
+        styles.button,
+        styles[variant],
+        size !== "md" && styles[size],
+        block && styles.block,
+        !children && styles.iconOnly,
+        busy && styles.busy,
         className,
       )}
       {...rest}

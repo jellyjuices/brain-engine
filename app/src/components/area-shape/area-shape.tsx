@@ -1,25 +1,6 @@
-import { css } from "@linaria/core";
+import styles from "./area-shape.module.css";
 import clsx from "clsx";
 import { mixGradient, mixSplit } from "@/lib/design/area-mix.ts";
-
-export const areaShape = css`
-  display: inline-block;
-  flex: none;
-  width: var(--size-toast-shape);
-  height: var(--size-toast-shape);
-`;
-
-const sizes = {
-  sm: css`
-    width: var(--size-icon-sm);
-    height: var(--size-icon-sm);
-  `,
-  md: "",
-  lg: css`
-    width: var(--size-plus);
-    height: var(--size-plus);
-  `,
-};
 
 export type AreaShapeProps = {
   areas: string[];
@@ -30,7 +11,7 @@ export type AreaShapeProps = {
 
 export const AreaShape = ({ areas, shape = "cookie", size = "md", label }: AreaShapeProps) => (
   <span
-    className={clsx(areaShape, sizes[size])}
+    className={clsx(styles.areaShape, size !== "md" && styles[size])}
     role={label ? "img" : undefined}
     aria-label={label}
     aria-hidden={label ? undefined : true}

@@ -1,35 +1,7 @@
-import { css } from "@linaria/core";
+import styles from "./area-mark.module.css";
 import clsx from "clsx";
 import { splitAreas } from "@/lib/design/area-mix.ts";
-import { AreaShape, areaShape } from "../area-shape/area-shape.tsx";
-
-const areaMark = css`
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  gap: var(--space-2xs);
-`;
-
-const extra = css`
-  font-family: var(--font-number);
-  font-size: var(--font-size-number-xs);
-  line-height: var(--font-leading-tight);
-  color: var(--text-secondary);
-`;
-
-const sizes = {
-  sm: css`
-    & .${areaShape} {
-      width: var(--font-size-body-sm);
-      height: var(--font-size-body-sm);
-    }
-  `,
-  md: css`
-    & .${extra} {
-      font-size: var(--font-size-number-sm);
-    }
-  `,
-};
+import { AreaShape } from "../area-shape/area-shape.tsx";
 
 export type AreaMarkProps = {
   areas: string[];
@@ -43,13 +15,13 @@ export const AreaMark = ({ areas, shape = "circle", size = "sm", label }: AreaMa
   if (shown.length === 0) return null;
   return (
     <span
-      className={clsx(areaMark, sizes[size])}
+      className={clsx(styles.areaMark, size === "md" && styles.md)}
       role={label ? "img" : undefined}
       aria-label={label}
     >
       <AreaShape areas={shown} shape={shape} size={size} />
       {extraCount > 0 && (
-        <span className={extra} aria-hidden>
+        <span className={styles.extra} aria-hidden>
           +{extraCount}
         </span>
       )}

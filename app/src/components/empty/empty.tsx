@@ -1,4 +1,4 @@
-import "./empty.css";
+import styles from "./empty.module.css";
 import clsx from "clsx";
 import type { Size } from "@/components/button/button.tsx";
 
@@ -10,9 +10,9 @@ export interface EmptyProps {
 
 export function Empty({ title, body, size = "md" }: EmptyProps) {
   return (
-    <div className={clsx("empty", size === "sm" && "empty--sm")}>
-      <p className="empty-title serif">{title}</p>
-      {body && <p className="lede">{body}</p>}
+    <div className={clsx(styles.empty, size === "sm" && styles.small)}>
+      <p className={styles.title}>{title}</p>
+      {body && <p className={styles.body}>{body}</p>}
     </div>
   );
 }

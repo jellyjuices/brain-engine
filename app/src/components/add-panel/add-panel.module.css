@@ -1,0 +1,195 @@
+.addPanel {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.rail {
+  justify-content: flex-start;
+  margin-bottom: var(--space-lg);
+}
+
+.rail .addMain {
+  flex-direction: row;
+  gap: var(--space-md);
+  color: var(--text-primary);
+  font-size: var(--type-body-size);
+}
+
+.rail .addMain > :first-child {
+  margin-top: 0;
+}
+
+.addMain {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: var(--size-target);
+  padding: var(--space-xs) 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: var(--type-tab-size);
+  font-weight: var(--type-tab-weight);
+  line-height: var(--type-tab-leading);
+  touch-action: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.addMain > :first-child {
+  margin-top: calc(var(--size-icon) * -1);
+  transition: transform var(--motion-fast) var(--motion-easing);
+}
+
+.addPanel.isOpen .addMain > :first-child {
+  width: var(--size-kind-pick);
+  height: var(--size-kind-pick);
+}
+
+.addMain > :first-child > svg {
+  transition: transform var(--motion-fast) var(--motion-easing);
+}
+
+.addMain:active > :first-child {
+  transform: scale(0.94);
+}
+
+.addPanel.isOpen .addMain > :first-child > svg {
+  transform: rotate(45deg);
+}
+
+.addScrim {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  border: 0;
+  background: var(--background-scrim);
+}
+
+.addBlob {
+  position: fixed;
+  --add-blob-w: var(--size-blob);
+  --add-blob-h: var(--size-blob);
+  top: calc(
+    var(--vvt, 0) + var(--vvh, 100dvh) - var(--size-tabbar) / 2 - env(safe-area-inset-bottom) -
+      var(--add-blob-h) / 2
+  );
+  left: 50%;
+  z-index: 2;
+  width: var(--add-blob-w);
+  height: var(--add-blob-h);
+  margin-left: calc(var(--add-blob-w) / -2);
+  transition:
+    top var(--motion-slow) var(--motion-easing),
+    width var(--motion-slow) var(--motion-easing),
+    height var(--motion-slow) var(--motion-easing),
+    margin-left var(--motion-slow) var(--motion-easing);
+  animation: add-inflate var(--motion-pop) var(--motion-easing) both;
+}
+
+.addBlob::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--background-accent);
+  clip-path: var(--shape-plus);
+  animation: add-spin var(--motion-duration-spin) linear infinite;
+}
+
+@keyframes add-spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .addBlob::before {
+    animation: none;
+  }
+}
+
+.addBlobTodo,
+.addBlobJournal {
+  animation: add-morph var(--motion-pop) var(--motion-easing) both;
+}
+
+.addBlobTodo::before {
+  clip-path: var(--shape-kind-todo);
+}
+
+.addBlobJournal {
+  --add-blob-w: 120vw;
+  --add-blob-h: 120vw;
+  top: calc(
+    var(--vvt, 0) + var(--vvh, 100dvh) - var(--size-tabbar) / 2 - env(safe-area-inset-bottom) -
+      var(--add-blob-h) * 0.8
+  );
+  transform-origin: 50% 80%;
+}
+
+.addBlobJournal.isFull {
+  --add-blob-w: max(calc(var(--vvh, 100dvh) / 0.7), 100vw);
+  --add-blob-h: var(--add-blob-w);
+  top: calc(var(--vvt, 0) - var(--add-blob-h) * 0.3);
+}
+
+.addFull {
+  display: grid;
+  place-items: center;
+  min-width: var(--size-target);
+  min-height: var(--size-target);
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.addBlobJournal::before {
+  clip-path: var(--shape-kind-journal);
+  animation: none;
+}
+
+@keyframes add-morph {
+  from {
+    transform: scale(0.9);
+  }
+}
+
+@keyframes add-inflate {
+  from {
+    transform: scale(0.15);
+  }
+}
+
+.addPanel:not(.isClosed) .label {
+  visibility: hidden;
+}
+
+.addPanel.isClosing .addBlob {
+  animation: add-deflate var(--motion-fast) var(--motion-easing-in) both;
+}
+
+.addPanel.isClosing .addScrim {
+  animation: add-fade var(--motion-fast) var(--motion-easing-in) both;
+}
+
+.addPanel.isClosing .addMain > :first-child > svg {
+  transform: none;
+}
+
+@keyframes add-deflate {
+  to {
+    opacity: 0;
+    transform: scale(0.15);
+  }
+}
+
+@keyframes add-fade {
+  to {
+    opacity: 0;
+  }
+}

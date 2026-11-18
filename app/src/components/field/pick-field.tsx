@@ -1,4 +1,4 @@
-import "./field.css";
+import styles from "./field.module.css";
 import { XIcon, type Icon as PhosphorIcon } from "@phosphor-icons/react";
 import clsx from "clsx";
 import { Icon } from "@/components/icon/icon.tsx";
@@ -15,11 +15,11 @@ export interface PickFieldProps {
 
 export function PickField({ label, value, placeholder, icon, onPick, onClear }: PickFieldProps) {
   return (
-    <div className="field">
-      <span className="section-label">{label}</span>
-      <div className="pick">
+    <div className={styles.field}>
+      <span className={styles.label}>{label}</span>
+      <div className={styles.pick}>
         <button
-          className={clsx("input pick-button", !value && "is-empty")}
+          className={clsx(styles.input, styles.pickButton, !value && styles.isEmpty)}
           type="button"
           onClick={onPick}
         >
@@ -28,7 +28,7 @@ export function PickField({ label, value, placeholder, icon, onPick, onClear }: 
         </button>
         {value && onClear && (
           <button
-            className="search-clear"
+            className={styles.searchClear}
             type="button"
             aria-label={copy.common.clear}
             onClick={onClear}

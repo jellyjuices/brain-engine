@@ -1,4 +1,4 @@
-import "./add-panel.css";
+import styles from "./add-panel.module.css";
 import { CheckIcon, PlusIcon } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
@@ -18,7 +18,7 @@ import { copy } from "@/content/index.ts";
 
 type Mode = "closed" | "open" | "todo" | "journal";
 
-export function AddPanel() {
+export function AddPanel({ layout = "tab" }: { layout?: "tab" | "rail" }) {
   const [mode, setMode] = useState<Mode>("closed");
   const [busy, setBusy] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -104,20 +104,34 @@ export function AddPanel() {
   const label = editing ? copy.common.save : mode === "open" ? copy.common.close : copy.nav.add;
 
   return (
-    <div ref={setHost} className={clsx("add-panel", `is-${mode}`, closing && "is-closing")}>
+    <div
+      ref={setHost}
+      className={clsx(
+        styles.addPanel,
+        layout === "rail" && styles.rail,
+        mode === "closed" && styles.isClosed,
+        mode === "open" && styles.isOpen,
+        closing && styles.isClosing,
+      )}
+    >
       {mode !== "closed" && (
         <button
           type="button"
-          className="add-scrim"
+          className={styles.addScrim}
           aria-label={copy.common.close}
           onClick={() => close()}
         />
       )}
       {mode !== "closed" && (
         <div
-          className={clsx("add-blob", `add-blob--${mode}`, full && "is-full")}
+          className={clsx(
+            styles.addBlob,
+            mode === "todo" && styles.addBlobTodo,
+            mode === "journal" && styles.addBlobJournal,
+            full && styles.isFull,
+          )}
           onAnimationEnd={(e) => {
-            if (e.animationName === "add-deflate") closed();
+            if (e.animationName === styles["add-deflate"]) closed();
           }}
         >
           {mode === "open" && (
@@ -143,7 +157,7 @@ export function AddPanel() {
       )}
       <button
         type="button"
-        className="add-main"
+        className={styles.addMain}
         aria-label={label}
         aria-expanded={mode !== "closed"}
         aria-busy={busy || undefined}
@@ -157,7 +171,7 @@ export function AddPanel() {
           size="lg"
           variant={mode === "closed" ? "primary" : "secondary"}
         />
-        <span className="label">{copy.nav.add}</span>
+        <span className={styles.label}>{copy.nav.add}</span>
       </button>
     </div>
   );

@@ -1,0 +1,159 @@
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: var(--background-scrim);
+  animation: fade var(--motion-slow) var(--motion-easing);
+}
+
+.scrim[data-state="closed"] {
+  animation: fade var(--motion-fast) var(--motion-easing) reverse forwards;
+}
+
+.grip {
+  display: grid;
+  place-items: center;
+  height: var(--space-xl);
+  cursor: grab;
+  touch-action: none;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: var(--size-control);
+  padding: 0 var(--space-lg);
+  touch-action: none;
+}
+
+.sheet {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 31;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, var(--size-max-width));
+  max-height: var(--size-sheet-max);
+  margin: 0 auto;
+  padding-bottom: calc(var(--space-lg) + env(safe-area-inset-bottom));
+  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+  background: var(--background-raised);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-raised);
+  transition: transform var(--motion-slow) var(--motion-easing);
+  outline: none;
+}
+
+.sheet[data-state="open"] {
+  animation: up var(--motion-slow) var(--motion-easing);
+}
+
+.sheet[data-state="closed"] {
+  animation: down var(--motion-fast) var(--motion-easing) forwards;
+}
+
+.isDragging {
+  transition: none;
+}
+
+.isDragging .grip {
+  cursor: grabbing;
+}
+
+.handle {
+  width: var(--size-handle);
+  height: var(--size-handle-height);
+  border-radius: var(--radius-control);
+  background: var(--border-strong);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-title-section-size);
+  font-weight: var(--type-title-section-weight);
+  line-height: var(--type-title-section-leading);
+}
+
+.description {
+  margin: 0;
+  padding: 0 var(--space-lg) var(--space-sm);
+  font-size: var(--type-secondary-size);
+  color: var(--text-secondary);
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-lg);
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 var(--space-lg);
+}
+
+.close {
+  margin-left: auto;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes up {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes down {
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes in {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes out {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (min-width: 48rem) {
+  .grip {
+    display: none;
+  }
+
+  .head {
+    touch-action: auto;
+  }
+
+  .sheet {
+    top: 0;
+    left: auto;
+    width: var(--panel-width);
+    max-height: none;
+    margin: 0;
+    padding-top: var(--space-lg);
+    border-radius: var(--radius-sheet) 0 0 var(--radius-sheet);
+  }
+
+  .sheet[data-state="open"] {
+    animation-name: in;
+  }
+
+  .sheet[data-state="closed"] {
+    animation-name: out;
+  }
+}

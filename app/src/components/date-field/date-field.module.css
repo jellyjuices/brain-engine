@@ -1,0 +1,71 @@
+.dateField {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.label {
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  color: var(--text-secondary);
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  height: var(--size-control);
+  padding: 0 var(--space-md);
+  border: var(--size-hair) solid var(--border-strong);
+  border-radius: var(--radius-input);
+  background: var(--background-secondary);
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+}
+
+.trigger[data-state="open"] {
+  border-color: var(--border-focus);
+}
+
+.trigger:disabled {
+  border-style: dashed;
+  border-color: var(--border-primary);
+  background: var(--background-disabled);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.icon {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  color: var(--text-secondary);
+}
+
+.placeholder {
+  color: var(--text-secondary);
+}
+
+.popover {
+  z-index: 40;
+  padding: var(--space-sm);
+  border: var(--size-hair) solid var(--border-primary);
+  border-radius: var(--radius-card);
+  background: var(--background-raised);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-raised);
+  animation: in var(--motion-fast) var(--motion-easing);
+}
+
+@keyframes in {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--space-xs) * -1));
+  }
+}
+
+@media (hover: hover) {
+  .trigger:hover:not(:disabled) {
+    background:
+      linear-gradient(var(--background-hover), var(--background-hover)), var(--background-secondary);
+  }
+}

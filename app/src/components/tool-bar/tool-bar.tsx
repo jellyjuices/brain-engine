@@ -1,4 +1,4 @@
-import "./tool-bar.css";
+import styles from "./tool-bar.module.css";
 import type { ReactNode } from "react";
 
 export function ToolBar({
@@ -11,9 +11,9 @@ export function ToolBar({
   children: ReactNode;
 }) {
   return (
-    <div className="tool-bar">
+    <div className={styles.toolBar}>
       {meta}
-      <div className="tool-bar-tools" role="toolbar" aria-label={label}>
+      <div className={styles.toolBarTools} role="toolbar" aria-label={label}>
         {children}
       </div>
     </div>

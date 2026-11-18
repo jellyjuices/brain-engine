@@ -1,14 +1,16 @@
-import "./note.css";
+import styles from "./note.module.css";
 import { PencilSimpleIcon, PlusIcon } from "@phosphor-icons/react";
 import { useEffect } from "react";
 import { Button } from "@/components/button/button.tsx";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
-import { IconButton } from "@/components/button/icon-button.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
+import { IconButton } from "@/components/icon-button/icon-button.tsx";
 import { SubjectCard } from "@/components/card/subject-card.tsx";
 import { NoteIntro } from "@/components/facts/note-intro.tsx";
+import { SectionHeader } from "@/components/section-header/section-header.tsx";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
+import { typeLook } from "@/lib/notes/kinds.ts";
 import { noteHref, todayIso } from "@/lib/notes/model.ts";
 import { backlinksOf, buildCard, cardHasContent, isSubject } from "@/lib/notes/subject-card.ts";
 import { back, go, navigate } from "@/lib/platform/router.ts";
@@ -39,7 +41,7 @@ export function NoteRead({ path }: { path: string }) {
 
   return (
     <>
-      <ScreenHead
+      <PageHeader
         onBack={() => back()}
         action={
           <IconButton
@@ -53,10 +55,10 @@ export function NoteRead({ path }: { path: string }) {
         }
       />
       <NoteIntro note={note} notes={notes} />
-      {status.waiting && <p className="pending">{copy.notes.editWaiting}</p>}
+      {status.waiting && <p className={styles.pending}>{copy.notes.editWaiting}</p>}
       {showCard && <SubjectCard card={card} />}
       <NoteBody note={note} hideOpenLoops={showCard} />
-      <div className="add-here">
+      <div className={styles.addHere}>
         <Button
           variant="outlined"
           icon={PlusIcon}
@@ -67,11 +69,17 @@ export function NoteRead({ path }: { path: string }) {
         </Button>
       </div>
       {links.length > 0 && (
-        <section className="backlinks">
-          <h2 className="section-label">{copy.notes.linkedFrom}</h2>
+        <section>
+          <SectionHeader title={copy.notes.linkedFrom} />
           <List>
             {links.map((l) => (
-              <Row key={l.path} href={noteHref(l.path)} title={l.title} end={l.type} />
+              <Row
+                key={l.path}
+                {...typeLook(l.type)}
+                href={noteHref(l.path)}
+                title={l.title}
+                end={l.type}
+              />
             ))}
           </List>
         </section>

@@ -1,6 +1,6 @@
-import "./find.css";
+import styles from "./find.module.css";
 import { useEffect, useRef, useState } from "react";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { SearchInput } from "@/components/field/search-input.tsx";
 import { SyncLine } from "@/components/sync-line/sync-line.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
@@ -49,7 +49,7 @@ export function FindScreen() {
 
   return (
     <>
-      <ScreenHead title={copy.nav.find} />
+      <PageHeader title={copy.nav.find} />
       <SearchInput
         inputRef={input}
         placeholder={copy.notes.findPlaceholder}
@@ -65,7 +65,7 @@ export function FindScreen() {
         }}
       />
       <SyncLine />
-      <div className="results" aria-live="polite">
+      <div className={styles.results} aria-live="polite">
         {!q ? (
           <RecentChips
             onPick={(r) => {

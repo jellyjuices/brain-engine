@@ -1,0 +1,13 @@
+.addMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-sm);
+}
+
+.waiting {
+  margin-left: auto;
+  color: var(--text-secondary);
+  font-size: var(--type-secondary-size);
+}

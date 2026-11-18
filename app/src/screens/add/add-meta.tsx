@@ -1,4 +1,4 @@
-import "./add.css";
+import styles from "./add-meta.module.css";
 import {
   CalendarCheckIcon,
   CalendarDotsIcon,
@@ -36,25 +36,28 @@ export function AddMeta({
 }) {
   if (!shown && tags.length === 0 && waiting === 0) return null;
   return (
-    <div className="add-meta">
+    <div className={styles.addMeta}>
       {shown && (
-        <Chip icon={CHIP_ICON[shown.kind] ?? ClockIcon} label={copy.add.whenIs(shown.label)}>
-          {shown.label}
-        </Chip>
+        <Chip
+          icon={CHIP_ICON[shown.kind] ?? ClockIcon}
+          variant="accent"
+          label={shown.label}
+          ariaLabel={copy.add.whenIs(shown.label)}
+        />
       )}
       {tags.map((t) => (
         <Chip
           key={t}
           icon={HashIcon}
-          label={copy.common.remove(`#${t}`)}
+          variant="accent"
+          label={`#${t}`}
+          removeLabel={copy.common.remove(`#${t}`)}
           onRemove={() => onRemoveTag(t)}
-        >
-          {`#${t}`}
-        </Chip>
+        />
       ))}
       {waiting > 0 && (
         <a
-          className="waiting"
+          className={styles.waiting}
           href="/settings"
           onClick={(e) => {
             e.preventDefault();

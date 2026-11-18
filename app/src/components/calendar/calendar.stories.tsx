@@ -2,29 +2,28 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { Calendar, type CalendarProps } from "./calendar.tsx";
 
-const today = new Date(2026, 10, 13);
+const today = "2026-11-13";
 
-const Live = (args: CalendarProps) => {
-  const [date, setDate] = useState<Date | undefined>(args.selected);
+function Live(args: CalendarProps) {
+  const [date, setDate] = useState(args.value);
   return (
     <div style={{ display: "grid", gap: "var(--space-md)" }}>
-      <Calendar {...args} selected={date} onSelect={setDate} />
-      <p style={{ color: "var(--text-secondary)" }}>
-        Picked: {date ? date.toDateString() : "nothing"}
-      </p>
+      <Calendar {...args} value={date} onPick={setDate} />
+      <p style={{ color: "var(--text-secondary)" }}>Picked: {date ?? "nothing"}</p>
     </div>
   );
-};
+}
 
 const meta = {
   title: "Components/Calendar",
   component: Calendar,
   render: Live,
-  args: { selected: today, defaultMonth: today },
+  args: { today, value: today, onPick: () => {} },
 } satisfies Meta<typeof Calendar>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
-export const PastDaysOff: Story = { args: { disabled: { before: today } } };
+export const PastDaysOff: Story = { args: { min: today } };
+export const Birthday: Story = { args: { max: today, yearSteps: true, value: undefined } };

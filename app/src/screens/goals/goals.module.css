@@ -1,0 +1,26 @@
+.body {
+  display: grid;
+  gap: var(--space-lg);
+  padding: var(--space-md) var(--space-md) var(--space-3xl);
+}
+
+.card {
+  display: grid;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border-radius: var(--radius-card);
+  background: var(--background-secondary);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: var(--type-title-item-size);
+  font-weight: var(--type-title-item-weight);
+  line-height: var(--type-title-item-leading);
+}
+
+.title a {
+  color: var(--text-primary);
+  text-decoration: none;
+}

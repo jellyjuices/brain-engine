@@ -1,10 +1,10 @@
-import "./shape.css";
+import styles from "./shape.module.css";
 import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 import clsx from "clsx";
 import { Icon } from "@/components/icon/icon.tsx";
+import type { KindName } from "@/lib/notes/kinds.ts";
 
-export type ShapeName =
-  "add" | "todo" | "journal" | "person" | "place" | "thing" | "file" | "intake" | "other";
+export type ShapeName = "add" | KindName;
 
 export interface ShapeProps {
   name: ShapeName;
@@ -17,13 +17,15 @@ export function Shape({ name, icon, size = "md", variant = "default" }: ShapePro
   return (
     <span
       className={clsx(
-        "shape",
-        `shape--${name}`,
-        `shape--${size}`,
-        variant !== "default" && `shape--${variant}`,
+        styles.shape,
+        name === "journal" && styles.shapeJournal,
+        name === "person" && styles.shapePerson,
+        size === "lg" && styles.shapeLg,
+        variant === "primary" && styles.shapePrimary,
+        variant === "secondary" && styles.shapeSecondary,
       )}
     >
-      <span className="shape-bg" style={{ clipPath: `var(--shape-kind-${name})` }} />
+      <span className={styles.shapeBg} style={{ clipPath: `var(--shape-kind-${name})` }} />
       {icon && <Icon icon={icon} />}
     </span>
   );

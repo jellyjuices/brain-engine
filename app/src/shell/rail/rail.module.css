@@ -1,0 +1,20 @@
+.rail {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-xs);
+  width: var(--size-glow);
+  padding: calc(var(--space-xl) + env(safe-area-inset-top)) var(--space-md) var(--space-lg)
+    calc(var(--space-md) + env(safe-area-inset-left));
+  overflow-y: auto;
+  border-right: var(--size-hair) solid var(--border-primary);
+  background: var(--background-secondary);
+}
+
+.end {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+}

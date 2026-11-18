@@ -1,0 +1,16 @@
+.body {
+  display: grid;
+  gap: var(--space-xl);
+  padding: var(--space-md) var(--space-md) var(--space-3xl);
+}
+
+.why {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--type-body-size);
+}
+
+.subs {
+  display: grid;
+  gap: var(--space-md);
+}

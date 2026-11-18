@@ -1,5 +1,5 @@
-import { typeIcon } from "@/components/icon/icons.ts";
-import { DayPicker } from "@/components/day-picker/day-picker.tsx";
+import { typeLook } from "@/lib/notes/kinds.ts";
+import { Calendar } from "@/components/calendar/calendar.tsx";
 import { SearchList } from "@/components/search-list/search-list.tsx";
 import { openSheet } from "@/components/sheet/open-sheet.tsx";
 import { SheetHead } from "@/components/sheet/sheet-head.tsx";
@@ -22,7 +22,7 @@ export async function pickReference(from: string): Promise<Insertion | null> {
           key: n.path,
           value: n,
           match: n.title,
-          row: { icon: typeIcon(n.type), title: n.title, sub: n.type },
+          row: { ...typeLook(n.type), title: n.title, sub: n.type },
         }))}
         onPick={(n) => finish(referenceText(from, n))}
       />
@@ -35,7 +35,7 @@ export function pickDate(): Promise<Insertion | null> {
   return openSheet<Insertion>(copy.notes.insertDate, (finish) => (
     <>
       <SheetHead title={copy.notes.insertDate} />
-      <DayPicker today={now} value={now} onPick={(iso) => finish(dateText(iso))} />
+      <Calendar today={now} value={now} onPick={(iso) => finish(dateText(iso))} />
     </>
   ));
 }

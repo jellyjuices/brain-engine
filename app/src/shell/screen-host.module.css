@@ -1,0 +1,60 @@
+.screenHost {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.screen {
+  --screen-pad-x: var(--space-screen-x);
+  --screen-pad-top: calc(var(--space-xl) + env(safe-area-inset-top));
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--screen-pad-top) calc(var(--screen-pad-x) + env(safe-area-inset-right))
+    var(--space-lg) calc(var(--screen-pad-x) + env(safe-area-inset-left));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  animation: screen-in var(--motion-slow) var(--motion-easing) both;
+}
+
+.padded {
+  padding-bottom: calc(var(--space-2xl) + var(--space-lg));
+}
+
+.flush {
+  padding-bottom: 0;
+}
+
+.clip {
+  overflow: hidden;
+}
+
+.leaving {
+  animation: screen-out var(--motion-fast) var(--motion-easing) both;
+  pointer-events: none;
+}
+
+[data-layout="wide"] .screen {
+  --screen-pad-x: var(--space-2xl);
+}
+
+[data-layout="popover"] .screen {
+  --screen-pad-top: var(--space-lg);
+  padding: var(--space-lg);
+  scrollbar-width: none;
+}
+
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-sm));
+  }
+}
+
+@keyframes screen-out {
+  to {
+    opacity: 0;
+  }
+}

@@ -1,4 +1,4 @@
-import "./todo-sheet.css";
+import styles from "./todo-sheet-head.module.css";
 import { ClockIcon } from "@phosphor-icons/react";
 import clsx from "clsx";
 import { Chip } from "@/components/chip/chip.tsx";
@@ -23,8 +23,8 @@ export function TodoSheetHead({ todo, now, title, onBack }: TodoSheetHeadProps) 
       onBack={onBack}
       context={
         <>
-          <Chip size="sm">{todo.subject}</Chip>
-          <span className={clsx("sheet-due", late && "is-late")}>
+          <Chip label={todo.subject} />
+          <span className={clsx(styles.sheetDue, late && styles.isLate)}>
             <Icon icon={ClockIcon} />
             {dueText(todo.due, now)}
           </span>

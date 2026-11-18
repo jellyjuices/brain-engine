@@ -1,0 +1,10 @@
+.reportSummary {
+  display: grid;
+  gap: var(--space-lg);
+  padding-bottom: var(--space-xl);
+}
+
+.reportNote {
+  color: var(--text-secondary);
+  font-size: var(--type-secondary-size);
+}

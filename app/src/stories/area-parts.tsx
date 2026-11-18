@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { areaKeys } from "../../tokens/areas.ts";
-import { Chip } from "../components/chip-next/chip.tsx";
+import { Chip } from "../components/chip/chip.tsx";
 import { AreaShape } from "../components/area-shape/area-shape.tsx";
 import { areaVar, mixGlow, mixGradient } from "@/lib/design/area-mix.ts";
 

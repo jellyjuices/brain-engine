@@ -1,4 +1,4 @@
-import "./facts.css";
+import styles from "./facts.module.css";
 import {
   CakeIcon,
   CalendarBlankIcon,
@@ -41,32 +41,32 @@ export function NoteIntro({ note, notes }: { note: StoredNote; notes: StoredNote
   const hasFacts = isPerson || birthday || partner || hasDate || hasDue || withList.length > 0;
 
   return (
-    <div className="note-intro">
+    <div className={styles.noteIntro}>
       {!isCapture && (
-        <p className="section-label">
+        <p className={styles.kicker}>
           {note.type ?? copy.common.note}
           {note.area && (
             <>
               {" · "}
-              <a className="fact-link" href={noteHref(`areas/${note.area}.md`)}>
+              <a className={styles.factLink} href={noteHref(`areas/${note.area}.md`)}>
                 {sentence(note.area.replace(/-/g, " "))}
               </a>
             </>
           )}
         </p>
       )}
-      <h1 className="serif note-title">{title}</h1>
+      <h1 className={styles.noteTitle}>{title}</h1>
       {(nick || pronouns) && (
-        <p className="note-who">
-          {nick && <span className="note-nick">{nick}</span>}
-          {pronouns && <Chip size="sm">{pronouns}</Chip>}
+        <p className={styles.noteWho}>
+          {nick && <span className={styles.noteNick}>{nick}</span>}
+          {pronouns && <Chip label={pronouns} />}
         </p>
       )}
       {note.description && note.description.trim() !== title.trim() && (
-        <p className="note-desc">{note.description}</p>
+        <p className={styles.noteDesc}>{note.description}</p>
       )}
       {hasFacts && (
-        <dl className="facts">
+        <dl className={styles.facts}>
           {birthday && (
             <Fact icon={CakeIcon} label={copy.notes.birthday} sub={birthday.sub}>
               {birthday.main}
@@ -82,7 +82,7 @@ export function NoteIntro({ note, notes }: { note: StoredNote; notes: StoredNote
           {partner && (
             <Fact icon={HeartIcon} label={sentence(partner.role)}>
               {partner.path ? (
-                <a className="fact-link" href={noteHref(partner.path)}>
+                <a className={styles.factLink} href={noteHref(partner.path)}>
                   {partner.name}
                 </a>
               ) : (

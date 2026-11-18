@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import { useId, useState, type KeyboardEvent } from "react";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react";
-import { visuallyHidden } from "../visually-hidden/visually-hidden.ts";
-import * as styles from "./suggest-input.styles.ts";
+import visually from "../visually-hidden/visually-hidden.module.css";
+import styles from "./suggest-input.module.css";
 
 export type Suggestion = { id: string; label: string; hint?: string };
 
@@ -56,7 +56,7 @@ export const SuggestInput = ({
 
   return (
     <div className={clsx(styles.suggestInput, disabled && styles.isDisabled)}>
-      <label htmlFor={id} className={clsx(styles.label, hideLabel && visuallyHidden)}>
+      <label htmlFor={id} className={clsx(styles.label, hideLabel && visually.hidden)}>
         {label}
       </label>
       <div className={styles.field}>

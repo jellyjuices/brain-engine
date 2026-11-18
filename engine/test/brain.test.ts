@@ -284,10 +284,10 @@ test("brain command: check and index exit codes", () => {
 test("swiftbar: the icon shows the inbox count and opens the web app in a popover", async () => {
   const { render, WEB_URL } = await import("../src/interface/swiftbar.ts");
   const root = fixture();
-  assert.equal(render(root), ` | sfimage=scribble href=${WEB_URL}/today webview=true webvieww=400 webviewh=680`, "no number when the inbox is empty");
+  assert.equal(render(root), ` | sfimage=scribble href=${WEB_URL}/todos webview=true webvieww=400 webviewh=680`, "no number when the inbox is empty");
   capture(root, { text: "x" });
   capture(root, { text: "y" });
   const menu = render(root);
-  assert.match(menu, /^2 \| sfimage=scribble href=http:\/\/127\.0\.0\.1:8787\/today webview=true /);
+  assert.match(menu, /^2 \| sfimage=scribble href=http:\/\/127\.0\.0\.1:8787\/todos webview=true /);
   assert.ok(!menu.includes("\n"), "one line: no dropdown menu");
 });

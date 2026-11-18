@@ -8,7 +8,7 @@ import type { GoalView } from "@shared/todos/index.ts";
 import { goalHref, titleAt } from "@/lib/notes/goals.ts";
 import type { StoredNote } from "@/lib/notes/model.ts";
 import { noteHref } from "@/lib/notes/model.ts";
-import * as styles from "./goals.styles.ts";
+import styles from "./goals.module.css";
 import { copy } from "@/content/index.ts";
 
 export interface GoalCardProps {
@@ -27,9 +27,9 @@ export function GoalCard({ goal, notes }: GoalCardProps) {
       {next && (
         <section aria-label={copy.goals.nextStep}>
           <SectionHeader title={copy.goals.nextStep} as="h3" />
-          <ul className={styles.list}>
+          <List variant="plain">
             <GoalStep step={next} goal={goal.title} subject={titleAt(notes, next.path)} />
-          </ul>
+          </List>
         </section>
       )}
       {goal.subgoals.map((sub) => (

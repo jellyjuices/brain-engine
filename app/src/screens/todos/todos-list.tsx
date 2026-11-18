@@ -1,9 +1,10 @@
+import { List } from "@/components/row/list.tsx";
 import { SectionHeader } from "@/components/section-header/section-header.tsx";
 import { Empty } from "@/components/empty/empty.tsx";
 import type { TodoView } from "@shared/todos/index.ts";
 import { groupView, type ViewTodo } from "@/lib/notes/todo-views.ts";
 import { TodoLine } from "./todo-line.tsx";
-import * as styles from "./todos.styles.ts";
+import styles from "./todos.module.css";
 
 export interface TodosListProps {
   view: TodoView;
@@ -20,11 +21,11 @@ export function TodosList({ view, items, now, empty }: TodosListProps) {
   return groupView(view, items, now).map((g) => (
     <section key={g.key} className={styles.group} aria-label={g.title}>
       <SectionHeader title={g.title} count={g.items.length} tone={g.late ? "late" : "default"} />
-      <ul className={styles.list}>
+      <List variant="plain">
         {g.items.map((todo) => (
           <TodoLine key={todo.ref} todo={todo} now={now} showSubject={showSubject} />
         ))}
-      </ul>
+      </List>
     </section>
   ));
 }

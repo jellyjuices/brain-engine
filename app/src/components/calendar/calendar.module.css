@@ -1,0 +1,129 @@
+.calendar {
+  position: relative;
+  width: max-content;
+  font-size: var(--type-secondary-size);
+}
+
+.calendar :global(.rdp-month_caption) {
+  display: flex;
+  align-items: center;
+  height: var(--size-control);
+  padding: 0 var(--space-sm);
+}
+
+.calendar :global(.rdp-caption_label) {
+  font-family: var(--font-display);
+  font-size: var(--type-title-item-size);
+}
+
+.calendar :global(.rdp-dropdowns) {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.calendar :global(.rdp-nav) {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: var(--space-2xs);
+}
+
+.calendar :global(.rdp-button_previous),
+.calendar :global(.rdp-button_next) {
+  display: grid;
+  place-items: center;
+  width: var(--size-control);
+  height: var(--size-control);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: none;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.calendar :global(.rdp-button_previous:disabled),
+.calendar :global(.rdp-button_next:disabled) {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.calendar :global(.rdp-chevron),
+.calendar :global(.rdp-nav) svg {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+}
+
+.calendar :global(.rdp-month_grid) {
+  border-collapse: collapse;
+}
+
+.calendar :global(.rdp-weekday) {
+  height: var(--size-day);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  color: var(--text-secondary);
+}
+
+.calendar :global(.rdp-day) {
+  padding: var(--space-2xs);
+  text-align: center;
+}
+
+.calendar :global(.rdp-day_button) {
+  display: grid;
+  place-items: center;
+  width: var(--size-day);
+  height: var(--size-day);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: none;
+  font-family: var(--font-number);
+  font-size: var(--type-number-size);
+  cursor: pointer;
+  transition: background-color var(--motion-fast) var(--motion-easing);
+}
+
+.calendar :global(.rdp-day_button:active:not(:disabled)) {
+  background: var(--background-pressed);
+}
+
+.calendar :global(.rdp-today:not(.rdp-selected) .rdp-day_button) {
+  color: var(--text-accent);
+  font-weight: var(--font-weight-bold);
+  box-shadow: inset 0 0 0 var(--size-hair) var(--border-selected);
+}
+
+.calendar :global(.rdp-outside .rdp-day_button) {
+  color: var(--text-secondary);
+}
+
+.calendar :global(.rdp-disabled .rdp-day_button) {
+  color: var(--text-disabled);
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.calendar :global(.rdp-hidden) {
+  visibility: hidden;
+}
+
+.calendar :global(.rdp-selected .rdp-day_button) {
+  background: var(--background-accent);
+  color: var(--text-on-accent);
+  font-weight: var(--font-weight-bold);
+}
+
+@media (hover: hover) {
+  .calendar :global(.rdp-button_previous:hover:not(:disabled)),
+  .calendar :global(.rdp-button_next:hover:not(:disabled)),
+  .calendar :global(.rdp-day_button:hover:not(:disabled)) {
+    background: var(--background-hover);
+  }
+
+  .calendar :global(.rdp-selected .rdp-day_button:hover) {
+    background: var(--background-accent);
+  }
+}

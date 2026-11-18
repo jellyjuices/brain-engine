@@ -1,7 +1,9 @@
 import { SparkleIcon } from "@phosphor-icons/react";
+import styles from "./report.module.css";
 import { Button } from "@/components/button/button.tsx";
 import { Markdown } from "@/components/markdown/markdown.tsx";
 import { Panel } from "@/components/panel/panel.tsx";
+import { SectionHeader } from "@/components/section-header/section-header.tsx";
 import { useSummary } from "@/hooks/use-summary.ts";
 import { copy } from "@/content/index.ts";
 
@@ -10,8 +12,8 @@ export function ReportSummary({ markdown, path }: { markdown: string; path: stri
 
   if (summary) {
     return (
-      <div className="report-summary">
-        <p className="section-label">{copy.report.summary}</p>
+      <div className={styles.reportSummary}>
+        <SectionHeader title={copy.report.summary} />
         <Panel>
           <Markdown src={summary} path={path} />
         </Panel>
@@ -19,11 +21,11 @@ export function ReportSummary({ markdown, path }: { markdown: string; path: stri
     );
   }
   return (
-    <div className="report-summary">
+    <div className={styles.reportSummary}>
       <Button variant="secondary" icon={SparkleIcon} block busy={busy} onClick={() => void run()}>
         {copy.report.summarize}
       </Button>
-      {failed && <p className="report-note">{copy.report.summaryFailed}</p>}
+      {failed && <p className={styles.reportNote}>{copy.report.summaryFailed}</p>}
     </div>
   );
 }

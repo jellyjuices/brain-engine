@@ -1,0 +1,96 @@
+@import "@fontsource/hedvig-letters-serif/400.css";
+@import "@fontsource-variable/atkinson-hyperlegible-next/index.css";
+@import "@fontsource/space-mono/400.css";
+@import "@fontsource/space-mono/700.css";
+@import "../../tokens/design-tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: var(--background-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-leading);
+  overscroll-behavior: none;
+  text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#app {
+  position: fixed;
+  top: var(--vvt, 0);
+  right: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  height: var(--vvh, 100%);
+}
+
+button,
+input,
+textarea {
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+button,
+[role="button"],
+[role="tab"],
+[role="option"],
+[role="menuitem"],
+label {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: var(--size-focus) solid var(--border-focus);
+  outline-offset: var(--space-2xs);
+}
+
+[data-radix-popper-content-wrapper] > :focus,
+[role="dialog"]:focus,
+[role="menu"]:focus,
+[role="listbox"]:focus {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0ms !important;
+    transition-duration: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}

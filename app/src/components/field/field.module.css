@@ -1,0 +1,101 @@
+.field {
+  display: flex;
+  flex: 1 1 var(--size-menu-min);
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+
+.label {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+}
+
+.input {
+  width: 100%;
+  min-height: var(--size-plus);
+  padding: var(--space-md) var(--space-lg);
+  border: var(--size-hair) solid var(--border-primary);
+  border-radius: var(--radius-md);
+  background: var(--background-secondary);
+  color: inherit;
+  font: inherit;
+  font-size: var(--type-body-size);
+  resize: none;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color var(--motion-fast) var(--motion-easing);
+}
+
+.input:focus-visible {
+  border-color: var(--border-selected);
+  outline-offset: 0;
+}
+
+.input::placeholder {
+  color: var(--text-secondary);
+}
+
+.search,
+.pick {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search > svg {
+  position: absolute;
+  left: var(--space-lg);
+  width: var(--size-icon);
+  height: var(--size-icon);
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.searchInput {
+  padding-right: var(--size-target);
+  padding-left: calc(var(--space-lg) + var(--size-icon) + var(--space-md));
+}
+
+.searchInput::-webkit-search-cancel-button {
+  display: none;
+}
+
+.searchClear {
+  position: absolute;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: var(--size-target);
+  height: var(--size-target);
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.searchClear svg {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+}
+
+.pickButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding-right: var(--size-target);
+  text-align: left;
+}
+
+.pickButton svg {
+  flex: none;
+  width: var(--size-icon);
+  height: var(--size-icon);
+  color: var(--text-accent);
+}
+
+.pickButton.isEmpty {
+  color: var(--text-secondary);
+}

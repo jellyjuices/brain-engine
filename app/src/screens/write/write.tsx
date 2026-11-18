@@ -1,11 +1,12 @@
-import "./write.css";
+import { Composer } from "@/components/field/composer.tsx";
+import styles from "./write.module.css";
 import { FileTextIcon, UserIcon } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 import { DateField } from "@/components/date-field/date-field.tsx";
 import { PickField } from "@/components/field/pick-field.tsx";
 import { TextField } from "@/components/field/text-field.tsx";
 import { FilePicker } from "@/components/file-picker/file-picker.tsx";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { Tool } from "@/components/tool-bar/tool.tsx";
 import { ToolBar } from "@/components/tool-bar/tool-bar.tsx";
 import { pickAbout, readTextFile, saveJournal } from "@/flows/new-flow.ts";
@@ -64,7 +65,7 @@ export function WriteScreen() {
 
   return (
     <>
-      <ScreenHead title={copy.nav.journal} fallback="/new" />
+      <PageHeader title={copy.nav.journal} fallback="/new" />
       <TextField
         label={copy.add.writeTitleLabel}
         hideLabel
@@ -72,7 +73,7 @@ export function WriteScreen() {
         value={form.title}
         onChange={(title) => update({ title })}
       />
-      <div className="write-meta">
+      <div className={styles.writeMeta}>
         <DateField
           label={copy.add.day}
           value={form.date}
@@ -89,8 +90,7 @@ export function WriteScreen() {
           onClear={() => update({ about: null })}
         />
       </div>
-      <textarea
-        className="composer"
+      <Composer
         placeholder={copy.add.writePlaceholder}
         aria-label={copy.nav.journal}
         autoCapitalize="sentences"

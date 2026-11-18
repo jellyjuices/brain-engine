@@ -1,8 +1,8 @@
-import "./intake.css";
+import styles from "./intake.module.css";
 import { useState } from "react";
 import { Empty } from "@/components/empty/empty.tsx";
 import { Panel } from "@/components/panel/panel.tsx";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import {
   laterIntakeQuestion,
   saveIntakeAnswer,
@@ -39,7 +39,7 @@ export function IntakeScreen() {
 
   return (
     <>
-      <ScreenHead title={copy.nav.intake} fallback="/new" />
+      <PageHeader title={copy.nav.intake} fallback="/new" />
       {result?.kind === "offline" && (
         <Empty title={copy.intake.offlineTitle} body={copy.intake.offlineBody} />
       )}
@@ -49,7 +49,7 @@ export function IntakeScreen() {
       {current && (
         <>
           <Panel>
-            <p className="intake-question serif">{current.question}</p>
+            <p className={styles.intakeQuestion}>{current.question}</p>
           </Panel>
           {draft ? (
             <IntakeCheck

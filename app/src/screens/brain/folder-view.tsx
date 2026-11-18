@@ -2,11 +2,12 @@ import { PlusIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/button/button.tsx";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { folderRows } from "@/lib/notes/folders.ts";
 import { noteHref } from "@/lib/notes/model.ts";
 import { copy } from "@/content/index.ts";
+import { folderLook } from "@/lib/notes/kinds.ts";
 import { ADD_IN, type Folder } from "./folders.ts";
 import { Empty } from "@/components/empty/empty.tsx";
 import { OpenChip } from "./open-chip.tsx";
@@ -18,7 +19,7 @@ export function FolderView({ folder }: { folder: Folder }) {
   const addLabel = copy.notes.addIn[folder as keyof typeof copy.notes.addIn];
   return (
     <>
-      <ScreenHead
+      <PageHeader
         title={copy.notes.folders[folder]}
         fallback="/brain"
         action={
@@ -36,6 +37,7 @@ export function FolderView({ folder }: { folder: Folder }) {
           {rows.map((n) => (
             <Row
               key={n.path}
+              {...folderLook(folder)}
               href={noteHref(n.path)}
               title={n.title}
               sub={n.description}

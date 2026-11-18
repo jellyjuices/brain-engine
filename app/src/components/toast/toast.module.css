@@ -1,0 +1,151 @@
+.viewport {
+  position: fixed;
+  right: 0;
+  bottom: calc(var(--size-tabbar) + env(safe-area-inset-bottom) + var(--space-lg));
+  left: 0;
+  z-index: 40;
+  display: grid;
+  gap: var(--space-sm);
+  width: min(100%, var(--size-max-width));
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+  list-style: none;
+  outline: none;
+}
+
+.toast {
+  --toast-tone: var(--toast-success);
+  --toast-shape: var(--shape-toast-success);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md);
+  border-radius: var(--radius-card);
+  background: var(--background-inverse);
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-raised);
+  touch-action: none;
+  user-select: none;
+}
+
+.toast[data-state="open"] {
+  animation: in var(--motion-slow) var(--motion-easing);
+}
+
+.toast[data-state="closed"] {
+  animation: fade var(--motion-fast) var(--motion-easing) forwards;
+}
+
+.toast[data-swipe="move"] {
+  transform: translateX(var(--radix-toast-swipe-move-x));
+}
+
+.toast[data-swipe="cancel"] {
+  transform: translateX(0);
+  transition: transform var(--motion-fast) var(--motion-easing);
+}
+
+.toast[data-swipe="end"] {
+  animation: swipe-out var(--motion-fast) var(--motion-easing) forwards;
+}
+
+.error {
+  --toast-tone: var(--toast-error);
+  --toast-shape: var(--shape-toast-error);
+}
+
+.warning {
+  --toast-tone: var(--toast-warning);
+  --toast-shape: var(--shape-toast-warning);
+}
+
+.info {
+  --toast-tone: var(--toast-info);
+  --toast-shape: var(--shape-toast-info);
+}
+
+.neutral {
+  --toast-tone: var(--toast-neutral);
+  --toast-shape: var(--shape-toast-neutral);
+}
+
+.badge {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--size-toast-shape);
+  height: var(--size-toast-shape);
+  color: var(--toast-icon);
+}
+
+.shape {
+  position: absolute;
+  inset: 0;
+  background: var(--toast-tone);
+  clip-path: var(--toast-shape);
+}
+
+.icon {
+  position: relative;
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-weight: var(--font-weight-semibold);
+}
+
+.detail {
+  font-size: var(--type-secondary-size);
+}
+
+.action {
+  flex: none;
+  min-height: var(--size-control);
+  padding: 0 var(--space-md);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: none;
+  color: var(--text-inverse-accent);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+
+.action:active {
+  background: var(--background-inverse-pressed);
+}
+
+@media (hover: hover) {
+  .action:hover {
+    background: var(--background-inverse-hover);
+  }
+}
+
+@keyframes in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-lg));
+  }
+}
+
+@keyframes fade {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes swipe-out {
+  from {
+    transform: translateX(var(--radix-toast-swipe-end-x));
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}

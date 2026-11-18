@@ -1,0 +1,13 @@
+.area {
+  position: relative;
+}
+
+.area::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, var(--size-target));
+  height: max(100%, var(--size-target));
+  translate: -50% -50%;
+}

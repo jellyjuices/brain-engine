@@ -1,4 +1,5 @@
-import "./add-arc.css";
+import styles from "./add-arc.module.css";
+import clsx from "clsx";
 import { BookOpenIcon, CheckSquareIcon, DotsThreeIcon } from "@phosphor-icons/react";
 import { Shape } from "@/components/shape/shape.tsx";
 import { copy } from "@/content/index.ts";
@@ -11,11 +12,11 @@ export interface AddArcProps {
 
 export function AddArc({ onTodo, onJournal, onOther }: AddArcProps) {
   return (
-    <div className="add-arc" role="menu" aria-label={copy.add.newTitle}>
+    <div className={styles.addArc} role="menu" aria-label={copy.add.newTitle}>
       <button
         type="button"
         role="menuitem"
-        className="add-arc-pick add-arc-pick--1"
+        className={clsx(styles.addArcPick, styles.addArcPick1)}
         onClick={onTodo}
       >
         <Shape name="todo" icon={CheckSquareIcon} size="lg" />
@@ -24,7 +25,7 @@ export function AddArc({ onTodo, onJournal, onOther }: AddArcProps) {
       <button
         type="button"
         role="menuitem"
-        className="add-arc-pick add-arc-pick--2"
+        className={clsx(styles.addArcPick, styles.addArcPick2)}
         onClick={onJournal}
       >
         <Shape name="journal" icon={BookOpenIcon} size="lg" />
@@ -33,7 +34,7 @@ export function AddArc({ onTodo, onJournal, onOther }: AddArcProps) {
       <button
         type="button"
         role="menuitem"
-        className="add-arc-pick add-arc-pick--3"
+        className={clsx(styles.addArcPick, styles.addArcPick3)}
         onClick={onOther}
       >
         <Shape name="other" icon={DotsThreeIcon} size="lg" />

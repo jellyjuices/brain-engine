@@ -1,7 +1,8 @@
 import { NoteIcon } from "@phosphor-icons/react";
+import styles from "./add-head.module.css";
 import { Button } from "@/components/button/button.tsx";
 import { Chip } from "@/components/chip/chip.tsx";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { copy } from "@/content/index.ts";
 
 export interface Target {
@@ -23,8 +24,8 @@ export function AddHead({
   onClearInto: () => void;
 }) {
   return (
-    <header className="add-head">
-      <ScreenHead
+    <header className={styles.addHead}>
+      <PageHeader
         title={after ? copy.add.nextTitle : copy.nav.add}
         fallback="/new"
         action={
@@ -35,17 +36,17 @@ export function AddHead({
           ) : undefined
         }
       />
-      {after && <p className="add-after lede">{copy.add.afterTodo(after)}</p>}
+      {after && <p className={styles.addAfter}>{copy.add.afterTodo(after)}</p>}
       {into && (
-        <div className="add-target">
-          <span className="lede">{copy.add.addingTo}</span>
+        <div className={styles.addTarget}>
+          <span className={styles.addingTo}>{copy.add.addingTo}</span>
           <Chip
             icon={NoteIcon}
-            label={copy.common.remove(into.title || copy.add.thisNote)}
+            variant="accent"
+            label={into.title || copy.add.thisNote}
+            removeLabel={copy.common.remove(into.title || copy.add.thisNote)}
             onRemove={onClearInto}
-          >
-            {into.title || copy.add.thisNote}
-          </Chip>
+          />
         </div>
       )}
     </header>

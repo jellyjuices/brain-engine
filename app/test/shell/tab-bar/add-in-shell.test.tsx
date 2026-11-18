@@ -2,6 +2,7 @@ import "fake-indexeddb/auto";
 import { act, cleanup, fireEvent, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import styles from "@/components/add-panel/add-panel.module.css";
 import { unlockTestVault } from "../../helpers.ts";
 import { HOLD_MS } from "@/components/add-panel/use-hold-to-pick.ts";
 import { HOME } from "@/lib/platform/router.ts";
@@ -15,8 +16,8 @@ function addButton() {
 }
 
 function finishClosing() {
-  const blob = document.querySelector(".add-blob");
-  if (blob) fireEvent.animationEnd(blob, { animationName: "add-deflate" });
+  const blob = document.querySelector('[class*="addBlob"]');
+  if (blob) fireEvent.animationEnd(blob, { animationName: styles["add-deflate"] });
 }
 
 async function holdAdd() {

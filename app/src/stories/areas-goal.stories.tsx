@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Bar } from "../components/bar/bar.tsx";
-import { GoalProgress } from "../components/goal-progress/goal-progress.tsx";
 import { PageHeader } from "../components/page-header/page-header.tsx";
-import { Chip } from "../components/chip-next/chip.tsx";
+import { Chip } from "../components/chip/chip.tsx";
 import { name } from "./area-parts.tsx";
 
 type Args = { first: string; second: string; value: number };
@@ -55,7 +54,6 @@ export const GoalPage: Story = {
           </div>
         </PageHeader>
         <div style={{ display: "grid", gap: "var(--space-md)", padding: "var(--space-lg)" }}>
-          <GoalProgress title="Run a sample 10K" value={value} note="+2 this month" areas={areas} />
           <Bar
             label="Sample weekly runs"
             done={Math.round(value / 2)}

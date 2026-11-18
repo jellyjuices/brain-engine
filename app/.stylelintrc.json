@@ -8,14 +8,5 @@
     "declaration-block-no-duplicate-properties": true,
     "no-duplicate-selectors": true,
     "unit-disallowed-list": ["px"]
-  },
-  "overrides": [
-    {
-      "files": ["src/styles/tokens.css", "src/styles/design-base.css"],
-      "rules": {
-        "color-no-hex": null,
-        "unit-disallowed-list": null
-      }
-    }
-  ]
+  }
 }

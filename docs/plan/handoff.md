@@ -28,7 +28,7 @@ Updated 2026-11-17. This lists only work still to do. The intent for every part 
 | --- | --- | --- |
 | A | Make `~/.config/brain/privacy-words.txt` | Template: `ops/config/privacy-words.example.txt`. Your surname, street, company and client names. Without it the privacy scan checks nothing |
 | B | Merge, deploy and look at the app branch | Branch `worktree-agent-a20820768b9c32f85`: opens on To-dos, back closes sheets first, To-dos views, Goals tab, goal page. Reinstall the app for the new start page. Check back swipes, the Add panel close, sharing into the app, the done toast, the Goals look |
-| C | Look at each Linaria slice | Session branch `claude/linaria-slices-b41ccf`. Cards are done and wait for a look |
+| C | Look at the new styles | Every part, screen and shell piece is on CSS Modules and the new tokens. Look at each screen, the Add panel most of all |
 | D | Soon: 7 or 14 days | The concept says 7, the API says 14. The app uses 14 for now |
 | E | Say yes to the intake and sorter plans | See #2 and #5 |
 
@@ -49,7 +49,7 @@ Updated 2026-11-17. This lists only work still to do. The intent for every part 
 | 16 | Goal API gaps | Small | none | A list of linked projects in `GoalView`; subgoals and decisions in `/api/goals`; a route to cross off a target (today the app edits the note) |
 | 17 | One home for shared app and engine code | Small | none | The view rules (`engine/src/interface/routes/reads.ts`) and goal types (`engine/src/reports/goals.ts`) are copied in the app. Move them to `engine/shared` |
 | 6 | Dead code, rest | Small | none | fallow still lists 21 unused exports in `engine/` |
-| 8 | Test cleanup | Small | after the UI settles | `if` and `for` in tests, files with no failure case. Skipped against the new criteria: `app/test/shell/shell-frame/shell-frame.test.tsx`, the tab bar and rail rows for To-dos and Goals. Delete the scratch folder `app/test/tmpx/` in the app worktree |
+| 8 | Test cleanup | Small | after the UI settles | `if` and `for` in tests, files with no failure case. Skipped against the new criteria: `app/test/shell/shell-frame/shell-frame.test.tsx` (the tab bar and rail rows for To-dos and Goals; "the phone layout reaches Settings from To-dos", Settings is now in the To-dos header); `app/test/shell/unsorted-banner/unsorted-banner.test.tsx` (the whole file: the banner now sits inside the To-dos screen, not the shell). Brittle after the CSS Modules move: the Add panel tests find the blob by part of a class name; `mention.test.tsx` no longer checks the look |
 
 ## App
 
@@ -57,7 +57,7 @@ Design: [concept-a.md](../design/concept-a.md). Add flows: [add-flows.md](add-fl
 
 | # | Task | Size | Needs | Notes |
 | --- | --- | --- | --- | --- |
-| 9 | Linaria, slice 2 onward | Medium each | none | A session runs it. Buttons, sheets, to-do row, toast, Add panel last. Stop after each slice for the owner to look. The toast now takes a list of buttons on the app branch: expect a small merge conflict |
+| 9 | Styles | Medium each | none | Styles: CSS Modules on the new tokens, done |
 | 10 | Sort screen | Medium | 15 | Grouped by subject. Tap a tag to change it, + to add one. Long-press, then Move to, first. Drag by a handle is its own task after |
 | 18 | Saved own views and the Edit view sheet | Medium | an API for saved views | The To-dos screen has the standard views only |
 | 12 | Page, decision page, Connections | Large | none | The goal page is on the app branch |

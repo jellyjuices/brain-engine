@@ -1,164 +1,59 @@
-import { css } from "@linaria/core";
 import { DayPicker, type Matcher } from "react-day-picker";
 import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
-
-const calendar = css`
-  position: relative;
-  width: max-content;
-  font-size: var(--font-size-body-sm);
-
-  & .rdp-month_caption {
-    display: flex;
-    align-items: center;
-    height: var(--size-control);
-    padding: 0 var(--space-sm);
-  }
-
-  & .rdp-caption_label {
-    font-family: var(--font-display);
-    font-size: var(--font-size-display-sm);
-  }
-
-  & .rdp-nav {
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: flex;
-    gap: var(--space-2xs);
-  }
-
-  & .rdp-button_previous,
-  & .rdp-button_next {
-    display: grid;
-    place-items: center;
-    width: var(--size-control);
-    height: var(--size-control);
-    padding: 0;
-    border: 0;
-    border-radius: var(--radius-control);
-    background: none;
-    color: var(--text-primary);
-    cursor: pointer;
-  }
-
-  & .rdp-button_previous:disabled,
-  & .rdp-button_next:disabled {
-    color: var(--text-disabled);
-    cursor: not-allowed;
-  }
-
-  & .rdp-chevron,
-  & .rdp-nav svg {
-    width: var(--size-icon-sm);
-    height: var(--size-icon-sm);
-  }
-
-  & .rdp-month_grid {
-    border-collapse: collapse;
-  }
-
-  & .rdp-weekday {
-    height: var(--size-day);
-    font-size: var(--font-size-body-xs);
-    font-weight: var(--font-weight-medium);
-    color: var(--text-secondary);
-  }
-
-  & .rdp-day {
-    padding: var(--space-2xs);
-    text-align: center;
-  }
-
-  & .rdp-day_button {
-    display: grid;
-    place-items: center;
-    width: var(--size-day);
-    height: var(--size-day);
-    padding: 0;
-    border: 0;
-    border-radius: var(--radius-control);
-    background: none;
-    font-family: var(--font-number);
-    font-size: var(--font-size-number-sm);
-    cursor: pointer;
-    transition: background-color var(--motion-fast) var(--motion-easing);
-  }
-
-  & .rdp-day_button:active:not(:disabled) {
-    background: var(--background-pressed);
-  }
-
-  & .rdp-today:not(.rdp-selected) .rdp-day_button {
-    color: var(--text-accent);
-    font-weight: var(--font-weight-bold);
-    box-shadow: inset 0 0 0 var(--size-hair) var(--border-selected);
-  }
-
-  & .rdp-outside .rdp-day_button {
-    color: var(--text-secondary);
-  }
-
-  & .rdp-disabled .rdp-day_button {
-    color: var(--text-disabled);
-    text-decoration: line-through;
-    cursor: not-allowed;
-  }
-
-  & .rdp-hidden {
-    visibility: hidden;
-  }
-
-  @media (hover: hover) {
-    & .rdp-button_previous:hover:not(:disabled),
-    & .rdp-button_next:hover:not(:disabled) {
-      background: var(--background-hover);
-    }
-
-    & .rdp-day_button:hover:not(:disabled) {
-      background: var(--background-hover);
-    }
-
-    & .rdp-selected .rdp-day_button,
-    & .rdp-selected .rdp-day_button:hover {
-      background: var(--background-accent);
-      color: var(--text-on-accent);
-      font-weight: var(--font-weight-bold);
-    }
-  }
-`;
+import styles from "./calendar.module.css";
 
 export type CalendarProps = {
-  selected?: Date;
-  onSelect?: (date: Date | undefined) => void;
-  disabled?: Matcher | Matcher[];
-  defaultMonth?: Date;
+  today: string;
+  value?: string;
+  min?: string;
+  max?: string;
+  yearSteps?: boolean;
   autoFocus?: boolean;
+  onPick: (iso: string) => void;
 };
 
-export const Calendar = ({
-  selected,
-  onSelect,
-  disabled,
-  defaultMonth,
-  autoFocus,
-}: CalendarProps) => (
-  <DayPicker
-    className={calendar}
-    mode="single"
-    selected={selected}
-    onSelect={onSelect}
-    disabled={disabled}
-    defaultMonth={defaultMonth ?? selected}
-    autoFocus={autoFocus}
-    showOutsideDays
-    weekStartsOn={0}
-    components={{
-      Chevron: ({ orientation }) =>
-        orientation === "left" ? (
-          <CaretLeftIcon aria-hidden weight="bold" />
-        ) : (
-          <CaretRightIcon aria-hidden weight="bold" />
-        ),
-    }}
-  />
-);
+function at(iso: string): Date {
+  const [y = 0, m = 1, d = 1] = iso.slice(0, 10).split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+
+function iso(date: Date): string {
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${date.getFullYear()}-${m}-${d}`;
+}
+
+function Chevron({ orientation }: { orientation?: string }) {
+  return orientation === "left" ? (
+    <CaretLeftIcon aria-hidden weight="bold" />
+  ) : (
+    <CaretRightIcon aria-hidden weight="bold" />
+  );
+}
+
+export function Calendar({ today, value, min, max, yearSteps, autoFocus, onPick }: CalendarProps) {
+  const selected = value ? at(value) : undefined;
+  const disabled: Matcher[] = [
+    ...(min ? [{ before: at(min) }] : []),
+    ...(max ? [{ after: at(max) }] : []),
+  ];
+  return (
+    <DayPicker
+      className={styles.calendar}
+      mode="single"
+      required
+      today={at(today)}
+      selected={selected}
+      onSelect={(date: Date) => onPick(iso(date))}
+      disabled={disabled}
+      defaultMonth={selected ?? at(today)}
+      startMonth={min ? at(min) : yearSteps ? new Date(1900, 0) : undefined}
+      endMonth={max ? at(max) : undefined}
+      captionLayout={yearSteps ? "dropdown" : "label"}
+      autoFocus={autoFocus}
+      showOutsideDays
+      weekStartsOn={0}
+      components={{ Chevron }}
+    />
+  );
+}

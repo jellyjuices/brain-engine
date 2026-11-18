@@ -15,7 +15,7 @@ export function InboxHead({ item, title, onBack }: InboxHeadProps) {
     <SheetHead
       title={title ?? text}
       quote={title && text}
-      context={<Chip size="sm">{copy.inbox.tag}</Chip>}
+      context={<Chip label={copy.inbox.tag} />}
       onBack={onBack}
     />
   );

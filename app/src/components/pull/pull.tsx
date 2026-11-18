@@ -1,4 +1,4 @@
-import "./pull.css";
+import styles from "./pull.module.css";
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { copy } from "@/content/index.ts";
@@ -72,11 +72,11 @@ export function Pull({ onRefresh }: { onRefresh: () => Promise<unknown> }) {
   return (
     <div
       ref={ref}
-      className={clsx("pull", settling && "is-settling", busy && "is-busy")}
+      className={clsx(styles.pull, settling && styles.isSettling, busy && styles.isBusy)}
       style={{ height }}
       aria-hidden="true"
     >
-      <span className="pull-dot" />
+      <span className={styles.pullDot} />
       <span>{label}</span>
     </div>
   );

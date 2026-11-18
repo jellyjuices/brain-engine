@@ -2,10 +2,10 @@ import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeftIcon, CaretRightIcon, CheckIcon } from "@phosphor-icons/react";
 import { IconButton } from "../icon-button/icon-button.tsx";
-import { Sheet } from "../sheet-next/sheet.tsx";
+import { Sheet } from "../sheet/sheet.tsx";
 import type { Option } from "./types.ts";
 import { useHeight } from "./use-height.ts";
-import * as styles from "./options-menu.styles.ts";
+import styles from "./options-menu.module.css";
 
 export type { Option } from "./types.ts";
 
@@ -71,7 +71,7 @@ export const OptionsMenu = ({
           <ul
             key={path.map((p) => p.id).join("/") || "root"}
             ref={list}
-            className={clsx(styles.list, styles.directions[direction])}
+            className={clsx(styles.list, styles[direction])}
             onKeyDown={(e) => e.key === "Backspace" && current && back()}
           >
             {items.map((option) => {

@@ -1,0 +1,76 @@
+.track {
+  position: relative;
+  overflow: hidden;
+  height: var(--bar-goal);
+  border-radius: var(--radius-control);
+  background: var(--progress-track);
+}
+
+.bar {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "label label"
+    "number facts";
+  align-items: end;
+  gap: var(--space-xs) var(--space-md);
+}
+
+.label {
+  grid-area: label;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-title-item-size);
+  font-weight: var(--type-title-item-weight);
+  line-height: var(--type-title-item-leading);
+}
+
+.number {
+  grid-area: number;
+  margin: 0;
+  font-family: var(--font-number);
+  font-size: var(--type-number-big-size);
+  font-weight: var(--type-number-big-weight);
+  line-height: var(--type-number-big-leading);
+  color: var(--text-primary);
+}
+
+.unit {
+  font-size: var(--type-title-item-size);
+}
+
+.facts {
+  grid-area: facts;
+  display: grid;
+  justify-items: end;
+  gap: var(--space-2xs);
+  margin: 0;
+  font-size: var(--type-secondary-size);
+  line-height: var(--type-secondary-leading);
+  color: var(--text-secondary);
+}
+
+.gainText {
+  color: var(--text-primary);
+}
+
+.gainNumber {
+  font-family: var(--font-number);
+  font-weight: var(--font-weight-bold);
+}
+
+.fillBar {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gradient-progress);
+  transition: width var(--motion-slow) var(--motion-easing);
+}
+
+.step .track {
+  height: var(--bar-step);
+}

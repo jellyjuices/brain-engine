@@ -1,0 +1,106 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-control);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  white-space: nowrap;
+}
+
+.slot {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-chip-y) var(--space-chip-x);
+  border: 0;
+  background: none;
+  border-radius: var(--radius-control);
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.labelSlot {
+  gap: var(--space-xs);
+}
+
+.labelSlot svg {
+  width: var(--type-secondary-size);
+  height: var(--type-secondary-size);
+}
+
+button.labelSlot,
+.removeSlot {
+  cursor: pointer;
+  transition: background-color var(--motion-fast) var(--motion-easing);
+}
+
+button.labelSlot:active,
+.removeSlot:active {
+  background: var(--background-pressed);
+}
+
+.removeSlot {
+  padding-left: 0;
+}
+
+.removeSlot svg {
+  width: var(--type-label-size);
+  height: var(--type-label-size);
+}
+
+.dots {
+  display: inline-flex;
+}
+
+.dot {
+  width: var(--size-dot);
+  height: var(--size-dot);
+  border-radius: var(--radius-control);
+  box-shadow: 0 0 0 var(--size-hair) var(--background-secondary);
+}
+
+.dot + .dot {
+  margin-left: calc(var(--size-dot) / -3);
+}
+
+.dotsExtra {
+  margin-left: var(--space-2xs);
+  font-family: var(--font-number);
+  font-size: var(--type-number-size);
+}
+
+.tag {
+  background: var(--background-tag);
+  color: var(--text-tag);
+}
+
+.check {
+  background: var(--background-check);
+  color: var(--status-check);
+}
+
+.accent {
+  background: var(--background-accent-soft);
+  color: var(--text-accent);
+}
+
+.chip.disabled {
+  background: var(--background-disabled);
+  color: var(--text-disabled);
+}
+
+.chip.disabled button {
+  cursor: not-allowed;
+}
+
+@media (hover: hover) {
+  button.labelSlot:hover,
+  .removeSlot:hover {
+    background: var(--background-hover);
+  }
+
+  .accent button.labelSlot:hover {
+    background: var(--background-accent-soft-hover);
+  }
+}

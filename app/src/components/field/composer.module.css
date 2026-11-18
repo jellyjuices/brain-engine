@@ -1,0 +1,22 @@
+.composer {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  padding: var(--space-sm) 0 var(--space-lg);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--type-reading-size);
+  line-height: var(--type-reading-leading);
+  resize: none;
+  overflow-y: auto;
+}
+
+.composer::placeholder {
+  color: var(--text-secondary);
+}
+
+.composer:focus-visible {
+  outline: none;
+}

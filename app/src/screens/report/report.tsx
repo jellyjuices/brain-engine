@@ -1,7 +1,6 @@
-import "./report.css";
 import { Empty } from "@/components/empty/empty.tsx";
 import { Markdown } from "@/components/markdown/markdown.tsx";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { useCanSummarize } from "@/hooks/use-can-summarize.ts";
 import { useReport } from "@/hooks/use-report.ts";
 import { useRoute } from "@/hooks/use-route.ts";
@@ -18,7 +17,7 @@ export function ReportScreen() {
 
   return (
     <>
-      <ScreenHead title={copy.nav.report} fallback="/brain" />
+      <PageHeader title={copy.nav.report} fallback="/brain" />
       {report?.kind === "offline" && (
         <Empty title={copy.report.offlineTitle} body={copy.report.offlineBody} />
       )}

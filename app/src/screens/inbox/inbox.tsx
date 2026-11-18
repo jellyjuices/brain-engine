@@ -5,7 +5,7 @@ import { Swipe } from "@/components/swipe/swipe.tsx";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
 import { SyncLine } from "@/components/sync-line/sync-line.tsx";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { useOutboxItems } from "@/hooks/use-outbox-items.ts";
 import { inboxItems, inboxText } from "@/lib/notes/capture.ts";
@@ -25,7 +25,7 @@ export function InboxScreen() {
   const sending = useOutboxItems().filter((item) => item.kind === "inbox");
   return (
     <>
-      <ScreenHead title={copy.nav.inbox} onBack={() => back()} />
+      <PageHeader title={copy.nav.inbox} onBack={() => back()} />
       <SyncLine />
       {notes && !items.length && !sending.length ? (
         <Empty title={copy.inbox.empty} />

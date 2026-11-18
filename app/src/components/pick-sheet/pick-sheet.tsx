@@ -1,5 +1,5 @@
 import { HashIcon } from "@phosphor-icons/react";
-import { typeIcon } from "@/components/icon/icons.ts";
+import { typeLook } from "@/lib/notes/kinds.ts";
 import { SearchList, type SearchItem } from "@/components/search-list/search-list.tsx";
 import { openSheet } from "@/components/sheet/open-sheet.tsx";
 import { SheetHead } from "@/components/sheet/sheet-head.tsx";
@@ -28,7 +28,7 @@ export async function noteSheet(
       key: n.path,
       value: n,
       match: n.title,
-      row: { icon: typeIcon(n.type), title: n.title, sub: n.type ?? copy.common.note },
+      row: { ...typeLook(n.type), title: n.title, sub: n.type ?? copy.common.note },
     }));
   return pickSheet(title, copy.add.searchNotes, items);
 }

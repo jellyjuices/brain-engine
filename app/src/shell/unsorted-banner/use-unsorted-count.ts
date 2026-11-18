@@ -1,23 +1,9 @@
-import { useEffect, useState } from "react";
-import { api } from "@/lib/sync/api.ts";
+import { useNotes } from "@/hooks/use-notes.ts";
+import { useOutboxItems } from "@/hooks/use-outbox-items.ts";
+import { inboxItems } from "@/lib/notes/capture.ts";
 
-interface UnsortedReply {
-  count?: unknown;
-}
-
-export function useUnsortedCount(active: boolean, routeKey: string): number {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!active) return;
-    let live = true;
-    void api<UnsortedReply>("/api/unsorted").then((reply) => {
-      if (live && reply.ok && typeof reply.data.count === "number") setCount(reply.data.count);
-    });
-    return () => {
-      live = false;
-    };
-  }, [active, routeKey]);
-
-  return active ? count : 0;
+export function useUnsortedCount(): number {
+  const notes = useNotes();
+  const sending = useOutboxItems().filter((item) => item.kind === "inbox");
+  return (notes ? inboxItems(notes).length : 0) + sending.length;
 }

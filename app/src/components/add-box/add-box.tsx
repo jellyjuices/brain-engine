@@ -1,4 +1,4 @@
-import "./add-box.css";
+import styles from "./add-box.module.css";
 import type { KeyboardEvent, Ref } from "react";
 import clsx from "clsx";
 import { copy } from "@/content/index.ts";
@@ -17,7 +17,7 @@ export function AddBox({ ref, kind, full, onInput, onSelect, onKeyDown }: AddBox
   return (
     <div
       ref={ref}
-      className={clsx("add-box", `add-box--${kind}`, full && "is-full")}
+      className={clsx(styles.addBox, !todo && styles.addBoxJournal, full && styles.isFull)}
       role="textbox"
       tabIndex={0}
       aria-multiline="true"

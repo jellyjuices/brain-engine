@@ -1,0 +1,94 @@
+.lock {
+  position: fixed;
+  top: var(--vvt, 0);
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  height: var(--vvh, 100%);
+  padding: env(safe-area-inset-top) calc(var(--space-xl) + env(safe-area-inset-right))
+    env(safe-area-inset-bottom) calc(var(--space-xl) + env(safe-area-inset-left));
+  background: var(--background-primary);
+  animation: fade-in var(--motion-slow) var(--motion-easing) both;
+}
+
+.lockPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  width: 100%;
+  max-width: var(--size-max-width);
+}
+
+.wordmark {
+  margin-bottom: var(--space-xl);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: var(--font-size-display-3xl);
+  font-weight: var(--type-title-page-weight);
+  line-height: var(--type-title-page-leading);
+  text-align: center;
+}
+
+.field {
+  position: relative;
+}
+
+.field input {
+  width: 100%;
+  min-height: var(--size-plus);
+  padding: 0 calc(var(--size-target) + var(--space-sm)) 0 var(--space-lg);
+  border: var(--size-hair) solid var(--border-primary);
+  border-radius: var(--radius-md);
+  background: var(--background-secondary);
+  font-size: var(--type-body-size);
+  transition: border-color var(--motion-fast) var(--motion-easing);
+}
+
+.field input:focus-visible {
+  border-color: var(--border-selected);
+  outline-offset: 0;
+}
+
+.field > button {
+  position: absolute;
+  top: var(--space-xs);
+  right: var(--space-xs);
+}
+
+.lockError {
+  min-height: var(--space-xl);
+  color: var(--text-danger);
+  font-size: var(--type-secondary-size);
+  text-align: center;
+}
+
+.info {
+  color: var(--text-secondary);
+}
+
+.shake {
+  animation: shake 360ms var(--motion-easing);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes shake {
+  20% {
+    transform: translateX(calc(var(--space-sm) * -1));
+  }
+  40% {
+    transform: translateX(calc(var(--space-sm) * 0.8));
+  }
+  60% {
+    transform: translateX(calc(var(--space-sm) * -0.6));
+  }
+  80% {
+    transform: translateX(calc(var(--space-sm) * 0.3));
+  }
+}

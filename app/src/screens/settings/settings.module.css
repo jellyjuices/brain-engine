@@ -1,0 +1,6 @@
+.pendingRow {
+  color: var(--text-secondary);
+  font-size: var(--type-secondary-size);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

@@ -1,4 +1,4 @@
-import "./field.css";
+import styles from "./field.module.css";
 import { useId, type Ref } from "react";
 
 export interface TextFieldProps {
@@ -32,7 +32,7 @@ export function TextField({
   const shared = {
     id,
     ref: inputRef,
-    className: "input",
+    className: styles.input,
     placeholder,
     autoFocus,
     autoCapitalize,
@@ -42,9 +42,9 @@ export function TextField({
     "aria-label": hideLabel ? label : undefined,
   };
   return (
-    <div className="field">
+    <div className={styles.field}>
       {!hideLabel && (
-        <label className="section-label" htmlFor={id}>
+        <label className={styles.label} htmlFor={id}>
           {label}
         </label>
       )}

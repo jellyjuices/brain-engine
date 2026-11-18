@@ -1,0 +1,42 @@
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-section-top) var(--space-row-x) var(--space-section-bottom);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-title-section-size);
+  font-weight: var(--type-title-section-weight);
+  line-height: var(--type-title-section-leading);
+  color: var(--text-primary);
+}
+
+.sectionHeader.isLate .title {
+  color: var(--status-late);
+}
+
+.countBadge {
+  display: inline-grid;
+  place-items: center;
+  min-width: var(--space-xl);
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--radius-control);
+  background: var(--background-tag);
+  font-family: var(--font-number);
+  font-size: var(--type-number-size);
+  font-weight: var(--type-number-weight);
+  line-height: var(--type-number-leading);
+  color: var(--text-secondary);
+}
+
+.actionBox {
+  display: flex;
+  align-items: center;
+}

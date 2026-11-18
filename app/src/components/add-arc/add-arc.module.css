@@ -1,0 +1,65 @@
+.addArc {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+}
+.addArcPick {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  border: 0;
+  background: transparent;
+  color: var(--text-on-accent);
+  font: inherit;
+  font-size: var(--type-tab-size);
+  font-weight: var(--type-tab-weight);
+  line-height: var(--type-tab-leading);
+  translate: -50% 0;
+  animation: add-arc-pop var(--motion-fast) var(--motion-easing) both;
+}
+
+.addArcPick > :first-child {
+  width: var(--size-kind-pick);
+  height: var(--size-kind-pick);
+  color: var(--text-accent);
+}
+
+.addArcPick > :first-child > :first-child {
+  animation: add-arc-spin var(--motion-duration-spin) linear infinite;
+  background: var(--background-secondary);
+}
+
+.addArcPick1 {
+  transform: translate(calc(var(--size-ring) * -0.87), calc(var(--size-ring) * -0.5));
+}
+
+.addArcPick2 {
+  transform: translate(0, calc(var(--size-ring) * -1));
+}
+
+.addArcPick3 {
+  transform: translate(calc(var(--size-ring) * 0.87), calc(var(--size-ring) * -0.5));
+}
+
+@keyframes add-arc-pop {
+  from {
+    opacity: 0;
+    scale: 0.4;
+  }
+}
+
+@keyframes add-arc-spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .addArcPick > :first-child > :first-child {
+    animation: none;
+  }
+}

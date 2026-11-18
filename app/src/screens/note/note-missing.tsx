@@ -4,7 +4,7 @@ import { back } from "@/lib/platform/router.ts";
 import { putNotes } from "@/lib/storage/store.ts";
 import { api } from "@/lib/sync/api.ts";
 import { notePath } from "@/lib/sync/writes.ts";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { Empty } from "@/components/empty/empty.tsx";
 import { copy } from "@/content/index.ts";
 
@@ -20,7 +20,7 @@ export function NoteMissing({ path }: { path: string }) {
   }, [path]);
   return (
     <>
-      <ScreenHead title={copy.nav.note} onBack={() => back()} />
+      <PageHeader title={copy.nav.note} onBack={() => back()} />
       <Empty title={copy.notes.missingTitle} body={copy.notes.missingBody} />
     </>
   );

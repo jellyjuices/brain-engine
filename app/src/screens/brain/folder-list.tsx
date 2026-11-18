@@ -1,12 +1,14 @@
 import { ArchiveIcon, CalendarCheckIcon, CalendarDotsIcon } from "@phosphor-icons/react";
+import { SectionHeader } from "@/components/section-header/section-header.tsx";
 import { List } from "@/components/row/list.tsx";
 import { Row } from "@/components/row/row.tsx";
-import { ScreenHead } from "@/components/screen-head/screen-head.tsx";
+import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { SyncLine } from "@/components/sync-line/sync-line.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { folderSummaries } from "@/lib/notes/folders.ts";
 import { copy } from "@/content/index.ts";
-import { FOLDER_ICON, FOLDERS, type Folder } from "./folders.ts";
+import { folderLook } from "@/lib/notes/kinds.ts";
+import { FOLDERS, type Folder } from "./folders.ts";
 import { OpenChip } from "./open-chip.tsx";
 
 export function FolderList() {
@@ -14,14 +16,14 @@ export function FolderList() {
   const rows = notes ? folderSummaries(notes, FOLDERS) : [];
   return (
     <>
-      <ScreenHead title={copy.nav.brain} />
+      <PageHeader title={copy.nav.brain} />
       <SyncLine />
       <List>
         {rows.map((f) => (
           <Row
             key={f.folder}
             href={`/brain/${f.folder}`}
-            icon={FOLDER_ICON[f.folder as Folder]}
+            {...folderLook(f.folder)}
             title={copy.notes.folders[f.folder as Folder]}
             sub={f.count === 1 ? copy.common.oneNote : copy.common.noteCount(f.count)}
             end={<OpenChip open={f.open} />}
@@ -29,7 +31,7 @@ export function FolderList() {
           />
         ))}
       </List>
-      <p className="section-label">{copy.report.title}</p>
+      <SectionHeader title={copy.report.title} />
       <List>
         <Row
           href="/report/today"

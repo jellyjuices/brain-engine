@@ -1,0 +1,4 @@
+.mention {
+  color: var(--text-accent);
+  text-decoration: none;
+}

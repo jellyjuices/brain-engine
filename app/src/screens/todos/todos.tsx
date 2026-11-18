@@ -7,9 +7,13 @@ import { SyncLine } from "@/components/sync-line/sync-line.tsx";
 import { longDate } from "@/lib/notes/model.ts";
 import { isTodoView, type TodoView } from "@shared/todos/index.ts";
 import { TODO_VIEW_TABS } from "@/lib/notes/todo-views.ts";
+import { SETTINGS } from "@/shell/places.ts";
+import { PlaceLink } from "@/shell/place-link/place-link.tsx";
+import { UnsortedBanner } from "@/shell/unsorted-banner/unsorted-banner.tsx";
+import { useShellLayout } from "@/shell/use-shell-layout.ts";
 import { TodosList } from "./todos-list.tsx";
 import { useTodoView } from "./use-todo-view.ts";
-import * as styles from "./todos.styles.ts";
+import styles from "./todos.module.css";
 import { copy } from "@/content/index.ts";
 
 const EMPTY: Record<TodoView, string> = {
@@ -26,11 +30,16 @@ const TABS = TODO_VIEW_TABS.map((v) => ({ value: v.id, label: v.label }));
 export function TodosScreen() {
   const [view, setView] = useState<TodoView>("today");
   const { now, items, noDate, refresh } = useTodoView(view);
+  const wide = useShellLayout() === "wide";
 
   return (
     <>
       <Pull onRefresh={refresh} />
-      <PageHeader title={copy.todos.title} kicker={longDate(now)}>
+      <PageHeader
+        title={copy.todos.title}
+        kicker={longDate(now)}
+        action={wide ? undefined : <PlaceLink place={SETTINGS} variant="icon" />}
+      >
         <ViewTabs
           views={TABS}
           value={view}
@@ -38,6 +47,7 @@ export function TodosScreen() {
           label={copy.todos.views}
         />
       </PageHeader>
+      <UnsortedBanner />
       <SyncLine />
       <div className={styles.body}>
         {items && <TodosList view={view} items={items} now={now} empty={EMPTY[view]} />}

@@ -1,4 +1,4 @@
-import "./search-list.css";
+import styles from "./search-list.module.css";
 import { PlusIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 import { List } from "@/components/row/list.tsx";
@@ -50,7 +50,7 @@ export function SearchList<T>({
         onChange={setQuery}
         onEnter={pickFirst}
       />
-      <div className="search-results">
+      <div className={styles.searchResults}>
         {hits.length || showAdd ? (
           <List variant="ghost">
             {hits.map((x) => (

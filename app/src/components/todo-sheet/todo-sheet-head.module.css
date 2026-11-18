@@ -1,0 +1,19 @@
+.sheetDue {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--text-secondary);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+}
+
+.sheetDue svg {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+}
+
+.sheetDue.isLate {
+  color: var(--text-danger);
+  font-weight: var(--font-weight-semibold);
+}
