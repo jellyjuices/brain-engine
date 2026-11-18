@@ -34,6 +34,17 @@ export function wrapMarks(value: string, start: number, end: number, mark: strin
   };
 }
 
+export function toggleMarks(value: string, start: number, end: number, mark: string): Edit {
+  if (start !== end) return wrapMarks(value, start, end, mark);
+  let from = start;
+  let to = end;
+  while (from > 0 && WORD.test(value[from - 1]!)) from--;
+  while (to < value.length && WORD.test(value[to]!)) to++;
+  const edit = wrapMarks(value, from, to, mark);
+  const caret = edit.start + (start - from);
+  return { value: edit.value, start: caret, end: caret };
+}
+
 function lineRange(value: string, start: number, end: number): [number, number] {
   const last = end > start && value[end - 1] === "\n" ? end - 1 : end;
   const from = start === 0 ? 0 : value.lastIndexOf("\n", start - 1) + 1;

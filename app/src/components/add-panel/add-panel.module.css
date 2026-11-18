@@ -16,10 +16,6 @@
   font-size: var(--font-size-body-lg);
 }
 
-.rail .addMain > :first-child {
-  margin-top: 0;
-}
-
 .addMain {
   position: relative;
   z-index: 2;
@@ -43,12 +39,17 @@
 
 .addMain > :first-child {
   margin-top: calc(1.5rem * -1);
-  transition: transform var(--motion-fast) var(--motion-easing);
+  transition: all var(--motion-fast) var(--motion-easing);
 }
 
-.addPanel.isOpen .addMain > :first-child {
-  width: 3rem;
-  height: 3rem;
+.addPanel:not(.isClosed) .addMain > :first-child {
+  width: var(--size-control);
+  height: var(--size-control);
+}
+
+.rail .addMain > :first-child,
+.addPanel:is([data-mode="todo"], [data-mode="journal"]) .addMain > :first-child {
+  margin-top: 0;
 }
 
 .addMain > :first-child > svg {

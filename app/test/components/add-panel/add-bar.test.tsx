@@ -64,11 +64,25 @@ describe("quick add tool bar", () => {
     expect(document.activeElement).toBe(box);
   });
 
-  it("Mention opens note suggestions and a pick writes the name", async () => {
+  it("Mention opens note suggestions and a pick writes the name with its @", async () => {
     const { user, box } = await openTodo("Call");
     await user.click(screen.getByRole("button", { name: "Mention" }));
     await user.click(await screen.findByRole("button", { name: /Aisha/ }));
-    expect(box).toHaveTextContent("Call Aisha");
+    expect(box).toHaveTextContent("Call @Aisha");
+  });
+
+  it("a picked name is drawn as a mention", async () => {
+    const { user } = await openTodo("Call");
+    await user.click(screen.getByRole("button", { name: "Mention" }));
+    await user.click(await screen.findByRole("button", { name: /Aisha/ }));
+    expect(screen.getByText("@Aisha").className).toMatch(/liveMention/);
+  });
+
+  it("Bold hides the stars and draws the word bold", async () => {
+    const { user, box } = await openTodo("Call mom");
+    await user.click(screen.getByRole("button", { name: "Bold" }));
+    expect(box).toHaveTextContent("Call **mom**");
+    expect(screen.getByText("mom").className).toMatch(/liveBold/);
   });
 
   it("Tag opens tag suggestions and a pick saves the tag with the to-do", async () => {

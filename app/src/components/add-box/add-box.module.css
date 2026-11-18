@@ -13,12 +13,14 @@
 .addBox {
   --add-tools: calc(var(--size-control) + var(--space-sm) * 2 + 0.0625rem);
   position: absolute;
-  inset-block: 16% calc(50% + var(--layout-tabbar) / 2 + var(--add-tools));
-  inset-inline: calc((var(--add-blob-w) - 100vw) / 2 + var(--space-xl));
+  inset-block: 21% calc(50% + var(--layout-tabbar) / 2 + var(--add-tools));
+  inset-inline: max(calc((var(--add-blob-w) - 100vw) / 2 + var(--space-xl)), 22%);
   overflow-y: auto;
   color: var(--text-on-accent);
-  font-size: var(--font-size-body-lg);
+  font-size: var(--font-size-body-2xl);
+  font-weight: 400;
   line-height: var(--font-leading-normal);
+  text-align: center;
   white-space: pre-wrap;
   outline: none;
   transition: inset var(--motion-slow) var(--motion-easing);
@@ -29,7 +31,38 @@
   opacity: 0.7;
 }
 
+.liveMark,
+.liveBullet {
+  font-size: 0;
+}
+
+.liveBullet::before {
+  content: "•";
+  margin-inline-end: var(--space-sm);
+  font-size: var(--font-size-body-xl);
+}
+
+.liveBold {
+  font-weight: 700;
+}
+
+.liveItalic {
+  font-style: italic;
+}
+
+.liveMention {
+  color: color-mix(in oklch, var(--text-on-accent) 55%, var(--color-seafoam-400));
+  font-weight: 500;
+}
+
+.liveMention.liveBold {
+  font-weight: 800;
+}
+
 .addBoxJournal {
+  inset-inline: calc((var(--add-blob-w) - 100vw) / 2 + var(--space-xl));
+  font-size: var(--font-size-body-xl);
+  text-align: start;
   inset-block: 30% calc(20% + var(--layout-tabbar) / 2 + var(--add-tools));
   mask-image: linear-gradient(
     transparent,

@@ -67,6 +67,7 @@ export function useMentions({
     const at = next.caret + value.length - next.value.length;
     setText(value);
     setCaret(at);
+    setClosedAt(open.start);
     requestAnimationFrame(() => {
       area.current?.focus();
       area.current?.setSelectionRange(at, at);
