@@ -16,7 +16,7 @@ export const notes = {
   yourVersion: "Your version",
   keepMac: "Keep Mac version",
   keepMine: "Keep mine",
-  next: "Next",
+  soon: "Soon",
   lately: "Lately",
   related: "Related",
   birthday: "Birthday",

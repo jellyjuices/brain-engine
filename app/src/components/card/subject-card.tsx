@@ -1,12 +1,12 @@
-import { List } from "@/components/row/list.tsx";
 import { Shape } from "@/components/shape/shape.tsx";
 import { typeLook } from "@/lib/notes/kinds.ts";
 import { Panel } from "@/components/panel/panel.tsx";
 import styles from "./card.module.css";
 import { CardSection } from "./card-section.tsx";
-import { CardTodoRow } from "./card-todo-row.tsx";
+import { CardSoonLine } from "./card-soon-line.tsx";
 import { LinkLine, type Line } from "./link-line.tsx";
-import { longDate, noteHref, todayIso } from "@/lib/notes/model.ts";
+import { longDate, noteHref } from "@/lib/notes/model.ts";
+import { soonOf } from "@/lib/notes/card-soon.ts";
 import type { Card } from "@/lib/notes/card-types.ts";
 import { copy } from "@/content/index.ts";
 
@@ -25,6 +25,7 @@ export function SubjectCard({ card, heading, bare }: SubjectCardProps) {
     ...card.relations.filter((r) => r.direction === "in"),
     ...card.related.map((r) => ({ path: r.path, title: r.title })),
   ].filter((r) => !seen.has(r.path) && seen.add(r.path));
+  const soon = soonOf(card);
 
   if (bare) return null;
   return (
@@ -39,25 +40,9 @@ export function SubjectCard({ card, heading, bare }: SubjectCardProps) {
           {subject.description && <p className={styles.cardDesc}>{subject.description}</p>}
         </>
       )}
-      {card.todo.length > 0 && (
-        <CardSection label={copy.todo.toDo}>
-          <List variant="ghost">
-            {card.todo.map((t) => (
-              <CardTodoRow key={t.ref ?? `${t.path}:${t.text}`} todo={t} subject={subject.title} />
-            ))}
-          </List>
-        </CardSection>
-      )}
-      {card.next && (
-        <CardSection label={copy.notes.next}>
-          <p>
-            <a className={styles.cardLink} href={noteHref(card.next.path)}>
-              {card.next.text}
-            </a>
-            <span className={styles.cardWhen}>
-              {` · ${card.next.date === todayIso() ? copy.common.today : longDate(card.next.date)}`}
-            </span>
-          </p>
+      {soon && (
+        <CardSection label={copy.notes.soon}>
+          <CardSoonLine soon={soon} subject={subject.title} />
         </CardSection>
       )}
       {card.history.length > 0 && (
