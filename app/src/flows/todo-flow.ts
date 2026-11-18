@@ -2,7 +2,7 @@ import { applyChange, undoChange, type Change } from "@/lib/sync/changes.ts";
 import type { Decision, TodoRef } from "@/lib/sync/local-edit.ts";
 import { addDays, noteHref, todayIso } from "@/lib/notes/model.ts";
 import { go } from "@/lib/platform/router.ts";
-import { todoSheet } from "@/components/todo-sheet/todo-sheet.tsx";
+import { todoSheet, type Step } from "@/components/todo-sheet/todo-sheet.tsx";
 import { toast } from "@/components/toast/toast-store.ts";
 import { isOffline } from "@/lib/sync/queued-text.ts";
 import { copy } from "@/content/index.ts";
@@ -60,7 +60,7 @@ export async function tickTodo(todo: TodoRef, goal?: string): Promise<void> {
 
 export async function openTodo(
   todo: TodoRef,
-  start: "menu" | "done" = "menu",
+  start: Step = "menu",
   collapse?: () => Promise<void>,
 ): Promise<void> {
   const r = await todoSheet(todo, start);

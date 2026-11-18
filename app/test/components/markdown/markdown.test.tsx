@@ -91,22 +91,6 @@ describe("markdown renderer", () => {
     expect(view.getByRole("checkbox", { checked: true }).textContent).toBe("Book a dentist");
   });
 
-  it("can hide open to-dos (and an emptied To-dos heading) when a card shows them", () => {
-    const out = renderMarkdown("# To-dos\n\n- [ ] Open one\n\n# Notes\n\n- 2026-11-01 · kept", {
-      path: "a/b.md",
-      hideOpenLoops: true,
-    });
-    expect(out.textContent).not.toContain("Open one");
-    expect(out.textContent).not.toContain("To-dos");
-    expect(out.textContent).toContain("kept");
-    const keepsDone = renderMarkdown("# To-dos\n\n- [ ] gone\n- [x] stays", {
-      path: "a/b.md",
-      hideOpenLoops: true,
-    });
-    expect(keepsDone.textContent).toContain("To-dos");
-    expect(keepsDone.textContent).toContain("stays");
-  });
-
   it("renders quotes, rules and fenced code as text", () => {
     expect(html("> a quote\n\n---\n\n```\n<b>x</b>\n```")).toContain(
       "<blockquote>a quote</blockquote><hr><pre><code>&lt;b&gt;x&lt;/b&gt;</code></pre>",

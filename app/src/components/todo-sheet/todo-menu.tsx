@@ -5,6 +5,7 @@ import {
   CheckIcon,
   HourglassIcon,
   MoonStarsIcon,
+  PencilSimpleIcon,
 } from "@phosphor-icons/react";
 import type { Finish } from "@/components/sheet/open-sheet.tsx";
 import { Divider } from "@/components/row/divider.tsx";
@@ -45,6 +46,12 @@ export function TodoMenu({ todo, now, finish, show }: TodoStepProps) {
         />
         {!isEvent && (
           <>
+            <Row
+              icon={PencilSimpleIcon}
+              title={copy.common.edit}
+              chevron
+              onClick={() => show("edit")}
+            />
             <Row
               icon={HourglassIcon}
               title={copy.todo.putOnHold}

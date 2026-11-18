@@ -4,28 +4,30 @@ import { fieldsOf, LOOPS_HEADING, parseTodoLine } from "@shared/line/index.ts";
 import { makeTodo } from "@/lib/notes/todos.ts";
 import type { ListItem } from "@/lib/notes/markdown.ts";
 import type { StoredNote } from "@/lib/notes/model.ts";
-import { PlainCheck } from "@/components/markdown/plain-check.tsx";
 
-export function NoteBody({ note, hideOpenLoops }: { note: StoredNote; hideOpenLoops: boolean }) {
+function isDropped(line: string) {
+  const todo = parseTodoLine(line);
+  return !!todo && !!fieldsOf(todo).dropped;
+}
+
+export function NoteBody({ note }: { note: StoredNote }) {
   function renderTodo(item: ListItem) {
+    if (item.section !== LOOPS_HEADING.slice(2)) return null;
     const parsed = parseTodoLine(`- [${item.checked ? "x" : " "}] ${item.text}`);
     if (!parsed) return null;
     const loop = fieldsOf(parsed);
-    if (item.checked) return <PlainCheck text={loop.text} checked from={note.path} />;
-    if (item.section !== LOOPS_HEADING.slice(2)) return null;
     return (
       <TodoRefRow
         todo={makeTodo({ text: loop.text, path: note.path, subject: note.title, due: loop.due })}
         showSubject={false}
+        done={loop.done}
+        tickNow
       />
     );
   }
-  return (
-    <Markdown
-      src={note.body}
-      path={note.path}
-      hideOpenLoops={hideOpenLoops}
-      renderTodo={renderTodo}
-    />
-  );
+  const shown = note.body
+    .split("\n")
+    .filter((line) => !isDropped(line))
+    .join("\n");
+  return <Markdown src={shown} path={note.path} renderTodo={renderTodo} />;
 }

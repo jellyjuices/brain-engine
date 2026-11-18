@@ -1,6 +1,8 @@
 export const todo = {
-  toDo: "To do",
   done: "Done",
+  markNotDone: "Mark not done",
+  editTitle: "Edit to-do",
+  words: "To-do",
   setDate: "Set a date",
   putOnHold: "Put on hold",
   moveToSomeday: "Snooze",

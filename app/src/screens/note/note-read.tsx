@@ -57,7 +57,7 @@ export function NoteRead({ path }: { path: string }) {
       <NoteIntro note={note} notes={notes} />
       {status.waiting && <p className={styles.pending}>{copy.notes.editWaiting}</p>}
       {showCard && <SubjectCard card={card} />}
-      <NoteBody note={note} hideOpenLoops={showCard} />
+      <NoteBody note={note} />
       <div className={styles.addHere}>
         <Button
           variant="outlined"

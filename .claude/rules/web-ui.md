@@ -64,7 +64,7 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 | Label on a group | `SectionHeader`. A field or fact label keeps its own label style in its part |
 | Padded box | `Panel` |
 | Fact on a note | `Fact`, `AddFact` |
-| To-do line | `TodoRow` (`title`, `tag`, `when`, `checked`, `onCheckedChange`, `onOpen`, `onMenu`, `onLater` for the swipe-left Tomorrow). For a `TodoRef` from `makeTodo()`, use `TodoRefRow` |
+| To-do line | `TodoRow` (`title`, `tag`, `when`, `checked`, `onCheckedChange`, `onOpen`, `onMenu`, `onLater` for the swipe-left Tomorrow). For a `TodoRef` from `makeTodo()`, use `TodoRefRow` (`done` for a ticked one: a tap opens Mark not done, Edit, Delete; `tickNow` ticks at once) |
 | When a to-do is due | `WhenChip` (`label`, `status`) |
 | A goal's target or step, with its tick box | `GoalStep` from `components/goal-step/` |
 | A goal's big percent, bar and "+N this month" | `GoalBar` from `components/goal-bar/` |

@@ -2,6 +2,7 @@ import {
   LOOPS_HEADING,
   NOTES_HEADING,
   appendToSection,
+  dropDoneTodoIn,
   dropTodo,
   formatTodoLine,
   newTodoLine,
@@ -112,10 +113,11 @@ export function applyDecision(
     });
     if (body !== null && oneLine(d.follow_up)) body = addFollowUp(body, oneLine(d.follow_up)!, now);
   } else if (d.kind === "drop") {
-    body = editLine(note.body, todo.text, (l) => {
-      const why = dated(now, d.why);
-      return [formatTodoLine(dropTodo(l, now)), ...(why ? [why] : [])];
-    });
+    body =
+      editLine(note.body, todo.text, (l) => {
+        const why = dated(now, d.why);
+        return [formatTodoLine(dropTodo(l, now)), ...(why ? [why] : [])];
+      }) ?? dropDoneTodoIn(note.body, todo.text);
   } else {
     const w = dueFor(d.when, now);
     body = editLine(note.body, todo.text, (l) => [

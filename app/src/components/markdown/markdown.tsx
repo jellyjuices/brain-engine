@@ -1,18 +1,16 @@
 import styles from "./markdown.module.css";
 import type { ReactNode } from "react";
 import { MarkdownBlock } from "./markdown-block.tsx";
-import { parseBlocks, pruneOpenLoops, type ListItem } from "@/lib/notes/markdown.ts";
+import { parseBlocks, type ListItem } from "@/lib/notes/markdown.ts";
 
 export interface MarkdownProps {
   src: string;
   path: string;
-  hideOpenLoops?: boolean;
   renderTodo?: (item: ListItem) => ReactNode | null;
 }
 
-export function Markdown({ src, path, hideOpenLoops, renderTodo }: MarkdownProps) {
-  const parsed = parseBlocks(src);
-  const blocks = hideOpenLoops ? pruneOpenLoops(parsed) : parsed;
+export function Markdown({ src, path, renderTodo }: MarkdownProps) {
+  const blocks = parseBlocks(src);
   return (
     <div className={styles.md}>
       {blocks.map((b, i) => (

@@ -1,4 +1,3 @@
-import { LOOPS_HEADING } from "@shared/line/index.ts";
 import { noteHref, resolveLink } from "./model.ts";
 
 export interface ListItem {
@@ -145,26 +144,4 @@ export function inline(src: string, from: string): InlineToken[] {
     rest = rest.slice(m.index + m[0].length);
   }
   return out;
-}
-
-function isOpenLoop(i: ListItem) {
-  return i.checked === false && i.section === LOOPS_HEADING.slice(2);
-}
-
-export function pruneOpenLoops(blocks: Block[]): Block[] {
-  const kept: Block[] = [];
-  for (const b of blocks) {
-    if (b.t === "list") {
-      const items = b.items.filter((i) => !isOpenLoop(i));
-      if (items.length) kept.push({ t: "list", items });
-    } else kept.push(b);
-  }
-  return kept.filter(
-    (b, i) =>
-      !(
-        b.t === "heading" &&
-        b.text === LOOPS_HEADING.slice(2) &&
-        (kept[i + 1] === undefined || kept[i + 1]!.t === "heading")
-      ),
-  );
 }
