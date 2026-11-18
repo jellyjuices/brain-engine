@@ -31,7 +31,7 @@ export const save = {
     skip: "Skipped",
     stopRepeat: "Stopped repeating",
   },
-  changeOffline: (word: string) => `${word} offline`,
+  changeOffline: (word: string) => `${word} · offline`,
   conflict: "Your Mac changed it too. Choose a version",
   emptyAdd: "Empty note",
 };
