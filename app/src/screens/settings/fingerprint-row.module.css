@@ -1,7 +1,7 @@
 .switch {
   position: relative;
   flex: none;
-  width: calc(1.5rem * 2 + var(--space-xs));
+  width: calc(1.5rem * 2 + var(--space-xs) * 2);
   height: var(--space-2xl);
   border: 0;
   border-radius: var(--radius-full);
