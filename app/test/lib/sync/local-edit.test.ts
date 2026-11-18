@@ -37,6 +37,31 @@ describe("reopen and edit on the local copy", () => {
     );
   });
 
+  it.each([
+    [
+      "done moves the date and adds one Done line",
+      { kind: "done" as const },
+      "- [ ] Oil the hinges · due 2026-12-01 · every month\n- 2026-11-05 · Done: Oil the hinges\n\n",
+    ],
+    [
+      "skip moves the date with no Done line",
+      { kind: "skip" as const },
+      "- [ ] Oil the hinges · due 2026-12-01 · every month\n\n",
+    ],
+    [
+      "stop repeat keeps the date and drops the repeat",
+      { kind: "stopRepeat" as const },
+      "- [ ] Oil the hinges · due 2026-11-01\n\n",
+    ],
+  ])("a repeating to-do: %s", (_name, decision, lines) => {
+    const upkeep = note(
+      PATH,
+      "# To-dos\n\n- [ ] Oil the hinges · due 2026-11-01 · every month\n\n# Notes\n",
+    );
+    const out = applyDecision(upkeep, todo("Oil the hinges"), decision, "2026-11-05")!;
+    expect(out.body).toBe(`# To-dos\n\n${lines}# Notes\n`);
+  });
+
   it("reopen on an event changes nothing", () => {
     const event = { ...todo("Checkup"), kind: "event" as const, ref: "events/checkup.md" };
     expect(applyDecision(shed, event, { kind: "reopen" }, "2026-11-05")).toBeNull();

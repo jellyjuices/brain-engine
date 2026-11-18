@@ -61,6 +61,10 @@ export function registerWrites() {
   registerHandler("move", (item) => api("/api/move", { body: item.payload as MovePayload }));
   registerHandler("drop", (item) => api("/api/drop", { body: item.payload as DropPayload }));
   registerHandler("reopen", (item) => api("/api/reopen", { body: item.payload as RefPayload }));
+  registerHandler("skip", (item) => api("/api/skip", { body: item.payload as RefPayload }));
+  registerHandler("stop-repeat", (item) =>
+    api("/api/stop-repeat", { body: item.payload as RefPayload }),
+  );
   registerHandler("edit-todo", (item) =>
     api("/api/edit-todo", { body: item.payload as TodoTextPayload }),
   );
@@ -117,7 +121,9 @@ export async function queueDecision(ref: string, d: Decision): Promise<string> {
         clean({ ref, when: d.when, who: d.who?.trim(), what: d.what?.trim() }),
       )
     ).id;
-  if (d.kind === "reopen") return (await enqueue<RefPayload>("reopen", { ref })).id;
+  if (d.kind === "reopen" || d.kind === "skip")
+    return (await enqueue<RefPayload>(d.kind, { ref })).id;
+  if (d.kind === "stopRepeat") return (await enqueue<RefPayload>("stop-repeat", { ref })).id;
   if (d.kind === "edit")
     return (await enqueue<TodoTextPayload>("edit-todo", { ref, text: d.text.trim() })).id;
   return (await enqueue<DropPayload>("drop", clean({ ref, why: d.why?.trim() }))).id;

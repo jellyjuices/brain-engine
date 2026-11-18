@@ -2,6 +2,7 @@ import {
   LOOPS_HEADING,
   NOTES_HEADING,
   appendToSection,
+  doneHistoryLine,
   dropDoneTodoIn,
   dropTodo,
   formatTodoLine,
@@ -9,7 +10,10 @@ import {
   parseTodoLine,
   reopenTodoIn,
   retextTodoIn,
+  rollTodo,
+  rollTodoIn,
   sectionRange,
+  stopRepeatIn,
   tickTodo,
   updateTodo,
   type Outcome,
@@ -23,6 +27,8 @@ export type Decision =
   | { kind: "move"; when: string; who?: string; what?: string }
   | { kind: "drop"; why?: string }
   | { kind: "reopen" }
+  | { kind: "skip" }
+  | { kind: "stopRepeat" }
   | { kind: "edit"; text: string };
 
 export interface TodoRef {
@@ -32,6 +38,7 @@ export interface TodoRef {
   kind: "todo" | "event";
   ref: string;
   due?: string;
+  every?: string;
 }
 
 function oneLine(t: string | undefined) {
@@ -72,18 +79,31 @@ function addFollowUp(body: string, text: string, now: string): string {
   );
 }
 
+function rewriteRef(body: string, text: string, d: Decision, now: string): string | null {
+  if (d.kind === "reopen") return reopenTodoIn(body, text);
+  if (d.kind === "edit") return retextTodoIn(body, text, d.text);
+  if (d.kind === "skip") return rollTodoIn(body, text, now, false);
+  return stopRepeatIn(body, text);
+}
+
+function doneLines(l: TodoLine, now: string, happened: string | undefined): string[] {
+  const note = dated(now, happened);
+  const rolled = rollTodo(l, now);
+  const head = rolled
+    ? [formatTodoLine(rolled), doneHistoryLine(l.text, now)]
+    : [formatTodoLine(tickTodo(l, now))];
+  return [...head, ...(note ? [note] : [])];
+}
+
 export function applyDecision(
   note: StoredNote,
   todo: TodoRef,
   d: Decision,
   now: string,
 ): StoredNote | null {
-  if (d.kind === "reopen" || d.kind === "edit") {
+  if (d.kind === "reopen" || d.kind === "edit" || d.kind === "skip" || d.kind === "stopRepeat") {
     if (todo.kind === "event") return null;
-    const body =
-      d.kind === "reopen"
-        ? reopenTodoIn(note.body, todo.text)
-        : retextTodoIn(note.body, todo.text, d.text);
+    const body = rewriteRef(note.body, todo.text, d, now);
     return body === null ? null : { ...note, body };
   }
   if (todo.kind === "event") {
@@ -106,11 +126,7 @@ export function applyDecision(
 
   let body: string | null;
   if (d.kind === "done") {
-    body = editLine(note.body, todo.text, (l) => {
-      const ticked = formatTodoLine(tickTodo(l, now));
-      const happened = dated(now, d.happened);
-      return [ticked, ...(happened ? [happened] : [])];
-    });
+    body = editLine(note.body, todo.text, (l) => doneLines(l, now, d.happened));
     if (body !== null && oneLine(d.follow_up)) body = addFollowUp(body, oneLine(d.follow_up)!, now);
   } else if (d.kind === "drop") {
     body =
