@@ -50,7 +50,9 @@ export const checkMix = (areas: string[], mode: Mode): MixResult[] => {
     { part: "corner glow", role: "glow", base: "background-primary" },
   ];
   for (const { part, role, base } of parts) {
-    const layers = areas.map((a) => resolve(role === "surface" ? surface(a) : `area-${a}-${role}`, mode));
+    const layers = areas.map((a) =>
+      resolve(role === "surface" ? surface(a) : `area-${a}-${role}`, mode),
+    );
     const alpha = role === "glow" ? glowAlpha : layers[0].alpha;
     const under = flatten([base], mode);
     for (const text of ["text-primary", "text-secondary"]) {

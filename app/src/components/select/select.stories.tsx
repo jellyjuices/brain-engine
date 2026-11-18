@@ -5,7 +5,9 @@ import { Select, type SelectProps } from "./select.tsx";
 const Live = (args: SelectProps) => {
   const [value, setValue] = useState(args.value);
   return (
-    <div style={{ maxWidth: "var(--layout-max-width)", minHeight: "calc(var(--size-control) * 7)" }}>
+    <div
+      style={{ maxWidth: "var(--layout-max-width)", minHeight: "calc(var(--size-control) * 7)" }}
+    >
       <Select {...args} value={value} onValueChange={setValue} />
     </div>
   );

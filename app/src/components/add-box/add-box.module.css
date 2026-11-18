@@ -60,6 +60,7 @@
 .addBox.isFull {
   inset-block: calc(30% + var(--space-3xl))
     calc(
-      70% - var(--vvh, 100dvh) + var(--layout-tabbar) + env(safe-area-inset-bottom) + var(--add-tools)
+      70% - var(--vvh, 100dvh) + var(--layout-tabbar) + env(safe-area-inset-bottom) +
+        var(--add-tools)
     );
 }

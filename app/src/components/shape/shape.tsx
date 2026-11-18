@@ -47,7 +47,10 @@ export function Shape({ name, icon, size = "md", variant = "default" }: ShapePro
         variant === "secondary" && styles.shapeSecondary,
       )}
     >
-      <span className={styles.shapeBg} style={{ clipPath: `var(--shape-${KIND_SHAPE[name] ?? "circle"})` }} />
+      <span
+        className={styles.shapeBg}
+        style={{ clipPath: `var(--shape-${KIND_SHAPE[name] ?? "circle"})` }}
+      />
       {icon && <Icon icon={icon} />}
     </span>
   );

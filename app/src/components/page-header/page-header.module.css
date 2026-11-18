@@ -19,8 +19,21 @@
 }
 
 .glow::before {
-  background: var(--page-glow, conic-gradient(from 200deg at 100% 0%, var(--glow-corner-start), var(--glow-corner-end), var(--glow-corner-start)));
-  mask-image: radial-gradient(circle at 100% 0%, var(--color-neutral-900) 0%, color-mix(in oklch, var(--color-neutral-900) 50%, transparent) 35%, transparent 70%);
+  background: var(
+    --page-glow,
+    conic-gradient(
+      from 200deg at 100% 0%,
+      var(--glow-corner-start),
+      var(--glow-corner-end),
+      var(--glow-corner-start)
+    )
+  );
+  mask-image: radial-gradient(
+    circle at 100% 0%,
+    var(--color-neutral-900) 0%,
+    color-mix(in oklch, var(--color-neutral-900) 50%, transparent) 35%,
+    transparent 70%
+  );
   opacity: var(--glow-corner-opacity);
 }
 

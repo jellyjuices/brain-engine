@@ -13,16 +13,10 @@ export const themed: Record<string, Pair> = {
   "background-secondary": pair("color-neutral-800", "color-neutral-100"),
   "background-raised": pair("color-neutral-800", "color-neutral-0"),
   "background-hover": pair(tint("text-primary", "8%"), tint("text-primary", "8%")),
-  "background-pressed": pair(
-    tint("text-primary", "15%"),
-    tint("text-primary", "15%"),
-  ),
+  "background-pressed": pair(tint("text-primary", "15%"), tint("text-primary", "15%")),
   "background-disabled": pair("color-neutral-700", "color-neutral-200"),
   "background-accent": pair("color-seafoam-300", "color-seafoam-700"),
-  "background-accent-hover": pair(
-    tint("text-on-accent", "14%"),
-    tint("color-neutral-900", "14%"),
-  ),
+  "background-accent-hover": pair(tint("text-on-accent", "14%"), tint("color-neutral-900", "14%")),
   "background-accent-pressed": pair(
     tint("text-on-accent", "24%"),
     tint("color-neutral-900", "24%"),
@@ -31,16 +25,10 @@ export const themed: Record<string, Pair> = {
     tint("color-seafoam-300", "16%"),
     tint("color-seafoam-400", "16%"),
   ),
-  "background-accent-soft-hover": pair(
-    tint("text-accent", "8%"),
-    tint("color-seafoam-400", "16%"),
-  ),
+  "background-accent-soft-hover": pair(tint("text-accent", "8%"), tint("color-seafoam-400", "16%")),
   "background-inverse": pair("color-neutral-100", "color-neutral-900"),
   "background-check": pair("color-yellow-900", "color-yellow-100"),
-  "background-scrim": pair(
-    tint("color-neutral-900", "60%"),
-    tint("color-neutral-900", "35%"),
-  ),
+  "background-scrim": pair(tint("color-neutral-900", "60%"), tint("color-neutral-900", "35%")),
   "text-primary": pair("color-neutral-100", "color-neutral-900"),
   "text-secondary": pair("color-neutral-400", "color-neutral-600"),
   "text-disabled": pair("color-neutral-500", "color-neutral-500"),
@@ -71,7 +59,10 @@ export const themed: Record<string, Pair> = {
   "glow-corner-end": pair("color-seafoam-200", "color-seafoam-100"),
   "glow-corner-opacity": pair("0.38", "0.5"),
   "texture-noise": pair(noise(1, "0 0 0.09 0.18"), noise(0, "0 0 0.06 0.12")),
-  "shadow-raised": pair("0 12px 32px color-mix(in oklch, var(--color-neutral-900) 50%, transparent)", "0 12px 32px color-mix(in oklch, var(--color-neutral-900) 16%, transparent)"),
+  "shadow-raised": pair(
+    "0 12px 32px color-mix(in oklch, var(--color-neutral-900) 50%, transparent)",
+    "0 12px 32px color-mix(in oklch, var(--color-neutral-900) 16%, transparent)",
+  ),
 };
 
 const areaRoles = (slug: string): Record<string, Pair> => {
@@ -146,21 +137,22 @@ export const contrastPairs: Check[] = [
   c("Focus ring on page", "border-focus", "background-primary", 3),
   c("Focus ring on card", "border-focus", "background-secondary", 3),
   c("Done tick on card", "status-done", "background-secondary", 3),
-  c("Bar fill on track", "progress-fill-start", ["background-secondary", tint("text-primary", "10%")], 3),
+  c(
+    "Bar fill on track",
+    "progress-fill-start",
+    ["background-secondary", tint("text-primary", "10%")],
+    3,
+  ),
   ...areaSlugs.flatMap((a) => [
-    c(`${a}: area text on its surface`, `area-${a}-text`, [
-      "background-secondary",
-      surface(a),
-    ]),
-    c(`${a}: body text on its surface`, "text-primary", [
-      "background-secondary",
-      surface(a),
-    ]),
-    c(`${a}: muted text on its surface`, "text-secondary", [
-      "background-secondary",
-      surface(a),
-    ]),
+    c(`${a}: area text on its surface`, `area-${a}-text`, ["background-secondary", surface(a)]),
+    c(`${a}: body text on its surface`, "text-primary", ["background-secondary", surface(a)]),
+    c(`${a}: muted text on its surface`, "text-secondary", ["background-secondary", surface(a)]),
     c(`${a}: accent on card`, `area-${a}-accent`, "background-secondary", 3),
-    c(`${a}: ring fill on track`, `area-${a}-fill`, ["background-secondary", tint("text-primary", "10%")], 3),
+    c(
+      `${a}: ring fill on track`,
+      `area-${a}-fill`,
+      ["background-secondary", tint("text-primary", "10%")],
+      3,
+    ),
   ]),
 ];
