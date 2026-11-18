@@ -15,6 +15,7 @@ interface Journal { date: string; text: string; about?: string; title?: string; 
 interface Subject { type: string; name: string }
 interface TextFile { title: string; text: string }
 interface Birthday { path: string; birthday: string }
+interface TodoWords { ref: string; text: string }
 interface IntakeSave { lens: string; question: string; line: string; by?: string; raw?: string }
 
 const REF = "A to-do ref from todos or today.";
@@ -58,6 +59,8 @@ export const INPUTS: Record<string, Input> = {
   done: obj<DoneRequest>({ ref: req(str(REF)), happened: str("What happened."), follow_up: str("The next to-do.") }),
   move: obj<MoveRequest>({ ref: req(str(REF)), when: req(str(WHEN)), who: str("Who it waits on."), what: str() }),
   delete_todo: obj<DeleteTodoRequest>({ ref: req(str(REF)), why: str() }),
+  edit_todo: obj<TodoWords>({ ref: req(str(REF)), text: req(str("The new words, with no date or tags.")) }),
+  reopen: obj<{ ref: string }>({ ref: req(str(REF)) }),
   undo: NONE,
   find: obj<Filters & Words>({ q: req(str()), ...filters }),
   todos: obj<{ view?: TodoView }>({ view: oneOf(TODO_VIEWS) }),

@@ -58,6 +58,7 @@ Use the brain's MCP tools. They answer from the index, which costs far fewer tok
 | Today, or any to-do view | `today`, `todos` |
 | Add | `add` |
 | Tick, move or delete a to-do | `done`, `move`, `delete_todo` |
+| Change a to-do's words | `edit_todo` |
 | Make a note from a template | `make_note` |
 | Put back the last change | `undo`, after `log` |
 | Sort what waits | `unsorted`, then `sort` |

@@ -176,6 +176,33 @@
     }
   },
   {
+    "name": "edit_todo",
+    "description": "Change a to-do's words. Its date, tags and links stay. Use to fix how a to-do reads.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "description": "A to-do ref from todos or today."
+        },
+        "text": {
+          "type": "string",
+          "description": "The new words, with no date or tags."
+        }
+      },
+      "required": [
+        "ref",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "undo",
     "description": "Undo the last change. A whole sort is one change. Use right after a wrong write.",
     "inputSchema": {

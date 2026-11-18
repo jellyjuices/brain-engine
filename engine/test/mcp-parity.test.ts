@@ -33,6 +33,7 @@ const STEPS: Step[] = [
   ["sort", (s) => ({ path: s.add.path, into: SHED, when: "tomorrow" })],
   ["done", (s) => ({ ref: refOf(s, "cedar"), happened: "Got them cheap." })],
   ["move", (s) => ({ ref: refOf(s, "roof"), when: "someday" })],
+  ["edit_todo", (s) => ({ ref: refOf(s, "roof"), text: "Fix the roof before the rain" })],
   ["delete_todo", (s) => ({ ref: refOf(s, "base") })],
   ["undo", () => ({})],
   ["log", () => ({ n: 5 })],

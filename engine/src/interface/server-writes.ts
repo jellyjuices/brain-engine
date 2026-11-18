@@ -6,6 +6,7 @@ import { loadSchema } from "../core/schema.ts";
 import { statusesFor } from "../core/schema-kinds.ts";
 import { move } from "../todos/verbs.ts";
 import { change } from "../todos/undo.ts";
+import { editTodoText, reopen } from "../todos/reopen.ts";
 import { inboxPath } from "./routes/capture.ts";
 import { doneWith, dropWith } from "../todos/wrapup.ts";
 import { HttpError, MAX_FILE } from "./server-auth.ts";
@@ -89,7 +90,11 @@ export const moveRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => 
 
 export const dropRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => dropWith(c.root, text(c.body.ref, "ref")!, text(c.body.why, "why", false))));
 
-export const undoRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => undoLast(c.root)));
+export const reopenRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => reopen(c.root, text(c.body.ref, "ref")!)));
+
+export const editTodoRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => editTodoText(c.root, text(c.body.ref, "ref")!, text(c.body.text, "text")!)));
+
+export const undoRoute =(c: Ctx) => afterWrite(c.root, () => asUserError(() => undoLast(c.root)));
 
 /** Save an edited body. `base` must be the hash the phone read, else 409 with the note as it is now. */
 function editTags(root: string, raw: unknown): string[] | undefined {

@@ -5,7 +5,7 @@
 import { calendarFeed } from "../../todos/calendar.ts";
 import { HttpError } from "../server-auth.ts";
 import { type Ctx, TextBody } from "../server-context.ts";
-import { addFile, addPerson, addSubject, doneRoute, dropRoute, editNote, inboxDrop, moveRoute, setBirthday, undoRoute } from "../server-writes.ts";
+import { addFile, addPerson, addSubject, doneRoute, dropRoute, editNote, editTodoRoute, inboxDrop, moveRoute, reopenRoute, setBirthday, undoRoute } from "../server-writes.ts";
 import { cardRoute, intakeNext, intakeSave, intakeSkip, listRoute, notesSince, oneNote, report, todayRoute } from "../server-reads.ts";
 import { newAgentToken, revokeAgent } from "./agent.ts";
 import { addRoute, sortRoute, unsortedRoute } from "./capture.ts";
@@ -43,6 +43,8 @@ export const ROUTES: Route[] = [
   r("POST", "/api/done", "done", "Tick a to-do, with an optional note and follow-up.", "Use when a to-do is finished.", doneRoute),
   r("POST", "/api/move", "move", "Give a to-do a new When.", "Use to put a to-do off, or on hold.", moveRoute),
   r("POST", "/api/drop", "delete_todo", "Delete a to-do. It stays on the timeline as dropped.", "Use when a to-do no longer matters.", dropRoute),
+  r("POST", "/api/edit-todo", "edit_todo", "Change a to-do's words. Its date, tags and links stay.", "Use to fix how a to-do reads.", editTodoRoute),
+  r("POST", "/api/reopen", "reopen", "Mark a done to-do not done. It goes back on the list.", "Use when a to-do was ticked by mistake.", reopenRoute, HIDDEN),
   r("POST", "/api/undo", "undo", "Undo the last change. A whole sort is one change.", "Use right after a wrong write.", undoRoute),
   r("GET", "/api/find", "find", "Find notes by words and meaning, with a short answer line and the subject card.", "Use first to look anything up; filter by type, tag, area or status.", findRoute),
   r("GET", "/api/todos", "todos", "One to-do view: today, soon, no-date, on-hold, by-goal or all.", "Use to get to-do refs.", todosRoute),
