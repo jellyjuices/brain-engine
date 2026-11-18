@@ -1,4 +1,9 @@
 .addBar {
+  --background-accent-soft: color-mix(
+    in srgb,
+    var(--background-accent) 14%,
+    var(--background-secondary)
+  );
   position: fixed;
   top: calc(var(--vvt, 0) + var(--vvh, 100dvh) - var(--size-tabbar) - env(safe-area-inset-bottom));
   right: 0;
