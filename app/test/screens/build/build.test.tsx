@@ -35,7 +35,7 @@ describe("Build screen", () => {
     await open("person");
     expect(screen.getByRole("heading", { name: copy.sort.nameQuestion.person })).toBeVisible();
     expect(screen.getByText(copy.sort.stepOf(1, 3))).toBeVisible();
-    const add = screen.getByRole("button", { name: copy.add.addPerson });
+    const add = screen.getByRole("button", { name: copy.sort.addKind.person });
     expect(add).toBeDisabled();
     await user.type(screen.getByLabelText(copy.add.name), "Louis Tremblay");
     expect(add).toBeEnabled();

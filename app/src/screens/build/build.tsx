@@ -13,7 +13,6 @@ import { copy } from "@/content/index.ts";
 
 const COUNT = 3;
 const TITLE = { person: copy.sort.person, place: copy.add.place, thing: copy.add.thing };
-const ADD = { person: copy.add.addPerson, place: copy.add.addPlace, thing: copy.add.addThing };
 
 export function BuildScreen() {
   const { rest } = useRoute();
@@ -78,7 +77,7 @@ export function BuildScreen() {
         {...shared}
         question={copy.sort.nameQuestion[kind]}
         hint={copy.sort.nameHint}
-        nextLabel={ADD[kind]}
+        nextLabel={copy.sort.addKind[kind]}
       >
         <BuildName kind={kind} name={name} day={day} onName={setName} onDay={setDay} />
       </WizardStep>
