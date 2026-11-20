@@ -4,7 +4,7 @@ export const report = {
   todayHint: "What is due and what is next",
   weekly: "This week",
   weeklyHint: "Inbox, quiet projects and Someday",
-  summarize: "Summarize on this phone",
+  summarize: "Summarize on this device",
   summary: "Summary",
   summaryFailed: "Couldn't summarize. Read the full report below.",
   offlineTitle: "Can't reach your Mac",

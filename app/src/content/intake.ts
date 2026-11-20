@@ -6,7 +6,7 @@ export const intake = {
   laterDone: "Moved to later",
   line: "Line to save",
   lineHint: "Fix it so it sounds like you.",
-  shortening: "Making it short on this phone",
+  shortening: "Making it short on this device",
   noneTitle: "No questions waiting",
   noneBody: "Run the intake on your Mac to add more.",
   offlineTitle: "Can't reach your Mac",

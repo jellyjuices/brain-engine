@@ -43,7 +43,7 @@ describe("saveFlow", () => {
     expect(toast).toHaveBeenCalledWith("Added to Gym", { detail: "Fri Nov 20" });
   });
 
-  it("says the write waits on this phone when it is still in the outbox", async () => {
+  it("says the write waits on this device when it is still in the outbox", async () => {
     outbox.has.mockResolvedValue(true);
     await saveFlow(() => Promise.resolve(item), "Saved");
     expect(toast).toHaveBeenCalledWith(expect.any(String), { tone: "offline", ms: 5000 });

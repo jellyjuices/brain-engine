@@ -9,7 +9,7 @@ export const notes = {
   editConflict: "This note changed on your Mac. Choose which version to keep.",
   editWaiting: "Edit not synced yet",
   linkedFrom: "Linked from",
-  missingTitle: "Note not on this phone yet",
+  missingTitle: "Note not on this device yet",
   missingBody: "It appears once this phone connects to your Mac.",
   conflictTitle: "Changed on your Mac",
   macVersion: "Mac version",

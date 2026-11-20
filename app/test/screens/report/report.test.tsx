@@ -28,13 +28,13 @@ describe("report screen", () => {
     });
     const user = userEvent.setup();
     render(<ReportScreen />);
-    await user.click(await screen.findByRole("button", { name: "Summarize on this phone" }));
+    await user.click(await screen.findByRole("button", { name: "Summarize on this device" }));
     expect(await screen.findByText("Sort 3 inbox notes.")).toBeInTheDocument();
   });
 
   it("shows only the full report when the phone can't summarize", async () => {
     render(<ReportScreen />);
     expect(await screen.findByText("Inbox: 3 notes to sort.")).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Summarize on this phone" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Summarize on this device" })).toBeNull();
   });
 });

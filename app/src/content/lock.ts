@@ -19,7 +19,7 @@ export const lock = {
   fpSetupFailed: "Couldn't set up fingerprint.",
   fpRelock: "Lock and unlock with your password, then try again.",
   fpSetupCancelled: "Fingerprint setup cancelled.",
-  fpNotSetUp: "Fingerprint isn't set up on this phone.",
+  fpNotSetUp: "Fingerprint isn't set up on this device.",
   fpWaiting: "Waiting for fingerprint",
   fpReset: "Fingerprint is off. Unlock with your password, then turn it on in Settings.",
   fpNoMatch: "Fingerprint didn't match. Use your password.",
