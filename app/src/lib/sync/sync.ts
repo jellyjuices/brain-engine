@@ -1,5 +1,5 @@
 import { api } from "./api.ts";
-import { ARCHIVE, slugOf, toStored, type StoredNote } from "@/lib/notes/model.ts";
+import { ARCHIVE, toStored, type StoredNote } from "@/lib/notes/model.ts";
 import { flush } from "./outbox.ts";
 import { allNotes, getMeta, putNotes, replaceAll, setMeta } from "@/lib/storage/store.ts";
 import { META } from "@/lib/storage/keys.ts";
@@ -42,7 +42,7 @@ export async function loadSyncState(): Promise<Readonly<SyncState>> {
   return state;
 }
 
-export function archivedAway(incoming: StoredNote[], existing: StoredNote[]): string[] {
+function archivedAway(incoming: StoredNote[], existing: StoredNote[]): string[] {
   const archived = new Set(
     incoming
       .filter((n) => n.path.startsWith(`${ARCHIVE}/`))
@@ -52,10 +52,6 @@ export function archivedAway(incoming: StoredNote[], existing: StoredNote[]): st
   return existing
     .filter((n) => n.path.startsWith("inbox/") && archived.has(n.path.slice(6)))
     .map((n) => n.path);
-}
-
-export function slugsMatch(a: string, b: string) {
-  return slugOf(a) === slugOf(b);
 }
 
 async function pull(full: boolean): Promise<SyncResult> {

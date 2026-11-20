@@ -1,6 +1,6 @@
 import type { SortSubject } from "./types.ts";
 
-export const TYPE_RANK = ["Event", "Person", "Group", "Place", "Thing", "Topic", "Project", "Area"];
+const TYPE_RANK = ["Event", "Person", "Group", "Place", "Thing", "Topic", "Project", "Area"];
 
 const MIN_NAME = 2;
 
@@ -13,7 +13,7 @@ export function namesOf(subject: SortSubject): string[] {
 
 const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-export function says(text: string, name: string): boolean {
+function says(text: string, name: string): boolean {
   return new RegExp(`(^|[^\\p{L}\\p{N}])${escape(name)}($|[^\\p{L}\\p{N}])`, "iu").test(text);
 }
 

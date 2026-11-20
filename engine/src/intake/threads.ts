@@ -42,7 +42,7 @@ function threadRange(lines: string[]): [number, number] | null {
   return [headingIndex + 1, end];
 }
 
-export function parseThreadLine(line: string, lens: string): Omit<ThreadSummary, "path" | "modified" | "tags" | "type" | "title" | "description"> | null {
+function parseThreadLine(line: string, lens: string): Omit<ThreadSummary, "path" | "modified" | "tags" | "type" | "title" | "description"> | null {
   const match = line.match(/^- \[( |x|X)\] (.+)$/);
   if (!match) return null;
   const [question, ...tokens] = match[2].split(TSEP);
@@ -57,7 +57,7 @@ export function parseThreadLine(line: string, lens: string): Omit<ThreadSummary,
   return { question: question.trim(), lens, depth, starred, created, status };
 }
 
-export function formatThread(t: { question: string; status?: string; starred?: boolean; depth?: number; created?: string }): string {
+function formatThread(t: { question: string; status?: string; starred?: boolean; depth?: number; created?: string }): string {
   const oneLine = t.question.replace(/\s*\n\s*/g, " ").replaceAll(TSEP, " - ").trim();
   const status = t.status ?? "open";
   const tokens = [
@@ -124,7 +124,7 @@ export function listThreads(root: string, f: { status?: string; lens?: string; a
 }
 
 /** Starred first, then shallowest, then the one waiting longest. */
-export function rankThreads(a: ThreadSummary, b: ThreadSummary): number {
+function rankThreads(a: ThreadSummary, b: ThreadSummary): number {
   return Number(b.starred) - Number(a.starred) || a.depth - b.depth || (a.created ?? "").localeCompare(b.created ?? "") || a.question.localeCompare(b.question);
 }
 

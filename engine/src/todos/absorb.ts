@@ -15,10 +15,10 @@ export interface AbsorbPlan {
 }
 
 const STOP = new Set(["with", "from", "that", "this", "have", "about", "into", "more", "some", "make", "start", "plan", "site", "sites", "next", "project", "move", "finish", "remake"]);
-export const words = (t: string) => (t.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []).filter((w) => w.length >= 4 && !STOP.has(w));
+const words = (t: string) => (t.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []).filter((w) => w.length >= 4 && !STOP.has(w));
 
 /** Captures that are sorted (they have an outcome) and not yet absorbed. */
-export function absorbable(notes: Note[]): Note[] {
+function absorbable(notes: Note[]): Note[] {
   return notes.filter((n) => typeOf(n) === "Capture" && folderOf(n) !== DIRS.archive && n.meta.outcome && n.meta.outcome !== "drop");
 }
 

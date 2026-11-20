@@ -1,7 +1,7 @@
 import type { Env } from "./auth.ts";
 import { json, jsonError } from "./headers.ts";
 
-export const MAX_BODY_BYTES = 64 * 1024;
+const MAX_BODY_BYTES = 64 * 1024;
 const MAX_ACK_IDS = 500;
 
 interface Row {
@@ -21,9 +21,9 @@ function result(row: Pick<Row, "client_id" | "received_at">, duplicate: boolean)
   return json({ ok: true, client_id: row.client_id, received_at: row.received_at, duplicate });
 }
 
-export const MAX_INTO = 200;
+const MAX_INTO = 200;
 
-export function validInto(into: unknown): into is string {
+function validInto(into: unknown): into is string {
   if (typeof into !== "string" || !into || into.length > MAX_INTO) return false;
   if (
     !into.endsWith(".md") ||

@@ -21,7 +21,7 @@ export const areaKeys: Record<string, AreaKey> = {
 const lightness = [0.965, 0.915, 0.85, 0.77, 0.68, 0.58, 0.47, 0.37, 0.25];
 const chroma = [0.03, 0.06, 0.09, 0.11, 0.12, 0.115, 0.1, 0.08, 0.045];
 
-export const areaRamp = ({ hue, chroma: scale = 1 }: AreaKey) =>
+const areaRamp = ({ hue, chroma: scale = 1 }: AreaKey) =>
   Object.fromEntries(
     lightness.map((l, i) => [
       String((i + 1) * 100),

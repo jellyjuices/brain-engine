@@ -17,10 +17,10 @@ export function isPasswordOff(env: Env, request: Request): boolean {
   return env.NO_PASSWORD === "1" && LOOPBACK.has(new URL(request.url).hostname);
 }
 
-export const SESSION_COOKIE = "brain_session";
-export const MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
-export const WINDOW_SECONDS = 15 * 60;
-export const MAX_FAILURES = 5;
+const SESSION_COOKIE = "brain_session";
+const MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
+const WINDOW_SECONDS = 15 * 60;
+const MAX_FAILURES = 5;
 
 const encoder = new TextEncoder();
 
@@ -74,7 +74,7 @@ export function clearSessionCookie(): string {
   return `${SESSION_COOKIE}=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0`;
 }
 
-export function readCookie(request: Request, name: string): string | undefined {
+function readCookie(request: Request, name: string): string | undefined {
   for (const part of (request.headers.get("Cookie") ?? "").split(";")) {
     const [k, ...rest] = part.trim().split("=");
     if (k === name) return rest.join("=");

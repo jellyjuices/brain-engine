@@ -10,7 +10,7 @@ import {
 } from "./card-parts.ts";
 import { extractLinks, isArchived, slugOf, type StoredNote } from "./model.ts";
 
-export const SUBJECT_TYPES = [
+const SUBJECT_TYPES = [
   "Area",
   "Project",
   "Person",

@@ -13,7 +13,7 @@ export interface Draft {
 
 const NUL = "\u0000";
 
-export function contentHash(entry: Omit<Entry, "id" | "hash" | "line">): string {
+function contentHash(entry: Omit<Entry, "id" | "hash" | "line">): string {
   const done = entry.done === null ? "" : String(entry.done);
   return hashText([entry.kind, entry.subject, entry.title, entry.names.join("|"), entry.date ?? "", done, entry.text, entry.embedText].join(NUL));
 }

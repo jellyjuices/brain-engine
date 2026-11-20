@@ -1,8 +1,6 @@
 import { isLive, type StoredNote } from "./model.ts";
 import { splitWhen } from "./when.ts";
 
-export const PLACEHOLDER = "tomorrow: call Aisha · note: GP retires · or just type";
-
 export function shareToText(params: URLSearchParams): string {
   const parts = ["title", "text", "url"].map((k) => params.get(k)?.trim() ?? "").filter(Boolean);
   return parts.filter((p, i) => parts.indexOf(p) === i).join("\n");
@@ -37,17 +35,6 @@ export function inboxText(n: StoredNote): string {
     .replace(/\s+/g, " ")
     .trim();
   return text || n.title;
-}
-
-export function insertAt(text: string, at: number, name: string): { text: string; cursor: number } {
-  const before = text.slice(0, at);
-  const after = text.slice(at);
-  const pad = before && !/\s$/.test(before) ? " " : "";
-  const tail = after && !/^\s/.test(after) ? " " : "";
-  return {
-    text: `${before}${pad}${name}${tail}${after}`,
-    cursor: before.length + pad.length + name.length,
-  };
 }
 
 export function mentionName(n: { title: string; type?: string }): string {

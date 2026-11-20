@@ -5,7 +5,7 @@ export interface Insertion {
   ownLine?: boolean;
 }
 
-export function relativePath(from: string, to: string): string {
+function relativePath(from: string, to: string): string {
   const fromDirs = from.split("/").slice(0, -1);
   const toParts = to.split("/");
   let shared = 0;

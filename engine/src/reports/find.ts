@@ -14,4 +14,3 @@ export function backlinks(notes: Note[], path: string): Summary[] {
   return notes.filter((n) => n.path !== path && n.links.includes(path)).map(summary);
 }
 
-export { localDate };

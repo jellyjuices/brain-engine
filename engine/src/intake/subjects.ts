@@ -15,7 +15,7 @@ import { findNote } from "../reports/find.ts";
 import { guessKind, knownNames, namesIn, secondMentions } from "../reports/mentions.ts";
 import { change } from "../todos/undo.ts";
 
-export const SESSION_FILE = ".reports/intake-session.json";
+const SESSION_FILE = ".reports/intake-session.json";
 export const SUBJECT_KINDS = ["Person", "Group", "Place", "Thing", "Topic"] as const;
 /** Subject types that get a link in a lens line. Areas are common words, so they stay plain. */
 export const LINKABLE = ["Person", "Group", "Place", "Thing", "Topic", "Project", "Event"];
@@ -69,7 +69,7 @@ export interface Prompts {
 }
 
 /** The one question for an unknown subject. */
-export function questionFor(name: string, text: string): string {
+function questionFor(name: string, text: string): string {
   if (/\b(project|working on|building|launch|client|contract|pitch|part in)\b/i.test(text)) return `What is your part in ${name}?`;
   return guessKind(name) === "Person" ? `Who is ${name} to you?` : `What is ${name}?`;
 }

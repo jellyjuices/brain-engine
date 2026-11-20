@@ -24,7 +24,7 @@ const MODEL_ROW = VECTORS.modelRow;
 
 let cache: Map<string, StoredVector> | null = null;
 
-export function forgetVectors(): void {
+function forgetVectors(): void {
   cache = null;
 }
 onLock(forgetVectors);

@@ -62,7 +62,7 @@ function editLine(body: string, text: string, fn: (l: TodoLine) => string[]): st
   return null;
 }
 
-export function dueFor(when: string, now: string): { due?: string; outcome?: Outcome } {
+function dueFor(when: string, now: string): { due?: string; outcome?: Outcome } {
   if (when === "someday") return { outcome: "someday" };
   if (when === "waiting") return { outcome: "waiting" };
   return { due: when === "today" ? now : when };

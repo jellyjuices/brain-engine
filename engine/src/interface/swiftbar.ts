@@ -13,7 +13,7 @@ export const WEB_URL = (process.env.BRAIN_WEB_URL || `http://127.0.0.1:${DEFAULT
 const POPOVER = { w: 400, h: 680 };
 
 /** Captures waiting in inbox/. */
-export function inboxCount(root: string): number {
+function inboxCount(root: string): number {
   const dir = join(root, "inbox");
   return existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith(".md")).length : 0;
 }

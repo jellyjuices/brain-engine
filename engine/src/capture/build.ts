@@ -38,7 +38,7 @@ export interface BuildSpec {
   extra?: Meta;
 }
 
-export const FIELD_NAMES = ["why", "when", "date", "with", "decide_by", "subjects", "birthday", "from", "renews", "status"];
+const FIELD_NAMES = ["why", "when", "date", "with", "decide_by", "subjects", "birthday", "from", "renews", "status"];
 const DATE_FIELDS = ["date", "decide_by", "birthday", "renews"];
 const isDay = (v: string) => /^\d{4}-\d{2}-\d{2}$/.test(v) && !Number.isNaN(Date.parse(v));
 const clean = (v: string | undefined) => v?.replace(/[·\n]/g, " ").trim() || undefined;

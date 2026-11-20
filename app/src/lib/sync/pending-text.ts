@@ -1,7 +1,7 @@
 import type { OutboxItem } from "./outbox.ts";
 import { copy } from "@/content/index.ts";
 
-export const CHANGE_WORD = {
+const CHANGE_WORD = {
   done: copy.toast.changeDone,
   move: copy.toast.changeMoved,
   drop: copy.toast.changeDropped,

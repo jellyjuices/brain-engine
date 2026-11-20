@@ -131,7 +131,7 @@ export interface Summary {
 }
 
 /** An upcoming Event counts as due on its date, so Today and the menu bar list it. Done or cancelled events do not. */
-export const EVENT_CLOSED = ["done", "cancelled"];
+const EVENT_CLOSED = ["done", "cancelled"];
 export function eventDue(n: Note): string | undefined {
   if (typeOf(n) !== "Event" || EVENT_CLOSED.includes(String(n.meta.status))) return undefined;
   return str(n.meta.date)?.slice(0, 10);

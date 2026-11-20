@@ -1,6 +1,6 @@
 import { plainLine, wordCount } from "./plain.ts";
 
-export const SECTION_WORDS = 200;
+const SECTION_WORDS = 200;
 
 export interface SectionLine {
   raw: string;

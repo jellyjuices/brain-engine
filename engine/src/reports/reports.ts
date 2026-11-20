@@ -146,7 +146,7 @@ export function areaMarkdown(b: AreaBrief): string {
 
 const ORDER = ["areas", "projects", "events", "people", "groups", "places", "things", "topics", "resources", "me", "threads", "journal", "inbox", DIRS.archive];
 
-export function indexMarkdown(notes: Note[]): string {
+function indexMarkdown(notes: Note[]): string {
   const out = [`# Index\n`, `A map of every note. Rebuilt by \`brain index\`. Do not edit by hand.\n`];
   for (const folder of ORDER) {
     const group = notes.filter((n) => folderOf(n) === folder).map(summary).sort((a, b) => a.title.localeCompare(b.title));

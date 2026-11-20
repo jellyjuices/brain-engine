@@ -9,7 +9,7 @@ export const STARTER = join(REPO, "..", "starter");
 export const BIN = join(REPO, "bin", "brain.ts");
 
 /** One blank Area note per starter area file: same slug and title, no content. */
-export function blankAreas(repo: string, root: string): void {
+function blankAreas(repo: string, root: string): void {
   mkdirSync(join(root, "areas"), { recursive: true });
   for (const f of readdirSync(join(repo, "areas")).filter((x) => x.endsWith(".md"))) {
     const title = readFileSync(join(repo, "areas", f), "utf8").match(/^title: (.+)$/m)?.[1].trim() ?? f.slice(0, -3);

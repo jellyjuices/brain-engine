@@ -20,7 +20,7 @@ import {
   type Icon as PhosphorIcon,
 } from "@phosphor-icons/react";
 
-export const KIND_ICON = {
+const KIND_ICON = {
   todo: CheckSquareIcon,
   journal: BookOpenIcon,
   person: UserIcon,

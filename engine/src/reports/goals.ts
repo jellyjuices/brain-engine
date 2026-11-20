@@ -16,7 +16,7 @@ import { relationsIn } from "../core/relations.ts";
 import { allLoops } from "../todos/todos.ts";
 import { ref } from "../todos/day-list.ts";
 
-export const RECENT_DAYS = 30;
+const RECENT_DAYS = 30;
 
 const percentOf = (done: number, total: number) => (total ? Math.round((100 * done) / total) : 0);
 const isGoal = (n: Note) => typeOf(n) === "Goal" && n.path.startsWith("goals/");

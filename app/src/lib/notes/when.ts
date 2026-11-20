@@ -81,10 +81,6 @@ function whenFrom(word: string, now: string): WhenPreview | undefined {
   return monthDayWhen(w, now) ?? weekdayWhen(w, now);
 }
 
-export function readWhen(word: string, now = iso(new Date())): WhenPreview | undefined {
-  return whenFrom(word, now);
-}
-
 export function splitWhen(
   input: string,
   now = iso(new Date()),

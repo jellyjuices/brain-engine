@@ -64,7 +64,7 @@ const PROXY_HEADERS = ["cf-connecting-ip", "cf-ray", "cdn-loop", "x-forwarded-fo
 export const localSecret = (token: string) => createHmac("sha256", token).update("brain-local-app").digest("base64url");
 
 /** True when the request came straight to this Mac's loopback address, not through the tunnel or a proxy. */
-export function isDirectLocal(req: IncomingMessage): boolean {
+function isDirectLocal(req: IncomingMessage): boolean {
   if (PROXY_HEADERS.some((h) => req.headers[h] !== undefined)) return false;
   try {
     return LOOPBACK_NAMES.has(new URL(`http://${req.headers.host ?? ""}`).hostname);
@@ -110,7 +110,7 @@ const PAGE_HEADERS = {
 };
 
 /** The page, marked so the app knows it runs on this Mac (main.ts reads the meta tag). */
-export const markLocal = (html: string) => html.replace("</head>", `<meta name="brain-local" content="1" />\n</head>`);
+const markLocal = (html: string) => html.replace("</head>", `<meta name="brain-local" content="1" />\n</head>`);
 
 /** Serve a file from the built app. Any path that is not a file gets the page (the app routes by path). */
 export function serveApp(req: IncomingMessage, res: ServerResponse, token: string): void {

@@ -5,7 +5,7 @@ import { sortHits } from "./hits.ts";
 
 const ENDED = ["done", "cancelled"];
 
-export function isLiveSubject(note: Note): boolean {
+function isLiveSubject(note: Note): boolean {
   if (folderOf(note) === DIRS.archive || str(note.meta.status) === "deprecated") return false;
   return !(typeOf(note) === "Event" && ENDED.includes(String(note.meta.status)));
 }

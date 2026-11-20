@@ -29,4 +29,4 @@ export const primitiveNames: Record<string, string> = flatten(
 );
 
 export { themed, reducedMotion, contrastPairs } from "./semantic.ts";
-export { color, font, space, radius, shape, size, layout, motion } from "./primitives.ts";
+export { color, font, space, radius, shape } from "./primitives.ts";

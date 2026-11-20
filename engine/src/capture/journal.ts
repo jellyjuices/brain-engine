@@ -10,7 +10,7 @@ import { changeFiles, readLog } from "../core/log.ts";
 import { isOwnerWriter } from "../core/owner.ts";
 import { fileInto, type SortBit } from "./file.ts";
 
-export const JOURNAL = "Journal";
+const JOURNAL = "Journal";
 const TITLE_WORDS = 6;
 const TITLE_MAX = 60;
 const DAY = /^\d{4}-\d{2}-\d{2}$/;
@@ -23,8 +23,8 @@ export function titleFrom(text: string): string {
   return title.replace(/[\p{P}\p{S}\s]+$/u, "") || "Journal";
 }
 
-export const isJournal = (n: Note) => typeOf(n) === JOURNAL && n.path.startsWith("journal/");
-export const isWaiting = (n: Note) => isJournal(n) && n.meta.sorted === false;
+const isJournal = (n: Note) => typeOf(n) === JOURNAL && n.path.startsWith("journal/");
+const isWaiting = (n: Note) => isJournal(n) && n.meta.sorted === false;
 
 /** Journal notes that wait to be sorted, oldest first. */
 export function waitingJournals(notes: Note[]): Note[] {

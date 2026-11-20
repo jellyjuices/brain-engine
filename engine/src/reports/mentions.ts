@@ -9,7 +9,7 @@ import { SUBJECT_TYPES } from "./card.ts";
 
 export const MAX_WARN_LINES = 10;
 const MENTION_TYPES = ["Person", "Group", "Place", "Thing", "Topic", "Project"];
-export const filed = (n: Note) => folderOf(n) !== "inbox" && folderOf(n) !== DIRS.archive && folderOf(n) !== "journal";
+const filed = (n: Note) => folderOf(n) !== "inbox" && folderOf(n) !== DIRS.archive && folderOf(n) !== "journal";
 
 const STOP = new Set(
   `the a an and but or if so then when what who where why how this that these those there here my our your his her their its i we he she it they you me us

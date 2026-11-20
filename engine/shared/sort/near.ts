@@ -1,8 +1,8 @@
 import type { NearSubject, SortHits } from "./types.ts";
 
-export const MIN_NEAR_HITS = 2;
-export const SURE_NEAR_HITS = 3;
-export const SURE_RATIO = 2;
+const MIN_NEAR_HITS = 2;
+const SURE_NEAR_HITS = 3;
+const SURE_RATIO = 2;
 
 export function nearSubjects(hits: SortHits, homes: ReadonlySet<string>): NearSubject[] {
   const bySubject = new Map<string, NearSubject>();

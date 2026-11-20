@@ -8,7 +8,7 @@ import { existsSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
-export const JOBS = ["com.brain.serve", "com.brain.tunnel"] as const;
+const JOBS = ["com.brain.serve", "com.brain.tunnel"] as const;
 
 export type Run = (args: string[]) => { ok: boolean; out: string };
 

@@ -101,7 +101,7 @@ export function tagInbox(root: string, dryRun = false): { path: string; added: s
 
 export type SortResult = { path: string; to?: string; reason?: string };
 
-export function sortOne(root: string, n: Note, schema: Schema, dryRun = false): SortResult {
+function sortOne(root: string, n: Note, schema: Schema, dryRun = false): SortResult {
   const type = typeOf(n);
   if (!type || type === "Capture") return { path: n.path, reason: "still a Capture (set a type first)" };
   const folder = schema.types[type];
@@ -126,7 +126,7 @@ export function sortInbox(root: string, dryRun = false): SortResult[] {
 
 
 /** keep = a fact or an idea with nothing to do. It is filed as a dated note line, not a to-do. */
-export const OUTCOMES = ["today", "date", "someday", "waiting", "keep", "drop"] as const;
+const OUTCOMES = ["today", "date", "someday", "waiting", "keep", "drop"] as const;
 export type Outcome = (typeof OUTCOMES)[number];
 
 export interface TriageDecision {
@@ -162,7 +162,7 @@ export function applyTriage(root: string, path: string, d: TriageDecision): Sort
 }
 
 
-export const AREA_QUESTIONS = [
+const AREA_QUESTIONS = [
   "What is going on here right now?",
   "What has a date or a deadline?",
   "What worries you most about it?",

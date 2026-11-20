@@ -16,7 +16,7 @@ export interface DecisionView extends DecisionRef {
 
 const isDecision = (n: Note) => typeOf(n) === "Decision" && n.path.startsWith("decisions/");
 
-export function decisionRef(n: Note): DecisionRef {
+function decisionRef(n: Note): DecisionRef {
   const by = str(n.meta.decide_by)?.slice(0, 10);
   return { path: n.path, title: titleOf(n), status: str(n.meta.status) ?? "open", ...(by && { decide_by: by }) };
 }

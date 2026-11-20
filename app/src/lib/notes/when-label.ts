@@ -26,7 +26,7 @@ export function dayLabel(iso: string, now: string): string {
   return niceDate(iso);
 }
 
-export function ruleLabel(every: string): string {
+function ruleLabel(every: string): string {
   const rule = parseEvery(`every ${every}`);
   if (!rule || !("weekday" in rule)) return every;
   return every.replace(/^[a-z]+/i, weekdayName(rule.weekday));

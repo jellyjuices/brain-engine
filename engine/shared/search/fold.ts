@@ -13,7 +13,7 @@ export function fold(text: string): string {
   return text.normalize("NFKD").replace(MARKS, "").normalize("NFC").toLowerCase();
 }
 
-export function japaneseSegmenter(): WordSegmenter | null {
+function japaneseSegmenter(): WordSegmenter | null {
   if (cached === undefined) {
     const hasSegmenter = typeof Intl !== "undefined" && typeof Intl.Segmenter === "function";
     cached = hasSegmenter ? new Intl.Segmenter("ja", { granularity: "word" }) : null;
@@ -31,7 +31,7 @@ function pairs(run: string): string[] {
   return chars.slice(1).map((char, i) => `${chars[i]}${char}`);
 }
 
-export function japaneseTerms(run: string, segmenter: WordSegmenter | null = japaneseSegmenter()): string[] {
+function japaneseTerms(run: string, segmenter: WordSegmenter | null = japaneseSegmenter()): string[] {
   const words = segmenter ? [...segmenter.segment(run)].filter((part) => part.isWordLike !== false).map((part) => part.segment) : [];
   return unique([...words, ...pairs(run)]);
 }

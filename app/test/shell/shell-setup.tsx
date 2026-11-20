@@ -17,7 +17,7 @@ export function reply(status: number, body: unknown = {}) {
   });
 }
 
-export function stubLayout(layout: ShellLayout) {
+function stubLayout(layout: ShellLayout) {
   vi.stubGlobal("matchMedia", (query: string) => ({
     matches: MATCHES[layout].includes(query),
     media: query,

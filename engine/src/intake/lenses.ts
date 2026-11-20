@@ -62,7 +62,7 @@ export const STAGES: Stage[] = [
   { n: 11, key: "synthesis", name: "Synthesis", lenses: ["profile"] },
 ];
 
-export const SETTINGS_PATH = "me/settings.yaml";
+const SETTINGS_PATH = "me/settings.yaml";
 export const lensPath = (slug: string) => `me/${slug}.md`;
 const lensBySlug = (slug: string) => LENSES.find((l) => l.slug === slug);
 
@@ -133,7 +133,7 @@ export function readSettings(root: string): Meta {
   return typeof data === "object" && !Array.isArray(data) ? (data as Meta) : {};
 }
 
-export function writeSettings(root: string, meta: Meta): void {
+function writeSettings(root: string, meta: Meta): void {
   const head = "# Intake settings. Stage 0 fills these in. The agent reads them at the start of every session.\n# stages_done is set by `brain intake done <stage>`. Do not edit it by hand.\n";
   writeAtomic(join(root, SETTINGS_PATH), head + YAML.stringify(meta, { lineWidth: 0 }));
 }

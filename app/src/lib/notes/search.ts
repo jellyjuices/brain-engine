@@ -29,7 +29,7 @@ function snippetOf(body: string, terms: string[]): string {
   return `${start > 0 ? "… " : ""}${flat.slice(start, i + 90).trim()}${i + 90 < flat.length ? " …" : ""}`;
 }
 
-export function scoreNote(n: StoredNote, q: string, terms: string[]): number {
+function scoreNote(n: StoredNote, q: string, terms: string[]): number {
   const title = n.title.toLowerCase();
   const desc = n.description.toLowerCase();
   const tags = n.tags.join(" ").toLowerCase();

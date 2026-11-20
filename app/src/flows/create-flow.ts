@@ -26,7 +26,7 @@ export async function addPersonFlow(): Promise<void> {
   if (made) go(`/person/${made.path}`);
 }
 
-export function fileTitle(name: string): string {
+function fileTitle(name: string): string {
   return (
     name
       .replace(/\.[^.]+$/, "")

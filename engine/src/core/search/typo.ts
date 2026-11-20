@@ -4,7 +4,7 @@ const WORDS = /[\p{L}\p{N}]+/gu;
 const PREFIX_COST = 0.5;
 const LENGTH_SLACK = 3;
 
-export function editDistance(a: string, b: string): number {
+function editDistance(a: string, b: string): number {
   const x = [...a];
   const y = [...b];
   let before: number[] = [];
@@ -40,7 +40,7 @@ function gapTo(word: string, candidates: readonly string[]): number {
   return best;
 }
 
-export function allowedEdits(word: string): number {
+function allowedEdits(word: string): number {
   const size = [...word].length;
   if (size < 4) return 0;
   return size < 7 ? 1 : 2;

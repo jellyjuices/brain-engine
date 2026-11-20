@@ -9,7 +9,7 @@ import {
 
 export const DEFAULT_ROUTE = "todos";
 export const HOME = `/${DEFAULT_ROUTE}`;
-export const SCREEN_NAMES = [
+const SCREEN_NAMES = [
   "todos",
   "goals",
   "goal",
@@ -48,14 +48,14 @@ function isScreen(name: string): name is ScreenName {
 
 const OLD_NAMES: Record<string, ScreenName> = { areas: "brain", today: "todos", report: "goals" };
 
-export function parse(url = here()): { name: ScreenName; params: URLSearchParams } {
+function parse(url = here()): { name: ScreenName; params: URLSearchParams } {
   const [path = "", query = ""] = url.replace(/^#?\/?/, "").split("?");
   const first = path.split("/")[0] || DEFAULT_ROUTE;
   const name = OLD_NAMES[first] ?? first;
   return { name: isScreen(name) ? name : DEFAULT_ROUTE, params: new URLSearchParams(query) };
 }
 
-export function routeRest(url = here()): string {
+function routeRest(url = here()): string {
   const path = url.replace(/^#?\/?/, "").split("?")[0] ?? "";
   if (!path.includes("/")) return "";
   const rest = path.slice(path.indexOf("/") + 1);

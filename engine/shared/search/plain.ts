@@ -12,7 +12,7 @@ function isKnownToken(part: string): boolean {
   return token !== null && !("raw" in token);
 }
 
-export function dropTokens(line: string): string {
+function dropTokens(line: string): string {
   const [head = "", ...rest] = line.split(SEP);
   return [head, ...rest.filter((part) => !isKnownToken(part))].join(SEP);
 }

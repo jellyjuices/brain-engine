@@ -32,7 +32,7 @@ export function subjectsNamed(notes: Note[], text: string): Note[] {
 
 const isPerson = (n: Note) => typeOf(n) === "Person";
 
-export const namesAPerson = (notes: Note[], text: string) => subjectsNamed(notes, text).some(isPerson);
+const namesAPerson = (notes: Note[], text: string) => subjectsNamed(notes, text).some(isPerson);
 
 /** Where a thought most likely goes: a named subject that is not a person, then the old word match (projects, area). */
 export function bestHome(notes: Note[], text: string, area?: string): { into?: string; reason: string } {

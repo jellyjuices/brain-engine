@@ -1,7 +1,7 @@
 import { fieldsOf, updateTodo } from "./fields.ts";
 import { formatTodoLine, parseTodoLine, type TodoLine } from "./line.ts";
 
-export function reopenTodo(todo: TodoLine): TodoLine {
+function reopenTodo(todo: TodoLine): TodoLine {
   return updateTodo(todo, { done: false, doneAt: undefined, dropped: undefined });
 }
 

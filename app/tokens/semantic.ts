@@ -77,8 +77,6 @@ const areaRoles = (slug: string): Record<string, Pair> => {
 
 for (const slug of areaSlugs) Object.assign(themed, areaRoles(slug));
 
-export const areaRoleNames = ["accent", "fill", "text", "glow"] as const;
-
 export const reducedMotion = ["motion-fast", "motion-slow", "motion-pop"];
 
 export const surface = (slug: string): Mix => tint(`area-${slug}-accent`, "16%");

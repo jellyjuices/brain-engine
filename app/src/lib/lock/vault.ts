@@ -31,7 +31,7 @@ interface Held {
   aad: string;
 }
 
-export const ITERATIONS = 600_000;
+const ITERATIONS = 600_000;
 const dec = new TextDecoder();
 
 let held: Held | null = null;

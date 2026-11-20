@@ -9,7 +9,7 @@
 import { extractLinks, type Note } from "./notes.ts";
 import { sectionRange } from "../../shared/line/index.ts";
 
-export const RELATION_HEADINGS = ["# People", "# Groups", "# Projects", "# Places", "# Things", "# Topics", "# Goals", "# Decisions", "# Related"];
+const RELATION_HEADINGS = ["# People", "# Groups", "# Projects", "# Places", "# Things", "# Topics", "# Goals", "# Decisions", "# Related"];
 
 const HEADING_OF_TYPE: Record<string, string> = { Person: "# People", Group: "# Groups", Project: "# Projects", Place: "# Places", Thing: "# Things", Topic: "# Topics", Goal: "# Goals", Decision: "# Decisions" };
 

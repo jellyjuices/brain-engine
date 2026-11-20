@@ -1,7 +1,7 @@
 import { addDays, longDate } from "./model.ts";
 import { copy } from "@/content/index.ts";
 
-export function quickDays(now: string): { fri: string; nextWeek: string } {
+function quickDays(now: string): { fri: string; nextWeek: string } {
   const dow = new Date(`${now}T12:00:00`).getDay();
   return {
     fri: addDays(now, (5 - dow + 7) % 7 || 7),

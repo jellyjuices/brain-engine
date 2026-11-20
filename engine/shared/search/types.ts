@@ -1,4 +1,4 @@
-export const ENTRY_KINDS = ["card", "section", "todo", "dated"] as const;
+const ENTRY_KINDS = ["card", "section", "todo", "dated"] as const;
 
 export type EntryKind = (typeof ENTRY_KINDS)[number];
 

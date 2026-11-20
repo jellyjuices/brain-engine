@@ -82,10 +82,6 @@ export function selectEditable(root: HTMLElement, start: number, end: number) {
   selection.addRange(range);
 }
 
-export function writeEditable(root: HTMLElement, value: string) {
-  root.textContent = value;
-}
-
 export function editableField(ref: RefObject<HTMLElement | null>): CaretField {
   function read() {
     const root = ref.current;

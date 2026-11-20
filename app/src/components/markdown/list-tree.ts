@@ -8,7 +8,7 @@ export interface ListNode {
 export type ListRun =
   { kind: "check"; item: ListItem } | { kind: "list"; ordered: boolean; nodes: ListNode[] };
 
-export function listRuns(items: ListItem[]): ListRun[] {
+function listRuns(items: ListItem[]): ListRun[] {
   const runs: ListRun[] = [];
   let stack: ListNode[] = [];
   for (const item of items) {

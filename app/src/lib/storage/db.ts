@@ -1,7 +1,7 @@
 import { DB_NAME, LOCAL, STORE } from "./keys.ts";
 import { askPersist } from "./persist.ts";
 
-export const DB_VERSION = 4;
+const DB_VERSION = 4;
 
 export type StoreName = (typeof STORE)[keyof typeof STORE];
 

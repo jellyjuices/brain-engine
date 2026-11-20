@@ -1,7 +1,7 @@
 import { fold } from "./fold.ts";
 import type { Entry } from "./types.ts";
 
-export const RRF_K = 60;
+const RRF_K = 60;
 export const NO_NAME = 3;
 
 export type RankedList = readonly string[];

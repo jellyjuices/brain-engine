@@ -9,7 +9,7 @@ import { HttpError, isAuthorized } from "../server-auth.ts";
 import { readBody } from "../server-context.ts";
 import { dispatch } from "./rpc.ts";
 
-export const MCP_PATH = "/mcp";
+const MCP_PATH = "/mcp";
 const LOOPBACK = new Set(["127.0.0.1", "localhost", "[::1]", "::1"]);
 const VERSION = (JSON.parse(readFileSync(new URL("../../../../package.json", import.meta.url), "utf8")) as { version: string }).version;
 

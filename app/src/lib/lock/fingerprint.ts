@@ -11,7 +11,7 @@ const TIMEOUT = 60 * 1000;
 const ES256 = -7;
 const RS256 = -257;
 
-export function toB64(bytes: ArrayBuffer) {
+function toB64(bytes: ArrayBuffer) {
   return btoa(String.fromCharCode(...new Uint8Array(bytes)))
     .replace(/\+/g, "-")
     .replace(/\//g, "_")

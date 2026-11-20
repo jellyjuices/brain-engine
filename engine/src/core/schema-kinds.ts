@@ -3,9 +3,9 @@ import { join, posix } from "node:path";
 import { areasOf, SLUG, slugOf, str, typeOf, type Note } from "./notes.ts";
 import type { Issue, Schema } from "./schema.ts";
 
-export const AREAS_MIN = 1;
+const AREAS_MIN = 1;
 export const AREAS_REQUIRED = ["Goal", "Decision"];
-export const KIND_SECTIONS: Record<string, string[]> = {
+const KIND_SECTIONS: Record<string, string[]> = {
   Goal: ["# Why", "# Targets", "# Wins", "# Notes"],
   Decision: ["# Rants", "# Buckets", "# Options", "# Decided"],
 };
@@ -23,7 +23,7 @@ export function statusesFor(type: string | undefined, schema: Schema): string[] 
   return schema.status;
 }
 
-export function areaIssues(n: Note): Issue[] {
+function areaIssues(n: Note): Issue[] {
   const type = typeOf(n);
   const hasAreas = n.meta.areas !== undefined;
   const required = !!type && AREAS_REQUIRED.includes(type);

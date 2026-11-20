@@ -88,9 +88,9 @@ function filedNote(notes: Note[], into: unknown): Note | undefined {
   return note;
 }
 
-export const sortText = (item: PendingItem) => splitPrefix(item.text).text;
+const sortText = (item: PendingItem) => splitPrefix(item.text).text;
 
-export const needsGuess = (item: PendingItem) => !item.into && !item.about?.length && !item.people?.length && !item.tags?.length;
+const needsGuess = (item: PendingItem) => !item.into && !item.about?.length && !item.people?.length && !item.tags?.length;
 
 export async function guessItem(root: string, item: PendingItem, embedder: Embedder | null): Promise<SortGuess | undefined> {
   return needsGuess(item) ? guessFor(root, loadAll(root), sortText(item), embedder) : undefined;

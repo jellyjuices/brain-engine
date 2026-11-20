@@ -1,10 +1,10 @@
 import { parseEvery } from "./every.ts";
 
 export const SEP = " · ";
-export const OUTCOMES = ["today", "someday", "waiting"] as const;
-export const LINK_KEYS = ["with", "re", "toward"] as const;
-export const VALUE_KEYS = [...LINK_KEYS, "due", "every", "done", "about", "from"] as const;
-export const BARE_KEYS = [...OUTCOMES, "dropped", "check"] as const;
+const OUTCOMES = ["today", "someday", "waiting"] as const;
+const LINK_KEYS = ["with", "re", "toward"] as const;
+const VALUE_KEYS = [...LINK_KEYS, "due", "every", "done", "about", "from"] as const;
+const BARE_KEYS = [...OUTCOMES, "dropped", "check"] as const;
 
 export type Outcome = (typeof OUTCOMES)[number];
 export type LinkKey = (typeof LINK_KEYS)[number];

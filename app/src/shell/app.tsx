@@ -12,7 +12,7 @@ import { copy } from "@/content/index.ts";
 
 registerWrites();
 
-export function App() {
+function App() {
   useEffect(() => {
     startRouter();
     const stopFlush = autoFlush((r) => {

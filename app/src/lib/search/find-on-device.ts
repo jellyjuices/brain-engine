@@ -10,7 +10,7 @@ const NO_VECTORS: VectorMap = new Map();
 
 let index: WordIndex | null = null;
 
-export function forgetDeviceIndex(): void {
+function forgetDeviceIndex(): void {
   index = null;
 }
 onLock(forgetDeviceIndex);

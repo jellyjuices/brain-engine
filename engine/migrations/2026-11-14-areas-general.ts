@@ -22,7 +22,7 @@ export interface MigrateResult {
   wrote: boolean;
 }
 
-export function gitDirty(root: string): string | undefined {
+function gitDirty(root: string): string | undefined {
   try {
     const status = execFileSync("git", ["-C", root, "status", "--porcelain"], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], env: { ...process.env, GIT_OPTIONAL_LOCKS: "0" } });
     return status.trim() ? "the notes folder has changes that are not committed" : undefined;

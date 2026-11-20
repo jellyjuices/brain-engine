@@ -1,5 +1,5 @@
-export const MEANING_TOP = 10;
-export const MIN_COSINE = 0.3;
+const MEANING_TOP = 10;
+const MIN_COSINE = 0.3;
 
 export interface StoredVector {
   hash: string;
@@ -13,7 +13,7 @@ export function decodeVector(base64: string): Int8Array {
   return new Int8Array(bytes.buffer);
 }
 
-export function cosine(a: Int8Array, b: Int8Array): number {
+function cosine(a: Int8Array, b: Int8Array): number {
   let dot = 0;
   let aa = 0;
   let bb = 0;

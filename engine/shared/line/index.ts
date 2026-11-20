@@ -10,7 +10,7 @@ export {
   type TodoPatch,
 } from "./fields.ts";
 export { formatTodoLine, parseTodoLine, type TodoLine } from "./line.ts";
-export { dropDoneTodoIn, reopenTodo, reopenTodoIn, retextTodoIn } from "./reopen.ts";
+export { dropDoneTodoIn, reopenTodoIn, retextTodoIn } from "./reopen.ts";
 export { doneHistoryLine, nextDue, rollTodo, rollTodoIn, stopRepeatIn } from "./repeat.ts";
 export {
   appendToSection,
@@ -21,14 +21,11 @@ export {
   todoSectionRange,
 } from "./sections.ts";
 export {
-  BARE_KEYS,
   formatToken,
   isOutcome,
-  OUTCOMES,
   parseToken,
   SEP,
   toOutcome,
-  VALUE_KEYS,
   type Outcome,
   type Token,
 } from "./tokens.ts";

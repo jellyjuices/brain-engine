@@ -18,11 +18,7 @@ function undoAction(change: Change) {
   };
 }
 
-export async function commit(
-  todo: TodoRef,
-  d: Decision,
-  collapse?: () => Promise<void>,
-): Promise<void> {
+async function commit(todo: TodoRef, d: Decision, collapse?: () => Promise<void>): Promise<void> {
   await collapse?.();
   try {
     const change = await applyChange(todo, d, todayIso());

@@ -102,7 +102,7 @@ export function wordAt(text: string, at: number): [number, number] {
   return [from, to];
 }
 
-export function hasStyle(rich: Rich, start: number, end: number, bit: number): boolean {
+function hasStyle(rich: Rich, start: number, end: number, bit: number): boolean {
   if (start === end) return ((rich.styles[start - 1] ?? 0) & bit) > 0;
   for (let i = start; i < end; i++) {
     if (/\s/.test(rich.text[i]!)) continue;

@@ -1,6 +1,6 @@
 import { addDays, isoDay as isoDate } from "@shared/todos/index.ts";
 
-export { addDays, isoDate };
+export { addDays };
 
 export interface StoredNote {
   path: string;
@@ -57,7 +57,7 @@ export function eventDue(n: StoredNote): string | undefined {
   return typeof d === "string" && d ? d.slice(0, 10) : undefined;
 }
 
-export function normalizePath(path: string): string {
+function normalizePath(path: string): string {
   const out: string[] = [];
   for (const part of path.split("/")) {
     if (!part || part === ".") continue;
