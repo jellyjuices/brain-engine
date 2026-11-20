@@ -38,8 +38,8 @@ If a screen part is needed in a second place, move it to `components/` first. Re
 | Group header with a count                        | `SectionHeader` (`title`, `count`, `tone`, `action`)                                                                                                                                                                                                                               |
 | Notice with one action                           | `Banner` (`message`, `count`, `actionLabel`, `onAction`)                                                                                                                                                                                                                           |
 | Sheet                                            | `openSheet()`, `confirmSheet()`. Both draw `Sheet` from `components/sheet/`                                                                                                                                                                                                        |
-| Sheet menu, with steps                           | `OptionsMenu` (`options`, `open`, `onOpenChange`)                                                                                                                                                                                                                                  |
-| Pick one from a list                             | `Select`                                                                                                                                                                                                                                                                           |
+| Sheet menu, with steps                           | `MenuGroups` (`selected` draws a tick). The sheet is a dropdown on desktop and a bottom sheet on the phone, by CSS only                                                                                                                                                           |
+| Pick one from a list                             | `Select`. A bottom sheet on the phone and a dropdown on desktop, by CSS only                                                                                                                                                                                                       |
 | Short message after an action                    | `toast()` from `components/toast/toast-store.ts`. It draws `Toast`                                                                                                                                                                                                                 |
 | Sheet top                                        | `SheetHead` (`title`, `context`, `quote`, `onBack`)                                                                                                                                                                                                                                |
 | Sheet buttons                                    | `SheetActions`, primary last                                                                                                                                                                                                                                                       |
@@ -114,7 +114,7 @@ The code is the source of truth for every value. This file names where values li
 - Pick many from a list: `ListRow checked`. It draws a checkbox on the left, green when checked, and sets `aria-pressed`. Pick one: a `CheckIcon` in `end`.
 - Picking subjects looks like the `@` drawer: rows with the kind's `KindIcon` and icon (spread `typeLook()`), the type as secondary text, a tick when picked. Multi-select. A "Suggested" group comes first, then the rest.
 - Pick notes to add to a subject: an Add pill in the row's end (`Chip`), "Added" with `CheckIcon` once picked. This is the one place a chip sits in a row's end.
-- Wizard steps fill the screen. The buttons sit at the bottom. A new person, place or thing is a three-step builder at `/build/<kind>` (name, what it goes with, notes to add). The build and file screens are listed in `BARE` in `shell/screen-host.tsx`, so their padding is the only padding.
+- Wizard steps fill the screen. The buttons sit at the bottom. A new person, place or thing is a three-step builder at `/build/<kind>` (name, what it goes with, notes to add). `WizardStep` draws the same `PageHeader` as intake (back arrow top left, step count at the end). A button that saves says the action ("Add a person", "Add Louis to Health"). Every step after the first saves nothing until tapped and has Skip.
 - A file note's page is the note page: `FileBody` and `FileResults` take the place of the body. A section still waiting on an ask shows a busy `ListRow`. Its words say it waits for a helper; never say it is working when nothing runs.
 - A picked or done state is green (`accent`) and past tense: "Added", with `CheckIcon`.
 
@@ -132,7 +132,7 @@ The code is the source of truth for every value. This file names where values li
 | `Link` | a link to one place | `NoteLink`, `SubgoalLink` |
 | `List` | a list of rows | `SearchList` |
 | `Sheet` / `Step` | a bottom sheet / one step in a sheet or wizard | `TodoSheet`, `TodoDateStep`, `WizardStep` |
-| `Menu` | a list of actions | `AddMenu`, `OptionsMenu` |
+| `Menu` | a list of actions | `AddMenu`, `MenuGroups` |
 | `Picker` | chooses a value | `WhenPicker` |
 | `Input` / `Field` | a form control / a control with its label | `AddInput`, `TextField` |
 | `Button` | a button | `IconButton`, `ToolbarButton` |

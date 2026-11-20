@@ -35,7 +35,10 @@ export const sort = {
   addCount: (count: number, name: string) => `Add ${count} to ${name}`,
   skip: "Skip",
   todo: "to-do",
-  next: "Next",
+  addKnown: (name: string, titles: string[]) =>
+    titles.length === 1
+      ? `Add ${name} to ${titles[0]}`
+      : `Add ${name} to ${titles.length} subjects`,
   noneNamed: (name: string) => `Nothing names ${name} yet.`,
   file: "File",
   fileHow: (name: string) => `How should ${name} be incorporated into the brain?`,

@@ -63,7 +63,6 @@ export function BuildScreen() {
     count: COUNT,
     stepLabel: copy.sort.stepOf(step + 1, COUNT),
     backLabel: copy.common.back,
-    closeLabel: copy.common.close,
     nextDisabled: busy || (step === 0 ? !name.trim() : !built),
     onClose: leave,
     onNext: () => void next(),
@@ -92,7 +91,11 @@ export function BuildScreen() {
         {...skip}
         question={kind === "person" ? copy.sort.howKnow(title) : copy.sort.belongsWith(title)}
         hint={copy.sort.pickAny}
-        nextLabel={copy.sort.next}
+        nextDisabled={busy || chosen.length === 0}
+        nextLabel={copy.sort.addKnown(
+          title,
+          chosen.map((n) => n.title),
+        )}
       >
         <BuildKnow notes={notes} built={built} picked={subjects} onChange={setSubjects} />
       </WizardStep>
@@ -103,7 +106,8 @@ export function BuildScreen() {
       {...skip}
       question={copy.sort.addNotesTo(title)}
       hint={copy.sort.alreadyName(title)}
-      nextLabel={linked.size ? copy.sort.addCount(linked.size, title) : copy.common.done}
+      nextDisabled={busy || linked.size === 0}
+      nextLabel={copy.sort.addCount(linked.size, title)}
     >
       <BuildNotes notes={notes} built={built} picked={linked} onChange={setLinked} />
     </WizardStep>

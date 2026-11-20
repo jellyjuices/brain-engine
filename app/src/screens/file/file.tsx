@@ -40,7 +40,6 @@ export function FileScreen() {
       question={copy.sort.fileHow(held.title)}
       hint={copy.sort.fileHint}
       backLabel={copy.common.back}
-      closeLabel={copy.common.close}
       nextLabel={copy.sort.addFile(held.title)}
       nextDisabled={busy}
       onClose={() => {

@@ -9,7 +9,6 @@ import { copy } from "@/content/index.ts";
 const LEAVE_MS = 160;
 const PADDED = new Set(["today", "find", "areas", "note"]);
 const FLUSH = new Set(["journal"]);
-const BARE = new Set(["build", "file"]);
 
 function screenKey(route: Route): string {
   return `${route.name}/${route.rest}?${route.params}`;
@@ -24,7 +23,6 @@ function ScreenFrame({ route, leaving }: { route: Route; leaving?: boolean }) {
         styles.screen,
         PADDED.has(route.name) && styles.padded,
         (FLUSH.has(route.name) || editing) && styles.flush,
-        BARE.has(route.name) && styles.bare,
         leaving && styles.leaving,
       )}
       aria-label={title}

@@ -1,9 +1,9 @@
 import styles from "./wizard-step.module.css";
 import { useEffect, useId, useRef, type FormEvent, type ReactNode } from "react";
-import { ArrowLeftIcon, XIcon } from "@phosphor-icons/react";
+import { ArrowLeftIcon } from "@phosphor-icons/react";
 import { ProgressBar } from "../progress-bar/progress-bar.tsx";
 import { Button } from "../button/button.tsx";
-import { IconButton } from "../icon-button/icon-button.tsx";
+import { PageHeader } from "../page-header/page-header.tsx";
 
 export type WizardStepProps = {
   title: string;
@@ -16,7 +16,6 @@ export type WizardStepProps = {
   backLabel: string;
   nextLabel: string;
   skipLabel?: string;
-  closeLabel?: string;
   nextDisabled?: boolean;
   onBack?: () => void;
   onNext: () => void;
@@ -25,18 +24,8 @@ export type WizardStepProps = {
 };
 
 export const WizardStep = (props: WizardStepProps) => {
-  const {
-    step,
-    count,
-    stepLabel,
-    question,
-    hint,
-    children,
-    backLabel,
-    nextLabel,
-    skipLabel,
-    closeLabel,
-  } = props;
+  const { step, count, stepLabel, question, hint, children, backLabel, nextLabel, skipLabel } =
+    props;
   const { nextDisabled, onBack, onNext, onSkip, onClose } = props;
   const headingId = useId();
   const hintId = useId();
@@ -60,15 +49,18 @@ export const WizardStep = (props: WizardStepProps) => {
       aria-describedby={hint ? hintId : undefined}
       onSubmit={submit}
     >
-      <header className={styles.head}>
-        {onClose && closeLabel && <IconButton icon={XIcon} label={closeLabel} onClick={onClose} />}
-        <p className={styles.title}>{props.title}</p>
-        {count > 1 && (
-          <p className={styles.countText} aria-live="polite">
-            {stepLabel}
-          </p>
-        )}
-      </header>
+      <PageHeader
+        title={props.title}
+        onBack={onClose}
+        backLabel={backLabel}
+        action={
+          count > 1 && (
+            <p className={styles.countText} aria-live="polite">
+              {stepLabel}
+            </p>
+          )
+        }
+      />
       {count > 1 && <ProgressBar label={stepLabel} done={step + 1} total={count} size="step" />}
       <h2 id={headingId} ref={heading} tabIndex={-1} className={styles.questionText}>
         {question}

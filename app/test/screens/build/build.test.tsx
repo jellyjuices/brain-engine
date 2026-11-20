@@ -26,7 +26,7 @@ afterEach(() => {
 async function open(kind: string) {
   history.pushState({}, "", `/build/${kind}`);
   render(<BuildScreen />);
-  await screen.findByRole("heading");
+  await screen.findByRole("heading", { level: 2 });
 }
 
 describe("Build screen", () => {
