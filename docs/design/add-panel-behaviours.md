@@ -1,6 +1,6 @@
 # Add button, Add panel and inputs: behaviours on main
 
-Check list for hand-testing later slices. Paths are under `app/src/components/`. Tokens: `--motion-fast` 160ms, `--motion-slow` 220ms, `--motion-pop` 600ms (was 460ms), `--motion-duration-spin` 40s, `--motion-easing`, `--motion-easing-in`. Keyframes are scoped by the CSS Module; `add-panel.tsx` reads the scoped `add-deflate` name from the module.
+Check list for hand-testing later slices. Paths are under `app/src/components/`. Keyframes are scoped by the CSS Module; `add-panel.tsx` reads the scoped `add-deflate` name from the module.
 
 ## Animations (keyframes name, owner)
 
@@ -34,7 +34,7 @@ Check list for hand-testing later slices. Paths are under `app/src/components/`.
 - Plus turns 45 degrees into a cross when open (`.addPanel.isOpen .addMain > :first-child > svg`), no turn while closing. `add-panel/add-panel.module.css`
 - Plus button squashes to 0.94 on press. `add-panel/add-panel.module.css`
 - Blob outline rotates 1 turn per 40s. `add-panel/add-panel.module.css`
-- Kind positions: three buttons on a 120px arc at -0.87/-0.5, 0/-1, 0.87/-0.5. `add-menu/add-menu.module.css`
+- Kind positions: three buttons on an arc. `add-menu/add-menu.module.css`
 
 ## States
 
@@ -51,7 +51,7 @@ Check list for hand-testing later slices. Paths are under `app/src/components/`.
 - Closing blurs the text box, then waits for `add-deflate` to end. `add-panel/add-panel.tsx`
 - Tap on button: closed opens kinds, open closes, editing saves (empty text closes). `add-panel/add-panel.tsx`
 - Saving disables the button (`aria-busy`). `add-panel/add-panel.tsx`
-- "Other" kind closes and goes to `/new`. `add-panel/add-panel.tsx`
+- "Other" kind closes and goes to `/add`. `add-panel/use-add-panel.ts`
 - On a phone keyboard, the tab bar hides unless todo or journal is open (`[data-keyboard]`). `shell/tab-bar/tab-bar.module.css`
 
 ## Hold and drag

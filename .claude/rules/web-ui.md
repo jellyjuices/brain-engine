@@ -98,7 +98,7 @@ The code is the source of truth for every value. This file names where values li
 - Icons: import the Phosphor `…Icon` part and pass it (`<Icon icon={PlusIcon} />`). Type props with `type Icon as PhosphorIcon`. No icon name strings. One meaning, one glyph. Size an icon where it is used.
 - A chevron means "opens a next step". Back is an arrow, top left. Close is ×, top right of a sheet. The primary action is last and full width. Other actions are `outlined`.
 - One surface at a time. Never stack a sheet on a sheet.
-- Dates: `longDate()`, `niceDate()` from `lib/notes/model.ts`, `quickDays()` from `lib/notes/due.ts`. Note-type lists and icons live in `lib/notes/`.
+- Dates: `longDate()`, `niceDate()` from `lib/notes/model.ts`. Note-type lists and icons live in `lib/notes/`.
 - Hover: write `:hover`, then undo it in a local `@media (hover: none)` below. No shared hover helper.
 - No `text-transform: uppercase`. Values that change all the time go on the element `style`, not a CSS rule.
 
@@ -115,7 +115,7 @@ The code is the source of truth for every value. This file names where values li
 - Pick many from a list: `ListRow checked`. It draws a checkbox on the left, green when checked, and sets `aria-pressed`. Pick one: a `CheckIcon` in `end`.
 - Picking subjects looks like the `@` drawer: rows with the kind's `KindIcon` and icon (spread `typeLook()`), the type as secondary text, a tick when picked. Multi-select. A "Suggested" group comes first, then the rest.
 - Pick notes to add to a subject: an Add pill in the row's end (`Chip`), "Added" with `CheckIcon` once picked. This is the one place a chip sits in a row's end.
-- Wizard steps fill the screen. The buttons sit at the bottom. A wizard is its own screen, listed in `BARE` in `shell/screen-host.tsx`, so the wizard's padding is the only padding.
+- Wizard steps fill the screen. The buttons sit at the bottom. The person and file screens are listed in `BARE` in `shell/screen-host.tsx`, so their padding is the only padding.
 - A file note's page is the note page: `FileBody` and `FileResults` take the place of the body. A section still waiting on an ask shows a busy `ListRow`. Its words say it waits for a helper; never say it is working when nothing runs.
 - A picked or done state is green (`accent`) and past tense: "Added", with `CheckIcon`.
 

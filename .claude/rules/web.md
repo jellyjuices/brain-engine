@@ -26,7 +26,7 @@ Run `npm run gates` from the repo root before you finish. All must pass.
 
 | Folder | Holds |
 | --- | --- |
-| `lib/` | Logic with no React: `notes/`, `storage/`, `sync/`, `lock/`, `platform/` |
+| `lib/` | Logic with no React: `notes/`, `storage/`, `sync/`, `lock/`, `platform/`, `design/`, `search/` |
 | `hooks/` | Hooks that read the stores, and general hooks |
 | `components/<part>/` | Shared parts, each with its `.tsx` files and one `<part>.module.css` |
 | `screens/<screen>/` | One folder per screen, with its own parts and CSS Modules |

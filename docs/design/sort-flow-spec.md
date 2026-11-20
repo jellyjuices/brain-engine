@@ -1,10 +1,10 @@
 # Spec: where it went (A, B, C)
 
-Built 2026-11-19 from the Storybook mocks, which are now deleted. This spec says how each flow works in the real app.
+This spec says how each flow works in the real app.
 
 ## Rules for all three
 
-- No AI on the device or the server. Guesses come from names and tags the brain already has (helpers.md, outcome 1).
+- No AI on the device or the server. Guesses come from names and tags the brain already has (helpers.md, aim 1).
 - Each screen uses the real parts: `AddToolbar`, `Toast`, `Sheet`, `WizardStep`, `ListRow`, `List`, `NoteRead`.
 - Pages sit inside the screen host, so the gutter and top space match every other note page.
 
@@ -40,7 +40,7 @@ Built 2026-11-19 from the Storybook mocks, which are now deleted. This spec says
 
 ## B. Building out a person
 
-After "Add a person" saves, the app opens the person builder at `/person-build/<path>`. Step 1 was the name sheet, so the builder starts at step 2 of 3.
+After "Add a person" saves, the app opens the person builder at `/person/<path>`. Step 1 was the name sheet, so the builder starts at step 2 of 3.
 
 ### B1. How do you know Louis?
 
@@ -61,7 +61,7 @@ After "Add a person" saves, the app opens the person builder at `/person-build/<
 
 ### C1. How should workbook-ch2 be incorporated into the brain?
 
-- After the owner picks a file on the New screen, the app opens `/file-add`. The file waits in memory.
+- After the owner picks a file from Other on the Add panel, the app opens `/file`. The file waits in memory.
 - Three ticks: "Break it up into to-dos and notes", "Write intake questions", "Add to the notes you already have".
 - The helper line: the file is always kept in Resources.
 - The button: "Add workbook-ch2".
