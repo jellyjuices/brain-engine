@@ -30,7 +30,9 @@ function Text({ multiline }: { multiline?: boolean }) {
 
 function Search() {
   const [value, setValue] = useState("");
-  return <SearchInput placeholder="Find a note" value={value} onChange={setValue} autoFocus={false} />;
+  return (
+    <SearchInput placeholder="Find a note" value={value} onChange={setValue} autoFocus={false} />
+  );
 }
 
 function Pick({ start }: { start?: string }) {

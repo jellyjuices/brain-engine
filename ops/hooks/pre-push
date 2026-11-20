@@ -15,6 +15,6 @@ if npm run gates >"$log" 2>&1; then
   exit 0
 fi
 echo "pre-push: a gate failed. The push is stopped."
-grep -n -E "^✖|^not ok|error TS|Error:|FAIL|✗| failed|over 200 lines|privacy-check:" "$log" | head -40
+grep -n -E "^✖|^not ok|error TS|Error:|FAIL|✗| failed|size-check:|privacy-check:" "$log" | head -40
 echo "Full output: $log"
 exit 1

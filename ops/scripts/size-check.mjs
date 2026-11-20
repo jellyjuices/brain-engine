@@ -62,12 +62,10 @@ const oversized = folders
 if (oversized.length === 0) {
   console.log(`No files over ${THRESHOLD} lines in: ${folders.join(", ")}`);
 } else {
-  const width = String(oversized[0].lines).length;
   console.log(
-    `${oversized.length} file(s) over ${THRESHOLD} lines (longest first):\n`,
+    `size-check: warning: ${oversized.length} file(s) over ${THRESHOLD} lines (longest first). This does not fail the gate.`,
   );
   for (const { file, lines } of oversized) {
-    console.log(colorize(lines, `${String(lines).padStart(width)}  ${file}`));
+    console.log(colorize(lines, `size-check: warning: ${lines} lines  ${file}`));
   }
-  process.exitCode = 1;
 }

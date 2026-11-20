@@ -93,7 +93,7 @@ describe("undoSaved", () => {
   });
 
   it("Undo while the add is being sent waits for it, then undoes it by id", async () => {
-    let land: (r: Response) => void = () => undefined;
+    let land: ((r: Response) => void) | undefined;
     const inboxSent = vi.fn();
     vi.stubGlobal(
       "fetch",
@@ -108,7 +108,7 @@ describe("undoSaved", () => {
     await vi.waitFor(() => expect(inboxSent).toHaveBeenCalled());
 
     const undoing = undoSaved(item.id);
-    land(reply({ path: "inbox/cottage.md", undo_id: "7a3c9e01" }));
+    land?.(reply({ path: "inbox/cottage.md", undo_id: "7a3c9e01" }));
     await Promise.all([sending, undoing]);
     await sendAll();
 

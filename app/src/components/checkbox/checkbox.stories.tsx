@@ -20,4 +20,6 @@ function Toggle({ shape }: { shape: "round" | "square" }) {
 export const Display: Story = { args: { checked: true } };
 export const Round: Story = { render: () => <Toggle shape="round" /> };
 export const Square: Story = { render: () => <Toggle shape="square" /> };
-export const Disabled: Story = { args: { checked: true, disabled: true, onCheckedChange: () => {} } };
+export const Disabled: Story = {
+  args: { checked: true, disabled: true, onCheckedChange: () => {} },
+};
