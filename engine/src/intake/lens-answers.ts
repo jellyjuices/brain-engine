@@ -4,8 +4,9 @@ import { addSubjectFact } from "./subjects.ts";
 import { linkKnownNames } from "./intake-end.ts";
 import { type Note, nowStamp, today } from "../core/notes.ts";
 import { loadAll, readNote, writeAtomic, writeNote } from "../core/files.ts";
-import { log } from "../core/log.ts";
+import { changeFiles, log } from "../core/log.ts";
 import { ensureLens, LENSES, lensPath, lensPrivacy, needLens } from "./lenses.ts";
+import { updateThread } from "./threads.ts";
 
 export interface SaveOptions {
   session?: number;
@@ -20,6 +21,8 @@ export interface SaveOptions {
   link?: boolean;
   /** Facts about a subject go to its note, not the lens. Each is a dated note line there. */
   facts?: { into: string; text: string }[];
+  /** Mark this thread talked, in the same change, so one undo reverses both. */
+  thread?: string;
 }
 
 export const QUOTE_MAX = 120;
@@ -51,6 +54,20 @@ export function saveLensAnswer(root: string, slug: string, text: string, opts: S
   if (privacy === "headline" && (opts.raw || opts.quote)) throw new Error(`The ${slug} lens is set to headline: save one short line only, with no quote or raw answer.`);
   const quote = opts.quote?.trim().replace(/^["“]|["”]$/g, "").replace(/\s*\n\s*/g, " ");
   if (quote && quote.length > QUOTE_MAX) throw new Error(`The quote is over ${QUOTE_MAX} characters. Keep only the phrase that matters.`);
+  const rawRel = opts.raw?.trim() ? rawPath(today(), opts.session) : undefined;
+  const lensPaths = opts.thread ? LENSES.map((l) => lensPath(l.slug)) : [lensPath(slug)];
+  const paths = [...lensPaths, ...(rawRel ? [rawRel] : [])];
+  const msg = `intake: answer saved to ${lensPath(slug)}${rawRel ? ` (raw in ${rawRel})` : ""}`;
+  const note = changeFiles(root, paths, msg, () => {
+    const saved = writeLensLine(root, slug, text, quote, opts);
+    if (opts.thread) updateThread(root, opts.thread, { status: "talked", by: opts.by });
+    return saved;
+  });
+  for (const f of opts.facts ?? []) addSubjectFact(root, f.into, f.text);
+  return note;
+}
+
+function writeLensLine(root: string, slug: string, text: string, quote: string | undefined, opts: SaveOptions): Note {
   const raw = opts.raw?.trim() ? saveRaw(root, slug, opts.raw, { session: opts.session, question: opts.question }) : undefined;
   const rel = ensureLens(root, slug, opts.by);
   const n = readNote(root, rel);
@@ -63,10 +80,7 @@ export function saveLensAnswer(root: string, slug: string, text: string, opts: S
   if (raw) line += ` ([raw](../${raw}))`;
   if (quote) line += `\n  - In their words: "${quote}"`;
   body = lastH2 === heading ? `${body}\n${line}` : `${body}\n\n${heading}\n\n${line}`;
-  const note = writeNote(root, rel, { ...n.meta, generated: { by: opts.by ?? "claude", at: nowStamp() } }, body);
-  log(root, `intake answer saved to ${rel}${raw ? ` (raw in ${raw})` : ""}`);
-  for (const f of opts.facts ?? []) addSubjectFact(root, f.into, f.text);
-  return note;
+  return writeNote(root, rel, { ...n.meta, generated: { by: opts.by ?? "claude", at: nowStamp() } }, body);
 }
 
 export interface RedactResult {

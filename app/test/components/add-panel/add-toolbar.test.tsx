@@ -6,7 +6,12 @@ import { selectEditable } from "@/lib/platform/editable.ts";
 import { clearStore, putNotes } from "@/lib/storage/store.ts";
 import { fixture, note, unlockTestVault } from "../../helpers.ts";
 
-const queueInbox = vi.fn();
+const queueInbox = vi.fn(async (..._args: unknown[]) => ({
+  id: "c0ffee03",
+  kind: "inbox",
+  payload: {},
+  created_at: "2026-11-19T10:00:00",
+}));
 vi.mock("@/lib/platform/router.ts", () => ({ go: vi.fn() }));
 vi.mock("@/flows/save-flow.ts", () => ({
   saveFlow: async (write: () => unknown) => {

@@ -26,14 +26,16 @@ export function IntakeAnswer({
         value={answer}
         onChange={(e) => onChange(e.target.value)}
       />
-      <SheetActions>
-        <Button variant="outlined" disabled={busy} onClick={onLater}>
-          {copy.intake.later}
-        </Button>
-        <Button busy={busy} disabled={!answer.trim()} onClick={onNext}>
-          {busy ? copy.intake.shortening : copy.intake.next}
-        </Button>
-      </SheetActions>
+      <div className={styles.intakeActions}>
+        <SheetActions>
+          <Button variant="outlined" disabled={busy} onClick={onLater}>
+            {copy.intake.later}
+          </Button>
+          <Button busy={busy} disabled={!answer.trim()} onClick={onNext}>
+            {busy ? copy.intake.shortening : copy.intake.next}
+          </Button>
+        </SheetActions>
+      </div>
     </div>
   );
 }

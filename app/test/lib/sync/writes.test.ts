@@ -101,7 +101,7 @@ describe("outbox kinds", () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("offline")));
     await queueDecision("a.md::One", { kind: "done" });
     await queueDecision("a.md::Two", { kind: "move", when: "someday" });
-    await queueUndo();
+    await queueUndo("ab12cd34");
     expect((await flush()).left).toBe(3);
     vi.stubGlobal(
       "fetch",
@@ -110,7 +110,7 @@ describe("outbox kinds", () => {
     const res = await flush();
     expect(res).toMatchObject({ left: 0 });
     expect(calls().map((c) => c[0])).toEqual(["/api/done", "/api/move", "/api/undo"]);
-    expect(bodyOf(2)).toEqual({});
+    expect(bodyOf(2)).toEqual({ id: "ab12cd34" });
   });
 
   it("a locked 401 keeps the write; a refused 400 drops it so the queue never jams", async () => {
@@ -257,21 +257,31 @@ describe("a change, its Undo and the local copy", () => {
     ]);
   });
 
-  it("Undo after it landed queues /api/undo", async () => {
+  it("Undo after it landed queues /api/undo with the id of that change", async () => {
     vi.stubGlobal(
       "fetch",
-      vi
-        .fn()
-        .mockImplementation(async () => reply(200, { now: "2026-11-05T09:00:00.000Z", notes: [] })),
+      vi.fn().mockImplementation(async () => reply(200, { undo_id: "5e1f0a7c", notes: [] })),
     );
     await putNotes(fixture());
     const change = await applyChange(todo, { kind: "move", when: "2026-11-20" }, NOW);
     await flush();
-    expect(await list()).toHaveLength(0);
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("offline")));
     expect(await undoChange(change)).toBe(true);
-    expect((await list()).map((i) => i.kind)).toEqual(["undo"]);
+    expect((await list()).map((i) => [i.kind, i.payload])).toEqual([["undo", { id: "5e1f0a7c" }]]);
     expect((await getNote(todo.path))!.body).toContain("due 2026-11-05 · today");
+  });
+
+  it("Undo after a landed write with no undo id is too late and queues nothing", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockImplementation(async () => reply(200, { notes: [] })),
+    );
+    await putNotes(fixture());
+    const change = await applyChange(todo, { kind: "move", when: "2026-11-20" }, NOW);
+    await flush();
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("offline")));
+    expect(await undoChange(change)).toBe(false);
+    expect(await list()).toEqual([]);
   });
 
   it("only the last change can be undone", async () => {

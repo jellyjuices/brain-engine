@@ -22,6 +22,7 @@ import type {
   BirthdayPayload,
   IntakeSavePayload,
   IntakeSkipPayload,
+  UndoPayload,
 } from "./write-payloads.ts";
 
 export function notePath(path: string) {
@@ -91,7 +92,7 @@ export function registerWrites() {
   registerHandler("intake-skip", (item) =>
     api("/api/intake/skip", { body: item.payload as IntakeSkipPayload }),
   );
-  registerHandler("undo", () => api("/api/undo", { body: {} }));
+  registerHandler("undo", (item) => api("/api/undo", { body: item.payload as UndoPayload }));
   registerHandler("edit", (item) => sendEdit(item.payload as EditPayload));
 }
 
@@ -167,8 +168,8 @@ export function queueIntakeSkip(question: string) {
   return enqueue<IntakeSkipPayload>("intake-skip", { question });
 }
 
-export function queueUndo() {
-  return enqueue("undo", {});
+export function queueUndo(id: string) {
+  return enqueue<UndoPayload>("undo", { id });
 }
 
 export async function queueEdit(path: string, body: string, base: string, tags?: string[]) {

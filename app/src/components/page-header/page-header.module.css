@@ -87,3 +87,14 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.wrap .top {
+  padding-bottom: var(--space-lg);
+}
+
+.wrap .kicker,
+.wrap .title {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}

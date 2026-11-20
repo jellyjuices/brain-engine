@@ -74,3 +74,6 @@ export interface IntakeSavePayload {
 export interface IntakeSkipPayload {
   question: string;
 }
+export interface UndoPayload {
+  id: string;
+}

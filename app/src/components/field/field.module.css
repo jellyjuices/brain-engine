@@ -14,25 +14,29 @@
   line-height: var(--font-leading-snug);
 }
 
-.input {
-  width: 100%;
+.inputBase {
   min-height: 3.625rem;
   padding: var(--space-md) var(--space-lg);
-  border: 0.0625rem solid var(--border-primary);
+  border: 0;
   border-radius: var(--radius-md);
   background: var(--background-secondary);
   color: inherit;
   font: inherit;
   font-size: var(--font-size-body-lg);
+  transition: box-shadow var(--motion-fast) var(--motion-easing);
+}
+
+.input {
+  composes: inputBase;
+  width: 100%;
   resize: none;
   -webkit-appearance: none;
   appearance: none;
-  transition: border-color var(--motion-fast) var(--motion-easing);
 }
 
 .input:focus-visible {
-  border-color: var(--border-focus);
-  outline-offset: 0;
+  box-shadow: 0 0 0 0.0625rem var(--border-focus);
+  outline: none;
 }
 
 .input::placeholder {
@@ -107,28 +111,23 @@
 }
 
 .controlBox {
+  composes: inputBase;
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  height: var(--size-control);
-  padding: 0 var(--space-md);
-  border: 0.0625rem solid var(--border-strong);
-  border-radius: var(--radius-md);
-  background: var(--background-secondary);
+  gap: var(--space-md);
 }
 
 .controlTrigger {
   composes: controlBox;
+  width: 100%;
   cursor: pointer;
 }
 
 .controlTrigger[data-state="open"] {
-  border-color: var(--border-focus);
+  box-shadow: 0 0 0 0.0625rem var(--border-focus);
 }
 
 .controlTrigger:disabled {
-  border-style: dashed;
-  border-color: var(--border-primary);
   background: var(--background-disabled);
   color: var(--text-disabled);
   cursor: not-allowed;

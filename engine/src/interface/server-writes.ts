@@ -104,7 +104,7 @@ export const stopRepeatRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(
 
 export const editTodoRoute =(c: Ctx) => afterWrite(c.root, () => asUserError(() => editTodoText(c.root, text(c.body.ref, "ref")!, text(c.body.text, "text")!)));
 
-export const undoRoute =(c: Ctx) => afterWrite(c.root, () => asUserError(() => undoLast(c.root)));
+export const undoRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => undoLast(c.root, text(c.body.id, "id", false))));
 
 /** Save an edited body. `base` must be the hash the phone read, else 409 with the note as it is now. */
 function editTags(root: string, raw: unknown): string[] | undefined {

@@ -8,7 +8,8 @@ import { areaBrief, areaMarkdown, todayMarkdown, todayReport, weeklyMarkdown, we
 import { changedVectors, feedModel, list, search } from "../core/search.ts";
 import type { NotesSinceResponse } from "./api-types.ts";
 import { dayList, ref } from "../todos/day-list.ts";
-import { lensPrivacy } from "../intake/lenses.ts";
+import { LENSES, lensPath, lensPrivacy } from "../intake/lenses.ts";
+import { changeFiles } from "../core/log.ts";
 import { saveLensAnswer } from "../intake/lens-answers.ts";
 import { listThreads, updateThread } from "../intake/threads.ts";
 import { HttpError } from "./server-auth.ts";
@@ -87,11 +88,7 @@ export function intakeSave(c: Ctx) {
   const raw = text(c.body.raw, "raw", false)?.trim();
   try {
     const keepRaw = lensPrivacy(c.root, lens) === "full";
-    const note = afterWrite(c.root, () => {
-      const saved = saveLensAnswer(c.root, lens, line, { question, raw: keepRaw ? raw : undefined, by });
-      updateThread(c.root, question, { status: "talked", by });
-      return saved;
-    });
+    const note = afterWrite(c.root, () => saveLensAnswer(c.root, lens, line, { question, raw: keepRaw ? raw : undefined, by, thread: question }));
     return { path: note.path };
   } catch (e) {
     throw new HttpError(400, (e as Error).message);
@@ -101,7 +98,8 @@ export function intakeSave(c: Ctx) {
 export function intakeSkip(c: Ctx) {
   const question = text(c.body.question, "question")!.trim();
   try {
-    afterWrite(c.root, () => updateThread(c.root, question, { status: "parked", by: OWNER_BY }));
+    const lenses = LENSES.map((l) => lensPath(l.slug));
+    afterWrite(c.root, () => changeFiles(c.root, lenses, `intake: later: ${question}`, () => updateThread(c.root, question, { status: "parked", by: OWNER_BY })));
     return { ok: true };
   } catch (e) {
     throw new HttpError(400, (e as Error).message);

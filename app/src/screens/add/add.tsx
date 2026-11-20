@@ -29,7 +29,7 @@ export function AddScreen() {
 
   return (
     <>
-      <PageHeader title={copy.add.newTitle} />
+      <PageHeader title={copy.add.newTitle} wrap />
       <List>
         {CHOICES.map((c) => (
           <ListRow

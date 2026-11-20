@@ -48,7 +48,7 @@ export const ROUTES: Route[] = [
   r("POST", "/api/skip", "skip", "Move a repeating to-do to its next date without marking it done.", "Use when the owner skips one time.", skipRoute),
   r("POST", "/api/stop-repeat", "stop_repeat", "Make a repeating to-do a one-off. Its date stays.", "Use when the owner stops a repeat.", stopRepeatRoute, HIDDEN),
   r("POST", "/api/reopen","reopen", "Mark a done to-do not done. It goes back on the list.", "Use when a to-do was ticked by mistake.", reopenRoute, HIDDEN),
-  r("POST", "/api/undo", "undo", "Undo the last change. A whole sort is one change.", "Use right after a wrong write.", undoRoute),
+  r("POST", "/api/undo", "undo", "Undo one change: the one with this id, or else the newest. A whole sort is one change.", "Pass the undo_id the write gave back.", undoRoute),
   r("GET", "/api/find", "find", "Find notes by words and meaning, with a short answer line and the subject card.", "Use first to look anything up; filter by type, tag, area or status.", findRoute),
   r("GET", "/api/todos", "todos", "One to-do view: today, soon, no-date, on-hold, by-goal or all.", "Use to get to-do refs.", todosRoute),
   r("GET", "/api/today", "today", "Today: overdue and due to-dos and events.", "Use to plan the day.", todayRoute),

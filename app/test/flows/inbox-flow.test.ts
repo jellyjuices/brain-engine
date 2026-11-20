@@ -4,10 +4,11 @@ import { note } from "../helpers.ts";
 
 const sheets = vi.hoisted(() => ({ sortSheet: vi.fn(), pickNote: vi.fn() }));
 const queueSort = vi.hoisted(() => vi.fn());
+const queueInboxDrop = vi.hoisted(() => vi.fn());
 
 vi.mock("@/components/sort-sheet/sort-sheet.tsx", () => ({ sortSheet: sheets.sortSheet }));
 vi.mock("@/components/picker-sheet/picker-sheet.tsx", () => ({ pickNote: sheets.pickNote }));
-vi.mock("@/lib/sync/writes.ts", () => ({ queueSort, queueInboxDrop: vi.fn() }));
+vi.mock("@/lib/sync/writes.ts", () => ({ queueSort, queueInboxDrop }));
 vi.mock("@/lib/sync/outbox.ts", () => ({
   flush: vi.fn(() => Promise.resolve({ sent: ["s1"], dropped: [], left: 0 })),
   has: vi.fn(() => Promise.resolve(false)),
@@ -24,6 +25,7 @@ const chantal = note("people/chantal.md", "", { title: "Chantal", type: "Person"
 beforeEach(() => {
   vi.clearAllMocks();
   queueSort.mockResolvedValue({ id: "s1", kind: "sort", payload: {}, created_at: "now" });
+  queueInboxDrop.mockResolvedValue({ id: "s1", kind: "drop", payload: {}, created_at: "now" });
 });
 
 describe("sortCapture", () => {
@@ -42,6 +44,15 @@ describe("sortCapture", () => {
     await sortCapture(capture, [chantal]);
 
     expect(queueSort).toHaveBeenCalledWith(capture.path, chantal.path, "someday");
+  });
+
+  it("deleting from the sheet drops the capture", async () => {
+    sheets.sortSheet.mockResolvedValue("archive");
+
+    await sortCapture(capture, [chantal]);
+
+    expect(queueInboxDrop).toHaveBeenCalledWith(capture.path);
+    expect(queueSort).not.toHaveBeenCalled();
   });
 
   it("closing the sheet sends nothing", async () => {

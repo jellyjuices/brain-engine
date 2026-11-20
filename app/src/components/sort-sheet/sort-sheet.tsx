@@ -1,19 +1,17 @@
-import { SparkleIcon } from "@phosphor-icons/react";
-import { Button } from "@/components/button/button.tsx";
-import { List } from "@/components/list/list.tsx";
+import { ArchiveIcon, ArrowElbowDownRightIcon, InfoIcon, SparkleIcon } from "@phosphor-icons/react";
+import { MenuGroups } from "@/components/list/menu-groups.tsx";
 import { openSheet } from "@/components/sheet/open-sheet.tsx";
-import { SheetActions } from "@/components/sheet/sheet-actions.tsx";
 import { SheetHead } from "@/components/sheet/sheet-head.tsx";
-import { TodoRow } from "@/components/todo-row/todo-row.tsx";
 import type { StoredNote } from "@/lib/notes/model.ts";
 import { copy } from "@/content/index.ts";
 
-export type SortChoice = "guess" | "else";
+export type SortChoice = "guess" | "else" | "open" | "archive";
 
 export function sortSheet(text: string, guess: StoredNote | undefined): Promise<SortChoice | null> {
   return openSheet<SortChoice>(text, (finish) => (
     <>
       <SheetHead
+        title={text}
         context={
           guess && (
             <>
@@ -21,25 +19,46 @@ export function sortSheet(text: string, guess: StoredNote | undefined): Promise<
             </>
           )
         }
-        title={
-          guess
-            ? copy.sort.addToKind(guess.title, guess.type ?? copy.common.note)
-            : copy.sort.whereGoes
-        }
       />
-      <List variant="ghost">
-        <TodoRow title={text} />
-      </List>
-      <SheetActions>
-        {guess && (
-          <Button block onClick={() => finish("guess")}>
-            {copy.sort.addTo(guess.title)}
-          </Button>
-        )}
-        <Button block variant={guess ? "outlined" : "primary"} onClick={() => finish("else")}>
-          {guess ? copy.sort.somewhereElse : copy.sort.pickSubject}
-        </Button>
-      </SheetActions>
+      <MenuGroups
+        groups={[
+          [
+            {
+              id: "guess",
+              icon: ArrowElbowDownRightIcon,
+              title: guess ? copy.sort.sortTo(guess.title) : copy.sort.pickSubject,
+              variant: "primary",
+              chevron: !guess,
+              onClick: () => finish(guess ? "guess" : "else"),
+            },
+            !!guess && {
+              id: "else",
+              icon: ArrowElbowDownRightIcon,
+              title: copy.sort.somewhereElse,
+              chevron: true,
+              onClick: () => finish("else"),
+            },
+          ],
+          [
+            {
+              id: "open",
+              icon: InfoIcon,
+              title: copy.inbox.getDetails,
+              chevron: true,
+              onClick: () => finish("open"),
+            },
+          ],
+          [
+            {
+              id: "archive",
+              icon: ArchiveIcon,
+              title: copy.inbox.archive,
+              variant: "danger",
+              onClick: () => finish("archive"),
+            },
+          ],
+        ]}
+      />
     </>
   ));
 }

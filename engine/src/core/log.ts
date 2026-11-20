@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto";
-import { appendFileSync, existsSync, readFileSync, unlinkSync } from "node:fs";
+import { appendFileSync, existsSync, readFileSync, statSync, unlinkSync } from "node:fs";
 import { join } from "node:path";
 import { LOG_FILE, nowStamp, parse } from "./notes.ts";
 import { writeAtomic } from "./files.ts";
@@ -98,12 +98,47 @@ function planStep(root: string, step: UndoStep, pending: Map<string, string | nu
   return () => writeAtomic(full, text);
 }
 
-/** Reverse the last change that is not undone yet. Every step is checked before any file changes. */
-export function undoLast(root: string): { msg: string; line: string } {
+export function logMark(root: string): number {
+  const path = join(root, LOG_FILE);
+  return existsSync(path) ? statSync(path).size : 0;
+}
+
+export function undoIdSince(root: string, mark: number): string | undefined {
+  const path = join(root, LOG_FILE);
+  if (!existsSync(path)) return undefined;
+  const fresh = readFileSync(path).subarray(mark).toString("utf8").split("\n").filter(Boolean);
+  const ids = fresh.flatMap((line) => {
+    try {
+      const e = JSON.parse(line) as LogEntry;
+      return e.id && e.undo ? [e.id] : [];
+    } catch {
+      return [];
+    }
+  });
+  return ids.at(-1);
+}
+
+const isUndoable = (e: LogEntry, undone: Set<string>) => !!(e.id && e.undo && !undone.has(e.id));
+
+function pickEntry(entries: LogEntry[], undone: Set<string>, id?: string): LogEntry {
+  if (id) {
+    const hit = entries.find((e) => e.id === id);
+    if (!hit) throw new Error(`No change with id ${id}. Nothing changed.`);
+    if (undone.has(id)) throw new Error(`${hit.msg} is undone already. Nothing changed.`);
+    if (!isUndoable(hit, undone)) throw new Error(`${hit.msg} cannot be undone. Nothing changed.`);
+    return hit;
+  }
+  const last = entries.find((e) => !e.undoes && !(e.id && undone.has(e.id)));
+  if (!last) throw new Error("Nothing to undo.");
+  if (!isUndoable(last, undone)) throw new Error(`The last change cannot be undone: ${last.msg}. Nothing changed.`);
+  return last;
+}
+
+/** Reverse one change: the one with `id`, or else the newest one. Refuses when the newest change cannot be undone, so it never reaches past it. Every step is checked before any file changes. */
+export function undoLast(root: string, id?: string): { msg: string; line: string } {
   const entries = readLog(root);
   const undone = new Set(entries.flatMap((e) => (e.undoes ? [e.undoes] : [])));
-  const last = entries.find((e) => e.id && e.undo && !undone.has(e.id));
-  if (!last) throw new Error("Nothing to undo.");
+  const last = pickEntry(entries, undone, id);
   const pending = new Map<string, string | null>();
   const plans = last.undo!.map((step) => planStep(root, step, pending));
   for (const apply of plans) apply();

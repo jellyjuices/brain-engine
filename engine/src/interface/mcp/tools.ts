@@ -3,7 +3,8 @@
 
 import { ROUTES, type Route } from "../routes/table.ts";
 import { HttpError } from "../server-auth.ts";
-import { snapshot, withCheck } from "../server-check.ts";
+import { snapshot, withCheck, withUndoId } from "../server-check.ts";
+import { logMark } from "../../core/log.ts";
 import { TextBody } from "../server-send.ts";
 import { INPUTS } from "./inputs.ts";
 import type { Input, Json } from "./schema.ts";
@@ -51,8 +52,9 @@ export async function runTool(tool: Tool, args: Json, root: string, agentFile: s
   if (route.method === "GET") for (const [k, v] of Object.entries(fields)) if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
   const body = route.method === "POST" || route.method === "PUT" ? fields : {};
   const before = route.method === "GET" ? undefined : snapshot(root);
+  const mark = logMark(root);
   const result = await route.handler({ root, url, body, caller: "agent", agentFile }, rest);
-  return before ? withCheck(root, before, result) : result;
+  return before ? withUndoId(root, mark, withCheck(root, before, result)) : result;
 }
 
 /** Plain text for the agent, never over MAX_RESULT bytes. */

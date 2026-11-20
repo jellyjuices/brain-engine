@@ -9,7 +9,14 @@ const go = vi.fn();
 const saveFlow = vi.fn(async () => true);
 vi.mock("@/lib/platform/router.ts", () => ({ go: (p: string) => go(p) }));
 vi.mock("@/flows/save-flow.ts", () => ({ saveFlow: () => saveFlow() }));
-vi.mock("@/lib/sync/writes.ts", () => ({ queueInbox: vi.fn() }));
+vi.mock("@/lib/sync/writes.ts", () => ({
+  queueInbox: vi.fn(async () => ({
+    id: "c0ffee04",
+    kind: "inbox",
+    payload: {},
+    created_at: "2026-11-19T10:00:00",
+  })),
+}));
 
 const { AddPanel } = await import("@/components/add-panel/add-panel.tsx");
 

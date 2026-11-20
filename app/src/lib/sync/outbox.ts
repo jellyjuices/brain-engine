@@ -2,6 +2,7 @@ import type { ApiResult } from "./api.ts";
 import { openDb } from "@/lib/storage/db.ts";
 import { hasKey, LockedError, open, seal, type Sealed } from "@/lib/lock/vault.ts";
 import { STORE } from "@/lib/storage/keys.ts";
+import { rememberUndoId } from "./undo-ids.ts";
 
 export interface OutboxItem<P = unknown> {
   id: string;
@@ -115,6 +116,12 @@ function isPermanent(status: number) {
   return status >= 400 && status < 500 && ![401, 408, 429].includes(status);
 }
 
+let sendingId: string | null = null;
+
+export function isSending(id: string): boolean {
+  return sendingId === id;
+}
+
 export function flush(): Promise<FlushResult> {
   flushing ??= doFlush().finally(() => (flushing = null));
   return flushing;
@@ -126,8 +133,10 @@ async function doFlush(): Promise<FlushResult> {
   for (const item of items) {
     const handler = handlers.get(item.kind);
     if (!handler) break;
-    const res = await handler(item);
+    sendingId = item.id;
+    const res = await handler(item).finally(() => (sendingId = null));
     if (res.ok) {
+      rememberUndoId(item.id, res.data);
       await remove(item.id);
       result.sent.push(item.id);
     } else if (!res.offline && isPermanent(res.status)) {

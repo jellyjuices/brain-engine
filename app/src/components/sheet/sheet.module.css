@@ -157,3 +157,44 @@
     animation-name: out;
   }
 }
+
+@media (min-width: 48rem) {
+  .sheet:has([data-variant="menu"]) {
+    top: 20dvh;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    width: 22rem;
+    max-height: 60dvh;
+    margin: 0 0 0 -11rem;
+    padding: var(--space-sm) 0;
+    border: 0.0625rem solid var(--border-primary);
+    border-radius: var(--radius-md);
+  }
+
+  .sheet:has([data-variant="menu"])[data-state="open"] {
+    animation-name: drop;
+  }
+
+  .sheet:has([data-variant="menu"])[data-state="closed"] {
+    animation-name: lift;
+  }
+
+  .sheet:has([data-variant="menu"]) .head {
+    display: none;
+  }
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--space-sm) * -1));
+  }
+}
+
+@keyframes lift {
+  to {
+    opacity: 0;
+    transform: translateY(calc(var(--space-sm) * -1));
+  }
+}

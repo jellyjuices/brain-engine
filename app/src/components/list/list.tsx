@@ -10,7 +10,7 @@ export interface ListProps {
 
 export function List({ children, variant = "outlined", label }: ListProps) {
   return (
-    <ul className={clsx(styles.list, styles[variant])} aria-label={label}>
+    <ul className={clsx(styles.list, styles[variant])} data-variant={variant} aria-label={label}>
       {Children.toArray(children).map((child, i) => (
         <li key={i} className={styles.item}>
           {child}

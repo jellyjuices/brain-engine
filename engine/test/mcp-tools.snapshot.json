@@ -226,9 +226,15 @@
   },
   {
     "name": "undo",
-    "description": "Undo the last change. A whole sort is one change. Use right after a wrong write.",
+    "description": "Undo one change: the one with this id, or else the newest. A whole sort is one change. Pass the undo_id the write gave back.",
     "inputSchema": {
       "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The undo_id a write gave back. Without it, undo reverses the newest change, or refuses if that one cannot be undone."
+        }
+      },
       "additionalProperties": false
     },
     "annotations": {

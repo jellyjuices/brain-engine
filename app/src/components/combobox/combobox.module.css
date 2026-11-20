@@ -25,21 +25,10 @@
 
 .field {
   composes: controlBox from "../field/field.module.css";
-  transition: border-color var(--motion-fast) var(--motion-easing);
-}
-
-.field:focus-within {
-  border-color: var(--border-focus);
 }
 
 .field:has(:focus-visible) {
   box-shadow: 0 0 0 0.0625rem var(--border-focus);
-}
-
-@media (hover: hover) {
-  .field:hover {
-    border-color: var(--text-secondary);
-  }
 }
 
 .suggestInput {
@@ -56,8 +45,6 @@
 }
 
 .suggestInput.isDisabled .field {
-  border-style: dashed;
-  border-color: var(--border-primary);
   background: var(--background-disabled);
   cursor: not-allowed;
 }

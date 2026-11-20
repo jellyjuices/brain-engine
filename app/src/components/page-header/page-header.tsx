@@ -12,6 +12,7 @@ export type PageHeaderProps = {
   kicker?: string;
   action?: ReactNode;
   glow?: boolean;
+  wrap?: boolean;
   children?: ReactNode;
   areas?: string[];
   fallback?: string;
@@ -24,6 +25,7 @@ export function PageHeader({
   kicker,
   action,
   glow = true,
+  wrap = false,
   children,
   areas,
   fallback,
@@ -33,7 +35,7 @@ export function PageHeader({
   const hasBack = !!onBack || fallback !== undefined;
   return (
     <header
-      className={clsx(styles.pageHeader, glow && styles.glow)}
+      className={clsx(styles.pageHeader, glow && styles.glow, wrap && styles.wrap)}
       style={areas?.length ? ({ "--page-glow": mixGlow(areas) } as CSSProperties) : undefined}
     >
       <div className={styles.top}>

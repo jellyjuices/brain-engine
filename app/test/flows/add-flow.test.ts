@@ -3,7 +3,7 @@ import { addTodo } from "@/flows/add-flow.ts";
 
 const queueInbox = vi.hoisted(() => vi.fn());
 
-vi.mock("@/lib/sync/writes.ts", () => ({ queueInbox, queueUndo: vi.fn() }));
+vi.mock("@/lib/sync/writes.ts", () => ({ queueInbox }));
 vi.mock("@/lib/storage/store.ts", () => ({ getNote: vi.fn(() => Promise.resolve(undefined)) }));
 vi.mock("@/lib/sync/outbox.ts", () => ({
   flush: vi.fn(() => Promise.resolve({ sent: ["a1"], dropped: [], left: 0 })),

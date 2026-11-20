@@ -3,8 +3,9 @@ import type { Suggestion } from "@/lib/notes/mention.ts";
 import { longDate, todayIso } from "@/lib/notes/model.ts";
 import { dayInText } from "@/lib/notes/when-word.ts";
 import { getNote } from "@/lib/storage/store.ts";
-import { queueInbox, queueUndo } from "@/lib/sync/writes.ts";
+import { queueInbox } from "@/lib/sync/writes.ts";
 import { saveFlow, type DoneToast } from "./save-flow.ts";
+import { undoSaved } from "./undo-flow.ts";
 import { copy } from "@/content/index.ts";
 
 export interface TodoAdd {
@@ -19,10 +20,6 @@ async function placeName(into: string | undefined, home: Suggestion | null): Pro
   return home?.title ?? copy.sort.unsorted;
 }
 
-function undo(): Promise<boolean> {
-  return saveFlow(queueUndo, copy.toast.undone);
-}
-
 export async function addTodo(add: TodoAdd): Promise<boolean> {
   const into = add.into ?? (add.home?.kind === "subject" ? add.home.value : undefined);
   const tags =
@@ -30,16 +27,21 @@ export async function addTodo(add: TodoAdd): Promise<boolean> {
       ? [...add.tags, add.home.value]
       : add.tags;
   const day = dayInText(add.text, todayIso());
+  let itemId = "";
   const done: DoneToast = {
     message: copy.sort.addedTo(await placeName(into, add.home)),
     ...(day && { detail: longDate(day) }),
     actions: [
       {
         label: copy.sort.move,
-        onClick: () => void undo().then((ok) => ok && requestAdd({ text: add.text })),
+        onClick: () => void undoSaved(itemId).then((ok) => ok && requestAdd({ text: add.text })),
       },
-      { label: copy.common.undo, onClick: () => void undo() },
+      { label: copy.common.undo, onClick: () => void undoSaved(itemId) },
     ],
   };
-  return saveFlow(() => queueInbox(add.text, into, tags), done);
+  return saveFlow(async () => {
+    const item = await queueInbox(add.text, into, tags);
+    itemId = item.id;
+    return item;
+  }, done);
 }

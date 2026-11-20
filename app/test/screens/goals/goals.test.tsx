@@ -118,6 +118,21 @@ describe("Goals tab", () => {
   });
 });
 
+describe("goal page subjects", () => {
+  it("names each subject of the goal under the title", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() => Promise.resolve(reply(200, { ...GET_FIT, areas: ["health", "fitness"] }))),
+    );
+    go("/goal/goals/get-fit.md");
+    render(<GoalScreen />);
+    const header = (await screen.findByRole("heading", { name: "Get fit" })).closest("header");
+    expect(header).not.toBeNull();
+    expect(within(header as HTMLElement).getByText("Health")).toBeInTheDocument();
+    expect(within(header as HTMLElement).getByText("Fitness")).toBeInTheDocument();
+  });
+});
+
 describe("goal page", () => {
   it.each([
     [copy.goals.nextStep, "Book a trainer"],

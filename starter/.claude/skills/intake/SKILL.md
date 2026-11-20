@@ -38,7 +38,7 @@ After each answer run `brain intake ask "<their words>" --json`.
 - **Known name:** `brain intake save` links it. A fact about a subject goes to its note (`--fact "<note>::<fact>"` or `brain intake fact <note> "fact"`), not the lens.
 - **Fix a role:** `brain intake role <subject> --about <note> --role "…"`.
 - **To-dos:** ask About what? and When?, then `brain intake todo "text" --when today|tomorrow|<date>|someday|waiting|note --about <note>`. Never `inbox/`.
-- **Fix a mistake:** `undo` does not cover intake saves. Use the fix lines that `brain intake end` prints.
+- **Fix a mistake:** each intake save is one change. Its answer has an `undo_id`. Pass it to `undo` to put back that save and nothing else. Undo with no id only reverses the newest change, and refuses if that one cannot be undone. For subjects and facts, use the fix lines that `brain intake end` prints.
 
 ## Care
 

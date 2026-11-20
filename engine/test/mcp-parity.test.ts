@@ -44,9 +44,10 @@ const STEPS: Step[] = [
   ["intake_skip", () => ({ question: "What made-up place calms you?" })],
 ];
 
-/** Times, hashes and calendar stamps differ between two runs; nothing else may. */
+/** Times, hashes, undo ids and calendar stamps differ between two runs; nothing else may. */
 const normal = (x: unknown) =>
   JSON.stringify(x)
+    .replace(/"undo_id":"[0-9a-f]{8}"/g, '"undo_id":"<id>"')
     .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:?\d{2})?/g, "<time>")
     .replace(/\b[0-9a-f]{64}\b/g, "<hash>")
     .replace(/\d{8}T\d{6}Z?/g, "<stamp>")

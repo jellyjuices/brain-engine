@@ -6,6 +6,7 @@ import { existsSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { notePaths } from "../core/files.ts";
 import { updateIndex } from "../core/search.ts";
+import { undoIdSince } from "../core/log.ts";
 import { check } from "../reports/reports.ts";
 import type { CheckIssue } from "./api-types.ts";
 
@@ -43,4 +44,10 @@ export function withCheck(root: string, before: Snapshot, result: unknown): unkn
   updateIndex(root);
   const issues = checkNotes(root, changed);
   return issues.length && isPlainObject(result) ? { ...result, check: issues } : result;
+}
+
+/** Put the id of the change this write made on the answer, so the caller can undo exactly that change. */
+export function withUndoId(root: string, mark: number, result: unknown): unknown {
+  const id = undoIdSince(root, mark);
+  return id && isPlainObject(result) ? { ...result, undo_id: id } : result;
 }

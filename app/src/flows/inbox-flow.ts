@@ -41,6 +41,14 @@ export async function sortCapture(item: StoredNote, notes: StoredNote[]): Promis
   const guess = bestHome(notes, text);
   const choice = await sortSheet(text, guess);
   if (!choice) return;
+  if (choice === "open") {
+    go(noteHref(item.path));
+    return;
+  }
+  if (choice === "archive") {
+    await saveFlow(() => queueInboxDrop(item.path), copy.toast.archived, true);
+    return;
+  }
   const into =
     choice === "guess" && guess
       ? guess

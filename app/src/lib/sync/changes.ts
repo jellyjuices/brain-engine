@@ -1,9 +1,10 @@
 import { applyDecision, type Decision, type TodoRef } from "./local-edit.ts";
 import type { StoredNote } from "@/lib/notes/model.ts";
-import { flush, has, remove } from "./outbox.ts";
+import { flush, has, isSending, remove } from "./outbox.ts";
 import { getNote, putNotes } from "@/lib/storage/store.ts";
 import { syncNow } from "./sync.ts";
 import { queueDecision, queueUndo } from "./writes.ts";
+import { takeUndoId } from "./undo-ids.ts";
 import { nextDue } from "@shared/line/index.ts";
 import { dayLabel } from "@/lib/notes/when-label.ts";
 import { copy } from "@/content/index.ts";
@@ -49,11 +50,22 @@ export async function applyChange(todo: TodoRef, d: Decision, now: string): Prom
   return last;
 }
 
+export async function undoWrite(itemId: string): Promise<boolean> {
+  if (isSending(itemId)) await flush();
+  if (await has(itemId)) {
+    await remove(itemId);
+    return true;
+  }
+  const id = takeUndoId(itemId);
+  if (!id) return false;
+  await queueUndo(id);
+  return true;
+}
+
 export async function undoChange(c: Change): Promise<boolean> {
   if (last?.id !== c.id) return false;
   last = null;
-  if (await has(c.id)) await remove(c.id);
-  else await queueUndo();
+  if (!(await undoWrite(c.id))) return false;
   if (c.before) await putNotes([c.before]);
   settle();
   return true;

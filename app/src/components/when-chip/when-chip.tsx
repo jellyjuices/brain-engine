@@ -34,6 +34,7 @@ export function WhenChip({ label, status, statusLabel }: WhenChipProps) {
         className={styles.glyph}
       />
       {statusLabel && <span className={visually.hidden}>{statusLabel} </span>}
+      {status === "waiting" ? "@" : ""}
       {label}
     </span>
   );

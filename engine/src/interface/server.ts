@@ -11,7 +11,8 @@ import { readBody } from "./server-context.ts";
 import { send } from "./server-send.ts";
 import { DEFAULT_PORT, HttpError, loadToken, serveApp, tokenPath } from "./server-auth.ts";
 import { AGENT_RATE, agentTokenPath, callerOf, RateLimit } from "./server-agent.ts";
-import { snapshot, withCheck } from "./server-check.ts";
+import { snapshot, withCheck, withUndoId } from "./server-check.ts";
+import { logMark } from "../core/log.ts";
 import { matchRoute } from "./routes/table.ts";
 import { handleMcp, isMcp } from "./mcp/http.ts";
 
@@ -42,8 +43,9 @@ async function handle(root: string, token: string, req: IncomingMessage, agentFi
   if (route.owner && caller !== "owner") throw new HttpError(403, "Only the owner can do that.");
   const body = hasBody(method) ? await readBody(req) : {};
   const before = WRITES.has(method) ? snapshot(root) : undefined;
+  const mark = logMark(root);
   const result = await route.handler({ root, url, body, caller, agentFile }, rest);
-  return before ? withCheck(root, before, result) : result;
+  return before ? withUndoId(root, mark, withCheck(root, before, result)) : result;
 }
 
 /** The server, not yet listening. Tests call this with a temp brain, a test token and a temp agent token file. */

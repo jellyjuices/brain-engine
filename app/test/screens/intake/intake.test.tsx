@@ -84,7 +84,7 @@ describe("intake screen", () => {
   it("moves a question to later and shows the next state", async () => {
     const user = userEvent.setup();
     render(<IntakeScreen />);
-    await user.click(await screen.findByRole("button", { name: "Later" }));
+    await user.click(await screen.findByRole("button", { name: "Skip" }));
     expect(await screen.findByText("No questions waiting")).toBeInTheDocument();
   });
 

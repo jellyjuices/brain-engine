@@ -1,6 +1,11 @@
 import { describe, it } from "vitest";
 import assert from "node:assert/strict";
-import { mixGradient, mixSplit, splitAreas } from "@/lib/design/area-mix.ts";
+import { areaLabel, mixGradient, mixSplit, splitAreas } from "@/lib/design/area-mix.ts";
+
+describe("areaLabel", () => {
+  it("turns a subject slug into its name", () =>
+    assert.equal(areaLabel("rest-and-fun"), "Rest and fun"));
+});
 
 const six = ["health", "fitness", "money", "home", "career", "love-life"];
 

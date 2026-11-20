@@ -4,6 +4,10 @@
   padding: var(--space-md) var(--space-md) var(--space-3xl);
 }
 
+.areas {
+  padding: 0 var(--layout-gutter) var(--space-md);
+}
+
 .why {
   margin: 0;
   color: var(--text-secondary);

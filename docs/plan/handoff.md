@@ -1,6 +1,6 @@
 # Handoff: work left
 
-Updated 2026-11-19. This lists only work still to do. The intent for every part is in [docs/intent/](../intent/README.md).
+Updated 2026-11-20. This lists only work still to do. The intent for every part is in [docs/intent/](../intent/README.md).
 
 ## How to work here
 
@@ -8,7 +8,8 @@ Updated 2026-11-19. This lists only work still to do. The intent for every part 
 - No worktrees, unless two agents write code at the same time.
 - `brain serve` and the jobs run from this checkout on the Mac mini. Keep the gates passing between commits.
 - After a change to the server, restart it: `launchctl kickstart -k gui/$(id -u)/com.brain.serve`.
-- A visual or interaction change is done only once the owner has looked at it on a screen. Tests do not see motion or click-away.
+- The owner checks screens by using the app while building. A visual check is not a blocker or a handoff row.
+- Soon means the next 14 days.
 - The owner approves every structure, tech and design change.
 - Agent sizes: Small and Medium on Sonnet, Large on Opus at medium effort.
 - Tests and new features: when a new feature breaks an old test on purpose, build the feature first. Skip the old test and add it to the list under #8. Fix it later, against the new criteria.
@@ -27,10 +28,7 @@ Updated 2026-11-19. This lists only work still to do. The intent for every part 
 | # | Task | Notes |
 | --- | --- | --- |
 | A | Make `~/.config/brain/privacy-words.txt` | Template: `ops/config/privacy-words.example.txt`. Your surname, street, company and client names. Without it the privacy scan checks nothing |
-| B | Look at the app on the phone | The quick add tools (bold, italic, list, tag, mention) above the keyboard; paste into a journal; a note page's one to-do list and its Soon line; repeating to-dos (tick, Skip this time, Stop repeating, the "Every week · Tue" chip); back swipes; dark mode, the goal page and the wide layout were never seen in a screenshot |
-| C | Approve the new words | On screen but not in the allowed list: Format, Bold, Italic, List, Mention, Soon, Edit, Not done, Done for now, Skip this time, Stop repeating, Every, Back, Skipped |
-| D | Soon: 7 or 14 days | The concept says 7, the API says 14. The app uses 14 for now |
-| E | Say yes to the intake and sorter plans | See #2 and #5 |
+| B | Say yes to the intake and sorter plans | See #2 and #5 |
 
 ## Mac mini
 
@@ -65,5 +63,4 @@ Manual check list for any style change: [add-panel-behaviours.md](../design/add-
 | 13 | Find with the answer card, Brain tab, Settings | Medium | none | |
 | 19 | Drafts kept on the device | Small | none | The device keeps its own draft copy and syncs it with `save_draft` |
 | 14 | Delete old screens: `inbox`, `today`, `report`, `write`, `new` | Small | 10, 12, 13 | No tab points at `today` or `report` now. The owner runs any `rm` |
-| 25 | Look at the where-it-went flows on the phone | Small | owner | Home chips while typing a to-do, the "Added to" toast with Move and Undo, unsorted rows and the sort sheet, the person builder after Add a person, the file page. Spec: [sort-flow-spec.md](../design/sort-flow-spec.md) |
 

@@ -63,7 +63,7 @@ export const INPUTS: Record<string, Input> = {
   reopen: obj<{ ref: string }>({ ref: req(str(REF)) }),
   skip: obj<{ ref: string }>({ ref: req(str(REF)) }),
   stop_repeat: obj<{ ref: string }>({ ref: req(str(REF)) }),
-  undo: NONE,
+  undo: obj<{ id?: string }>({ id: str("The undo_id a write gave back. Without it, undo reverses the newest change, or refuses if that one cannot be undone.") }),
   find: obj<Filters & Words>({ q: req(str()), ...filters }),
   todos: obj<{ view?: TodoView }>({ view: oneOf(TODO_VIEWS) }),
   today: NONE,

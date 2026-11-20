@@ -6,7 +6,12 @@ import type { OutboxItem } from "@/lib/sync/outbox.ts";
 import { selectEditable } from "@/lib/platform/editable.ts";
 import { note, unlockTestVault } from "../../helpers.ts";
 
-const queueInbox = vi.fn();
+const queueInbox = vi.fn(async (..._args: unknown[]) => ({
+  id: "c0ffee01",
+  kind: "inbox",
+  payload: {},
+  created_at: "2026-11-19T10:00:00",
+}));
 const sent: { done: unknown }[] = [];
 vi.mock("@/lib/platform/router.ts", () => ({ go: vi.fn() }));
 vi.mock("@/flows/save-flow.ts", () => ({
@@ -16,7 +21,7 @@ vi.mock("@/flows/save-flow.ts", () => ({
     return true;
   },
 }));
-vi.mock("@/lib/sync/writes.ts", () => ({ queueInbox, queueUndo: vi.fn() }));
+vi.mock("@/lib/sync/writes.ts", () => ({ queueInbox }));
 
 const { AddPanel } = await import("@/components/add-panel/add-panel.tsx");
 const { putNotes } = await import("@/lib/storage/store.ts");

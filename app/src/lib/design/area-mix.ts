@@ -1,4 +1,8 @@
+import { sentence } from "@/lib/notes/facts.ts";
+
 export type AreaRole = "accent" | "fill" | "text" | "glow";
+
+export const areaLabel = (slug: string) => sentence(slug.replaceAll("-", " "));
 
 const MAX_MIXED_AREAS = 3;
 
