@@ -5,7 +5,7 @@ import { ListRow } from "@/components/list/list-row.tsx";
 import { kindLook, type KindName } from "@/lib/notes/kinds.ts";
 import { FilePicker } from "@/components/file-picker/file-picker.tsx";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
-import { addFile, addPersonFlow, addSubjectFlow } from "@/flows/create-flow.ts";
+import { addFile } from "@/flows/create-flow.ts";
 import { copy } from "@/content/index.ts";
 
 type ChoiceId = Extract<KindName, "intake" | "person" | "place" | "thing" | "file">;
@@ -23,10 +23,8 @@ export function AddScreen() {
 
   function choose(id: ChoiceId) {
     if (id === "intake") go("/intake");
-    else if (id === "person") void addPersonFlow();
-    else if (id === "place") void addSubjectFlow("Place");
-    else if (id === "thing") void addSubjectFlow("Thing");
-    else picker.current?.click();
+    else if (id === "file") picker.current?.click();
+    else go(`/build/${id}`);
   }
 
   return (

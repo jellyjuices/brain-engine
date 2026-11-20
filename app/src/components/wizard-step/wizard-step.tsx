@@ -63,11 +63,13 @@ export const WizardStep = (props: WizardStepProps) => {
       <header className={styles.head}>
         {onClose && closeLabel && <IconButton icon={XIcon} label={closeLabel} onClick={onClose} />}
         <p className={styles.title}>{props.title}</p>
-        <p className={styles.countText} aria-live="polite">
-          {stepLabel}
-        </p>
+        {count > 1 && (
+          <p className={styles.countText} aria-live="polite">
+            {stepLabel}
+          </p>
+        )}
       </header>
-      <ProgressBar label={stepLabel} done={step + 1} total={count} size="step" />
+      {count > 1 && <ProgressBar label={stepLabel} done={step + 1} total={count} size="step" />}
       <h2 id={headingId} ref={heading} tabIndex={-1} className={styles.questionText}>
         {question}
       </h2>

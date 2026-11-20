@@ -34,9 +34,9 @@ export function FileScreen() {
   return (
     <WizardStep
       title={copy.sort.file}
-      step={1}
-      count={2}
-      stepLabel={copy.sort.stepOf(1, 2)}
+      step={0}
+      count={1}
+      stepLabel={copy.sort.stepOf(1, 1)}
       question={copy.sort.fileHow(held.title)}
       hint={copy.sort.fileHint}
       backLabel={copy.common.back}

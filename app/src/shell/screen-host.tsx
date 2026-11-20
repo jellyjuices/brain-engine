@@ -9,7 +9,7 @@ import { copy } from "@/content/index.ts";
 const LEAVE_MS = 160;
 const PADDED = new Set(["today", "find", "areas", "note"]);
 const FLUSH = new Set(["journal"]);
-const BARE = new Set(["person", "file"]);
+const BARE = new Set(["build", "file"]);
 
 function screenKey(route: Route): string {
   return `${route.name}/${route.rest}?${route.params}`;

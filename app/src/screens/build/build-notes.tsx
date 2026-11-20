@@ -4,23 +4,23 @@ import { EmptyState } from "@/components/empty-state/empty-state.tsx";
 import { List } from "@/components/list/list.tsx";
 import { ListRow } from "@/components/list/list-row.tsx";
 import type { StoredNote } from "@/lib/notes/model.ts";
-import { namingNotes } from "@/lib/notes/person-build.ts";
+import { namingNotes } from "@/lib/notes/build-links.ts";
 import { toggled } from "@/lib/notes/toggled.ts";
 import { copy } from "@/content/index.ts";
 
-export function PersonNotes({
+export function BuildNotes({
   notes,
-  person,
+  built,
   picked,
   onChange,
 }: {
   notes: StoredNote[];
-  person: StoredNote;
+  built: StoredNote;
   picked: Set<string>;
   onChange: (next: Set<string>) => void;
 }) {
-  const hits = namingNotes(notes, person);
-  if (hits.length === 0) return <EmptyState title={copy.sort.noneNamed(person.title)} size="sm" />;
+  const hits = namingNotes(notes, built);
+  if (hits.length === 0) return <EmptyState title={copy.sort.noneNamed(built.title)} size="sm" />;
   return (
     <List variant="outlined">
       {hits.map((h) => {

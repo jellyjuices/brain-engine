@@ -4,22 +4,22 @@ import { ListRow } from "@/components/list/list-row.tsx";
 import { SectionHeader } from "@/components/section-header/section-header.tsx";
 import { typeLook } from "@/lib/notes/kinds.ts";
 import type { StoredNote } from "@/lib/notes/model.ts";
-import { personSubjects } from "@/lib/notes/person-build.ts";
+import { subjectChoices } from "@/lib/notes/build-links.ts";
 import { toggled } from "@/lib/notes/toggled.ts";
 import { copy } from "@/content/index.ts";
 
-export function PersonKnow({
+export function BuildKnow({
   notes,
-  person,
+  built,
   picked,
   onChange,
 }: {
   notes: StoredNote[];
-  person: StoredNote;
+  built: StoredNote;
   picked: Set<string>;
   onChange: (next: Set<string>) => void;
 }) {
-  const { suggested, rest } = personSubjects(notes, person);
+  const { suggested, rest } = subjectChoices(notes, built);
   function rows(list: StoredNote[]) {
     return list.map((n) => (
       <ListRow

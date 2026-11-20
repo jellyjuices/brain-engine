@@ -40,7 +40,6 @@ This spec says how each flow works in the real app.
 
 ## B. Building out a person
 
-After "Add a person" saves, the app opens the person builder at `/person/<path>`. Step 1 was the name sheet, so the builder starts at step 2 of 3.
 
 ### B1. How do you know Louis?
 
@@ -80,3 +79,14 @@ After "Add a person" saves, the app opens the person builder at `/person/<path>`
   - "To-dos it found": open to-dos in notes that link to the file.
   - "Notes it added to": notes that link to the file.
   - "Intake": "N questions ready" from the file note's `# Intake` list, and "Start the intake". For now it opens the normal intake, not the file's own questions (handoff #24).
+
+## D. Builders for person, place and thing
+
+New screen `/build/<person|place|thing>`. It replaces the name sheet and the old `/person/<path>` page. One `WizardStep` per step, buttons at the bottom, 3 steps.
+
+- Step 1, "Who are you adding?" / "Where is it?" / "What are you adding?": the name, plus a birthday for a person. The button says "Add a person" (or place, thing). It saves, the toast says "Added to People", and the screen goes on to step 2. There is no Back here: the note exists.
+- Step 2, "How do you know Louis?" (a place or thing: "What goes with Gym?"): B1 above. Skip and Next go on. No Back: relations are sent.
+- Step 3, "Add notes to Louis?": B2 above. No Back (step 2 was sent). Skip and the last button go to the note's page.
+- Close (×) on step 1 goes back. On steps 2 and 3 it goes to the note's page.
+- The file screen is one step, so it shows no step count or bar.
+- The New screen and the Brain folders' add buttons open the builder.

@@ -23,7 +23,7 @@ const SCREEN_NAMES = [
   "inbox",
   "intake",
   "report",
-  "person",
+  "build",
   "file",
 ] as const;
 export type ScreenName = (typeof SCREEN_NAMES)[number];

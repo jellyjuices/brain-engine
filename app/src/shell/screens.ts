@@ -13,7 +13,7 @@ import { NoteScreen } from "@/screens/note/note.tsx";
 import { SettingsScreen } from "@/screens/settings/settings.tsx";
 import { TodayScreen } from "@/screens/today/today.tsx";
 import { TodosScreen } from "@/screens/todos/todos.tsx";
-import { PersonScreen } from "@/screens/person/person.tsx";
+import { BuildScreen } from "@/screens/build/build.tsx";
 import { FileScreen } from "@/screens/file/file.tsx";
 import { copy } from "@/content/index.ts";
 
@@ -31,6 +31,6 @@ export const SCREENS: Record<ScreenName, { title: string; Component: ComponentTy
   inbox: { title: copy.nav.inbox, Component: InboxScreen },
   intake: { title: copy.nav.intake, Component: IntakeScreen },
   report: { title: copy.nav.report, Component: ReportScreen },
-  person: { title: copy.sort.person, Component: PersonScreen },
+  build: { title: copy.sort.build, Component: BuildScreen },
   file: { title: copy.sort.file, Component: FileScreen },
 };

@@ -3,28 +3,13 @@ import { noteAfterSync } from "./build-flow.ts";
 import { dropHeldFile, holdFile, type PendingFile } from "./pending-file.ts";
 import { noteHref, type StoredNote } from "@/lib/notes/model.ts";
 import { toast } from "@/components/toast/toast-store.ts";
-import { queueFile, queueJournal, queuePerson, queueSubject } from "@/lib/sync/writes.ts";
-import type { JournalPayload, SubjectPayload } from "@/lib/sync/write-payloads.ts";
 import { pickNote } from "@/components/picker-sheet/picker-sheet.tsx";
-import { subjectSheet } from "@/components/subject-sheet/subject-sheet.tsx";
-import { personSheet } from "@/components/person-sheet/person-sheet.tsx";
+import { queueFile, queueJournal } from "@/lib/sync/writes.ts";
+import type { JournalPayload } from "@/lib/sync/write-payloads.ts";
 import { saveFlow } from "./save-flow.ts";
 import { copy } from "@/content/index.ts";
 
 const MAX_FILE_BYTES = 60 * 1024;
-
-export async function addPersonFlow(): Promise<void> {
-  const p = await personSheet();
-  if (!p) return;
-  const ok = await saveFlow(
-    () => queuePerson(p.name, p.birthday),
-    copy.sort.addedTo(copy.sort.people),
-  );
-  if (!ok) return;
-  const name = p.name.toLowerCase();
-  const made = await noteAfterSync((n) => n.type === "Person" && n.title.toLowerCase() === name);
-  if (made) go(`/person/${made.path}`);
-}
 
 function fileTitle(name: string): string {
   return (
@@ -57,12 +42,6 @@ export async function saveFile(held: PendingFile, asks: string[]): Promise<void>
     (n) => n.path.startsWith("resources/") && n.title === held.title,
   );
   go(made ? noteHref(made.path) : "/add", true);
-}
-
-export async function addSubjectFlow(type: SubjectPayload["type"]): Promise<void> {
-  const name = await subjectSheet(type);
-  if (!name) return;
-  await saveFlow(() => queueSubject(type, name), copy.toast.added);
 }
 
 export function pickAbout(): Promise<StoredNote | null> {

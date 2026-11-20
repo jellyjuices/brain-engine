@@ -1,5 +1,4 @@
 import { go } from "@/lib/platform/router.ts";
-import { addPersonFlow, addSubjectFlow } from "@/flows/create-flow.ts";
 import { copy } from "@/content/index.ts";
 
 export type Folder = keyof typeof copy.notes.folders;
@@ -7,9 +6,9 @@ export type Folder = keyof typeof copy.notes.folders;
 export const FOLDERS = Object.keys(copy.notes.folders) as Folder[];
 
 export const ADD_IN: Partial<Record<Folder, () => Promise<void>>> = {
-  people: addPersonFlow,
-  places: () => addSubjectFlow("Place"),
-  things: () => addSubjectFlow("Thing"),
+  people: async () => go("/build/person"),
+  places: async () => go("/build/place"),
+  things: async () => go("/build/thing"),
   journal: async () => go("/journal"),
 };
 
