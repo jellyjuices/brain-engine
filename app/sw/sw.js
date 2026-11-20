@@ -26,26 +26,33 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+function isAppRequest(request, url) {
+  const passThrough = url.pathname.startsWith("/api/") || url.pathname.startsWith("/relay/");
+  return request.method === "GET" && url.origin === self.location.origin && !passThrough;
+}
+
+function shareRedirect(url) {
+  const params = new URLSearchParams();
+  for (const key of ["title", "text", "url"]) {
+    const value = url.searchParams.get(key);
+    if (value) params.set(key, value);
+  }
+  return Response.redirect(`/add?${params}`, 303);
+}
+
+function cachedOrFetched(request) {
+  return caches.match(request).then((hit) => hit || fetch(request));
+}
+
+function respond(request, url) {
+  if (url.pathname === "/share") return shareRedirect(url);
+  if (request.mode === "navigate") return fetch(request).catch(() => caches.match("/"));
+  return cachedOrFetched(request);
+}
+
 self.addEventListener("fetch", (event) => {
-  const request = event.request;
-  if (request.method !== "GET") return;
-  const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return;
-  if (url.pathname.startsWith("/api/") || url.pathname.startsWith("/relay/")) return;
-
-  if (url.pathname === "/share") {
-    const params = new URLSearchParams();
-    for (const key of ["title", "text", "url"])
-      if (url.searchParams.get(key)) params.set(key, url.searchParams.get(key));
-    event.respondWith(Response.redirect(`/add?${params}`, 303));
-    return;
-  }
-
-  if (request.mode === "navigate") {
-    event.respondWith(fetch(request).catch(() => caches.match("/")));
-    return;
-  }
-  event.respondWith(caches.match(request).then((hit) => hit || fetch(request)));
+  const url = new URL(event.request.url);
+  if (isAppRequest(event.request, url)) event.respondWith(respond(event.request, url));
 });
 
 self.addEventListener("sync", (event) => {

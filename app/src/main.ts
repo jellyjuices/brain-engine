@@ -14,9 +14,13 @@ import { takeNotice } from "./lib/lock/notice.ts";
 import { toast } from "./components/toast/toast-store.ts";
 import { trackViewport } from "./lib/platform/viewport.ts";
 import { copy } from "@/content/index.ts";
+import { requestAdd } from "@/components/add-panel/add-request.ts";
+import { shareToText } from "@/lib/notes/capture.ts";
 
-if (location.pathname === "/share")
-  history.replaceState(null, "", `/add?${location.search.slice(1)}`);
+if (location.pathname === "/share") {
+  requestAdd({ text: shareToText(new URLSearchParams(location.search)) });
+  history.replaceState(null, "", "/");
+}
 
 const app = document.getElementById("app") as HTMLElement;
 let unmount: (() => void) | null = null;

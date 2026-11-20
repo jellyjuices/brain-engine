@@ -1,4 +1,4 @@
-import { Empty } from "@/components/empty/empty.tsx";
+import { EmptyState } from "@/components/empty-state/empty-state.tsx";
 import { Markdown } from "@/components/markdown/markdown.tsx";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { useCanSummarize } from "@/hooks/use-can-summarize.ts";
@@ -19,10 +19,10 @@ export function ReportScreen() {
     <>
       <PageHeader title={copy.nav.report} fallback="/brain" />
       {report?.kind === "offline" && (
-        <Empty title={copy.report.offlineTitle} body={copy.report.offlineBody} />
+        <EmptyState title={copy.report.offlineTitle} body={copy.report.offlineBody} />
       )}
       {report?.kind === "missing" && (
-        <Empty title={copy.report.missingTitle} body={copy.report.missingBody} />
+        <EmptyState title={copy.report.missingTitle} body={copy.report.missingBody} />
       )}
       {report?.kind === "ready" && (
         <>

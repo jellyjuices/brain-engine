@@ -1,14 +1,14 @@
-import { Composer } from "@/components/field/composer.tsx";
+import { TextArea } from "@/components/field/text-area.tsx";
 import styles from "./note.module.css";
 import { useEffect, useRef, useState } from "react";
 import { AtIcon, CalendarBlankIcon, CheckSquareIcon, HashIcon } from "@phosphor-icons/react";
 import { Chip } from "@/components/chip/chip.tsx";
-import { MentionDrawer } from "@/components/mention-drawer/mention-drawer.tsx";
-import { useMentions } from "@/components/mention-drawer/use-mentions.ts";
-import { tagSheet } from "@/components/pick-sheet/pick-sheet.tsx";
+import { MentionSuggestions } from "@/components/mention-suggestions/mention-suggestions.tsx";
+import { useMentions } from "@/components/mention-suggestions/use-mentions.ts";
+import { pickTag } from "@/components/picker-sheet/picker-sheet.tsx";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
-import { Tool } from "@/components/tool-bar/tool.tsx";
-import { ToolBar } from "@/components/tool-bar/tool-bar.tsx";
+import { ToolbarButton } from "@/components/toolbar/toolbar-button.tsx";
+import { Toolbar } from "@/components/toolbar/toolbar.tsx";
 import { useDraft } from "@/hooks/use-draft.ts";
 import { insertAt, todoText, type Insertion } from "@/lib/notes/insert.ts";
 import { noteHref, type StoredNote } from "@/lib/notes/model.ts";
@@ -81,7 +81,7 @@ export function NoteEdit({ note: opened }: { note: StoredNote }) {
         await putNotes([{ ...fresh, body: next.text, tags: next.tags }]);
         return queueEdit(note.path, next.text, base.current, next.tags);
       },
-      async () => ((await getConflict(note.path)) ? copy.save.conflict : copy.save.saved),
+      async () => ((await getConflict(note.path)) ? copy.toast.conflict : copy.toast.saved),
     );
     if (ok) base.current = (await getNote(note.path))?.hash ?? base.current;
     else update(next);
@@ -115,7 +115,7 @@ export function NoteEdit({ note: opened }: { note: StoredNote }) {
   return (
     <>
       <PageHeader title={note.title} kicker={copy.common.edit} onBack={close} />
-      <Composer
+      <TextArea
         ref={area}
         aria-label={copy.notes.editNote}
         spellCheck
@@ -135,13 +135,13 @@ export function NoteEdit({ note: opened }: { note: StoredNote }) {
         }}
       />
       {mentions.kind && mentions.suggestions.length > 0 && (
-        <MentionDrawer
+        <MentionSuggestions
           kind={mentions.kind}
           suggestions={mentions.suggestions}
           onPick={mentions.pick}
         />
       )}
-      <ToolBar
+      <Toolbar
         label={copy.add.details}
         meta={
           tags.length > 0 && (
@@ -158,29 +158,29 @@ export function NoteEdit({ note: opened }: { note: StoredNote }) {
           )
         }
       >
-        <Tool
+        <ToolbarButton
           icon={CalendarBlankIcon}
           label={copy.notes.insertDate}
           onClick={() => void pickDate().then(insert)}
         />
-        <Tool
+        <ToolbarButton
           icon={HashIcon}
           label={copy.common.tag}
           onClick={() =>
-            void tagSheet(tags).then((t) => t && update({ ...current.current, tags: [...tags, t] }))
+            void pickTag(tags).then((t) => t && update({ ...current.current, tags: [...tags, t] }))
           }
         />
-        <Tool
+        <ToolbarButton
           icon={AtIcon}
           label={copy.add.mention}
           onClick={() => void pickReference(note.path).then(insert)}
         />
-        <Tool
+        <ToolbarButton
           icon={CheckSquareIcon}
           label={copy.notes.insertTodo}
           onClick={() => insert(todoText())}
         />
-      </ToolBar>
+      </Toolbar>
     </>
   );
 }

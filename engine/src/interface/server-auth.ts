@@ -4,7 +4,7 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 import { homedir } from "node:os";
 import { dirname, extname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { send } from "./server.ts";
+import { send } from "./server-send.ts";
 
 export const DEFAULT_PORT = 8787;
 export const MAX_BODY = 256 * 1024;

@@ -2,7 +2,11 @@ import { useSyncExternalStore } from "react";
 import { closeToast, subscribeToasts, toastSnapshot, type ToastTone } from "./toast-store.ts";
 import { Toast, ToastProvider, type ToastVariant } from "./toast.tsx";
 
-const variants: Record<ToastTone, ToastVariant> = { offline: "warning", error: "error" };
+const variants: Record<ToastTone, ToastVariant> = {
+  offline: "warning",
+  error: "error",
+  deleted: "deleted",
+};
 
 export function Toasts() {
   const items = useSyncExternalStore(subscribeToasts, toastSnapshot);
@@ -14,6 +18,7 @@ export function Toasts() {
           open={!t.leaving}
           onOpenChange={(open) => open || closeToast(t.id)}
           message={t.message}
+          detail={t.detail}
           variant={t.tone ? variants[t.tone] : "success"}
           actions={t.actions.map((a) => ({
             label: a.label,

@@ -37,8 +37,8 @@ test("T6: the dry run lists changes and writes nothing", () => {
   assert.equal(read(root, "projects/garden.md"), before);
   assert.equal(existsSync(join(root, "areas/general.md")), false);
   assert.equal(existsSync(join(root, "inbox/2026-11-01-sam.md")), true);
-  const kinds = new Set(r.changes.map((c) => c.kind));
-  for (const k of ["area", "general", "capture", "heading", "token"]) assert.equal(kinds.has(k as never), true, k);
+  const kinds = [...new Set(r.changes.map((c) => c.kind))].sort();
+  assert.deepEqual(kinds, ["area", "capture", "general", "heading", "token"]);
 });
 
 test("T6: --write applies the 4 changes and keeps unknown tokens", () => {

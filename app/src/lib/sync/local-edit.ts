@@ -95,50 +95,84 @@ function doneLines(l: TodoLine, now: string, happened: string | undefined): stri
   return [...head, ...(note ? [note] : [])];
 }
 
+type LineDecision = Extract<Decision, { kind: "done" | "drop" | "move" }>;
+type RefDecision = Exclude<Decision, LineDecision>;
+
+const REF_KINDS = new Set<Decision["kind"]>(["reopen", "edit", "skip", "stopRepeat"]);
+
+function isRefDecision(d: Decision): d is RefDecision {
+  return REF_KINDS.has(d.kind);
+}
+
+function eventMeta(
+  meta: StoredNote["meta"],
+  d: LineDecision,
+  now: string,
+): StoredNote["meta"] | null {
+  if (d.kind === "done") return { ...meta, status: "done" };
+  if (d.kind === "drop") return { ...meta, status: "cancelled" };
+  const due = dueFor(d.when, now).due;
+  return due ? { ...meta, date: due } : null;
+}
+
+function applyToEvent(note: StoredNote, d: LineDecision, now: string): StoredNote | null {
+  const meta = eventMeta(note.meta, d, now);
+  if (!meta) return null;
+  const closed = meta.status === "done" || meta.status === "cancelled";
+  return {
+    ...note,
+    meta,
+    status: String(meta.status ?? note.status),
+    due: closed ? undefined : String(meta.date ?? "").slice(0, 10) || note.due,
+  };
+}
+
+function doneBody(
+  body: string,
+  text: string,
+  d: { happened?: string; follow_up?: string },
+  now: string,
+) {
+  const edited = editLine(body, text, (l) => doneLines(l, now, d.happened));
+  const follow = oneLine(d.follow_up);
+  return edited !== null && follow ? addFollowUp(edited, follow, now) : edited;
+}
+
+function dropBody(body: string, text: string, why: string | undefined, now: string) {
+  const reason = dated(now, why);
+  const edited = editLine(body, text, (l) => [
+    formatTodoLine(dropTodo(l, now)),
+    ...(reason ? [reason] : []),
+  ]);
+  return edited ?? dropDoneTodoIn(body, text);
+}
+
+function moveBody(body: string, text: string, when: string, now: string) {
+  const w = dueFor(when, now);
+  return editLine(body, text, (l) => [
+    formatTodoLine(updateTodo(l, { due: w.due, outcome: w.outcome })),
+  ]);
+}
+
+function lineBody(body: string, text: string, d: LineDecision, now: string): string | null {
+  if (d.kind === "done") return doneBody(body, text, d, now);
+  if (d.kind === "drop") return dropBody(body, text, d.why, now);
+  return moveBody(body, text, d.when, now);
+}
+
+function withBody(note: StoredNote, body: string | null): StoredNote | null {
+  return body === null ? null : { ...note, body };
+}
+
 export function applyDecision(
   note: StoredNote,
   todo: TodoRef,
   d: Decision,
   now: string,
 ): StoredNote | null {
-  if (d.kind === "reopen" || d.kind === "edit" || d.kind === "skip" || d.kind === "stopRepeat") {
-    if (todo.kind === "event") return null;
-    const body = rewriteRef(note.body, todo.text, d, now);
-    return body === null ? null : { ...note, body };
-  }
-  if (todo.kind === "event") {
-    const meta = { ...note.meta };
-    if (d.kind === "done") meta.status = "done";
-    else if (d.kind === "drop") meta.status = "cancelled";
-    else {
-      const w = dueFor(d.when, now);
-      if (!w.due) return null;
-      meta.date = w.due;
-    }
-    const closed = meta.status === "done" || meta.status === "cancelled";
-    return {
-      ...note,
-      meta,
-      status: String(meta.status ?? note.status),
-      due: closed ? undefined : String(meta.date ?? "").slice(0, 10) || note.due,
-    };
-  }
-
-  let body: string | null;
-  if (d.kind === "done") {
-    body = editLine(note.body, todo.text, (l) => doneLines(l, now, d.happened));
-    if (body !== null && oneLine(d.follow_up)) body = addFollowUp(body, oneLine(d.follow_up)!, now);
-  } else if (d.kind === "drop") {
-    body =
-      editLine(note.body, todo.text, (l) => {
-        const why = dated(now, d.why);
-        return [formatTodoLine(dropTodo(l, now)), ...(why ? [why] : [])];
-      }) ?? dropDoneTodoIn(note.body, todo.text);
-  } else {
-    const w = dueFor(d.when, now);
-    body = editLine(note.body, todo.text, (l) => [
-      formatTodoLine(updateTodo(l, { due: w.due, outcome: w.outcome })),
-    ]);
-  }
-  return body === null ? null : { ...note, body };
+  const isEvent = todo.kind === "event";
+  if (isRefDecision(d))
+    return isEvent ? null : withBody(note, rewriteRef(note.body, todo.text, d, now));
+  if (isEvent) return applyToEvent(note, d, now);
+  return withBody(note, lineBody(note.body, todo.text, d, now));
 }

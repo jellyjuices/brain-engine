@@ -4,8 +4,11 @@ import { readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import { capture } from "./actions.ts";
-import { bestHome, fileInto, namesAPerson, splitPrefix, subjectsNamed, whenFrom, type When } from "./file.ts";
-import { GENERAL, pickedHome } from "./picked.ts";
+import { fileInto, splitPrefix, subjectsNamed, whenFrom, type When } from "./file.ts";
+import { pickedHome } from "./picked.ts";
+import { guessHome, type SortGuess } from "../../shared/sort/index.ts";
+import { guessFor, sortSubjects } from "../sort/guess.ts";
+import type { Embedder } from "../core/embed.ts";
 import { DIRS, folderOf, type Note, typeOf } from "../core/notes.ts";
 import { loadAll } from "../core/files.ts";
 import { readLog } from "../core/log.ts";
@@ -85,13 +88,16 @@ function filedNote(notes: Note[], into: unknown): Note | undefined {
   return note;
 }
 
-function homeFromText(notes: Note[], input: string): Note | undefined {
-  const { when, text } = splitPrefix(input);
-  if (when?.kind !== "note" && namesAPerson(notes, text)) return undefined;
-  const named = subjectsNamed(notes, text)[0];
-  if (named) return named;
-  if (!when) return undefined;
-  return filedNote(notes, bestHome(notes, text).into);
+export const sortText = (item: PendingItem) => splitPrefix(item.text).text;
+
+export const needsGuess = (item: PendingItem) => !item.into && !item.about?.length && !item.people?.length && !item.tags?.length;
+
+export async function guessItem(root: string, item: PendingItem, embedder: Embedder | null): Promise<SortGuess | undefined> {
+  return needsGuess(item) ? guessFor(root, loadAll(root), sortText(item), embedder) : undefined;
+}
+
+export async function saveSorted(root: string, item: PendingItem, embedder: Embedder | null = null) {
+  return saveItem(root, item, await guessItem(root, item, embedder));
 }
 
 export const phoneMark = (id: string) => `(phone ${id})`;
@@ -106,30 +112,36 @@ function whenOfItem(item: PendingItem): { w: When; text: string } {
 }
 
 /** File one phone item in its note. A When prefix picks to-do or date; with none it is a dated note line. */
-function fileOnNote(root: string, notes: Note[], target: Note, item: PendingItem, picked: { with: string[]; re: string[] }): void {
+function fileOnNote(root: string, notes: Note[], target: Note, item: PendingItem, picked: { with: string[]; re: string[] }, check: boolean): void {
   const { w, text } = whenOfItem(item);
   const hits = subjectsNamed(notes, text).filter((n) => n.path !== target.path);
   const people = [...new Set([...picked.with, ...hits.filter((n) => typeOf(n) === "Person").map((n) => n.path)])].filter((p) => p !== target.path);
   const re = [...new Set([...picked.re, ...hits.filter((n) => typeOf(n) !== "Person").map((n) => n.path)])].filter((p) => p !== target.path);
   const date = (item.created_at ?? "").slice(0, 10) || undefined;
   change(root, target.path, `added to ${target.path}: ${text} ${phoneMark(item.client_id)}`, () => {
-    fileInto(root, notes, target.path, text, w, { with: people, re, date, ...(item.kind === "feeling" && { feeling: true, about: item.side }) });
+    fileInto(root, notes, target.path, text, w, { with: people, re, date, check, ...(item.kind === "feeling" && { feeling: true, about: item.side }) });
   });
 }
 
 export const alreadyFiled = (root: string, id: string) => readLog(root).some((e) => e.msg.endsWith(phoneMark(id)));
 
-/** Save one app item: on its note when `into` names a filed note, else in the inbox. "skipped" = already saved. */
-export function saveItem(root: string, item: PendingItem): { saved: "filed" | "inbox" | "skipped"; path?: string } {
+function chosenHome(notes: Note[], item: PendingItem, picked: { target?: Note }, guess: SortGuess | undefined): { target?: Note; check: boolean } {
+  const chosen = filedNote(notes, item.into) ?? picked.target;
+  if (chosen) return { target: chosen, check: false };
+  const sorted = guess ?? guessHome(sortText(item), sortSubjects(notes), []);
+  return { target: filedNote(notes, sorted.into ?? undefined), check: !sorted.sure };
+}
+
+/** Save one app item: on its note when `into`, a pick or the sorter names a filed note, else in the inbox. "skipped" = already saved. */
+export function saveItem(root: string, item: PendingItem, guess?: SortGuess): { saved: "filed" | "inbox" | "skipped"; path?: string } {
   const notes = loadAll(root);
   const existing = notes.find((n) => n.meta.client_id === item.client_id);
   if (existing) return { saved: "skipped", path: existing.path };
   if (alreadyFiled(root, item.client_id)) return { saved: "skipped" };
   const picked = pickedHome(notes, item);
-  const wanted = item.kind === "todo" || item.when !== undefined;
-  const target = filedNote(notes, item.into) ?? picked.target ?? homeFromText(notes, item.text) ?? (wanted ? filedNote(notes, GENERAL) : undefined);
+  const { target, check } = chosenHome(notes, item, picked, guess);
   if (target) {
-    fileOnNote(root, notes, target, item, picked);
+    fileOnNote(root, notes, target, item, picked, check);
     return { saved: "filed", path: target.path };
   }
   const note = capture(root, { text: item.text, tags: item.tags, clientId: item.client_id, createdAt: item.created_at, by: item.by });
@@ -144,7 +156,7 @@ export async function pull(root: string, cfg: RelayConfig): Promise<PullResult> 
   let pulled = 0;
   let filed = 0;
   for (const item of items) {
-    const { saved } = saveItem(root, item);
+    const { saved } = await saveSorted(root, item);
     safe.push(item.client_id);
     if (saved !== "skipped") pulled += 1;
     if (saved === "filed") filed += 1;

@@ -1,7 +1,7 @@
 import { PlusIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/button/button.tsx";
-import { List } from "@/components/row/list.tsx";
-import { Row } from "@/components/row/row.tsx";
+import { List } from "@/components/list/list.tsx";
+import { ListRow } from "@/components/list/list-row.tsx";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { folderRows } from "@/lib/notes/folders.ts";
@@ -9,8 +9,8 @@ import { noteHref } from "@/lib/notes/model.ts";
 import { copy } from "@/content/index.ts";
 import { folderLook } from "@/lib/notes/kinds.ts";
 import { ADD_IN, type Folder } from "./folders.ts";
-import { Empty } from "@/components/empty/empty.tsx";
-import { OpenChip } from "./open-chip.tsx";
+import { EmptyState } from "@/components/empty-state/empty-state.tsx";
+import { OpenCountChip } from "./open-count-chip.tsx";
 
 export function FolderView({ folder }: { folder: Folder }) {
   const notes = useNotes();
@@ -31,17 +31,17 @@ export function FolderView({ folder }: { folder: Folder }) {
         }
       />
       {notes && !rows.length ? (
-        <Empty title={copy.notes.emptyFolder} />
+        <EmptyState title={copy.notes.emptyFolder} />
       ) : (
         <List>
           {rows.map((n) => (
-            <Row
+            <ListRow
               key={n.path}
               {...folderLook(folder)}
               href={noteHref(n.path)}
               title={n.title}
               sub={n.description}
-              end={<OpenChip open={n.open} />}
+              end={<OpenCountChip open={n.open} />}
               chevron
             />
           ))}

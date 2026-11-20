@@ -11,8 +11,11 @@ test("unlock with the right password sets a strict cookie", async () => {
   assert.deepEqual(await res.json(), { unlocked: true });
   const cookie = res.headers.get("Set-Cookie") ?? "";
   assert.match(cookie, /^brain_session=\d+\.[\w-]+;/);
-  for (const flag of ["Path=/", "HttpOnly", "Secure", "SameSite=Strict", "Max-Age=2592000"])
-    assert.equal(cookie.includes(flag), true, flag);
+  const flags = ["Path=/", "HttpOnly", "Secure", "SameSite=Strict", "Max-Age=2592000"];
+  assert.deepEqual(
+    flags.filter((flag) => !cookie.includes(flag)),
+    [],
+  );
   assert.equal(res.headers.get("Cache-Control"), "no-store");
 });
 
@@ -23,17 +26,24 @@ test("unlock with a bad password is 401 and sets no cookie", async () => {
   assert.equal(res.headers.get("Set-Cookie"), null);
 });
 
-test("unlock is 503 when PASSWORD or SESSION_SECRET is empty", async () => {
-  for (const o of [{ PASSWORD: "" }, { SESSION_SECRET: "" }]) {
-    const { env } = makeEnv(o);
-    assert.equal((await call(env, "/api/unlock", post({ password: "x" }))).status, 503);
-  }
-});
+for (const unset of ["PASSWORD", "SESSION_SECRET"]) {
+  test(`unlock is 503 when ${unset} is empty`, async () => {
+    const { env } = makeEnv({ [unset]: "" });
+    assert.equal((await call(env, "/api/unlock", post({ password: PASSWORD }))).status, 503);
+  });
+}
+
+async function failUnlock(env: Parameters<typeof call>[0], times: number) {
+  const tries = Array.from({ length: times }, () => post({ password: "wrong-horse-battery" }));
+  return tries.reduce(
+    async (seen, init) => [...(await seen), (await call(env, "/api/unlock", init)).status],
+    Promise.resolve([] as number[]),
+  );
+}
 
 test("the sixth try after five failures is 429 with Retry-After, even with the right password", async () => {
   const { env } = makeEnv();
-  for (let i = 0; i < 5; i += 1)
-    assert.equal((await call(env, "/api/unlock", post({ password: "bad" }))).status, 401);
+  assert.deepEqual(await failUnlock(env, 5), [401, 401, 401, 401, 401]);
   const res = await call(env, "/api/unlock", post({ password: PASSWORD }));
   assert.equal(res.status, 429);
   assert.ok(Number(res.headers.get("Retry-After")) > 0, `got ${res.headers.get("Retry-After")}`);
@@ -50,9 +60,13 @@ test("a good unlock clears earlier failures", async () => {
   assert.equal(db.attempts.size, 0);
 });
 
-test("a failure window older than 15 minutes is forgotten", async () => {
+const NOW = Date.UTC(2026, 10, 14, 9, 30);
+const NOW_SECONDS = NOW / 1000;
+
+test("a failure window older than 15 minutes is forgotten", async (t) => {
+  t.mock.timers.enable({ apis: ["Date"], now: NOW });
   const { env, db } = makeEnv();
-  db.attempts.set("1.2.3.4", { count: 5, first_at: Math.floor(Date.now() / 1000) - 16 * 60 });
+  db.attempts.set("1.2.3.4", { count: 5, first_at: NOW_SECONDS - 16 * 60 });
   assert.equal((await call(env, "/api/unlock", post({ password: PASSWORD }))).status, 200);
 });
 
@@ -77,24 +91,32 @@ test("a valid cookie opens a gated route, no cookie gets 401 with no-store", asy
   assert.deepEqual(await res.json(), { error: "The Mac is offline", offline: true });
 });
 
-test("an expired cookie is refused", async () => {
+test("an expired cookie is refused", async (t) => {
+  t.mock.timers.enable({ apis: ["Date"], now: NOW });
   const { env } = makeEnv();
-  const old = (
-    await createSessionCookie(env, Math.floor(Date.now() / 1000) - 31 * 24 * 3600)
-  ).split(";")[0];
+  const old = (await createSessionCookie(env, NOW_SECONDS - 31 * 24 * 3600)).split(";")[0];
   assert.equal((await call(env, "/api/today", { headers: { Cookie: old } })).status, 401);
   assert.equal(await isValidSessionToken(env, old.split("=")[1]), false);
 });
 
-test("a tampered cookie is refused", async () => {
-  const { env } = makeEnv();
-  const [name, token] = (await login(env)).split("=");
-  const [stamp, mac] = token.split(".");
-  const longer = `${name}=${Number(stamp) + 1000}.${mac}`;
-  const flipped = `${name}=${stamp}.${mac.slice(0, -1)}${mac.endsWith("A") ? "B" : "A"}`;
-  for (const cookie of [longer, flipped, `${name}=garbage`])
-    assert.equal((await call(env, "/api/today", { headers: { Cookie: cookie } })).status, 401);
-});
+const tampers: [string, (name: string, stamp: string, mac: string) => string][] = [
+  ["a stretched expiry", (name, stamp, mac) => `${name}=${Number(stamp) + 1000}.${mac}`],
+  [
+    "a flipped signature",
+    (name, stamp, mac) => `${name}=${stamp}.${mac.slice(0, -1)}${mac.endsWith("A") ? "B" : "A"}`,
+  ],
+  ["a value with no signature", (name) => `${name}=garbage`],
+];
+
+for (const [label, tamper] of tampers) {
+  test(`a cookie with ${label} is refused`, async () => {
+    const { env } = makeEnv();
+    const [name, token] = (await login(env)).split("=");
+    const [stamp, mac] = token.split(".");
+    const res = await call(env, "/api/today", { headers: { Cookie: tamper(name, stamp, mac) } });
+    assert.equal(res.status, 401);
+  });
+}
 
 test("changing the password ends every session", async () => {
   const { env } = makeEnv();

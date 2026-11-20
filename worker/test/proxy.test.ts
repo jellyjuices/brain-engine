@@ -61,20 +61,24 @@ test("proxy passes a Mac error status and body through", async () => {
   assert.equal(((await res.json()) as { error: string }).error, "changed");
 });
 
-test("proxy says the Mac is offline on a tunnel error, a network failure or a timeout", async () => {
-  const { env, cookie } = await setup();
-  for (const status of [502, 503, 504, 530]) {
+for (const status of [502, 503, 504, 530]) {
+  test(`proxy says the Mac is offline when the tunnel answers ${status}`, async () => {
+    const { env, cookie } = await setup();
     stub(() => new Response("tunnel", { status }));
     const res = await call(env, "/api/today", { headers: { Cookie: cookie } });
-    assert.equal(res.status, 503, String(status));
+    assert.equal(res.status, 503);
     assert.deepEqual(await res.json(), { error: "The Mac is offline", offline: true });
-  }
+  });
+}
+
+test("proxy says the Mac is offline on a network failure", async () => {
+  const { env, cookie } = await setup();
   stub(() => {
     throw new TypeError("fetch failed");
   });
   const down = await call(env, "/api/today", { headers: { Cookie: cookie } });
   assert.equal(down.status, 503);
-  assert.equal(((await down.json()) as { offline: boolean }).offline, true);
+  assert.deepEqual(await down.json(), { error: "The Mac is offline", offline: true });
 });
 
 test("proxy is offline when MAC_ORIGIN is not set, and never reached when locked", async () => {

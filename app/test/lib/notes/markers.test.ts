@@ -1,34 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { insertTrigger, prefixLines, pullTags, wrapMarks } from "@/lib/notes/markers.ts";
-
-describe("wrapMarks", () => {
-  it("wraps the selection and keeps it selected", () => {
-    expect(wrapMarks("call mom now", 5, 8, "**")).toEqual({
-      value: "call **mom** now",
-      start: 7,
-      end: 10,
-    });
-  });
-
-  it("puts empty marks at the caret with the caret inside", () => {
-    expect(wrapMarks("hi ", 3, 3, "_")).toEqual({ value: "hi __", start: 4, end: 4 });
-  });
-
-  it("unwraps a selection that already has the marks", () => {
-    expect(wrapMarks("call **mom** now", 7, 10, "**")).toEqual({
-      value: "call mom now",
-      start: 5,
-      end: 8,
-    });
-  });
-
-  it.each([
-    ["inside a word", "snake_case_word", 6, 10, "_", "snake__case__word"],
-    ["inside a longer bold run", "***x***", 3, 4, "**", "*****x*****"],
-  ])("adds marks instead of unwrapping %s", (_, value, start, end, mark, wrapped) => {
-    expect(wrapMarks(value, start, end, mark).value).toBe(wrapped);
-  });
-});
+import { insertTrigger, prefixLines, pullTags } from "@/lib/notes/markers.ts";
 
 describe("prefixLines", () => {
   it("adds a list mark to each selected line", () => {

@@ -1,17 +1,17 @@
 import styles from "./search-list.module.css";
 import { PlusIcon } from "@phosphor-icons/react";
 import { useState } from "react";
-import { List } from "@/components/row/list.tsx";
-import { Row, type RowProps } from "@/components/row/row.tsx";
+import { List } from "@/components/list/list.tsx";
+import { ListRow, type ListRowProps } from "@/components/list/list-row.tsx";
 import { SearchInput } from "@/components/field/search-input.tsx";
-import { Empty } from "@/components/empty/empty.tsx";
+import { EmptyState } from "@/components/empty-state/empty-state.tsx";
 import { copy } from "@/content/index.ts";
 
 export interface SearchItem<T> {
   key: string;
   value: T;
   match: string;
-  row: Omit<RowProps, "onClick">;
+  row: Omit<ListRowProps, "onClick">;
 }
 
 export interface SearchListProps<T> {
@@ -54,10 +54,10 @@ export function SearchList<T>({
         {hits.length || showAdd ? (
           <List variant="ghost">
             {hits.map((x) => (
-              <Row key={x.key} chevron={chevron} {...x.row} onClick={() => onPick(x.value)} />
+              <ListRow key={x.key} chevron={chevron} {...x.row} onClick={() => onPick(x.value)} />
             ))}
             {showAdd && (
-              <Row
+              <ListRow
                 icon={PlusIcon}
                 variant="primary"
                 title={copy.common.addItem(name)}
@@ -66,7 +66,7 @@ export function SearchList<T>({
             )}
           </List>
         ) : (
-          <Empty size="sm" title={copy.common.nothingFound} />
+          <EmptyState size="sm" title={copy.common.nothingFound} />
         )}
       </div>
     </>

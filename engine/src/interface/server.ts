@@ -5,9 +5,10 @@
 // `brain` command, so they log to .log.jsonl and undo can reverse them. Every write re-indexes and checks the notes
 // it changed (server-check.ts). The routes and their shapes: routes/table.ts and api-types.ts.
 
-import { createServer as httpServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
+import { createServer as httpServer, type IncomingMessage, type Server } from "node:http";
 import { health } from "./server-reads.ts";
-import { readBody, TextBody } from "./server-context.ts";
+import { readBody } from "./server-context.ts";
+import { send } from "./server-send.ts";
 import { DEFAULT_PORT, HttpError, loadToken, serveApp, tokenPath } from "./server-auth.ts";
 import { AGENT_RATE, agentTokenPath, callerOf, RateLimit } from "./server-agent.ts";
 import { snapshot, withCheck } from "./server-check.ts";
@@ -19,31 +20,28 @@ export interface ServerOptions {
   agentRate?: number;
 }
 
-export function send(res: ServerResponse, status: number, body: unknown, headers: Record<string, string> = {}): void {
-  const isText = body instanceof TextBody;
-  const data = isText ? body.text : JSON.stringify(body);
-  res.writeHead(status, { "Content-Type": isText ? body.type : "application/json; charset=utf-8", "Cache-Control": "no-store", "Content-Length": Buffer.byteLength(data), ...headers });
-  res.end(data);
+const WRITES = new Set(["POST", "PUT", "DELETE"]);
+
+function authorize(req: IncomingMessage, token: string, agentFile: string, limit: RateLimit) {
+  const caller = callerOf(req, token, agentFile);
+  if (!caller) throw new HttpError(401, "A token is needed.");
+  const wait = caller === "agent" ? limit.take() : 0;
+  if (wait) throw new HttpError(429, "Too many calls. Wait a little and try again.", { retry_after: wait });
+  return caller;
 }
 
-const WRITES = new Set(["POST", "PUT", "DELETE"]);
+const hasBody = (method: string) => method === "POST" || method === "PUT";
 
 async function handle(root: string, token: string, req: IncomingMessage, agentFile: string, limit: RateLimit): Promise<unknown> {
   const url = new URL(req.url ?? "/", "http://localhost");
   if (!url.pathname.startsWith("/api/")) throw new HttpError(404, "Not found.");
   if (url.pathname === "/api/health") return health(root);
-  const caller = callerOf(req, token, agentFile);
-  if (!caller) throw new HttpError(401, "A token is needed.");
-  if (caller === "agent") {
-    const wait = limit.take();
-    if (wait) throw new HttpError(429, "Too many calls. Wait a little and try again.", { retry_after: wait });
-  }
+  const caller = authorize(req, token, agentFile, limit);
   const method = req.method ?? "GET";
   const { route, rest } = matchRoute(method, url.pathname);
   if (route.owner && caller !== "owner") throw new HttpError(403, "Only the owner can do that.");
-  const isWrite = WRITES.has(method);
-  const body = method === "POST" || method === "PUT" ? await readBody(req) : {};
-  const before = isWrite ? snapshot(root) : undefined;
+  const body = hasBody(method) ? await readBody(req) : {};
+  const before = WRITES.has(method) ? snapshot(root) : undefined;
   const result = await route.handler({ root, url, body, caller, agentFile }, rest);
   return before ? withCheck(root, before, result) : result;
 }

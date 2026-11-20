@@ -40,7 +40,7 @@ test("slugify cuts on whole characters", () => {
 test("a Japanese note can be made, read, linked and found by its path", () => withApi(async (a) => {
   const made = await a.call("POST", "/api/notes", { type: "Topic", title: "日本語の勉強", description: "Study notes." });
   assert.equal(made.data.path, "topics/日本語の勉強.md");
-  assert.ok(existsSync(join(a.root, made.data.path)));
+  assert.equal(existsSync(join(a.root, made.data.path)), true, `${made.data.path} is missing`);
   const read = await a.call("GET", `/api/notes/${encodeURIComponent(made.data.path).replace(/%2F/g, "/")}`);
   assert.equal(read.status, 200);
   assert.equal(read.data.path, made.data.path);

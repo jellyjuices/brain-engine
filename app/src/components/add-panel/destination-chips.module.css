@@ -1,0 +1,24 @@
+.destinationChips {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  padding-block: var(--space-xs);
+}
+
+.chip {
+  animation: chip-rise var(--motion-slow) var(--motion-easing) both;
+}
+
+@keyframes chip-rise {
+  from {
+    opacity: 0;
+    translate: 0 var(--space-sm);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip {
+    animation: none;
+  }
+}

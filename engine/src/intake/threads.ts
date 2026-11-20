@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { type Note, nowStamp, type Summary, today } from "../core/notes.ts";
 import { readNote, writeNote } from "../core/files.ts";
 import { log } from "../core/log.ts";
-import { ensureLens, LENSES, lensPath, lensPrivacy, needLens, PRIVACY, THREAD_STATUS } from "./lenses.ts";
+import { ensureLens, LENSES, lensPath, lensPrivacy, needLens, PRIVACY, THREAD_STATUS, THREADS_HEADING } from "./lenses.ts";
 
 // Threads are open questions saved for a later chat. They live as checklist lines in the
 // "# Open threads" section of their lens note, not as separate files:
@@ -11,7 +11,6 @@ import { ensureLens, LENSES, lensPath, lensPrivacy, needLens, PRIVACY, THREAD_ST
 //   - [ ] What made weeks feel lighter in the past? · ★ · depth 2 · 2026-11-04
 //   - [x] Who do you talk to after a hard call? · talked · 2026-11-04
 
-export const THREADS_HEADING = "# Open threads";
 const TSEP = " · ";
 
 export interface ThreadInput {

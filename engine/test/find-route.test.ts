@@ -32,7 +32,8 @@ test("find embeds the query when the embedder is there, and keeps the answer sma
   assert.equal(r.data.answer.path, "topics/health-log.md");
   assert.equal(r.data.hits[0].kind, "todo");
   assert.deepEqual(Object.keys(r.data.hits[0]).sort(), ["date", "done", "kind", "line", "path", "score", "snippet", "title", "type"]);
-  assert.ok(JSON.stringify(r.data).length < 4096);
+  const bytes = JSON.stringify(r.data).length;
+  assert.ok(bytes < 4096, `got ${bytes} bytes`);
 }));
 
 test("find answers on words and strings with no embedder; filters drop the card; search is gone", () => withT9(false, async (a) => {
@@ -44,14 +45,14 @@ test("find answers on words and strings with no embedder; filters drop the card;
   assert.equal(named.data.hits[0].path, "people/mira-okafor.md");
   const filtered = await a.call("GET", "/api/find?q=Mira&type=Journal");
   assert.equal(filtered.data.card, undefined);
-  assert.ok(filtered.data.hits.every((h: { type: string }) => h.type === "Journal"));
+  assert.deepEqual(filtered.data.hits.filter((h: { type: string }) => h.type !== "Journal"), []);
   assert.equal((await a.call("GET", "/api/search?q=Mira")).status, 404);
 }));
 
 test("the changes feed has an empty vector list before any embedding", () => withT9(false, async (a) => {
   const r = await a.call("GET", "/api/notes");
   assert.equal(r.status, 200);
-  assert.ok(r.data.notes.length >= 40);
+  assert.ok(r.data.notes.length >= 40, `got ${r.data.notes.length} notes`);
   assert.equal(typeof r.data.model, "string");
   assert.deepEqual(r.data.vectors, []);
 }));

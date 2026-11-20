@@ -9,20 +9,20 @@ Check list for hand-testing later slices. Paths are under `app/src/components/`.
 - Blob outline spins forever: `add-spin`, 40s linear, not on journal. `add-panel/add-panel.module.css`
 - Blob shrinks on close: `add-deflate`, fast, ease-in; its `animationend` calls `closed()`. `add-panel/add-panel.module.css`, `add-panel.tsx`
 - Scrim fades on close: `add-fade`, fast, ease-in. `add-panel/add-panel.module.css`
-- Kind buttons pop in: `add-arc-pop`, fast, ease. `add-arc/add-arc.module.css`
-- Kind shapes spin: `add-arc-spin`, 40s linear. `add-arc/add-arc.module.css`
-- Journal text edges fade while scrolling: `add-edges` plus `@property --add-fade-top/bottom`. `add-box/add-box.module.css`
+- Kind buttons pop in: `add-arc-pop`, fast, ease. `add-menu/add-menu.module.css`
+- Kind shapes spin: `add-arc-spin`, 40s linear. `add-menu/add-menu.module.css`
+- Journal text edges fade while scrolling: `add-edges` plus `@property --add-fade-top/bottom`. `add-input/add-input.module.css`
 - Blob moves and resizes on full-screen toggle: transition on top, width, height, margin-left, slow. `add-panel/add-panel.module.css`
 
 ## Tool bar (to-do and journal)
 
-- A tool bar sits under the open box: Bold, Italic, List (journal only), Tag, Mention, and Full screen (journal only) at the end. `add-panel/add-bar.tsx`
-- It is pinned to the bottom of the visual viewport, right above the tab bar: `--vvt` + `--vvh` - `--size-tabbar` - safe area. With the phone keyboard up, it sits on the keyboard. `add-panel/add-bar.module.css`
-- The text box ends above the tool bar (`--add-tools`), so it never covers the line being typed. Full screen ends there too. `add-box/add-box.module.css`
+- A tool bar sits under the open box: Bold, Italic, List (journal only), Tag, Mention, and Full screen (journal only) at the end. `add-panel/add-toolbar.tsx`
+- It is pinned to the bottom of the visual viewport, right above the tab bar: `--vvt` + `--vvh` - `--size-tabbar` - safe area. With the phone keyboard up, it sits on the keyboard. `add-panel/add-toolbar.module.css`
+- The text box ends above the tool bar (`--add-tools`), so it never covers the line being typed. Full screen ends there too. `add-input/add-input.module.css`
 - Bold and Italic wrap the selection in `**` or `_`; tapped again on a wrapped selection they unwrap. With no selection they put the marks at the caret, caret inside. `lib/notes/markers.ts`
 - List adds `- ` to each selected line, or takes it off when every line has it.
 - Tag and Mention put `#` or `@` at the caret (a space first after a word) and open the suggestions. A selected word becomes the search.
-- Typing `@` or `#` opens the same suggestions, as on the full Add screen (`MentionDrawer`, `useMentions`). They show right above the tool bar.
+- Typing `@` or `#` opens the same suggestions, as on the full Add screen (`MentionSuggestions`, `useMentions`). They show right above the tool bar.
 - A pick writes what the full Add screen writes: a person or subject's name; for a to-do a date sets the When word, for a journal it writes the date. A tag stays in the text as `#tag`; on a to-do save it moves into the to-do's tags.
 - Tool taps keep the keyboard up: the bar cancels `pointerdown` and `mousedown`, and each tool puts the focus and caret back in the box.
 - Tool taps never close the panel: the bar sits above the scrim.
@@ -34,7 +34,7 @@ Check list for hand-testing later slices. Paths are under `app/src/components/`.
 - Plus turns 45 degrees into a cross when open (`.addPanel.isOpen .addMain > :first-child > svg`), no turn while closing. `add-panel/add-panel.module.css`
 - Plus button squashes to 0.94 on press. `add-panel/add-panel.module.css`
 - Blob outline rotates 1 turn per 40s. `add-panel/add-panel.module.css`
-- Kind positions: three buttons on a 120px arc at -0.87/-0.5, 0/-1, 0.87/-0.5. `add-arc/add-arc.module.css`
+- Kind positions: three buttons on a 120px arc at -0.87/-0.5, 0/-1, 0.87/-0.5. `add-menu/add-menu.module.css`
 
 ## States
 
@@ -63,9 +63,9 @@ Check list for hand-testing later slices. Paths are under `app/src/components/`.
 
 ## Text inputs
 
-- Todo and journal boxes are `contentEditable="plaintext-only"` with placeholder from `data-placeholder`. `add-box/add-box.tsx`
+- Todo and journal boxes are `contentEditable="plaintext-only"` with placeholder from `data-placeholder`. `add-input/add-input.tsx`
 - Box takes focus on the next frame after opening. `add-panel/add-panel.tsx`
-- Full-screen toggle (journal only), at the end of the tool bar, keeps the caret in view after the transition. `add-panel/add-full.tsx`, `add-panel.tsx`
+- Full-screen toggle (journal only), at the end of the tool bar, keeps the caret in view after the transition. `add-panel/add-expand-button.tsx`, `add-panel.tsx`
 - Fields use border focus colour, no outline offset. `field/field.module.css`
 - Search input has no native clear button; own clear button. `field/field.module.css`
 - Composer textarea has no outline on focus. `field/field.module.css`
@@ -73,7 +73,7 @@ Check list for hand-testing later slices. Paths are under `app/src/components/`.
 
 ## Reduced motion
 
-- Spin on blob outline and kind shapes stops. `add-panel.module.css`, `add-arc.module.css`
+- Spin on blob outline and kind shapes stops. `add-panel.module.css`, `add-menu.module.css`
 - Durations go to 0ms through tokens and a global rule. `styles/global.css`, the tokens
 
 ## Wide screens

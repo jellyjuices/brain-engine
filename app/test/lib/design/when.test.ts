@@ -16,7 +16,7 @@ describe("whenStatus", () => {
     ["no date and no someday has no When", {}, undefined],
   ];
 
-  for (const [name, input, expected] of cases) {
-    it(name, () => assert.equal(whenStatus(input, today), expected));
-  }
+  it.each(cases)("%s", (_name, input, expected) =>
+    assert.equal(whenStatus(input, today), expected),
+  );
 });

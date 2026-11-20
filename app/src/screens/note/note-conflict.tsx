@@ -17,10 +17,10 @@ export function NoteConflict({ note, conflict }: { note: StoredNote; conflict: C
       const send = await keepMine(note.path);
       if (send) await queueEdit(note.path, send.body, send.base);
       void flush().then(() => syncNow());
-      toast(copy.save.keptMine);
+      toast(copy.toast.keptMine);
     } else {
       await keepMacCopy(note.path);
-      toast(copy.save.keptMac);
+      toast(copy.toast.keptMac);
     }
   }
   const modified = conflict.current.modified;

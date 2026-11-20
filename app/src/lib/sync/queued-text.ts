@@ -6,5 +6,5 @@ export function isOffline(): boolean {
 }
 
 export function queuedText(): string {
-  return isOffline() ? copy.save.savedOffline : copy.save.savedRetry;
+  return isOffline() ? copy.toast.savedOffline : copy.toast.savedRetry;
 }

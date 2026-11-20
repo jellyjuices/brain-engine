@@ -22,7 +22,7 @@ afterEach(stopRouter);
 
 describe("router start", () => {
   it("puts To-dos under a shared link, so back lands on To-dos", async () => {
-    start("/add?text=Call%20the%20dentist");
+    start("/find?q=dentist");
     await pressBack();
     expect(here()).toBe(HOME);
   });

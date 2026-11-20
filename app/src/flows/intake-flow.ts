@@ -26,7 +26,7 @@ export function saveIntakeAnswer(q: IntakeQuestion, draft: IntakeDraft): Promise
         raw: draft.answer.trim(),
         by: draft.summary !== null && line === draft.summary ? "gemini-nano" : "owner",
       }),
-    copy.save.saved,
+    copy.toast.saved,
   );
 }
 

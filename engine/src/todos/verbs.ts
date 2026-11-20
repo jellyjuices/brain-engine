@@ -10,12 +10,12 @@ import { join, posix } from "node:path";
 import { randomBytes } from "node:crypto";
 import { type Note, titleOf, today, typeOf } from "../core/notes.ts";
 import { loadAll, readNote, writeNote } from "../core/files.ts";
-import { log, type UndoStep } from "../core/log.ts";
+import { diffLines, log, type UndoStep } from "../core/log.ts";
 import { newNote } from "../capture/actions.ts";
 import { addNoteLine } from "./todos.ts";
 import { doneHistoryLine, dropTodo, fieldsOf, formatTodoLine, parseTodoLine, rollTodo, tickTodo, type TodoLine, updateTodo } from "../../shared/line/index.ts";
 import { parseWhen, personNamed, subjectTitled } from "./when-words.ts";
-import { change, diffLines } from "./undo.ts";
+import { change } from "./undo.ts";
 import { type Item, resolve } from "./day-list.ts";
 
 /** Rewrite the open to-do line with this text in a note. fn returns the new lines for it. */

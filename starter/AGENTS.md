@@ -30,6 +30,7 @@ Read the file for the area you work in. Claude Code loads it on its own.
 - When you write or change a note, set `generated: {by: <your name>, at: <ISO time>}`. Leave it off notes the owner writes.
 - Only the owner adds `verified`, after they check a helper's note.
 - When you are unsure where a line goes, file it to your best guess and add `· check`.
+- A file note in `resources/` with `asks` waits for you. `split`: file its to-dos and notes in their subjects, each linking back to the file. `enrich`: add what it says to the notes it names, each linking back. `intake`: write questions as a list under `# Intake` in the file note. Take each word out of `asks` when its work is done.
 
 ## Hard rules
 

@@ -44,7 +44,7 @@ test("skip moves the date with no history line", () => {
   const root = brainWith(`- [ ] Oil the hinges · due ${now} · every month`);
   const r = skip(root, ref);
   assert.deepEqual(todoLines(root), [`- [ ] Oil the hinges · due ${r.next} · every month`]);
-  assert.equal(r.next! > now, true);
+  assert.ok(r.next! > now, `next ${r.next} is not after ${now}`);
 });
 
 test("skip on a one-off to-do says it does not repeat", () => {

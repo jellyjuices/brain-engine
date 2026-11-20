@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/button/button.tsx";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { ViewTabs } from "@/components/view-tabs/view-tabs.tsx";
-import { Pull } from "@/components/pull/pull.tsx";
-import { SyncLine } from "@/components/sync-line/sync-line.tsx";
+import { PullToRefresh } from "@/components/pull-to-refresh/pull-to-refresh.tsx";
+import { SyncStatus } from "@/components/sync-status/sync-status.tsx";
 import { longDate } from "@/lib/notes/model.ts";
 import { isTodoView, type TodoView } from "@shared/todos/index.ts";
 import { TODO_VIEW_TABS } from "@/lib/notes/todo-views.ts";
@@ -34,7 +34,7 @@ export function TodosScreen() {
 
   return (
     <>
-      <Pull onRefresh={refresh} />
+      <PullToRefresh onRefresh={refresh} />
       <PageHeader
         title={copy.todos.title}
         kicker={longDate(now)}
@@ -48,7 +48,7 @@ export function TodosScreen() {
         />
       </PageHeader>
       <UnsortedBanner />
-      <SyncLine />
+      <SyncStatus />
       <div className={styles.body}>
         {items && <TodosList view={view} items={items} now={now} empty={EMPTY[view]} />}
         {view === "today" && noDate > 0 && (

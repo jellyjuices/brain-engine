@@ -1,4 +1,4 @@
-import { test } from "node:test";
+import { test, type TestContext } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, mkdtempSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -69,20 +69,23 @@ test("search finds a note by words", () => withApi(async (a) => {
 test("notes since: returns changed notes with a hash, and one note with backlinks", () => withApi(async (a) => {
   const all = await a.call("GET", "/api/notes");
   assert.deepEqual(all.data.notes.filter((n: { hash: string; body: string }) => !(n.hash.length === 64 && typeof n.body === "string")), []);
-  const future = await a.call("GET", `/api/notes?since=${encodeURIComponent(new Date(Date.now() + 60_000).toISOString())}`);
+  const future = await a.call("GET", `/api/notes?since=${encodeURIComponent("2100-01-01T00:00:00.000Z")}`);
   assert.deepEqual(future.data.notes, []);
   assert.equal((await a.call("GET", "/api/notes?since=nope")).status, 400);
   const one = await a.call("GET", "/api/notes/projects/visit.md");
   assert.equal(one.data.title, "Family doctor visit");
-  assert.equal(Array.isArray(one.data.backlinks), true);
+  assert.deepEqual(one.data.backlinks, []);
 }));
 
-test("reports come as JSON and Markdown", () => withApi(async (a) => {
-  for (const name of ["today", "weekly", "area/health"]) {
+for (const name of ["today", "weekly", "area/health"]) {
+  test(`the ${name} report comes as JSON with Markdown`, () => withApi(async (a) => {
     const r = await a.call("GET", `/api/reports/${name}`);
-    assert.equal(r.status, 200, name);
-    assert.equal(typeof r.data.markdown, "string");
-  }
+    assert.equal(r.status, 200);
+    assert.match(r.data.markdown, /\S/);
+  }));
+}
+
+test("an unknown report is 404", () => withApi(async (a) => {
   assert.equal((await a.call("GET", "/api/reports/nope")).status, 404);
 }));
 
@@ -159,9 +162,9 @@ test("edit: tags are saved in the front matter; unknown tags are refused", () =>
 
 test("paths: traversal, absolute, sources/, hidden and archive writes are refused", () => withApi(async (a) => {
   writeFileSync(join(a.root, ".archive/old.md"), "---\ntype: Note\ntitle: Old\ndescription: Old.\n---\n\nold\n");
-  for (const p of ["..%2Fsecret.md", "%2Fetc%2Fpasswd.md", "projects%2F..%2F..%2Fx.md", "inbox%2F.hidden.md", ".brain%2Findex.md"]) {
-    assert.equal((await a.call("GET", `/api/notes/${p}`)).status, 400, p);
-  }
+  const bad = ["..%2Fsecret.md", "%2Fetc%2Fpasswd.md", "projects%2F..%2F..%2Fx.md", "inbox%2F.hidden.md", ".brain%2Findex.md"];
+  const statuses = await Promise.all(bad.map(async (p) => [p, (await a.call("GET", `/api/notes/${p}`)).status]));
+  assert.deepEqual(statuses, bad.map((p) => [p, 400]));
   assert.equal((await a.call("GET", "/api/notes/sources/intake/x.md")).status, 403);
   assert.equal((await a.call("PUT", "/api/notes/sources/intake/x.md", { body: "x", base: "y" })).status, 403);
   assert.equal((await a.call("GET", "/api/notes/.archive/old.md")).status, 200);
@@ -319,6 +322,17 @@ test("files: a text file becomes a note in resources, no copy on retry", () => w
   assert.equal((await a.call("POST", "/api/files", { title: "  ", text: "hi" })).status, 400);
 }));
 
+test("files: the ways to use a file are kept as asks for a helper", () => withApi(async (a) => {
+  const made = await a.call("POST", "/api/files", { title: "Workbook ch2", text: "Small wins.\n", asks: ["split", "intake"] });
+  const note = await a.call("GET", `/api/notes/${made.data.path}`);
+  assert.deepEqual(note.data.meta.asks, ["split", "intake"]);
+}));
+
+test("files: an unknown way to use a file is 400", () => withApi(async (a) => {
+  const bad = await a.call("POST", "/api/files", { title: "Workbook ch3", text: "More wins.\n", asks: ["summarize"] });
+  assert.equal(bad.status, 400);
+}));
+
 test("inbox: sort an item into a person with a day, or archive it", () => withApi(async (a) => {
   const person = await a.call("POST", "/api/people", { name: "Dana Cole" });
   const one = await a.call("POST", "/api/inbox", { client_id: "c1", text: "Call about the quote" });
@@ -334,32 +348,40 @@ test("inbox: sort an item into a person with a day, or archive it", () => withAp
   assert.equal((await a.call("POST", "/api/sort", { path: "inbox/none.md", into: person.data.path, when: "soon-ish" })).status, 400);
 }));
 
-test("intake: next lists open questions, save writes the lens line and closes the question", async () => {
+const LIGHTER = "What made weeks feel lighter in the past?";
+const HARD_CALL = "Who do you talk to after a hard call?";
+
+async function intakeApi(t: TestContext, question: string, lens: string) {
   const root = brain();
-  setLensPrivacy(root, "wellbeing", "full");
-  addThread(root, { question: "What made weeks feel lighter in the past?", lens: "wellbeing" });
+  setLensPrivacy(root, lens, "full");
+  addThread(root, { question, lens });
   const a = await start(root);
-  try {
-    const next = await a.call("GET", "/api/intake/next");
-    assert.deepEqual(next.data.threads, [{ question: "What made weeks feel lighter in the past?", lens: "wellbeing", privacy: "full" }]);
-    const saved = await a.call("POST", "/api/intake/save", { lens: "wellbeing", question: "What made weeks feel lighter in the past?", line: "Long walks with Elena Lam.", raw: "Honestly the long walks with Elena Lam on Sundays.", by: "gemini-nano" });
-    assert.equal(saved.data.path, "me/wellbeing.md");
-    assert.match(readFileSync(join(root, "me/wellbeing.md"), "utf8"), /- Long walks with Elena Lam\. \(\[raw\]/);
-    assert.deepEqual((await a.call("GET", "/api/intake/next")).data.threads, []);
-  } finally {
-    a.close();
-  }
+  t.after(() => a.close());
+  return { a, root };
+}
+
+test("intake: next lists open questions with their lens and privacy", async (t) => {
+  const { a } = await intakeApi(t, LIGHTER, "wellbeing");
+  const next = await a.call("GET", "/api/intake/next");
+  assert.deepEqual(next.data.threads, [{ question: LIGHTER, lens: "wellbeing", privacy: "full" }]);
 });
 
-test("intake: save refuses an unknown writer, skip parks the question", async () => {
-  const root = brain();
-  addThread(root, { question: "Who do you talk to after a hard call?", lens: "people" });
-  const a = await start(root);
-  try {
-    assert.equal((await a.call("POST", "/api/intake/save", { lens: "people", question: "Who do you talk to after a hard call?", line: "My sister.", by: "claude" })).status, 400);
-    assert.equal((await a.call("POST", "/api/intake/skip", { question: "Who do you talk to after a hard call?" })).status, 200);
-    assert.deepEqual((await a.call("GET", "/api/intake/next")).data.threads, []);
-  } finally {
-    a.close();
-  }
+test("intake: save writes the lens line with its raw answer and closes the question", async (t) => {
+  const { a, root } = await intakeApi(t, LIGHTER, "wellbeing");
+  const saved = await a.call("POST", "/api/intake/save", { lens: "wellbeing", question: LIGHTER, line: "Long walks with Elena Lam.", raw: "Honestly the long walks with Elena Lam on Sundays.", by: "gemini-nano" });
+  assert.equal(saved.data.path, "me/wellbeing.md");
+  assert.match(readFileSync(join(root, "me/wellbeing.md"), "utf8"), /- Long walks with Elena Lam\. \(\[raw\]/);
+  assert.deepEqual((await a.call("GET", "/api/intake/next")).data.threads, []);
+});
+
+test("intake: save refuses an unknown writer", async (t) => {
+  const { a } = await intakeApi(t, HARD_CALL, "people");
+  const r = await a.call("POST", "/api/intake/save", { lens: "people", question: HARD_CALL, line: "My sister.", by: "claude" });
+  assert.equal(r.status, 400);
+});
+
+test("intake: skip closes the question", async (t) => {
+  const { a } = await intakeApi(t, HARD_CALL, "people");
+  assert.equal((await a.call("POST", "/api/intake/skip", { question: HARD_CALL })).status, 200);
+  assert.deepEqual((await a.call("GET", "/api/intake/next")).data.threads, []);
 });

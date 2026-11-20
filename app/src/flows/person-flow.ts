@@ -2,7 +2,7 @@ import { appendToSection } from "@shared/line/index.ts";
 import type { StoredNote } from "@/lib/notes/model.ts";
 import { getNote, putNotes } from "@/lib/storage/store.ts";
 import { queueBirthday, queueEdit } from "@/lib/sync/writes.ts";
-import { noteSheet } from "@/components/pick-sheet/pick-sheet.tsx";
+import { pickNote } from "@/components/picker-sheet/picker-sheet.tsx";
 import { birthdaySheet } from "@/components/person-sheet/person-sheet.tsx";
 import { saveFlow } from "./save-flow.ts";
 import { copy } from "@/content/index.ts";
@@ -18,12 +18,12 @@ export async function addBirthday(note: StoredNote): Promise<void> {
     const fresh = await freshNote(note);
     await putNotes([{ ...fresh, meta: { ...fresh.meta, birthday } }]);
     return queueBirthday(note.path, birthday);
-  }, copy.save.saved);
+  }, copy.toast.saved);
 }
 
 export async function addPartner(note: StoredNote): Promise<void> {
   const firstName = note.title.split(/[\s,]+/)[0] ?? note.title;
-  const other = await noteSheet(
+  const other = await pickNote(
     copy.notes.whoIsPartner(firstName),
     (n) => n.type === "Person" && n.path !== note.path,
   );
@@ -37,5 +37,5 @@ export async function addPartner(note: StoredNote): Promise<void> {
     );
     await putNotes([{ ...fresh, body }]);
     return queueEdit(note.path, body, note.hash);
-  }, copy.save.saved);
+  }, copy.toast.saved);
 }

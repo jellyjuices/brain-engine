@@ -53,15 +53,6 @@ export interface Ctx {
   agentFile?: string;
 }
 
-export class TextBody {
-  readonly text: string;
-  readonly type: string;
-  constructor(text: string, type: string) {
-    this.text = text;
-    this.type = type;
-  }
-}
-
 export function textList(v: unknown, name: string): string[] | undefined {
   if (v === undefined || v === null) return undefined;
   if (!Array.isArray(v) || !v.every((x) => typeof x === "string")) throw new HttpError(400, `"${name}" must be a list of text.`);

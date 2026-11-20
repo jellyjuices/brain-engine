@@ -4,10 +4,9 @@ import { existsSync } from "node:fs";
 import { join, posix } from "node:path";
 import { addDays, areasOf, descOf, DIRS, folderOf, type Note, str, summary, type Summary, tagsOf, titleOf, today, typeOf } from "../core/notes.ts";
 import { loadAll, writeAtomic } from "../core/files.ts";
-import { type Issue, loadSchema, validate } from "../core/schema.ts";
-import { goalTreeIssues } from "../core/schema-kinds.ts";
+import type { Issue } from "../core/schema.ts";
 import { allLoops, inArea as loopInArea, loopSummary, whenWord } from "../todos/todos.ts";
-import { MAX_WARN_LINES, mentionedTwice, unlinkedMentions } from "./mentions.ts";
+import { allIssues } from "./check-issues.ts";
 import { isOwnerWriter } from "../core/owner.ts";
 
 /** Inbox notes not yet sorted (no outcome). Sorted captures wait in the inbox only until they are absorbed. */
@@ -162,29 +161,13 @@ export function writeIndexMd(root: string, notes = loadAll(root)) {
   writeAtomic(join(root, DIRS.reports, "index.md"), indexMarkdown(notes));
 }
 
-//
 export interface CheckResult {
   path: string;
   issues: Issue[];
 }
 
 export function check(root: string, notes = loadAll(root)): CheckResult[] {
-  const schema = loadSchema(root);
   const results = new Map<string, Issue[]>();
-  const add = (p: string, i: Issue) => results.set(p, [...(results.get(p) ?? []), i]);
-  for (const note of notes) {
-    for (const i of validate(note, schema)) add(note.path, i);
-    for (const target of note.links) if (target.endsWith(".md") && !existsSync(join(root, target))) add(note.path, { level: "error", message: `broken link to ${target}` });
-  }
-  const byTitle = new Map<string, string[]>();
-  for (const note of notes) {
-    if (folderOf(note) === "inbox" || !note.meta.title) continue;
-    const title = titleOf(note).toLowerCase();
-    byTitle.set(title, [...(byTitle.get(title) ?? []), note.path]);
-  }
-  for (const paths of byTitle.values()) if (paths.length > 1) for (const path of paths) add(path, { level: "warn", message: `same title as ${paths.filter((x) => x !== path).join(", ")}` });
-  for (const [p, issue] of goalTreeIssues(root, notes)) add(p, issue);
-  for (const [p, message] of unlinkedMentions(notes)) add(p, { level: "warn", message });
-  for (const mention of mentionedTwice(notes).slice(0, MAX_WARN_LINES)) add(mention.notes[0], { level: "warn", message: `${mention.name} shows in ${mention.notes.length} notes, no note. Make ${mention.suggest === "Person" ? "a Person" : "one"}?${mention.suggest === "Person" ? "" : " Who, where, doing, have, or know?"}` });
+  for (const [p, i] of allIssues(root, notes)) results.set(p, [...(results.get(p) ?? []), i]);
   return [...results.entries()].map(([path, issues]) => ({ path, issues })).sort((a, b) => a.path.localeCompare(b.path));
 }

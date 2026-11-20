@@ -3,6 +3,7 @@ import type { Decision, TodoRef } from "@/lib/sync/local-edit.ts";
 import { addDays, noteHref, todayIso } from "@/lib/notes/model.ts";
 import { go } from "@/lib/platform/router.ts";
 import { todoSheet, type Step } from "@/components/todo-sheet/todo-sheet.tsx";
+import { requestAdd } from "@/components/add-panel/add-request.ts";
 import { toast } from "@/components/toast/toast-store.ts";
 import { isOffline } from "@/lib/sync/queued-text.ts";
 import { copy } from "@/content/index.ts";
@@ -12,13 +13,9 @@ function undoAction(change: Change) {
     label: copy.common.undo,
     onClick: () =>
       void undoChange(change).then((ok) =>
-        ok ? toast(copy.save.undone) : toast(copy.save.undoTooLate, { tone: "error" }),
+        ok ? toast(copy.toast.undone) : toast(copy.toast.undoTooLate, { tone: "error" }),
       ),
   };
-}
-
-function followUpHref(todo: TodoRef) {
-  return `/add?${new URLSearchParams({ into: todo.path, after: todo.text })}`;
 }
 
 export async function commit(
@@ -30,12 +27,13 @@ export async function commit(
   try {
     const change = await applyChange(todo, d, todayIso());
     const offline = isOffline();
-    toast(offline ? copy.save.changeOffline(change.label) : change.label, {
+    toast(offline ? copy.toast.changeOffline(change.label) : change.label, {
+      ...(d.kind === "drop" && { tone: "deleted" as const }),
       ...(offline && { tone: "offline" as const, ms: 6000 }),
       action: undoAction(change),
     });
   } catch {
-    toast(copy.save.failed, { tone: "error" });
+    toast(copy.toast.failed, { tone: "error" });
   }
 }
 
@@ -56,12 +54,12 @@ export async function tickTodo(todo: TodoRef, goal?: string): Promise<void> {
       ms: 6000,
       ...(isOffline() && { tone: "offline" as const }),
       actions: [
-        { label: copy.todos.followUp, onClick: () => go(followUpHref(todo)) },
+        { label: copy.todos.followUp, onClick: () => requestAdd({ into: todo.path }) },
         undoAction(change),
       ],
     });
   } catch {
-    toast(copy.save.failed, { tone: "error" });
+    toast(copy.toast.failed, { tone: "error" });
   }
 }
 
@@ -78,7 +76,7 @@ export async function openTodo(
   }
   if (r.kind === "doneThenAdd") {
     await commit(todo, { kind: "done", happened: r.happened }, collapse);
-    go(followUpHref(todo));
+    requestAdd({ into: todo.path });
     return;
   }
   await commit(todo, r, collapse);

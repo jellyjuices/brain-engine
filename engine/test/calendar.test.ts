@@ -1,4 +1,4 @@
-import { test } from "node:test";
+import { test, type TestContext } from "node:test";
 import assert from "node:assert/strict";
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -39,20 +39,23 @@ test("text is escaped and long lines fold without breaking characters", () => {
   assert.equal(folded.replaceAll("\r\n ", ""), "SUMMARY:" + "é".repeat(60));
 });
 
-test("brain serve sends the feed at /api/cal.ics with a token only", async () => {
+async function serveFeed(t: TestContext): Promise<string> {
   const server = createServer(brain(), "test-token");
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
-  const base = `http://127.0.0.1:${(server.address() as AddressInfo).port}/api/cal.ics`;
-  try {
-    assert.equal((await fetch(base)).status, 401);
-    const res = await fetch(base, { headers: { Authorization: "Bearer test-token" } });
-    assert.equal(res.status, 200);
-    assert.match(res.headers.get("content-type")!, /^text\/calendar/);
-    assert.match(await res.text(), /SUMMARY:Checkup/);
-  } finally {
-    server.close();
-  }
+  t.after(() => server.close());
+  return `http://127.0.0.1:${(server.address() as AddressInfo).port}/api/cal.ics`;
+}
+
+test("brain serve refuses the feed with no token", async (t) => {
+  assert.equal((await fetch(await serveFeed(t))).status, 401);
+});
+
+test("brain serve sends the feed at /api/cal.ics with the token", async (t) => {
+  const res = await fetch(await serveFeed(t), { headers: { Authorization: "Bearer test-token" } });
+  assert.equal(res.status, 200);
+  assert.match(res.headers.get("content-type")!, /^text\/calendar/);
+  assert.match(await res.text(), /SUMMARY:Checkup/);
 });
 
 test("a to-do with a Markdown link shows only the name in the feed", () => {

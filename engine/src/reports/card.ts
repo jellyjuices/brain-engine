@@ -6,9 +6,8 @@
 // DECISION: Related adds the links of the subject's own events, so a visit's background notes
 // (like the health history) show on the person's card.
 
-import { DIRS, eventDue, extractLinks, folderOf, summary, titleOf, today, typeOf, type Note, type Summary } from "../core/notes.ts";
-import { loopsIn, type Loop } from "../todos/todos.ts";
-import { relationsOf, todosNaming } from "../core/index-links.ts";
+import { summary, titleOf, typeOf, type Note, type Summary } from "../core/notes.ts";
+import { cardHistory, cardRelated, cardRelations, cardTodos, nextDated, notArchived, type CardScope } from "./card-parts.ts";
 
 export const SUBJECT_TYPES = ["Area", "Project", "Person", "Group", "Place", "Thing", "Topic", "Event", "Note", "Lens"];
 const NOT_LINKED = ["Area", "Lens", "Journal", "Capture"];
@@ -27,15 +26,8 @@ export interface Card {
   mentions: Summary[];
 }
 
-const live = (n: Note) => folderOf(n) !== DIRS.archive;
-const DATED = /^- (\d{4}-\d{2}-\d{2}) · (.+)$/;
-
-function todoOf(l: Loop): CardTodo {
-  return { text: l.text, path: l.path, noteTitle: l.noteTitle, ...(l.due && { due: l.due }), ...(l.every && { every: l.every }) };
-}
-
 export function isSubject(n: Note): boolean {
-  return SUBJECT_TYPES.includes(typeOf(n) ?? "") && live(n);
+  return SUBJECT_TYPES.includes(typeOf(n) ?? "") && notArchived(n);
 }
 
 // Who and what come before doing and knowing, so "doctor" finds the doctor before the visit.
@@ -57,66 +49,20 @@ export function matchSubject(notes: Note[], query: string): Note | undefined {
   );
 }
 
+// DECISION: in History the subject's own note and its events count whole. Any other note counts only for
+// lines that link to the subject, so a project's Greta line does not show on Omar's card.
 export function buildCard(root: string, notes: Note[], n: Note): Card {
   const byPath = new Map(notes.map((x) => [x.path, x]));
-  const linking = notes.filter((x) => x.path !== n.path && live(x) && x.links.includes(n.path));
+  const linking = notes.filter((x) => x.path !== n.path && notArchived(x) && x.links.includes(n.path));
   const close = linking.filter((x) => !NOT_LINKED.includes(typeOf(x) ?? ""));
-
-  // To do: open to-dos here, in close notes, and on lines anywhere that name it.
-  const seen = new Set<string>();
-  const todo: CardTodo[] = [];
-  const push = (t: CardTodo) => {
-    const key = `${t.path}\n${t.text}`;
-    if (!seen.has(key)) { seen.add(key); todo.push(t); }
-  };
-  for (const note of [n, ...close]) for (const l of loopsIn(note)) if (!l.done) push(todoOf(l));
-  for (const t of todosNaming(root, n.path, { done: false })) {
-    const holder = byPath.get(t.path);
-    if (holder && live(holder)) push({ text: t.text, path: t.path, noteTitle: titleOf(holder), due: loopsIn(holder).find((l) => l.text === t.text)?.due });
-  }
-
-  // Next: the soonest upcoming event or due to-do.
-  const dated = [
-    ...[n, ...close].flatMap((x) => (eventDue(x) ? [{ date: eventDue(x)!, text: titleOf(x), path: x.path }] : [])),
-    ...todo.flatMap((t) => (t.due ? [{ date: t.due, text: t.text, path: t.path }] : [])),
-  ].filter((d) => d.date >= today()).sort((a, b) => a.date.localeCompare(b.date));
-
-  // History: the last 3 dated note lines and finished to-dos, from the subject and its close notes.
-  // DECISION: the subject's own note and its events count whole. Any other note counts only for
-  // lines that link to the subject, so a project's Greta line does not show on Omar's card.
-  const history: CardLine[] = [];
-  for (const note of [n, ...close]) {
-    const whole = note === n || typeOf(note) === "Event";
-    const about = (line: string) => whole || extractLinks(note.path, line).includes(n.path);
-    for (const line of note.body.split("\n")) {
-      const match = line.match(DATED);
-      if (match && about(line)) history.push({ date: match[1], text: match[2].trim(), path: note.path });
-    }
-    for (const l of loopsIn(note)) if (l.done && l.doneAt && (whole || l.subjects?.includes(n.path))) history.push({ date: l.doneAt, text: `Done: ${l.text}`, path: note.path });
-  }
-  history.sort((a, b) => b.date.localeCompare(a.date));
-
-  const rels = relationsOf(root, n.path);
-  const titled = (p: string) => (byPath.get(p) ? titleOf(byPath.get(p)!) : p);
-  const relations: CardRelation[] = [
-    ...rels.out.map((r) => ({ direction: "out" as const, path: r.to, title: titled(r.to), heading: r.heading, ...(r.role && { role: r.role }), ...(r.time && { time: r.time }) })),
-    ...rels.in.map((r) => ({ direction: "in" as const, path: r.from, title: titled(r.from), heading: r.heading, ...(r.role && { role: r.role }), ...(r.time && { time: r.time }) })),
-  ];
-
-  // Mentions: lenses that link to it. Related: every other linked note.
+  const scope: CardScope = { root, n, byPath, linking, close };
+  const todo = cardTodos(scope);
+  const next = nextDated(scope, todo);
+  const relations = cardRelations(scope);
   const mentions = linking.filter((x) => typeOf(x) === "Lens").map(summary);
   const skip = new Set([n.path, ...relations.map((r) => r.path), ...mentions.map((m) => m.path)]);
-  const events = close.filter((x) => typeOf(x) === "Event");
-  const relatedPaths = [...n.links, ...linking.map((x) => x.path), ...events.flatMap((e) => e.links)];
-  const related: Summary[] = [];
-  for (const path of relatedPaths) {
-    const note = byPath.get(path);
-    if (!note || skip.has(path) || !live(note)) continue;
-    skip.add(path);
-    related.push(summary(note));
-  }
-
-  return { subject: summary(n), todo, ...(dated[0] && { next: dated[0] }), history: history.slice(0, 3), relations, related, mentions };
+  const related = cardRelated(scope, skip);
+  return { subject: summary(n), todo, ...(next && { next }), history: cardHistory(scope).slice(0, 3), relations, related, mentions };
 }
 
 /** The card as plain lines for the terminal. */

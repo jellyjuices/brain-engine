@@ -1,3 +1,8 @@
+import { pickNote } from "@/components/picker-sheet/picker-sheet.tsx";
+import { sortSheet } from "@/components/sort-sheet/sort-sheet.tsx";
+import { inboxText } from "@/lib/notes/capture.ts";
+import { bestHome } from "@/lib/notes/home-guess.ts";
+import { SUBJECT_TYPES } from "@/lib/notes/types.ts";
 import { inboxSheet, type InboxStep } from "@/components/inbox-sheet/inbox-sheet.tsx";
 import { noteHref, type StoredNote } from "@/lib/notes/model.ts";
 import { go } from "@/lib/platform/router.ts";
@@ -13,8 +18,8 @@ export async function openInboxItem(item: StoredNote, start?: InboxStep): Promis
     return;
   }
   if (r.kind === "sort")
-    await saveFlow(() => queueSort(item.path, r.into, r.when), copy.save.sorted, true);
-  else await saveFlow(() => queueInboxDrop(item.path), copy.save.archived, true);
+    await saveFlow(() => queueSort(item.path, r.into, r.when), copy.toast.sorted, true);
+  else await saveFlow(() => queueInboxDrop(item.path), copy.toast.archived, true);
 }
 
 export function archiveInboxItem(
@@ -26,7 +31,24 @@ export function archiveInboxItem(
       await collapse();
       return queueInboxDrop(item.path);
     },
-    copy.save.archived,
+    { message: copy.toast.archived, tone: "deleted" },
+    true,
+  );
+}
+
+export async function sortCapture(item: StoredNote, notes: StoredNote[]): Promise<void> {
+  const text = inboxText(item);
+  const guess = bestHome(notes, text);
+  const choice = await sortSheet(text, guess);
+  if (!choice) return;
+  const into =
+    choice === "guess" && guess
+      ? guess
+      : await pickNote(copy.sort.pickSubject, (n) => SUBJECT_TYPES.includes(n.type ?? ""));
+  if (!into) return;
+  await saveFlow(
+    () => queueSort(item.path, into.path, "someday"),
+    copy.sort.addedTo(into.title),
     true,
   );
 }

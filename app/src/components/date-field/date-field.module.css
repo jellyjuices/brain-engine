@@ -4,35 +4,13 @@
 }
 
 .label {
-  font-size: var(--font-size-body-sm);
-  font-weight: 500;
-  color: var(--text-secondary);
+  composes: controlLabel from "../field/field.module.css";
 }
 
 .trigger {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  height: var(--size-control);
-  padding: 0 var(--space-md);
-  border: 0.0625rem solid var(--border-strong);
-  border-radius: var(--radius-md);
-  background: var(--background-secondary);
+  composes: controlTrigger from "../field/field.module.css";
   color: var(--text-primary);
   text-align: left;
-  cursor: pointer;
-}
-
-.trigger[data-state="open"] {
-  border-color: var(--border-focus);
-}
-
-.trigger:disabled {
-  border-style: dashed;
-  border-color: var(--border-primary);
-  background: var(--background-disabled);
-  color: var(--text-disabled);
-  cursor: not-allowed;
 }
 
 .icon {
@@ -60,12 +38,5 @@
   from {
     opacity: 0;
     transform: translateY(calc(var(--space-xs) * -1));
-  }
-}
-
-@media (hover: hover) {
-  .trigger:hover:not(:disabled) {
-    background:
-      linear-gradient(var(--background-hover), var(--background-hover)), var(--background-secondary);
   }
 }

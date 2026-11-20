@@ -1,13 +1,13 @@
 import { SectionHeader } from "@/components/section-header/section-header.tsx";
-import { List } from "@/components/row/list.tsx";
+import { List } from "@/components/list/list.tsx";
 import { TodoRefRow } from "@/components/todo-row/todo-ref-row.tsx";
 import { makeTodo } from "@/lib/notes/todos.ts";
 import { GROUPS, type TodayData } from "@/lib/notes/today.ts";
-import { Empty } from "@/components/empty/empty.tsx";
+import { EmptyState } from "@/components/empty-state/empty-state.tsx";
 import { copy } from "@/content/index.ts";
 
 export function TodayList({ data }: { data: TodayData }) {
-  if (!data.items.length) return <Empty title={copy.today.nothingToday} />;
+  if (!data.items.length) return <EmptyState title={copy.today.nothingToday} />;
   return (
     <div>
       {GROUPS.map((g) => {

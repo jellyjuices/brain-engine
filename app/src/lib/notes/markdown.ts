@@ -18,72 +18,96 @@ export type Block =
 
 const ITEM = /^(\s*)([-*+]|\d+[.)])\s+(.*)$/;
 
+const QUOTE = /^>\s?/;
+const FENCE = "```";
+
+type Read = { block?: Block; next: number };
+type Reader = (lines: string[], i: number, section: string) => Read | null;
+
+function takeWhile(lines: string[], from: number, keep: (line: string) => boolean): number {
+  let end = from;
+  while (end < lines.length && keep(lines[end]!)) end++;
+  return end;
+}
+
+function readCode(lines: string[], i: number): Read | null {
+  if (!lines[i]!.trim().startsWith(FENCE)) return null;
+  const end = takeWhile(lines, i + 1, (l) => !l.trim().startsWith(FENCE));
+  return { block: { t: "code", text: lines.slice(i + 1, end).join("\n") }, next: end + 1 };
+}
+
+function readBlank(lines: string[], i: number): Read | null {
+  return lines[i]!.trim() ? null : { next: i + 1 };
+}
+
+function readHeading(lines: string[], i: number): Read | null {
+  const heading = lines[i]!.match(/^(#{1,4})\s+(.*?)\s*#*\s*$/);
+  if (!heading) return null;
+  return { block: { t: "heading", level: heading[1]!.length, text: heading[2]! }, next: i + 1 };
+}
+
+function readRule(lines: string[], i: number): Read | null {
+  return /^\s*([-*_])(\s*\1){2,}\s*$/.test(lines[i]!) ? { block: { t: "hr" }, next: i + 1 } : null;
+}
+
+function readQuote(lines: string[], i: number): Read | null {
+  if (!QUOTE.test(lines[i]!)) return null;
+  const end = takeWhile(lines, i, (l) => QUOTE.test(l));
+  const text = lines
+    .slice(i, end)
+    .map((l) => l.replace(QUOTE, ""))
+    .join(" ");
+  return { block: { t: "quote", text }, next: end };
+}
+
+function listItem(m: RegExpMatchArray, section: string): ListItem {
+  const box = m[3]!.match(/^\[( |x|X)\]\s+(.*)$/);
+  return {
+    text: box ? box[2]! : m[3]!,
+    level: Math.floor(m[1]!.replace(/\t/g, "  ").length / 2),
+    ordered: /\d/.test(m[2]!),
+    ...(box && { checked: box[1] !== " " }),
+    section,
+  };
+}
+
+function readList(lines: string[], i: number, section: string): Read | null {
+  const end = takeWhile(lines, i, (l) => ITEM.test(l));
+  if (end === i) return null;
+  const items = lines.slice(i, end).map((l) => listItem(l.match(ITEM)!, section));
+  return { block: { t: "list", items }, next: end };
+}
+
+const READERS: Reader[] = [readCode, readBlank, readHeading, readRule, readQuote, readList];
+
+function readBlock(lines: string[], i: number, section: string): Read | null {
+  for (const reader of READERS) {
+    const read = reader(lines, i, section);
+    if (read) return read;
+  }
+  return null;
+}
+
 export function parseBlocks(src: string): Block[] {
   const lines = src.replace(/\r\n?/g, "\n").split("\n");
   const blocks: Block[] = [];
   let section = "";
   let para: string[] = [];
-  function flush() {
+  let i = 0;
+  while (i < lines.length) {
+    const read = readBlock(lines, i, section);
+    if (!read) {
+      para.push(lines[i]!.trim());
+      i++;
+      continue;
+    }
     if (para.length) blocks.push({ t: "para", text: para.join(" ") });
     para = [];
+    if (read.block?.t === "heading") section = read.block.text;
+    if (read.block) blocks.push(read.block);
+    i = read.next;
   }
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]!;
-    if (line.trim().startsWith("```")) {
-      flush();
-      const code: string[] = [];
-      for (i++; i < lines.length && !lines[i]!.trim().startsWith("```"); i++) code.push(lines[i]!);
-      blocks.push({ t: "code", text: code.join("\n") });
-      continue;
-    }
-    if (!line.trim()) {
-      flush();
-      continue;
-    }
-    const heading = line.match(/^(#{1,4})\s+(.*?)\s*#*\s*$/);
-    if (heading) {
-      flush();
-      section = heading[2]!;
-      blocks.push({ t: "heading", level: heading[1]!.length, text: heading[2]! });
-      continue;
-    }
-    if (/^\s*([-*_])(\s*\1){2,}\s*$/.test(line)) {
-      flush();
-      blocks.push({ t: "hr" });
-      continue;
-    }
-    if (/^>\s?/.test(line)) {
-      flush();
-      const quote: string[] = [line.replace(/^>\s?/, "")];
-      while (i + 1 < lines.length && /^>\s?/.test(lines[i + 1]!))
-        quote.push(lines[++i]!.replace(/^>\s?/, ""));
-      blocks.push({ t: "quote", text: quote.join(" ") });
-      continue;
-    }
-    const item = line.match(ITEM);
-    if (item) {
-      flush();
-      const items: ListItem[] = [];
-      for (; i < lines.length; i++) {
-        const m = lines[i]!.match(ITEM);
-        if (!m) break;
-        const box = m[3]!.match(/^\[( |x|X)\]\s+(.*)$/);
-        items.push({
-          text: box ? box[2]! : m[3]!,
-          level: Math.floor(m[1]!.replace(/\t/g, "  ").length / 2),
-          ordered: /\d/.test(m[2]!),
-          ...(box && { checked: box[1] !== " " }),
-          section,
-        });
-      }
-      i--;
-      blocks.push({ t: "list", items });
-      continue;
-    }
-    para.push(line.trim());
-  }
-  flush();
+  if (para.length) blocks.push({ t: "para", text: para.join(" ") });
   return blocks;
 }
 

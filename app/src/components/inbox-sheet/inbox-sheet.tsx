@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { openSheet, type Finish } from "@/components/sheet/open-sheet.tsx";
 import { todayIso, type StoredNote } from "@/lib/notes/model.ts";
-import { InboxAbout } from "./inbox-about.tsx";
+import { InboxSubjectStep } from "./inbox-subject-step.tsx";
 import { InboxMenu } from "./inbox-menu.tsx";
-import { InboxWhen } from "./inbox-when.tsx";
+import { InboxWhenStep } from "./inbox-when-step.tsx";
 import { copy } from "@/content/index.ts";
 
 export type InboxResult =
@@ -29,7 +29,7 @@ function InboxSheet({ item, start, finish }: InboxSheetProps) {
   const props = { item, finish, show: setStep };
   if (step === "about")
     return (
-      <InboxAbout
+      <InboxSubjectStep
         {...props}
         onPick={(path) => {
           setInto(path);
@@ -37,7 +37,7 @@ function InboxSheet({ item, start, finish }: InboxSheetProps) {
         }}
       />
     );
-  if (step === "when") return <InboxWhen {...props} into={into} now={todayIso()} />;
+  if (step === "when") return <InboxWhenStep {...props} into={into} now={todayIso()} />;
   return <InboxMenu {...props} />;
 }
 

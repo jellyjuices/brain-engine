@@ -2,14 +2,14 @@ import { useState } from "react";
 import { openSheet, type Finish } from "@/components/sheet/open-sheet.tsx";
 import { todayIso } from "@/lib/notes/model.ts";
 import type { Decision, TodoRef } from "@/lib/sync/local-edit.ts";
-import { TodoAsk } from "./todo-ask.tsx";
-import { TodoDay } from "./todo-day.tsx";
+import { TodoResolveStep } from "./todo-resolve-step.tsx";
+import { TodoDateStep } from "./todo-date-step.tsx";
 import { TodoDoneMenu } from "./todo-done-menu.tsx";
-import { TodoEdit } from "./todo-edit.tsx";
-import { TodoHold } from "./todo-hold.tsx";
+import { TodoEditStep } from "./todo-edit-step.tsx";
+import { TodoHoldStep } from "./todo-hold-step.tsx";
 import { TodoMenu } from "./todo-menu.tsx";
 import { TodoRepeatMenu } from "./todo-repeat-menu.tsx";
-import { TodoWaitPick } from "./todo-wait-pick.tsx";
+import { TodoWaitingStep } from "./todo-waiting-step.tsx";
 
 export type SheetResult = Decision | { kind: "open" } | { kind: "doneThenAdd"; happened?: string };
 export type Step =
@@ -32,12 +32,12 @@ export function TodoSheet({ todo, start, now, finish }: TodoSheetProps) {
   if (step === "menu") return <TodoMenu {...props} />;
   if (step === "doneMenu") return <TodoDoneMenu {...props} />;
   if (step === "edit")
-    return <TodoEdit {...props} back={start === "doneMenu" ? "doneMenu" : "menu"} />;
-  if (step === "day") return <TodoDay {...props} />;
-  if (step === "hold") return <TodoHold {...props} />;
+    return <TodoEditStep {...props} back={start === "doneMenu" ? "doneMenu" : "menu"} />;
+  if (step === "day") return <TodoDateStep {...props} />;
+  if (step === "hold") return <TodoHoldStep {...props} />;
   if (step === "someone" || step === "something")
-    return <TodoWaitPick key={step} {...props} kind={step} />;
-  return <TodoAsk key={step} {...props} step={step} />;
+    return <TodoWaitingStep key={step} {...props} kind={step} />;
+  return <TodoResolveStep key={step} {...props} step={step} />;
 }
 
 export function todoSheet(

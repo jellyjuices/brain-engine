@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { type Meta, type Note, nowStamp, str, today } from "../core/notes.ts";
 import { readNote, writeAtomic, writeNote } from "../core/files.ts";
 import { log } from "../core/log.ts";
-import { THREADS_HEADING } from "./threads.ts";
+export const THREADS_HEADING = "# Open threads";
 
 export interface Lens {
   slug: string;

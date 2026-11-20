@@ -16,7 +16,7 @@ export function App() {
   useEffect(() => {
     startRouter();
     const stopFlush = autoFlush((r) => {
-      if (r.dropped.length) toast(copy.save.skipped, { tone: "error" });
+      if (r.dropped.length) toast(copy.toast.skipped, { tone: "error" });
       void syncNow({ full: r.dropped.length > 0 });
     });
     const stopSync = startSync();

@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useRef,
   useState,
   type ClipboardEvent,
@@ -6,19 +7,23 @@ import {
   type KeyboardEvent,
   type RefObject,
 } from "react";
-import { LIVE_CLASSES } from "@/components/add-box/live-classes.ts";
-import { useMentions } from "@/components/mention-drawer/use-mentions.ts";
+import { LIVE_CLASSES } from "@/components/add-input/live-classes.ts";
+import { useMentions } from "@/components/mention-suggestions/use-mentions.ts";
 import { mentionName, setWhenWord } from "@/lib/notes/capture.ts";
-import { liveSegments, type Picked } from "@/lib/notes/live-marks.ts";
-import {
-  insertTrigger,
-  pasteText,
-  prefixLines,
-  pullTags,
-  toggleMarks,
-  type Edit,
-} from "@/lib/notes/markers.ts";
+import type { Picked } from "@/lib/notes/live-marks.ts";
+import { insertTrigger, pasteText, prefixLines, pullTags, type Edit } from "@/lib/notes/markers.ts";
 import type { Suggestion } from "@/lib/notes/mention.ts";
+import { richSegments } from "@/lib/notes/rich-segments.ts";
+import {
+  BOLD,
+  EMPTY_RICH,
+  ITALIC,
+  changedAt,
+  replaceText,
+  richMarkdown,
+  toggleStyle,
+  wordAt,
+} from "@/lib/notes/rich-text.ts";
 import { editableField, editableText } from "@/lib/platform/editable.ts";
 import { placeLiveCaret, renderLive } from "@/lib/platform/live-render.ts";
 
@@ -29,11 +34,18 @@ export interface Saved {
   tags: string[];
 }
 
-export function useAddText(box: RefObject<HTMLDivElement | null>, kind: AddKind) {
+interface Typing {
+  at: number;
+  style: number;
+}
+
+export function useAddText(box: RefObject<HTMLDivElement | null>, kind: AddKind, initial?: string) {
   const [field] = useState(() => ({ current: editableField(box) }));
   const [text, setText] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const picked = useRef<Picked>({ names: [], tags: [] });
+  const rich = useRef(EMPTY_RICH);
+  const typing = useRef<Typing | null>(null);
   const mentions = useMentions({
     area: field,
     from: "inbox/new.md",
@@ -57,32 +69,77 @@ export function useAddText(box: RefObject<HTMLDivElement | null>, kind: AddKind)
       s.kind === "date" && kind === "todo" ? setWhenWord(value, s.value) : value,
   });
 
-  function paint(value: string) {
+  function paint() {
     if (box.current)
       renderLive(
         box.current,
-        liveSegments(value, picked.current, kind === "journal"),
+        richSegments(rich.current, picked.current, kind === "journal"),
         LIVE_CLASSES,
       );
   }
 
+  const seed = useRef(initial);
+  useEffect(() => {
+    if (!seed.current) return;
+    write(seed.current);
+    seed.current = undefined;
+  });
+
+  function take(next: string) {
+    const at = changedAt(rich.current.text, next);
+    const style = typing.current?.at === at ? typing.current.style : undefined;
+    if (next !== rich.current.text) typing.current = null;
+    rich.current = replaceText(rich.current, next, style);
+  }
+
   function write(next: string) {
-    paint(next);
+    take(next);
+    paint();
     setText(next);
   }
 
-  function apply(change: (value: string, start: number, end: number) => Edit) {
-    const now = box.current ? editableText(box.current) : text;
-    const next = change(now, field.current.selectionStart, field.current.selectionEnd);
-    write(next.value);
+  function place(start: number, end: number) {
     field.current.focus();
-    if (box.current) placeLiveCaret(box.current, next.start, next.end, LIVE_CLASSES);
+    if (box.current) placeLiveCaret(box.current, start, end, LIVE_CLASSES);
+    mentions.track();
+  }
+
+  function apply(change: (value: string, start: number, end: number) => Edit) {
+    const next = change(
+      rich.current.text,
+      field.current.selectionStart,
+      field.current.selectionEnd,
+    );
+    write(next.value);
+    place(next.start, next.end);
+  }
+
+  function style(bit: number) {
+    const start = field.current.selectionStart;
+    const end = field.current.selectionEnd;
+    const [from, to] = wordAt(rich.current.text, start);
+    if (start === end && from === to) {
+      const now =
+        typing.current?.at === start ? typing.current.style : (rich.current.styles[start - 1] ?? 0);
+      typing.current = { at: start, style: now ^ bit };
+    } else {
+      rich.current = toggleStyle(rich.current, start, end, bit).rich;
+      typing.current = start === end ? { at: start, style: rich.current.styles[from] ?? 0 } : null;
+      paint();
+    }
+    place(start, end);
+  }
+
+  function onSelect() {
+    const at = field.current.selectionStart;
+    if (typing.current && typing.current.at !== at) typing.current = null;
     mentions.track();
   }
 
   function onInput(e: FormEvent) {
     const value = box.current ? editableText(box.current) : "";
-    if (!(e.nativeEvent as InputEvent).isComposing) paint(value);
+    take(value);
+    if (!(e.nativeEvent as InputEvent).isComposing) paint();
     setText(value);
     mentions.track();
   }
@@ -100,23 +157,25 @@ export function useAddText(box: RefObject<HTMLDivElement | null>, kind: AddKind)
       return;
     }
     if (!(e.metaKey || e.ctrlKey) || e.altKey) return;
-    const mark = { b: "**", i: "_" }[e.key.toLowerCase()];
-    if (!mark) return;
+    const bit = { b: BOLD, i: ITALIC }[e.key.toLowerCase()];
+    if (!bit) return;
     e.preventDefault();
-    apply((v, s, en) => toggleMarks(v, s, en, mark));
+    style(bit);
   }
 
   function saved(): Saved {
-    const value = box.current ? editableText(box.current).trim() : "";
+    if (box.current) take(editableText(box.current));
+    const value = richMarkdown(rich.current).trim();
     return kind === "todo" ? pullTags(value, tags) : { text: value, tags: [] };
   }
 
   return {
+    text,
     mentions,
-    events: { onInput, onPaste, onSelect: mentions.track, onKeyDown },
+    events: { onInput, onPaste, onSelect, onKeyDown },
     saved,
-    bold: () => apply((v, s, e) => toggleMarks(v, s, e, "**")),
-    italic: () => apply((v, s, e) => toggleMarks(v, s, e, "_")),
+    bold: () => style(BOLD),
+    italic: () => style(ITALIC),
     list: () => apply((v, s, e) => prefixLines(v, s, e, "- ")),
     tag: () => apply((v, s, e) => insertTrigger(v, s, e, "#")),
     link: () => apply((v, s, e) => insertTrigger(v, s, e, "@")),

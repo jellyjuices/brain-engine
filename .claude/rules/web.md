@@ -16,7 +16,10 @@ Run `npm run gates` from the repo root before you finish. All must pass.
 - `npm run size` fails on any file over 200 lines. Split the file. Never raise the limit. Some old files are still over. If you touch one, split it, or at least do not make it longer.
 - Tests: `npm run test:app -- test/<file>.test.tsx`, only for files you added or changed.
 - A failure in a file you did not touch is likely another agent's work. Say so in one line. Do not fix or revert it.
-- Do not open the app in a browser and do not take screenshots. The browser tools are blocked to save tokens. Check your work with typecheck, lint and tests. The owner checks the screen themselves. Do not start a dev server from Bash. Exception: when the owner works from their phone, follow [phone-preview.md](phone-preview.md).
+- Check routine code with typecheck, lint and tests, not screenshots. Reason: each image stays in the chat and is read again on every call.
+- Never run a headless browser (Puppeteer, Playwright, headless Chrome) or start a dev server or Storybook from Bash. Exception: when the owner works from their phone, follow [phone-preview.md](phone-preview.md).
+- No screenshots. For a design request, build the proposal as Storybook stories in `app/src/mocks/<topic>.stories.tsx`, from the real parts in `components/` and `shell/`. Keep the current look and feel; change only what the proposal is about. The owner runs Storybook and tests the stories by hand. Reason: a story can be tapped and typed into; a picture cannot.
+- A mock story is a sandbox, not product code. It may use fake data and no-op handlers. Delete it once the owner approves or drops the design.
 - Do not deploy (see `AGENTS.md`). Build, then tell the owner what to run.
 
 ## Layout of `app/src`

@@ -1,4 +1,6 @@
 import { TodoRow } from "./todo-row.tsx";
+import { laterAction } from "./todo-row-actions.tsx";
+import { Checkbox } from "@/components/checkbox/checkbox.tsx";
 import { openTodo, tickTodo, tomorrow } from "@/flows/todo-flow.ts";
 import { todayIso } from "@/lib/notes/model.ts";
 import { plainText } from "@/lib/notes/search.ts";
@@ -27,7 +29,7 @@ export function TodoRefRow({ todo, showSubject = true, done, tickNow }: TodoRefR
         title={title}
         tag={tag}
         checked
-        onCheckedChange={doneMenu}
+        start={<Checkbox checked label={title} onCheckedChange={doneMenu} />}
         onOpen={doneMenu}
         onMenu={doneMenu}
       />
@@ -38,11 +40,15 @@ export function TodoRefRow({ todo, showSubject = true, done, tickNow }: TodoRefR
       title={title}
       tag={tag}
       when={whenLabel(todo, todayIso())}
-      checked={false}
-      onCheckedChange={() => void (tickAtOnce ? tickTodo(todo) : openTodo(todo, "done"))}
+      start={
+        <Checkbox
+          label={title}
+          onCheckedChange={() => void (tickAtOnce ? tickTodo(todo) : openTodo(todo, "done"))}
+        />
+      }
       onOpen={menu}
       onMenu={menu}
-      onLater={() => void tomorrow(todo)}
+      actions={[laterAction(() => void tomorrow(todo))]}
     />
   );
 }

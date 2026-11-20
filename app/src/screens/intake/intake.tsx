@@ -1,6 +1,6 @@
 import styles from "./intake.module.css";
 import { useState } from "react";
-import { Empty } from "@/components/empty/empty.tsx";
+import { EmptyState } from "@/components/empty-state/empty-state.tsx";
 import { Panel } from "@/components/panel/panel.tsx";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
 import {
@@ -39,12 +39,12 @@ export function IntakeScreen() {
 
   return (
     <>
-      <PageHeader title={copy.nav.intake} fallback="/new" />
+      <PageHeader title={copy.nav.intake} fallback="/add" />
       {result?.kind === "offline" && (
-        <Empty title={copy.intake.offlineTitle} body={copy.intake.offlineBody} />
+        <EmptyState title={copy.intake.offlineTitle} body={copy.intake.offlineBody} />
       )}
       {result?.kind === "ready" && !current && (
-        <Empty title={copy.intake.noneTitle} body={copy.intake.noneBody} />
+        <EmptyState title={copy.intake.noneTitle} body={copy.intake.noneBody} />
       )}
       {current && (
         <>

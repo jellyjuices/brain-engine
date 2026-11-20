@@ -21,13 +21,13 @@ interface Hit {
 const BOLD = /\*\*(?=[^\s*])([^\n]*?[^\s*])\*\*/;
 const ITALIC = /(?<![\p{L}\p{N}*_])([*_])(?=[^\s*_])([^\n]*?[^\s*_])\1(?![\p{L}\p{N}*_])/u;
 const EMPTY = /(?<!\S)(\*\*\*\*|__)(?!\S)/;
-const BULLET = /^(\s*)([-*] )/;
+export const BULLET = /^(\s*)([-*] )/;
 
 function escaped(text: string) {
   return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function picker(picked: Picked): RegExp | null {
+export function picker(picked: Picked): RegExp | null {
   const words = [
     ...picked.names.filter(Boolean).map((n) => `@${escaped(n)}`),
     ...picked.tags.filter(Boolean).map((t) => `#${escaped(t)}`),

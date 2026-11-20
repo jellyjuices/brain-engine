@@ -37,18 +37,25 @@ export async function killCommand(c: CliContext): Promise<number> {
   return result.ok ? 0 : 1;
 }
 
-export async function serveCommand(c: CliContext): Promise<number> {
-  const { root, flags, json } = c;
-  const { runByLaunchd, startService } = await import("./service.ts");
-  if (!flags.foreground && !runByLaunchd()) {
-    const result = await startService();
-    flags.json ? json(result) : result.lines.forEach((l) => out(l));
-    return result.ok ? 0 : 1;
-  }
+async function startInBackground(c: CliContext): Promise<number> {
+  const { startService } = await import("./service.ts");
+  const result = await startService();
+  c.flags.json ? c.json(result) : result.lines.forEach((l) => out(l));
+  return result.ok ? 0 : 1;
+}
+
+async function serveHere(c: CliContext): Promise<number> {
   const { serve } = await import("./server.ts");
+  const port = c.flags.port ? Number(c.flags.port) : undefined;
   try {
-    return await serve(root, { host: flags.host, port: flags.port ? Number(flags.port) : undefined });
+    return await serve(c.root, { host: c.flags.host, port });
   } catch (err) {
     return fail((err as Error).message);
   }
+}
+
+export async function serveCommand(c: CliContext): Promise<number> {
+  const { runByLaunchd } = await import("./service.ts");
+  const here = c.flags.foreground || runByLaunchd();
+  return here ? serveHere(c) : startInBackground(c);
 }

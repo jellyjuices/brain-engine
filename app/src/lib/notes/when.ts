@@ -34,41 +34,51 @@ function niceDate(isoDate: string) {
   }).format(at(isoDate));
 }
 
-function whenFrom(word: string, now: string): WhenPreview | undefined {
-  const w = word.trim().toLowerCase();
-  if (w === "note") return { kind: "note", label: copy.common.note };
-  if (w === "today") return { kind: "today", label: copy.common.today, due: now };
-  if (w === "tomorrow")
-    return {
-      kind: "date",
-      label: `${copy.common.tomorrow}, ${niceDate(addDays(now, 1))}`,
-      due: addDays(now, 1),
-    };
-  if (w === "someday") return { kind: "someday", label: copy.common.someday, outcome: "someday" };
-  if (w === "waiting")
-    return { kind: "waiting", label: copy.common.waitingOnSomeone, outcome: "waiting" };
-  if (/^\d{4}-\d{2}-\d{2}$/.test(w)) {
-    const d = at(w);
-    return Number.isNaN(d.getTime()) || iso(d) !== w
-      ? undefined
-      : { kind: "date", label: niceDate(w), due: w };
-  }
+const WORDS: Record<string, (now: string) => WhenPreview> = {
+  note: () => ({ kind: "note", label: copy.common.note }),
+  today: (now) => ({ kind: "today", label: copy.common.today, due: now }),
+  tomorrow: (now) => ({
+    kind: "date",
+    label: `${copy.common.tomorrow}, ${niceDate(addDays(now, 1))}`,
+    due: addDays(now, 1),
+  }),
+  someday: () => ({ kind: "someday", label: copy.common.someday, outcome: "someday" }),
+  waiting: () => ({ kind: "waiting", label: copy.common.waitingOnSomeone, outcome: "waiting" }),
+};
+
+function onDate(due: string): WhenPreview {
+  return { kind: "date", label: niceDate(due), due };
+}
+
+function isoWhen(w: string): WhenPreview | undefined {
+  const d = at(w);
+  return Number.isNaN(d.getTime()) || iso(d) !== w ? undefined : onDate(w);
+}
+
+function monthDayWhen(w: string, now: string): WhenPreview | undefined {
   const md = w.match(/^([a-z]{3})[a-z]*\.?\s+(\d{1,2})$/);
   const mi = md ? MONTHS.indexOf(md[1]!) : -1;
-  if (md && mi !== -1) {
-    const day = Number(md[2]);
-    const year = Number(now.slice(0, 4));
-    let due = `${year}-${pad(mi + 1)}-${pad(day)}`;
-    if (due < now) due = `${year + 1}-${pad(mi + 1)}-${pad(day)}`;
-    return at(due).getDate() === day ? { kind: "date", label: niceDate(due), due } : undefined;
-  }
+  if (!md || mi === -1) return undefined;
+  const day = Number(md[2]);
+  const year = Number(now.slice(0, 4));
+  const thisYear = `${year}-${pad(mi + 1)}-${pad(day)}`;
+  const due = thisYear < now ? `${year + 1}-${pad(mi + 1)}-${pad(day)}` : thisYear;
+  return at(due).getDate() === day ? onDate(due) : undefined;
+}
+
+function weekdayWhen(w: string, now: string): WhenPreview | undefined {
   const d = DAYS.indexOf(w.slice(0, 3));
-  if (d !== -1 && w.length <= 9) {
-    const dow = at(now).getDay();
-    const due = addDays(now, (d - dow + 7) % 7 || 7);
-    return { kind: "date", label: niceDate(due), due };
-  }
-  return undefined;
+  if (d === -1 || w.length > 9) return undefined;
+  const dow = at(now).getDay();
+  return onDate(addDays(now, (d - dow + 7) % 7 || 7));
+}
+
+function whenFrom(word: string, now: string): WhenPreview | undefined {
+  const w = word.trim().toLowerCase();
+  const named = Object.hasOwn(WORDS, w) ? WORDS[w] : undefined;
+  if (named) return named(now);
+  if (/^\d{4}-\d{2}-\d{2}$/.test(w)) return isoWhen(w);
+  return monthDayWhen(w, now) ?? weekdayWhen(w, now);
 }
 
 export function readWhen(word: string, now = iso(new Date())): WhenPreview | undefined {

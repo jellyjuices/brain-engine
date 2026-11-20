@@ -1,7 +1,7 @@
 import styles from "./view-tabs.module.css";
 import { Tabs } from "radix-ui";
 import type { ReactNode } from "react";
-import { usePill } from "./use-pill.ts";
+import { useTabIndicator } from "./use-tab-indicator.ts";
 
 export type View = { value: string; label: string; disabled?: boolean };
 
@@ -14,7 +14,7 @@ export type ViewTabsProps = {
 };
 
 export const ViewTabs = ({ views, value, onValueChange, label, renderPanel }: ViewTabsProps) => {
-  const { list: listRef, box } = usePill(value);
+  const { list: listRef, box } = useTabIndicator(value);
   return (
     <Tabs.Root value={value} onValueChange={onValueChange} activationMode="manual">
       <Tabs.List ref={listRef} className={styles.list} aria-label={label}>

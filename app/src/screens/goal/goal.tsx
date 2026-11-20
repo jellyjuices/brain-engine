@@ -1,4 +1,4 @@
-import { Empty } from "@/components/empty/empty.tsx";
+import { EmptyState } from "@/components/empty-state/empty-state.tsx";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { useLoaded } from "@/hooks/use-loaded.ts";
 import { useNotes } from "@/hooks/use-notes.ts";
@@ -19,10 +19,10 @@ export function GoalScreen() {
         fallback="/goals"
       />
       {goal.kind === "offline" && (
-        <Empty title={copy.goals.offlineTitle} body={copy.goals.offlineBody} />
+        <EmptyState title={copy.goals.offlineTitle} body={copy.goals.offlineBody} />
       )}
       {goal.kind === "missing" && (
-        <Empty title={copy.goals.missingTitle} body={copy.goals.missingBody} />
+        <EmptyState title={copy.goals.missingTitle} body={copy.goals.missingBody} />
       )}
       {goal.kind === "ready" && <GoalBody goal={goal.data} notes={notes} />}
     </>

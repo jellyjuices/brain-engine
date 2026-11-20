@@ -3,8 +3,8 @@ import { TrayIcon } from "@phosphor-icons/react";
 import { useCallback, useEffect, useState } from "react";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { IconButton } from "@/components/icon-button/icon-button.tsx";
-import { Pull } from "@/components/pull/pull.tsx";
-import { SyncLine } from "@/components/sync-line/sync-line.tsx";
+import { PullToRefresh } from "@/components/pull-to-refresh/pull-to-refresh.tsx";
+import { SyncStatus } from "@/components/sync-status/sync-status.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { useOutboxCount } from "@/hooks/use-outbox-count.ts";
 import { inboxItems } from "@/lib/notes/capture.ts";
@@ -14,7 +14,7 @@ import { computeToday, fromServer, type TodayItem } from "@/lib/notes/today.ts";
 import { api } from "@/lib/sync/api.ts";
 import { syncNow } from "@/lib/sync/sync.ts";
 import { TodayList } from "./today-list.tsx";
-import { Empty } from "@/components/empty/empty.tsx";
+import { EmptyState } from "@/components/empty-state/empty-state.tsx";
 import { copy } from "@/content/index.ts";
 
 type Remote = { date: string; items: TodayItem[] } | null;
@@ -50,7 +50,7 @@ export function TodayScreen() {
 
   return (
     <>
-      <Pull onRefresh={refresh} />
+      <PullToRefresh onRefresh={refresh} />
       <PageHeader
         title={longDate(now)}
         action={
@@ -68,12 +68,12 @@ export function TodayScreen() {
           </span>
         }
       />
-      <SyncLine />
+      <SyncStatus />
       <div>
         {notes.length || data.items.length ? (
           <TodayList data={data} />
         ) : (
-          <Empty title={copy.today.noNotesTitle} body={copy.today.noNotesBody} />
+          <EmptyState title={copy.today.noNotesTitle} body={copy.today.noNotesBody} />
         )}
       </div>
     </>

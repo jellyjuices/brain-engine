@@ -3,11 +3,12 @@ export interface ToastAction {
   onClick: () => void;
 }
 
-export type ToastTone = "offline" | "error";
+export type ToastTone = "offline" | "error" | "deleted";
 
 export interface ToastItem {
   id: number;
   message: string;
+  detail?: string;
   actions: ToastAction[];
   tone?: ToastTone;
   leaving: boolean;
@@ -15,6 +16,7 @@ export interface ToastItem {
 
 export interface ToastOptions {
   ms?: number;
+  detail?: string;
   action?: ToastAction;
   actions?: ToastAction[];
   tone?: ToastTone;
@@ -49,7 +51,7 @@ export function toast(message: string, opts: number | ToastOptions = {}) {
   const o = typeof opts === "number" ? { ms: opts } : opts;
   const id = nextId++;
   const actions = [...(o.actions ?? []), ...(o.action ? [o.action] : [])];
-  publish([...items, { id, message, actions, tone: o.tone, leaving: false }]);
+  publish([...items, { id, message, detail: o.detail, actions, tone: o.tone, leaving: false }]);
   later(() => closeToast(id), o.ms ?? (actions.length ? 5000 : 3000));
 }
 

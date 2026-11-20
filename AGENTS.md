@@ -19,7 +19,7 @@ Where it runs: one always-on home server, a Mac mini, holds the one copy of the 
 
 Intent for every part: [docs/intent/README.md](docs/intent/README.md). When the intent and the code disagree, the intent wins: change the intent doc first.
 
-Plan and state of the work: [docs/plan/handoff.md](docs/plan/handoff.md). Screen design: [docs/design/](docs/design/concept-a.md).
+Plan and state of the work: [docs/plan/handoff.md](docs/plan/handoff.md). Screen behaviours: [docs/design/](docs/design/add-panel-behaviours.md).
 
 The root holds six folders and no code: `engine/`, `app/`, `worker/`, `ops/`, `starter/` and `docs/`. Put a new file inside one of them, not at the root.
 

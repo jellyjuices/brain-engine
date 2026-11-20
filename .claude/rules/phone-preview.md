@@ -11,7 +11,7 @@ Use this mode when the owner says they are on their phone (a Pixel), or when the
 ## What changes in this mode
 
 - The owner may ask to skip the gates. Then build and show. Still run them before you call the work done, unless they say not to.
-- Screenshots are allowed here. `web.md` says no screenshots for normal work. This mode is the exception.
+- Playwright screenshots are allowed here. `web.md` bans headless browsers for normal work. This mode is the exception.
 - Still never run a dev server. The preview is a built file.
 
 ## Steps

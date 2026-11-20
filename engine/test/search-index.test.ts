@@ -28,11 +28,12 @@ const fake: Embedder = {
   },
 };
 
+const YEAR_2100 = 4_102_444_800;
 let tick = 0;
 function write(root: string, rel: string, title: string, body: string, extra = "") {
   const full = join(root, rel);
   writeFileSync(full, `---\ntype: Note\ntitle: ${title}\ndescription: A test note.\n${extra}---\n\n${body}\n`);
-  const later = Date.now() / 1000 + 10 + tick++;
+  const later = YEAR_2100 + tick++;
   utimesSync(full, later, later);
 }
 

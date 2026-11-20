@@ -3,7 +3,8 @@
 import { captureText } from "../../todos/absorb.ts";
 import { BIT_KINDS, type SortBit, sortBits, whenFrom } from "../../capture/file.ts";
 import { GENERAL } from "../../capture/picked.ts";
-import { saveItem } from "../../capture/pull.ts";
+import { guessItem, saveItem } from "../../capture/pull.ts";
+import { routeEmbedder } from "../../core/search.ts";
 import { loadAll } from "../../core/files.ts";
 import { folderOf, str } from "../../core/notes.ts";
 import { isOwnerWriter } from "../../core/owner.ts";
@@ -25,7 +26,7 @@ function writer(c: Ctx): string | undefined {
 
 const notePaths = (v: unknown, name: string) => textList(v, name)?.map((p) => safeNotePath(p, true));
 
-export function addRoute(c: Ctx): AddResponse {
+export async function addRoute(c: Ctx): Promise<AddResponse> {
   const t = text(c.body.text, "text")!.trim();
   if (!t) throw new HttpError(400, `Missing "text".`);
   if (Buffer.byteLength(t) > MAX_CAPTURE) throw new HttpError(413, "A capture can be 64 KB at most.");
@@ -58,7 +59,8 @@ export function addRoute(c: Ctx): AddResponse {
     people: notePaths(c.body.people, "people"),
     by: writer(c),
   };
-  const { saved, path } = afterWrite(c.root, () => saveItem(c.root, item));
+  const guess = await guessItem(c.root, item, await routeEmbedder(c.root));
+  const { saved, path } = afterWrite(c.root, () => saveItem(c.root, item, guess));
   clearDraft(c.root, c.body.draft_id);
   return { path, client_id: clientId, saved };
 }

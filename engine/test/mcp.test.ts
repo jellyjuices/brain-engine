@@ -26,25 +26,34 @@ test("T4: the tool list matches its snapshot (set UPDATE_SNAPSHOT=1 to rewrite i
   const defs = TOOLS.map((t) => t.def);
   if (process.env.UPDATE_SNAPSHOT || !existsSync(SNAPSHOT)) writeFileSync(SNAPSHOT, JSON.stringify(defs, null, 2) + "\n");
   assert.deepEqual(defs, JSON.parse(readFileSync(SNAPSHOT, "utf8")));
-  for (const d of defs) assert.ok(d.description.split(/\s+/).length < 30, `${d.name}: description is 30 words or more`);
+});
+
+test("T4: every tool description is under 30 words", () => {
+  const long = TOOLS.map((t) => t.def).filter((d) => d.description.split(/\s+/).length >= 30).map((d) => d.name);
+  assert.deepEqual(long, []);
 });
 
 test("T4: one tool per route, and owner-only and hidden routes have none", () => {
   assert.deepEqual(TOOLS.map((t) => t.route), ROUTES.filter((r) => !r.owner && r.mcp !== false));
   const names = new Set(TOOLS.map((t) => t.def.name));
-  for (const r of ROUTES.filter((x) => x.owner || x.mcp === false)) assert.equal(names.has(r.tool), false, r.tool);
+  const leaked = ROUTES.filter((r) => (r.owner || r.mcp === false) && names.has(r.tool)).map((r) => r.tool);
+  assert.deepEqual(leaked, []);
   assert.equal(TOOLS.length, 24);
-  for (const t of TOOLS) assert.equal(t.def.annotations.readOnlyHint, t.route.method === "GET", t.def.name);
 });
 
-test("T4: no token, a wrong token or the owner token gets 401", () => withApi(async (a) => {
-  issueAgentToken(a.agentFile);
-  for (const auth of [null, "made-up", TOKEN]) {
+test("T4: a tool is read-only exactly when its route is a GET", () => {
+  const wrong = TOOLS.filter((t) => t.def.annotations.readOnlyHint !== (t.route.method === "GET")).map((t) => t.def.name);
+  assert.deepEqual(wrong, []);
+});
+
+for (const [label, auth] of [["no token", null], ["a made-up token", "made-up"], ["the owner token", TOKEN]] as const) {
+  test(`T4: ${label} gets 401 with a Bearer challenge`, () => withApi(async (a) => {
+    issueAgentToken(a.agentFile);
     const r = await rpc(a, { id: 1, method: "tools/list" }, auth);
-    assert.equal(r.status, 401, String(auth));
+    assert.equal(r.status, 401);
     assert.equal(r.headers.get("www-authenticate"), "Bearer");
-  }
-}));
+  }));
+}
 
 test("T4: initialize, tools/list, then tools/call, end to end", () => withApi(async (a) => {
   const agent = issueAgentToken(a.agentFile);

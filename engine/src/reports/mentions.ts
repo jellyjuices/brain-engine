@@ -73,26 +73,40 @@ export function knownNames(notes: Note[]): Set<string> {
   return known;
 }
 
+const isStop = (word: string) => STOP.has(word.toLowerCase());
+
+function startsSentence(line: string, index: number): boolean {
+  const before = line.slice(0, index).replace(/\s+$/, "");
+  return before === "" || /^(?:[-*+]|\d+\.)(?:\s+\[[ xX]\])?$/.test(before) || /[.!?:·—–-]$/.test(before);
+}
+
+function leadTrimmed(words: string[], atStart: boolean): string[] {
+  if (!atStart) return words;
+  if (isStop(words[0])) return words.slice(1);
+  return words.length === 1 ? [] : words;
+}
+
+function tailTrimmed(words: string[]): string[] {
+  let end = words.length;
+  while (end && isStop(words[end - 1])) end--;
+  return words.slice(0, end);
+}
+
+const tooWeak = (words: string[]) => !words.length || (words.length === 1 && (isStop(words[0]) || words[0].length < 3));
+
+function nameFrom(line: string, match: RegExpMatchArray): string | undefined {
+  const words = tailTrimmed(leadTrimmed(match[0].split(" "), startsSentence(line, match.index ?? 0)));
+  return tooWeak(words) ? undefined : words.join(" ");
+}
+
+function namesInLine(line: string): string[] {
+  if (/^\s*#/.test(line)) return [];
+  return [...line.matchAll(/\b[A-Z][a-z]+(?: [A-Z][a-z]+){0,2}\b/g)].flatMap((m) => nameFrom(line, m) ?? []);
+}
+
 /** Capitalised names (1-3 words) in the text. Single words at the start of a sentence are not names. */
 export function namesIn(body: string): string[] {
-  const out: string[] = [];
-  for (const raw of plainText(body).split("\n")) {
-    if (/^\s*#/.test(raw)) continue;
-    const line = raw;
-    for (const match of line.matchAll(/\b[A-Z][a-z]+(?: [A-Z][a-z]+){0,2}\b/g)) {
-      const before = line.slice(0, match.index).replace(/\s+$/, "");
-      const atStart = before === "" || /^(?:[-*+]|\d+\.)(?:\s+\[[ xX]\])?$/.test(before) || /[.!?:·—–-]$/.test(before);
-      let words = match[0].split(" ");
-      if (atStart && STOP.has(words[0].toLowerCase())) words = words.slice(1);
-      else if (atStart && words.length === 1) continue;
-      if (!words.length) continue;
-      // Drop stopwords inside the name edges ("Tessa The").
-      while (words.length && STOP.has(words[words.length - 1].toLowerCase())) words.pop();
-      if (!words.length || (words.length === 1 && (STOP.has(words[0].toLowerCase()) || words[0].length < 3))) continue;
-      out.push(words.join(" "));
-    }
-  }
-  return out;
+  return plainText(body).split("\n").flatMap(namesInLine);
 }
 
 /** Names with no note that show in 2 or more subject notes. Most-used first. */

@@ -27,7 +27,7 @@ function rolledTo(todo: TodoRef, d: Decision, now: string): string | undefined {
 }
 
 function labelFor(d: Decision, now: string, next: string | undefined) {
-  if (!next) return copy.save.changeToast[d.kind];
+  if (!next) return copy.toast.changeToast[d.kind];
   const day = dayLabel(next, now);
   return d.kind === "skip" ? copy.todos.skippedBack(day) : copy.todos.doneBack(day);
 }

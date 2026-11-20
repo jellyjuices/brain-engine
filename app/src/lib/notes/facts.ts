@@ -82,41 +82,57 @@ export function birthdayFact(
 
 const PARTNER_RE = /\b(partner|wife|husband|spouse|girlfriend|boyfriend|fianc[eé]e?)\b/i;
 
-export function findPartner(
-  note: StoredNote,
-  notes: StoredNote[],
-): { name: string; path?: string; role: string } | null {
+type Partner = { name: string; path?: string; role: string };
+
+function plainRole(role: string) {
+  return role.replace(/^(his|her|their)\s+/i, "");
+}
+
+function peopleLines(body: string): string[] {
+  const out: string[] = [];
   let section = "";
-  for (const line of note.body.split("\n")) {
+  for (const line of body.split("\n")) {
     const head = /^#\s+(.+)/.exec(line);
-    if (head) {
-      section = head[1]!.trim();
-      continue;
-    }
-    if (section !== "People") continue;
-    const m = /^-\s+(?:\[([^\]]+)\]\(([^)\s]+)\)|([^·]+?))\s*·\s*(.+)$/.exec(line.trim());
-    if (!m) continue;
-    const role = m[4]!.split("·")[0]!.trim();
-    if (!PARTNER_RE.test(role)) continue;
-    const path = m[2] ? (resolveLink(note.path, m[2]) ?? undefined) : undefined;
-    return {
-      name: (m[1] ?? m[3])!.trim(),
-      ...(path && { path }),
-      role: role.replace(/^(his|her|their)\s+/i, ""),
-    };
+    if (head) section = head[1]!.trim();
+    else if (section === "People") out.push(line);
   }
+  return out;
+}
+
+function partnerFromLine(note: StoredNote, line: string): Partner | null {
+  const m = /^-\s+(?:\[([^\]]+)\]\(([^)\s]+)\)|([^·]+?))\s*·\s*(.+)$/.exec(line.trim());
+  const role = m ? m[4]!.split("·")[0]!.trim() : "";
+  if (!m || !PARTNER_RE.test(role)) return null;
+  const path = m[2] ? (resolveLink(note.path, m[2]) ?? undefined) : undefined;
+  return { name: (m[1] ?? m[3])!.trim(), ...(path && { path }), role: plainRole(role) };
+}
+
+function partnerRoleIn(other: StoredNote, target: string): string | undefined {
+  for (const line of other.body.split("\n")) {
+    const m = /^-\s+\[[^\]]+\]\(([^)\s]+)\)\s*·\s*([^·]+)/.exec(line.trim());
+    if (m && resolveLink(other.path, m[1]!) === target && PARTNER_RE.test(m[2]!)) return m[2]!;
+  }
+  return undefined;
+}
+
+function partnerLinkingTo(note: StoredNote, notes: StoredNote[]): Partner | null {
   for (const other of notes) {
     if (other.path === note.path || other.type !== "Person") continue;
-    for (const line of other.body.split("\n")) {
-      const m = /^-\s+\[[^\]]+\]\(([^)\s]+)\)\s*·\s*([^·]+)/.exec(line.trim());
-      if (m && resolveLink(other.path, m[1]!) === note.path && PARTNER_RE.test(m[2]!)) {
-        return {
-          name: str(other.meta.full_name) || other.title,
-          path: other.path,
-          role: m[2]!.trim().replace(/^(his|her|their)\s+/i, ""),
-        };
-      }
-    }
+    const role = partnerRoleIn(other, note.path);
+    if (role)
+      return {
+        name: str(other.meta.full_name) || other.title,
+        path: other.path,
+        role: plainRole(role.trim()),
+      };
   }
   return null;
+}
+
+export function findPartner(note: StoredNote, notes: StoredNote[]): Partner | null {
+  for (const line of peopleLines(note.body)) {
+    const partner = partnerFromLine(note, line);
+    if (partner) return partner;
+  }
+  return partnerLinkingTo(note, notes);
 }

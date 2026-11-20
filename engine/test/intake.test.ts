@@ -217,7 +217,8 @@ test("redact removes the line, its quote, the raw answer and matching threads", 
 
 // ---- R11: intake builds relations ----------------------------------------
 
-import { intakePrompts, saveSubject } from "../src/intake/subjects.ts";
+import { intakePrompts } from "../src/intake/subjects.ts";
+import { saveSubject } from "../src/intake/subject-save.ts";
 import { fileIntakeTodo } from "../src/intake/intake-todo.ts";
 import { endSummary, linkKnownNames } from "../src/intake/intake-end.ts";
 import { loadAll } from "../src/core/files.ts";

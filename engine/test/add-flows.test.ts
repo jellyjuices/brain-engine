@@ -108,8 +108,8 @@ test("a new area gets the next unused colour", () => withApi(async (a) => {
   const one = await a.call("POST", "/api/notes", { type: "Area", title: "Garden" });
   const two = await a.call("POST", "/api/notes", { type: "Area", title: "Pets" });
   const colours = [one, two].map((r) => parse(file(a.root, r.data.path)).meta.color);
-  assert.equal(colours[0] === colours[1], false);
-  assert.ok(colours.every((c) => typeof c === "string" && c));
+  assert.notEqual(colours[0], colours[1]);
+  assert.deepEqual(colours.filter((c) => typeof c !== "string" || c === ""), []);
 }));
 
 test("a project can be marked finished, and an old stable project reads as active", () => withApi(async (a) => {

@@ -1,5 +1,5 @@
 import { PageHeader } from "@/components/page-header/page-header.tsx";
-import { Empty } from "@/components/empty/empty.tsx";
+import { EmptyState } from "@/components/empty-state/empty-state.tsx";
 import { useLoaded } from "@/hooks/use-loaded.ts";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { fetchGoals } from "@/lib/sync/goals-api.ts";
@@ -15,10 +15,10 @@ export function GoalsScreen() {
       <PageHeader title={copy.goals.title} />
       <div className={styles.body}>
         {(goals.kind === "offline" || goals.kind === "missing") && (
-          <Empty title={copy.goals.offlineTitle} body={copy.goals.offlineBody} />
+          <EmptyState title={copy.goals.offlineTitle} body={copy.goals.offlineBody} />
         )}
         {goals.kind === "ready" && goals.data.length === 0 && (
-          <Empty title={copy.goals.noGoalsTitle} body={copy.goals.noGoalsBody} />
+          <EmptyState title={copy.goals.noGoalsTitle} body={copy.goals.noGoalsBody} />
         )}
         {goals.kind === "ready" &&
           goals.data.map((goal) => <GoalCard key={goal.path} goal={goal} notes={notes} />)}

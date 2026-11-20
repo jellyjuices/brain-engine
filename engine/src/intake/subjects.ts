@@ -8,12 +8,9 @@
 
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, join, posix } from "node:path";
-import { newNote } from "../capture/actions.ts";
 import { addNoteLine } from "../todos/todos.ts";
-import { appendToSection } from "../../shared/line/index.ts";
-import { subjectsNamed } from "../capture/file.ts";
-import { type Note, nowStamp, titleOf, today, typeOf } from "../core/notes.ts";
-import { loadAll, readNote, writeAtomic, writeNote } from "../core/files.ts";
+import { type Note, titleOf, today } from "../core/notes.ts";
+import { loadAll, writeAtomic, writeNote } from "../core/files.ts";
 import { findNote } from "../reports/find.ts";
 import { guessKind, knownNames, namesIn, secondMentions } from "../reports/mentions.ts";
 import { change } from "../todos/undo.ts";
@@ -22,7 +19,7 @@ export const SESSION_FILE = ".reports/intake-session.json";
 export const SUBJECT_KINDS = ["Person", "Group", "Place", "Thing", "Topic"] as const;
 /** Subject types that get a link in a lens line. Areas are common words, so they stay plain. */
 export const LINKABLE = ["Person", "Group", "Place", "Thing", "Topic", "Project", "Event"];
-const HEADING_OF: Record<string, string> = { Person: "# People", Group: "# Groups", Project: "# Projects", Place: "# Places", Thing: "# Things", Topic: "# Topics" };
+export const HEADING_OF: Record<string, string> = { Person: "# People", Group: "# Groups", Project: "# Projects", Place: "# Places", Thing: "# Things", Topic: "# Topics" };
 
 export interface SessionChange {
   kind: "new" | "relation" | "fact" | "todo";
@@ -95,69 +92,7 @@ export function intakePrompts(root: string, text: string, notes = loadAll(root))
 }
 
 export const rel = (from: string, to: string) => posix.relative(posix.dirname(from), to);
-const label = (n: Note) => titleOf(n).split(",")[0];
-
-export interface SubjectInput {
-  name: string;
-  /** Person, Group, Place, Thing or Topic. Default Person. */
-  type?: string;
-  /** The owner's word for the role, never guessed. Blank when they skipped. */
-  role?: string;
-  /** A note (path, slug or title) the subject is linked to: "Acme" for "co-founder of Acme". */
-  about?: string;
-  /** The first fact, in the owner's words. */
-  fact?: string;
-  /** One line on what it is. Defaults to the owner's fact or role. */
-  description?: string;
-  by?: string;
-}
-
-export interface SubjectResult {
-  skipped: boolean;
-  path?: string;
-  lines: string[];
-}
-
-/** Make the subject's note from the owner's answer. Writes a relation line (when it is linked to a known note) and a first fact. */
-export function saveSubject(root: string, input: SubjectInput): SubjectResult {
-  const name = input.name.trim();
-  const role = input.role?.trim() || undefined;
-  const fact = input.fact?.trim() || undefined;
-  if (!name) throw new Error("Give the name.");
-  if (!role && !fact && !input.description?.trim() && !input.about) return { skipped: true, lines: [] }; // the owner skipped: write nothing, never guess
-  const type = input.type ? input.type[0].toUpperCase() + input.type.slice(1).toLowerCase() : "Person";
-  if (!(SUBJECT_KINDS as readonly string[]).includes(type)) throw new Error(`type must be one of: ${SUBJECT_KINDS.join(", ")}`);
-  const notes = loadAll(root);
-  if (subjectsNamed(notes, name).some((n) => n.meta.title && titleOf(n).toLowerCase() === name.toLowerCase())) throw new Error(`${name} already has a note. Add a fact with: brain intake fact`);
-  const about = input.about ? findNote(notes, input.about) : undefined;
-  if (input.about && !about) throw new Error(`No note matches "${input.about}".`);
-  const description = (input.description?.trim() || fact || (role ? `${role}${about ? ` of ${label(about)}` : ""}` : about ? `Linked to ${label(about)}` : "")).slice(0, 150);
-  const made = newNote(root, type, name, { description, generated: { by: input.by ?? "claude", at: nowStamp() } });
-  const lines: string[] = [];
-  record(root, { kind: "new", subject: name, type: type.toLowerCase(), text: description, path: made.path });
-  if (about) {
-    const line = `- [${label(about)}](${rel(made.path, about.path)})${role ? ` · ${role}` : ""}`;
-    const heading = HEADING_OF[typeOf(about) ?? ""] ?? "# Related";
-    change(root, made.path, `intake: ${name} linked to ${label(about)}`, () => {
-      const note = readNote(root, made.path);
-      writeNote(root, made.path, note.meta, appendToSection(note.body, heading, line));
-    });
-    const said = `${name}${role ? ` · ${role} of` : " ·"} ${label(about)}.`;
-    lines.push(said);
-    record(root, { kind: "relation", subject: name, type: type.toLowerCase(), text: said, path: made.path });
-  } else if (role) {
-    // No known subject to link to: the role is a fact on the note, in their words.
-    const said = `${name} · ${role}.`;
-    lines.push(said);
-    record(root, { kind: "relation", subject: name, type: type.toLowerCase(), text: said, path: made.path });
-    if (!fact) change(root, made.path, `intake: ${name} · ${role}`, () => addNoteLine(root, made.path, `${role}`));
-  }
-  if (fact) {
-    change(root, made.path, `intake: first fact for ${name}`, () => addNoteLine(root, made.path, fact));
-    record(root, { kind: "fact", subject: name, text: fact, path: made.path });
-  }
-  return { skipped: false, path: made.path, lines };
-}
+export const label = (n: Note) => titleOf(n).split(",")[0];
 
 /** Add a dated fact line to an existing subject note. Undoable. */
 export function addSubjectFact(root: string, into: string, text: string): string {

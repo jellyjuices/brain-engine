@@ -16,14 +16,15 @@ export const SCREEN_NAMES = [
   "today",
   "find",
   "add",
-  "new",
-  "write",
+  "journal",
   "brain",
   "note",
   "settings",
   "inbox",
   "intake",
   "report",
+  "person",
+  "file",
 ] as const;
 export type ScreenName = (typeof SCREEN_NAMES)[number];
 
@@ -125,13 +126,27 @@ export function routeSnapshot(): Route {
   return cached;
 }
 
-function onClick(e: MouseEvent) {
-  if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)
-    return;
+function isPlainClick(e: MouseEvent) {
+  const modified = e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
+  return !e.defaultPrevented && e.button === 0 && !modified;
+}
+
+const SERVER_PATHS = ["//", "/api/", "/relay/"];
+
+function isAppHref(href: string | null | undefined): href is string {
+  return Boolean(href?.startsWith("/")) && !SERVER_PATHS.some((p) => href?.startsWith(p));
+}
+
+function appLink(e: MouseEvent) {
   const a = (e.target as Element | null)?.closest?.("a");
   const href = a?.getAttribute("href");
-  if (!a || !href?.startsWith("/") || href.startsWith("//") || a.target) return;
-  if (a.hasAttribute("download") || href.startsWith("/api/") || href.startsWith("/relay/")) return;
+  if (!a || a.target || a.hasAttribute("download") || !isAppHref(href)) return null;
+  return href;
+}
+
+function onClick(e: MouseEvent) {
+  const href = isPlainClick(e) ? appLink(e) : null;
+  if (!href) return;
   e.preventDefault();
   go(href);
 }

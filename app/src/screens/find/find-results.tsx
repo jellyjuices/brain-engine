@@ -1,13 +1,13 @@
-import { SubjectCard } from "@/components/card/subject-card.tsx";
+import { SubjectCard } from "@/components/subject-card/subject-card.tsx";
 import { SectionHeader } from "@/components/section-header/section-header.tsx";
-import { List } from "@/components/row/list.tsx";
-import { Row } from "@/components/row/row.tsx";
+import { List } from "@/components/list/list.tsx";
+import { ListRow } from "@/components/list/list-row.tsx";
 import { noteHref, todayIso, type StoredNote } from "@/lib/notes/model.ts";
 import { rememberSearch } from "@/lib/notes/recent-searches.ts";
 import type { RemoteSearch } from "@/lib/notes/server-search.ts";
 import { buildCard, cardHasContent, matchSubject } from "@/lib/notes/subject-card.ts";
 import { typeLook } from "@/lib/notes/kinds.ts";
-import { Empty } from "@/components/empty/empty.tsx";
+import { EmptyState } from "@/components/empty-state/empty-state.tsx";
 import { AnswerRow } from "./answer-row.tsx";
 import { useDeviceFind } from "./use-device-find.ts";
 import { copy } from "@/content/index.ts";
@@ -33,7 +33,7 @@ export function FindResults({ q, notes, remote }: FindResultsProps) {
   const answer = found.answer;
   const answerNote = answer && found.notes.find((x) => x.path === answer.path);
 
-  if (!card && !others.length) return <Empty size="sm" title={copy.common.nothingFound} />;
+  if (!card && !others.length) return <EmptyState size="sm" title={copy.common.nothingFound} />;
   return (
     <>
       {card && <SubjectCard card={card} heading bare={!cardHasContent(card) && !others.length} />}
@@ -49,7 +49,7 @@ export function FindResults({ q, notes, remote }: FindResultsProps) {
           <SectionHeader title={card ? copy.notes.more : copy.notes.notes} />
           <List>
             {others.map((x) => (
-              <Row
+              <ListRow
                 key={x.path}
                 {...typeLook(x.type)}
                 href={noteHref(x.path)}

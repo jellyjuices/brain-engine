@@ -1,6 +1,6 @@
-import { TimelineLine } from "@/components/timeline-line/timeline-line.tsx";
-import { List } from "@/components/row/list.tsx";
-import { Row } from "@/components/row/row.tsx";
+import { TimelineEntry } from "@/components/timeline-entry/timeline-entry.tsx";
+import { List } from "@/components/list/list.tsx";
+import { ListRow } from "@/components/list/list-row.tsx";
 import { SubgoalLink } from "@/components/subgoal-link/subgoal-link.tsx";
 import type { GoalView } from "@shared/todos/index.ts";
 import { linkedPaths, titleAt } from "@/lib/notes/goals.ts";
@@ -24,7 +24,7 @@ export function GoalLinks({ goal, notes }: GoalLinksProps) {
         <GoalSection title={copy.goals.projects}>
           <List>
             {projects.map((path) => (
-              <Row key={path} title={titleAt(notes, path)} href={noteHref(path)} chevron />
+              <ListRow key={path} title={titleAt(notes, path)} href={noteHref(path)} chevron />
             ))}
           </List>
         </GoalSection>
@@ -33,7 +33,7 @@ export function GoalLinks({ goal, notes }: GoalLinksProps) {
         <GoalSection title={copy.goals.wins} count={goal.wins.length}>
           <List variant="plain">
             {goal.wins.map((win) => (
-              <TimelineLine
+              <TimelineEntry
                 key={`${win.path}::${win.text}`}
                 date={win.date ?? ""}
                 dateLabel={win.date ? niceDate(win.date) : ""}
@@ -58,7 +58,7 @@ export function GoalLinks({ goal, notes }: GoalLinksProps) {
         <GoalSection title={copy.goals.decisions}>
           <List>
             {goal.decisions.map((d) => (
-              <Row key={d.path} title={d.title} href={noteHref(d.path)} chevron />
+              <ListRow key={d.path} title={d.title} href={noteHref(d.path)} chevron />
             ))}
           </List>
         </GoalSection>

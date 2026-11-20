@@ -163,12 +163,17 @@ test("inbox refuses a bad into path", async () => {
     7,
     "",
   ];
-  for (const into of bad)
-    assert.equal(
-      (await capture(env, cookie, { client_id: "b", text: "hi", into })).status,
-      400,
-      String(into),
-    );
+  const statuses = await Promise.all(
+    bad.map(async (into, i) => [
+      into,
+      (await capture(env, cookie, { client_id: `bad-${i}`, text: "Call the dentist", into }))
+        .status,
+    ]),
+  );
+  assert.deepEqual(
+    statuses,
+    bad.map((into) => [into, 400]),
+  );
   assert.equal(db.inbox.size, 0);
   assert.equal(
     (await capture(env, cookie, { client_id: "ok", text: "hi", into: "x".repeat(197) + ".md" }))

@@ -79,13 +79,27 @@ function target(root: string, path: string): Note {
 
 const linkTo = (from: string, to: Note) => `[${titleOf(to).split(",")[0]}](${posix.relative(posix.dirname(from), to.path)})`;
 
+type When = NonNullable<ReturnType<typeof whenFrom>>;
+
+function parsedWhen(word?: string): When | undefined {
+  if (!word) return undefined;
+  const when = whenFrom(word);
+  if (!when) throw new Error(`"${word}" is not a day I know.`);
+  return when;
+}
+
+const DATED_KINDS = new Set(["date", "today"]);
+const PLAIN_KINDS = new Set(["date", "note", "today"]);
+
+function whenPatch(when?: When): TodoPatch {
+  if (!when) return {};
+  if (DATED_KINDS.has(when.kind)) return { due: when.due ?? today() };
+  return PLAIN_KINDS.has(when.kind) ? {} : { outcome: when.kind as TodoPatch["outcome"] };
+}
+
 function todoPatch(t: TodoInput, rel: string, root: string): TodoPatch & { text: string } {
-  const when = t.when ? whenFrom(t.when) : undefined;
-  if (t.when && !when) throw new Error(`"${t.when}" is not a day I know.`);
-  const outcome = !when || when.kind === "date" || when.kind === "note" ? undefined : when.kind;
-  const due = when && (when.kind === "date" || when.kind === "today") ? (when.due ?? today()) : undefined;
-  const toward = t.toward ? [linkTo(rel, target(root, t.toward))] : undefined;
-  return { text: t.text.trim(), ...(due && { due }), ...(outcome && outcome !== "today" && { outcome }), ...(toward && { toward }) };
+  const toward = t.toward ? { toward: [linkTo(rel, target(root, t.toward))] } : {};
+  return { text: t.text.trim(), ...whenPatch(parsedWhen(t.when)), ...toward };
 }
 
 export function buildNote(root: string, spec: BuildSpec): Note {

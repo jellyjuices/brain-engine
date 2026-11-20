@@ -6,12 +6,21 @@ import { RateLimit } from "../src/interface/server-agent.ts";
 import { ROUTES } from "../src/interface/routes/table.ts";
 import { withApi } from "./api-helpers.ts";
 
-test("no token, a wrong token, or no agent token yet: 401 on every route but health", () => withApi(async (a) => {
+test("health answers with no token", () => withApi(async (a) => {
   assert.equal((await a.call("GET", "/api/health", undefined, null)).status, 200);
-  for (const r of ROUTES) {
-    const path = r.prefix ? `${r.path}x.md` : r.path;
-    assert.equal((await a.call(r.method, path, r.method === "GET" || r.method === "DELETE" ? undefined : {}, null)).status, 401, `${r.method} ${path}`);
-  }
+}));
+
+test("every route but health is 401 with no token", () => withApi(async (a) => {
+  const calls = ROUTES.map(async (r) => {
+    const path = r.prefix ? `${r.path}garden-shed.md` : r.path;
+    const body = r.method === "GET" || r.method === "DELETE" ? undefined : {};
+    return `${r.method} ${path} ${(await a.call(r.method, path, body, null)).status}`;
+  });
+  const seen = await Promise.all(calls);
+  assert.deepEqual(seen.filter((s) => !s.endsWith(" 401")), []);
+}));
+
+test("a made-up token is 401", () => withApi(async (a) => {
   assert.equal((await a.call("GET", "/api/unsorted", undefined, "made-up")).status, 401);
 }));
 
@@ -38,7 +47,11 @@ test("agent token: calls past the rate limit get 429 with Retry-After; the owner
   assert.equal(third.status, 429);
   const retryAfter = Number(third.headers.get("retry-after"));
   assert.ok(retryAfter > 0, `got ${retryAfter}`);
-  for (let i = 0; i < 4; i++) assert.equal((await a.call("GET", "/api/log")).status, 200);
+}, { agentRate: 2 }));
+
+test("the owner has no rate limit", () => withApi(async (a) => {
+  const statuses = await Promise.all([1, 2, 3, 4].map(async () => (await a.call("GET", "/api/log")).status));
+  assert.deepEqual(statuses, [200, 200, 200, 200]);
 }, { agentRate: 2 }));
 
 test("rate limit opens again after the minute", () => {

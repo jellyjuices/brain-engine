@@ -1,0 +1,103 @@
+.label {
+  composes: controlLabel from "../field/field.module.css";
+}
+
+.icon {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--text-secondary);
+}
+
+.control {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: none;
+  font-size: var(--font-size-body-lg);
+  outline: none;
+}
+
+.control::placeholder {
+  color: var(--text-secondary);
+}
+
+.field {
+  composes: controlBox from "../field/field.module.css";
+  transition: border-color var(--motion-fast) var(--motion-easing);
+}
+
+.field:focus-within {
+  border-color: var(--border-focus);
+}
+
+.field:has(:focus-visible) {
+  box-shadow: 0 0 0 0.0625rem var(--border-focus);
+}
+
+@media (hover: hover) {
+  .field:hover {
+    border-color: var(--text-secondary);
+  }
+}
+
+.suggestInput {
+  position: relative;
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.suggestInput.isDisabled .label,
+.suggestInput.isDisabled .icon,
+.suggestInput.isDisabled .control,
+.suggestInput.isDisabled .control::placeholder {
+  color: var(--text-disabled);
+}
+
+.suggestInput.isDisabled .field {
+  border-style: dashed;
+  border-color: var(--border-primary);
+  background: var(--background-disabled);
+  cursor: not-allowed;
+}
+
+.list {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  z-index: 5;
+  margin: var(--space-xs) 0 0;
+  padding: var(--space-xs);
+  border: 0.0625rem solid var(--border-primary);
+  border-radius: var(--radius-md);
+  background: var(--background-secondary);
+  box-shadow: var(--shadow-raised);
+  list-style: none;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--size-control);
+  line-height: var(--font-leading-normal);
+  gap: var(--space-md);
+  padding: 0 var(--space-md);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.option:active {
+  background: var(--background-pressed);
+}
+
+.isActive {
+  background: var(--background-hover);
+}
+
+.hint {
+  font-size: var(--font-size-body-xs);
+  color: var(--text-secondary);
+}

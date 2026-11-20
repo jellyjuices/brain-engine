@@ -1,3 +1,4 @@
+import { screen } from "@testing-library/react";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
 const calls = vi.hoisted(() => ({ mount: 0, teardown: 0 }));
@@ -30,7 +31,7 @@ function appEl() {
   return document.getElementById("app") as HTMLElement;
 }
 function lockShown() {
-  return document.querySelector('[role="dialog"]') !== null;
+  return screen.queryByRole("dialog") !== null;
 }
 
 let session: typeof import("@/lib/lock/session.ts");

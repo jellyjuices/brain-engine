@@ -72,7 +72,7 @@
   background: var(--background-scrim);
 }
 
-.addBlob {
+.addSurface {
   position: fixed;
   --add-blob-w: 32.5rem;
   --add-blob-h: 32.5rem;
@@ -85,21 +85,18 @@
   width: var(--add-blob-w);
   height: var(--add-blob-h);
   margin-left: calc(var(--add-blob-w) / -2);
-  transition:
-    top var(--motion-slow) var(--motion-easing),
-    width var(--motion-slow) var(--motion-easing),
-    height var(--motion-slow) var(--motion-easing),
-    margin-left var(--motion-slow) var(--motion-easing);
+  transition: all var(--motion-slow) var(--motion-easing);
   animation: add-inflate var(--motion-pop) var(--motion-easing) both;
 }
 
-.addBlob::before {
+.addSurface::before {
   content: "";
   position: absolute;
   inset: 0;
   background: var(--background-accent);
   clip-path: var(--shape-cookie);
   animation: add-spin 40s linear infinite;
+  transition: clip-path var(--motion-slow) var(--motion-easing);
 }
 
 @keyframes add-spin {
@@ -109,21 +106,21 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .addBlob::before {
+  .addSurface::before {
     animation: none;
   }
 }
 
-.addBlobTodo,
-.addBlobJournal {
+.addSurfaceTodo,
+.addSurfaceJournal {
   animation: add-morph var(--motion-pop) var(--motion-easing) both;
 }
 
-.addBlobTodo::before {
+.addSurfaceTodo::before {
   clip-path: var(--shape-scallop);
 }
 
-.addBlobJournal {
+.addSurfaceJournal {
   --add-blob-w: 120vw;
   --add-blob-h: 120vw;
   top: calc(
@@ -133,13 +130,13 @@
   transform-origin: 50% 80%;
 }
 
-.addBlobJournal.isFull {
-  --add-blob-w: max(calc(var(--vvh, 100dvh) / 0.7), 100vw);
-  --add-blob-h: var(--add-blob-w);
-  top: calc(var(--vvt, 0) - var(--add-blob-h) * 0.3);
+.addSurfaceJournal.isFull {
+  --add-blob-w: 100vw;
+  --add-blob-h: var(--vvh, 100dvh);
+  top: var(--vvt, 0);
 }
 
-.addTool {
+.addToolbarButton {
   display: grid;
   place-items: center;
   min-width: var(--size-control);
@@ -149,9 +146,13 @@
   background: transparent;
 }
 
-.addBlobJournal::before {
-  clip-path: var(--shape-blossom);
+.addSurfaceJournal::before {
+  clip-path: var(--shape-blossom-square);
   animation: none;
+}
+
+.addSurfaceJournal.isFull::before {
+  clip-path: var(--shape-blossom-full);
 }
 
 @keyframes add-morph {
@@ -170,7 +171,7 @@
   visibility: hidden;
 }
 
-.addPanel.isClosing .addBlob {
+.addPanel.isClosing .addSurface {
   animation: add-deflate var(--motion-fast) cubic-bezier(0.5, 0, 0.75, 0) both;
 }
 

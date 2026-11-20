@@ -85,49 +85,66 @@ export function redact(root: string, words: string, by = "claude"): RedactResult
   if (needle.length < 3) throw new Error("Give at least 3 characters to redact.");
   const has = (t: string) => t.toLowerCase().includes(needle);
   const out: RedactResult = { lensLines: 0, rawAnswers: 0, threads: 0, files: [] };
-  for (const lens of LENSES) {
-    const rel = lensPath(lens.slug);
-    if (!existsSync(join(root, rel))) continue;
-    const note = readNote(root, rel);
-    const lines = note.body.split("\n");
-    const keep: string[] = [];
-    let dropping = false;
-    for (const line of lines) {
-      if (line.startsWith("- ")) dropping = has(line);
-      else if (!line.startsWith("  - ")) dropping = false;
-      const subHit = line.startsWith("  - ") && has(line);
-      if (dropping || subHit) {
-        if (/^- \[[ xX]\] /.test(line)) out.threads++;
-        else out.lensLines++;
-        continue;
-      }
-      keep.push(line);
-    }
-    if (keep.length !== lines.length) {
-      writeNote(root, rel, { ...note.meta, generated: { by, at: nowStamp() } }, keep.join("\n"));
-      out.files.push(rel);
-    }
-  }
-  const rawDir = join(root, "sources", "intake");
-  if (existsSync(rawDir)) {
-    for (const f of readdirSync(rawDir).filter((x) => x.endsWith(".md"))) {
-      const full = join(rawDir, f);
-      const text = readFileSync(full, "utf8");
-      let count = 0;
-      const next = text.replace(/^\*\*(Q|A):\*\* .*$/gm, (m, k: string) => {
-        if (!has(m)) return m;
-        count++;
-        return `**${k}:** [redacted at the owner's request]`;
-      });
-      if (count) {
-        writeAtomic(full, next);
-        out.rawAnswers += count;
-        out.files.push(`sources/intake/${f}`);
-      }
-    }
-  }
+  for (const lens of LENSES) redactLens(root, lensPath(lens.slug), has, by, out);
+  redactRaw(root, has, out);
   log(root, `redacted at the owner's request: ${out.lensLines} lens lines, ${out.rawAnswers} raw answers, ${out.threads} threads`);
   return out;
+}
+
+type Has = (t: string) => boolean;
+
+function nextDropping(line: string, dropping: boolean, has: Has): boolean {
+  if (line.startsWith("- ")) return has(line);
+  return line.startsWith("  - ") ? dropping : false;
+}
+
+function countDropped(line: string, out: RedactResult) {
+  if (/^- \[[ xX]\] /.test(line)) out.threads++;
+  else out.lensLines++;
+}
+
+function keptLines(lines: string[], has: Has, out: RedactResult): string[] {
+  const keep: string[] = [];
+  let dropping = false;
+  for (const line of lines) {
+    dropping = nextDropping(line, dropping, has);
+    const subHit = line.startsWith("  - ") && has(line);
+    if (dropping || subHit) countDropped(line, out);
+    else keep.push(line);
+  }
+  return keep;
+}
+
+function redactLens(root: string, rel: string, has: Has, by: string, out: RedactResult) {
+  if (!existsSync(join(root, rel))) return;
+  const note = readNote(root, rel);
+  const lines = note.body.split("\n");
+  const keep = keptLines(lines, has, out);
+  if (keep.length === lines.length) return;
+  writeNote(root, rel, { ...note.meta, generated: { by, at: nowStamp() } }, keep.join("\n"));
+  out.files.push(rel);
+}
+
+function redactRawFile(full: string, has: Has): number {
+  let count = 0;
+  const next = readFileSync(full, "utf8").replace(/^\*\*(Q|A):\*\* .*$/gm, (m, k: string) => {
+    if (!has(m)) return m;
+    count++;
+    return `**${k}:** [redacted at the owner's request]`;
+  });
+  if (count) writeAtomic(full, next);
+  return count;
+}
+
+function redactRaw(root: string, has: Has, out: RedactResult) {
+  const rawDir = join(root, "sources", "intake");
+  if (!existsSync(rawDir)) return;
+  for (const f of readdirSync(rawDir).filter((x) => x.endsWith(".md"))) {
+    const count = redactRawFile(join(rawDir, f), has);
+    if (!count) continue;
+    out.rawAnswers += count;
+    out.files.push(`sources/intake/${f}`);
+  }
 }
 
 export function intakeBlocks(n: Note): string[] {

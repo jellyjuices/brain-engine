@@ -1,6 +1,6 @@
 # Handoff: work left
 
-Updated 2026-11-17. This lists only work still to do. The intent for every part is in [docs/intent/](../intent/README.md).
+Updated 2026-11-19. This lists only work still to do. The intent for every part is in [docs/intent/](../intent/README.md).
 
 ## How to work here
 
@@ -44,25 +44,26 @@ Updated 2026-11-17. This lists only work still to do. The intent for every part 
 
 | # | Task | Size | Needs | Notes |
 | --- | --- | --- | --- | --- |
-| 5 | Sorter | Large | owner yes | Inside `brain serve`, as [helpers.md](../intent/helpers.md) says, so it reuses the loaded search model. Rules plus learned moves, fuzzy names, then the nearest-neighbour step (S5 in [search.md](search.md)). Unsure: best guess plus `· check`. A sorted capture is deleted. A feeling line gets `· about <words>`. Also: `saveItem` in `engine/src/capture/pull.ts` now files a `kind: "todo"` with no subject into `areas/general.md`; it must wait for the sorter instead. Test: pure layers on fixture notes, a fake model, a hand-run check for a 95% hit rate |
+| 5 | Sorter: what is left | Medium | 15 | Done: the shared core in `engine/shared/sort/` (names, then nearest subject by words and meaning, unsure gets `· check`). `brain serve` and `brain pull` use it in `saveItem`, and the phone uses it for the home chips (`app/src/lib/search/sort-on-device.ts`). A to-do with no guess stays a capture; General is no longer the fallback. Left: learned moves (needs 15), sorting captures already in the inbox, meaning on the phone once `embedQuery` is real, and a hand-run check of the hit rate on the real brain |
 | 15 | Sort routes | Medium | 5 | `GET /api/sorted` (lines by subject, with kind and `· check`), and routes to move a filed line and change its tag. Each logged, undoable, and teaches the sorter |
 | 16 | Goal API gaps | Small | none | A list of linked projects in `GoalView`; subgoals and decisions in `/api/goals`; a route to cross off a target (today the app edits the note) |
 | 21 | Old repeat copies on note pages | Small | none | Done copies made before the rolling rule stay as history. Check they read well on a note page |
 | 22 | Repeat history line for a to-do in another note | Small | none | Done for now writes `- <date> · Done: <text>` under the to-do. When the to-do lives in another note than its subject, that line does not link to the subject, so it only shows on that note's card |
 | 6 | Dead code, rest | Small | none | fallow still lists 21 unused exports in `engine/` |
+| 23 | File asks without a chat | Large | Ollama, owner yes | `brain serve` works through a file note's `asks` (`split`, `enrich`, `intake`) with a local model, writes with `generated`, then clears each ask. Rules in [helpers.md](../intent/helpers.md) outcomes 11 and 12 |
+| 24 | Intake from a file | Medium | none | "Start the intake" on a file page opens the normal intake. `intake_next` should ask the file's `# Intake` questions first |
 | 8 | Test cleanup | Small | after the UI settles | `if` and `for` in tests, files with no failure case. Skipped against the new criteria: `app/test/shell/shell-frame/shell-frame.test.tsx` (the tab bar and rail rows for To-dos and Goals; "the phone layout reaches Settings from To-dos", Settings is now in the To-dos header); `app/test/shell/unsorted-banner/unsorted-banner.test.tsx` (the whole file: the banner now sits inside the To-dos screen, not the shell). Brittle after the CSS Modules move: the Add panel tests find the blob by part of a class name; `mention.test.tsx` no longer checks the look |
 
 ## App
 
-Design: [concept-a.md](../design/concept-a.md). Add flows: [add-flows.md](add-flows.md). Manual check list for any style change: [add-panel-behaviours.md](../design/add-panel-behaviours.md).
+Manual check list for any style change: [add-panel-behaviours.md](../design/add-panel-behaviours.md).
 
 | # | Task | Size | Needs | Notes |
 | --- | --- | --- | --- | --- |
-| 10 | Sort screen | Medium | 15 | Grouped by subject. Tap a tag to change it, + to add one. Long-press, then Move to, first. Drag by a handle is its own task after |
 | 18 | Saved own views and the Edit view sheet | Medium | an API for saved views | The To-dos screen has the standard views only |
 | 12 | Page, decision page, Connections | Large | none | The goal page and the note page's to-do list are done |
 | 13 | Find with the answer card, Brain tab, Settings | Medium | none | |
-| 19 | Drafts kept on the device (G12) | Small | none | The device keeps its own draft copy and syncs it with `save_draft` |
+| 19 | Drafts kept on the device | Small | none | The device keeps its own draft copy and syncs it with `save_draft` |
 | 14 | Delete old screens: `inbox`, `today`, `report`, `write`, `new` | Small | 10, 12, 13 | No tab points at `today` or `report` now. The owner runs any `rm` |
+| 25 | Look at the where-it-went flows on the phone | Small | owner | Home chips while typing a to-do, the "Added to" toast with Move and Undo, unsorted rows and the sort sheet, the person builder after Add a person, the file page. Spec: [sort-flow-spec.md](../design/sort-flow-spec.md) |
 
-Paths in [add-flows.md](add-flows.md), [search.md](search.md) and [concept-a.md](../design/concept-a.md) predate the folder layout: `src/` is now `engine/src/`, `shared/` is `engine/shared/`, `design-system/` is now inside the app: `app/src/components/`, `app/tokens/`.

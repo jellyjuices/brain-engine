@@ -71,7 +71,7 @@ describe("ShellFrame", () => {
   });
 
   it("marks no place on an old screen that has none", () => {
-    renderShell("phone", "/write");
+    renderShell("phone", "/journal");
     expect(within(mainNav()).queryByRole("link", { current: "page" })).toBeNull();
   });
 

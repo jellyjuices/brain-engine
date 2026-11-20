@@ -1,4 +1,4 @@
-import { test } from "node:test";
+import { test, type TestContext } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -102,24 +102,46 @@ test("a decision linked through # Goals shows under the goal", () => {
   assert.equal(d.decided, "We chose the second.");
 });
 
-test("the read routes return the module's views; the decide-by to-do shows in to-do views", async () => {
+async function goalApi(t: TestContext) {
   const root = makeBrain();
   goal(root, "run-far", "- [x] Run 5 km · done 2026-03-05\n- [ ] Run 10 km");
   decision(root, "shoes", "open", now);
   const a = await startApi({}, root);
-  try {
-    const notes = loadAll(root);
-    const g = await a.call("GET", "/api/goals/run-far");
-    assert.deepEqual(g.data, JSON.parse(JSON.stringify(goalView(notes, RUN))));
-    assert.deepEqual((await a.call("GET", `/api/goals/${RUN}`)).data, g.data);
-    assert.deepEqual((await a.call("GET", "/api/goals")).data.goals, goalList(notes));
-    const d = await a.call("GET", "/api/decisions/shoes");
-    assert.deepEqual(d.data, JSON.parse(JSON.stringify(decisionView(notes, "decisions/shoes.md"))));
-    assert.equal((await a.call("GET", "/api/goals/nope")).status, 404);
-    const view = await a.call("GET", "/api/todos?view=today");
-    assert.deepEqual(view.data.items.map((i: { text: string }) => i.text), ["Decide: Pick shoes?"]);
-    assert.equal((await a.call("GET", "/api/today")).data.items[0].text, "Decide: Pick shoes?");
-  } finally {
-    a.close();
-  }
+  t.after(() => a.close());
+  return { a, notes: loadAll(root) };
+}
+
+test("GET /api/goals/:slug returns the goal view", async (t) => {
+  const { a, notes } = await goalApi(t);
+  const g = await a.call("GET", "/api/goals/run-far");
+  assert.deepEqual(g.data, JSON.parse(JSON.stringify(goalView(notes, RUN))));
+});
+
+test("GET /api/goals/:path returns the same view as the slug", async (t) => {
+  const { a } = await goalApi(t);
+  const byPath = await a.call("GET", `/api/goals/${RUN}`);
+  assert.deepEqual(byPath.data, (await a.call("GET", "/api/goals/run-far")).data);
+});
+
+test("GET /api/goals lists every goal", async (t) => {
+  const { a, notes } = await goalApi(t);
+  assert.deepEqual((await a.call("GET", "/api/goals")).data.goals, goalList(notes));
+});
+
+test("GET /api/decisions/:slug returns the decision view", async (t) => {
+  const { a, notes } = await goalApi(t);
+  const d = await a.call("GET", "/api/decisions/shoes");
+  assert.deepEqual(d.data, JSON.parse(JSON.stringify(decisionView(notes, "decisions/shoes.md"))));
+});
+
+test("an unknown goal is 404", async (t) => {
+  const { a } = await goalApi(t);
+  assert.equal((await a.call("GET", "/api/goals/nope")).status, 404);
+});
+
+test("the decide-by to-do shows in the today view and on Today", async (t) => {
+  const { a } = await goalApi(t);
+  const view = await a.call("GET", "/api/todos?view=today");
+  assert.deepEqual(view.data.items.map((i: { text: string }) => i.text), ["Decide: Pick shoes?"]);
+  assert.equal((await a.call("GET", "/api/today")).data.items[0].text, "Decide: Pick shoes?");
 });

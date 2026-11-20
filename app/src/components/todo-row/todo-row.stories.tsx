@@ -1,13 +1,26 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { fn } from "storybook/test";
+import { CalendarDotsIcon, FunnelSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 import { TodoRow, type TodoRowProps } from "./todo-row.tsx";
+import { Checkbox } from "../checkbox/checkbox.tsx";
 
 const Live = (args: TodoRowProps) => {
   const [checked, setChecked] = useState(args.checked ?? false);
   return (
     <ul style={{ margin: 0, padding: 0, maxWidth: "var(--layout-max-width)" }}>
-      <TodoRow {...args} checked={checked} onCheckedChange={setChecked} />
+      <TodoRow
+        {...args}
+        checked={checked}
+        start={
+          <Checkbox
+            checked={checked}
+            disabled={args.disabled}
+            label={args.title}
+            onCheckedChange={setChecked}
+          />
+        }
+      />
     </ul>
   );
 };
@@ -26,10 +39,11 @@ const meta = {
     disabled: false,
     onOpen: fn(),
     onMenu: fn(),
-    onSort: fn(),
-    onDrop: fn(),
-    sortLabel: "Sort",
-    dropLabel: "Delete",
+    actions: [
+      { id: "later", label: "Tomorrow", icon: CalendarDotsIcon, tone: "later", onSelect: fn() },
+      { id: "sort", label: "Sort", icon: FunnelSimpleIcon, tone: "sort", onSelect: fn() },
+      { id: "delete", label: "Delete", icon: TrashIcon, tone: "delete", onSelect: fn() },
+    ],
   },
 } satisfies Meta<typeof TodoRow>;
 
@@ -83,6 +97,16 @@ export const Done: Story = { args: { checked: true } };
 export const Pressed: Story = { args: { pressed: true } };
 export const Swiped: Story = { args: { defaultSwiped: true } };
 export const Disabled: Story = { args: { disabled: true } };
+export const OnSecondary: Story = {
+  args: { surface: "secondary", defaultSwiped: true },
+  decorators: [
+    (Story) => (
+      <div style={{ background: "var(--background-secondary)" }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
 export const List: Story = {
   render: (args) => (
     <ul style={{ margin: 0, padding: 0, maxWidth: "var(--layout-max-width)" }}>

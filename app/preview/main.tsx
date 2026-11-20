@@ -10,8 +10,8 @@ import {
   UserIcon,
 } from "@phosphor-icons/react";
 import { createRoot } from "react-dom/client";
-import { List } from "@/components/row/list.tsx";
-import { Row } from "@/components/row/row.tsx";
+import { List } from "@/components/list/list.tsx";
+import { ListRow } from "@/components/list/list-row.tsx";
 import { TabBar } from "@/shell/tab-bar/tab-bar.tsx";
 import { trackViewport } from "@/lib/platform/viewport.ts";
 
@@ -35,7 +35,7 @@ if (host)
       <main className="preview-main">
         <List variant="outlined">
           {KINDS.map((k) => (
-            <Row key={k.shape} shape={k.shape} icon={k.icon} title={k.title} />
+            <ListRow key={k.shape} shape={k.shape} icon={k.icon} title={k.title} />
           ))}
         </List>
       </main>

@@ -1,0 +1,11 @@
+.mentionSuggestions {
+  max-height: 40dvh;
+  margin: 0 calc(-1 * var(--space-lg));
+  padding: var(--space-sm) var(--space-lg);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--background-secondary);
+  border-top: 0.0625rem solid var(--border-primary);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow: var(--shadow-raised);
+}

@@ -11,7 +11,7 @@ import { skip, stopRepeat } from "../todos/repeat.ts";
 import { inboxPath } from "./routes/capture.ts";
 import { doneWith, dropWith } from "../todos/wrapup.ts";
 import { HttpError, MAX_FILE } from "./server-auth.ts";
-import { afterWrite, asUserError, type Ctx, existingNote, fileText, fullNoteJson, hash, safeNotePath, text } from "./server-context.ts";
+import { afterWrite, asUserError, type Ctx, existingNote, fileText, fullNoteJson, hash, safeNotePath, text, textList } from "./server-context.ts";
 
 const BIRTHDAY = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -51,16 +51,21 @@ export function addSubject(c: Ctx) {
 }
 
 /** A text file from the phone becomes a Note in resources/. The same title and text returns that note, so a retry makes no copy. */
+const FILE_ASKS = ["split", "intake", "enrich"];
+
 export function addFile(c: Ctx) {
   const title = text(c.body.title, "title")!.trim().replace(/\s+/g, " ");
   if (!title) throw new HttpError(400, `Missing "title".`);
   if (title.length > 120) throw new HttpError(400, "A title can be 120 characters at most.");
   const body = text(c.body.text, "text")!;
   if (Buffer.byteLength(body) > MAX_FILE) throw new HttpError(413, "A file can be 60 KB at most.");
+  const asks = textList(c.body.asks, "asks") ?? [];
+  const odd = asks.find((a) => !FILE_ASKS.includes(a));
+  if (odd) throw new HttpError(400, `"asks" must be from: ${FILE_ASKS.join(", ")}.`);
   const same = loadAll(c.root).find((n) => n.meta.type === "Note" && String(n.meta.title ?? "") === title && n.body.trim() === body.trim());
   if (same) return { path: same.path, created: false };
   const made = afterWrite(c.root, () => {
-    const note = newNote(c.root, "Note", title, { description: `File added from the phone: ${title}`.slice(0, 150), tags: ["reference"] });
+    const note = newNote(c.root, "Note", title, { description: `File added from the phone: ${title}`.slice(0, 150), tags: ["reference"], ...(asks.length && { asks }) });
     return writeNote(c.root, note.path, note.meta, `${body.trimEnd()}\n`);
   });
   return { path: made.path, created: true };

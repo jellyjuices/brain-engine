@@ -2,7 +2,7 @@ import clsx from "clsx";
 import type { ReactNode } from "react";
 import type { Icon } from "@phosphor-icons/react";
 import { ArrowBendUpLeftIcon, TargetIcon, UsersIcon } from "@phosphor-icons/react";
-import { AreaMark } from "../area-mark/area-mark.tsx";
+import { AreaIndicator } from "../area-indicator/area-indicator.tsx";
 import { Chip } from "../chip/chip.tsx";
 import { WhenChip } from "../when-chip/when-chip.tsx";
 import type { TodoRowProps } from "./todo-row.tsx";
@@ -71,7 +71,7 @@ export function TodoRowMeta({
         <Extra
           glyph={TargetIcon}
           hidden={markLabels?.goal}
-          mark={goalAreas?.length ? <AreaMark areas={goalAreas} /> : undefined}
+          mark={goalAreas?.length ? <AreaIndicator areas={goalAreas} /> : undefined}
         >
           {goal}
         </Extra>

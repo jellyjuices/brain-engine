@@ -108,8 +108,8 @@ test("sort files complete notes and leaves the rest", () => {
   const r = sortInbox(root);
   assert.equal(r.find((x) => x.path === "inbox/ready.md")?.to, "projects/ready-one.md");
   assert.match(r.find((x) => x.path === "inbox/no-desc.md")?.reason ?? "", /description/);
-  assert.ok(existsSync(join(root, "projects/ready-one.md")));
-  assert.ok(!existsSync(join(root, "inbox/ready.md")));
+  assert.equal(existsSync(join(root, "projects/ready-one.md")), true, "projects/ready-one.md is missing");
+  assert.equal(existsSync(join(root, "inbox/ready.md")), false, "inbox/ready.md is still there");
 });
 
 test("triage drop moves to archive, never deletes", () => {
@@ -118,7 +118,7 @@ test("triage drop moves to archive, never deletes", () => {
   const r = applyTriage(root, n.path, { outcome: "drop" });
   assert.match(r.to ?? "", /^\.archive\//);
   assert.equal(readNote(root, r.to!).meta.outcome, "drop");
-  assert.ok(!existsSync(join(root, n.path)));
+  assert.equal(existsSync(join(root, n.path)), false, `${n.path} is still there`);
 });
 
 test("triage with a type, title and description files the note", () => {
@@ -160,11 +160,15 @@ for (const [type, path, heading] of [
     const n = newNote(root, type, "Test", { description: "x" });
     assert.equal(n.path, path);
     assert.equal(n.meta.type, type);
-    assert.ok(n.body.includes(heading));
+    assert.match(n.body, new RegExp(heading));
     assert.match(n.body, /# To-dos/);
-    if (type === "Thing") assert.ok("renews" in n.meta && "from" in n.meta && "papers" in n.meta);
   });
 }
+
+test("new Thing carries its renews, from and papers fields", () => {
+  const n = newNote(fixture(), "Thing", "Car insurance", { description: "Policy for the hatchback." });
+  assert.deepEqual(["renews", "from", "papers"].filter((k) => !(k in n.meta)), []);
+});
 
 // ---- search ------------------------------------------------------------
 
@@ -184,7 +188,7 @@ test("search finds by word and prefix, filters, and follows changes", () => {
   assert.equal(search(root, "", { type: "Project" }).length, 2);
 
   write(root, "projects/condo.md", proj("Condo search").replace("Body of", "Pre-construction in High Park,"));
-  utimesSync(join(root, "projects/condo.md"), new Date(), new Date(Date.now() + 5000));
+  utimesSync(join(root, "projects/condo.md"), new Date("2100-01-01T00:00:00Z"), new Date("2100-01-01T00:00:00Z"));
   assert.equal(search(root, "high park")[0].path, "projects/condo.md");
   assert.match(search(root, "park")[0].snippet, /\[Park\]/);
   assert.equal(updateIndex(root).updated, 0); // search already picked up the change
@@ -276,7 +280,7 @@ test("brain command: check and index exit codes", () => {
   assert.equal(run(root, "index").status, 0);
   assert.match(readFileSync(join(root, ".reports/index.md"), "utf8"), new RegExp(`## areas \\(${readdirSync(join(STARTER, "areas")).filter((f) => f.endsWith(".md")).length}\\)`));
   assert.match(readFileSync(join(root, ".reports/index.md"), "utf8"), /\]\(\.\.\/areas\/money\.md\)/);
-  assert.ok(readdirSync(join(root, ".brain")).includes("index.db"));
+  assert.equal(existsSync(join(root, ".brain/index.db")), true, ".brain/index.db is missing");
 });
 
 // ---- SwiftBar ----------------------------------------------------------

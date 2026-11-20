@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Bar } from "../components/bar/bar.tsx";
+import { ProgressBar } from "../components/progress-bar/progress-bar.tsx";
 import { PageHeader } from "../components/page-header/page-header.tsx";
 import { Chip } from "../components/chip/chip.tsx";
 import { name } from "./area-parts.tsx";
@@ -54,7 +54,7 @@ export const GoalPage: Story = {
           </div>
         </PageHeader>
         <div style={{ display: "grid", gap: "var(--space-md)", padding: "var(--space-lg)" }}>
-          <Bar
+          <ProgressBar
             label="Sample weekly runs"
             done={Math.round(value / 2)}
             total={100}

@@ -68,6 +68,10 @@ export function parseCli(rest: string[]) {
   });
 }
 
+export const restText = (args: string[]) => args.slice(1).join(" ").trim();
+
+export const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
+
 export function fail(msg: string): number {
   process.stderr.write(pc.red(msg) + "\n");
   return 1;

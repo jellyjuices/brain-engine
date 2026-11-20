@@ -4,9 +4,7 @@
 }
 
 .labelText {
-  font-size: var(--font-size-body-sm);
-  font-weight: 500;
-  color: var(--text-secondary);
+  composes: controlLabel from "../field/field.module.css";
 }
 
 .caret {
@@ -16,43 +14,16 @@
 }
 
 .trigger {
-  display: flex;
-  align-items: center;
+  composes: controlTrigger from "../field/field.module.css";
   justify-content: space-between;
-  gap: var(--space-sm);
-  height: var(--size-control);
-  padding: 0 var(--space-md);
-  border: 0.0625rem solid var(--border-strong);
-  border-radius: var(--radius-md);
-  background: var(--background-secondary);
-  cursor: pointer;
-}
-
-.trigger[data-state="open"] {
-  border-color: var(--border-focus);
 }
 
 .trigger[data-placeholder] {
   color: var(--text-secondary);
 }
 
-.trigger:disabled {
-  border-style: dashed;
-  border-color: var(--border-primary);
-  background: var(--background-disabled);
-  color: var(--text-disabled);
-  cursor: not-allowed;
-}
-
 .trigger[data-state="open"] .caret {
   rotate: 180deg;
-}
-
-@media (hover: hover) {
-  .trigger:hover:not(:disabled) {
-    background:
-      linear-gradient(var(--background-hover), var(--background-hover)), var(--background-secondary);
-  }
 }
 
 .content {

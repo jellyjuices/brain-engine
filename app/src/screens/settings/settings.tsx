@@ -2,8 +2,8 @@ import styles from "./settings.module.css";
 import { ArrowClockwiseIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Button } from "@/components/button/button.tsx";
-import { List } from "@/components/row/list.tsx";
-import { Row } from "@/components/row/row.tsx";
+import { List } from "@/components/list/list.tsx";
+import { ListRow } from "@/components/list/list-row.tsx";
 import { SectionHeader } from "@/components/section-header/section-header.tsx";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { useOutboxCount } from "@/hooks/use-outbox-count.ts";
@@ -34,7 +34,7 @@ export function SettingsScreen() {
         <FingerprintRow />
         {waiting > 0 && (
           <>
-            <Row
+            <ListRow
               title={copy.settings.unsent}
               sub={offline ? copy.settings.unsentOffline : copy.settings.unsentHint}
               end={
@@ -47,7 +47,7 @@ export function SettingsScreen() {
               }
             />
             {items.map((item) => (
-              <Row
+              <ListRow
                 key={item.id}
                 title={<span className={styles.pendingRow}>{pendingText(item)}</span>}
               />
@@ -57,7 +57,7 @@ export function SettingsScreen() {
       </List>
       <SectionHeader title={copy.settings.app} />
       <List>
-        <Row
+        <ListRow
           title={copy.settings.version}
           sub={__APP_VERSION__}
           end={

@@ -13,10 +13,9 @@ describe("splitAreas", () => {
     [["health", "health", "fitness"], { shown: ["health", "fitness"], extra: 0 }],
   ];
 
-  for (const [areas, expected] of cases) {
-    it(`shows ${expected.shown.length} and counts ${expected.extra} for ${areas.length} areas`, () =>
-      assert.deepEqual(splitAreas(areas), expected));
-  }
+  it.each(cases)("splits %j into %j", (areas, expected) =>
+    assert.deepEqual(splitAreas(areas), expected),
+  );
 });
 
 describe("mixes for many areas", () => {

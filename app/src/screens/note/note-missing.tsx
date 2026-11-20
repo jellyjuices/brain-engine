@@ -5,7 +5,7 @@ import { putNotes } from "@/lib/storage/store.ts";
 import { api } from "@/lib/sync/api.ts";
 import { notePath } from "@/lib/sync/writes.ts";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
-import { Empty } from "@/components/empty/empty.tsx";
+import { EmptyState } from "@/components/empty-state/empty-state.tsx";
 import { copy } from "@/content/index.ts";
 
 export function NoteMissing({ path }: { path: string }) {
@@ -21,7 +21,7 @@ export function NoteMissing({ path }: { path: string }) {
   return (
     <>
       <PageHeader title={copy.nav.note} onBack={() => back()} />
-      <Empty title={copy.notes.missingTitle} body={copy.notes.missingBody} />
+      <EmptyState title={copy.notes.missingTitle} body={copy.notes.missingBody} />
     </>
   );
 }

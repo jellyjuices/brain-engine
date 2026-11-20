@@ -47,7 +47,7 @@ test("done on a repeating to-do adds the next one, and undo removes it", () => {
   const root = brainWithTodos();
   const before = file(root);
   const r = done(root, "rent");
-  assert.ok(r.next);
+  assert.match(r.next ?? "", /^\d{4}-\d{2}-\d{2}$/);
   assert.match(file(root), new RegExp(`- \\[ \\] Pay rent · due ${r.next} · every month`));
   undo(root);
   assert.equal(file(root), before);
@@ -177,7 +177,7 @@ test("put on hold: who links a Person note, what links a Thing; a new name makes
   const root = brainWithTodos();
   move(root, ref("projects/visit.md", "Book the sleep test"), "waiting", { who: "Dad" });
   assert.match(file(root), /- \[ \] Book the sleep test · with \[Dad\]\(\.\.\/people\/dad\.md\) · waiting/);
-  assert.ok(existsSync(join(root, "people/dad.md")));
+  assert.equal(existsSync(join(root, "people/dad.md")), true, "people/dad.md is missing");
   move(root, ref("projects/visit.md", "Later thing"), "waiting", { what: "New tires" });
   assert.match(file(root), /- \[ \] Later thing · re \[New tires\]\(\.\.\/things\/new-tires\.md\) · waiting/);
   move(root, ref("projects/visit.md", "Later thing"), "waiting", { what: "new tires" });

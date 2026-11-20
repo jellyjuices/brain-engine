@@ -34,7 +34,7 @@ const meta = {
   argTypes: {
     variant: {
       control: "inline-radio",
-      options: ["success", "error", "warning", "info", "neutral"],
+      options: ["success", "deleted", "error", "warning", "info", "neutral"],
     },
     duration: { control: { type: "number", step: 1000 } },
     icon: { control: false },
@@ -52,6 +52,9 @@ export const Moved: Story = {
     detail: undefined,
     icon: ArrowsLeftRightIcon,
   },
+};
+export const Deleted: Story = {
+  args: { variant: "deleted", message: "Deleted", detail: undefined },
 };
 export const Failed: Story = {
   args: {

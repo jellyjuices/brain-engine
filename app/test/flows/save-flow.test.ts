@@ -27,7 +27,7 @@ beforeEach(() => {
 describe("saveFlow", () => {
   it("shows the done words once the Mac has the write", async () => {
     expect(await saveFlow(() => Promise.resolve(item), "Saved")).toBe(true);
-    expect(toast).toHaveBeenCalledWith("Saved");
+    expect(toast).toHaveBeenCalledWith("Saved", {});
   });
 
   it("works out the done words after the write is sent", async () => {
@@ -35,7 +35,12 @@ describe("saveFlow", () => {
       () => Promise.resolve(item),
       () => Promise.resolve("Later words"),
     );
-    expect(toast).toHaveBeenCalledWith("Later words");
+    expect(toast).toHaveBeenCalledWith("Later words", {});
+  });
+
+  it("names where it went with a day line under the words", async () => {
+    await saveFlow(() => Promise.resolve(item), { message: "Added to Gym", detail: "Fri Nov 20" });
+    expect(toast).toHaveBeenCalledWith("Added to Gym", { detail: "Fri Nov 20" });
   });
 
   it("says the write waits on this phone when it is still in the outbox", async () => {
@@ -47,11 +52,11 @@ describe("saveFlow", () => {
   it("says the Mac refused the write when it was dropped", async () => {
     outbox.flush.mockResolvedValue({ sent: [], dropped: ["a1"], left: 0 });
     await saveFlow(() => Promise.resolve(item), "Saved");
-    expect(toast).toHaveBeenCalledWith(copy.save.rejected, { tone: "error" });
+    expect(toast).toHaveBeenCalledWith(copy.toast.rejected, { tone: "error" });
   });
 
   it("says the save failed when the write throws", async () => {
     expect(await saveFlow(() => Promise.reject(new Error("no")), "Saved")).toBe(false);
-    expect(toast).toHaveBeenCalledWith(copy.save.failed, { tone: "error" });
+    expect(toast).toHaveBeenCalledWith(copy.toast.failed, { tone: "error" });
   });
 });

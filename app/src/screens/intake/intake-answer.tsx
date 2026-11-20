@@ -1,5 +1,5 @@
 import styles from "./intake.module.css";
-import { Composer } from "@/components/field/composer.tsx";
+import { TextArea } from "@/components/field/text-area.tsx";
 import { Button } from "@/components/button/button.tsx";
 import { SheetActions } from "@/components/sheet/sheet-actions.tsx";
 import { copy } from "@/content/index.ts";
@@ -19,7 +19,7 @@ export function IntakeAnswer({
 }) {
   return (
     <div className={styles.intakeStep}>
-      <Composer
+      <TextArea
         placeholder={copy.intake.answerPlaceholder}
         aria-label={copy.intake.answer}
         autoCapitalize="sentences"

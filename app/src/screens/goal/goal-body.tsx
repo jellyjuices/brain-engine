@@ -1,6 +1,6 @@
-import { List } from "@/components/row/list.tsx";
-import { GoalBar } from "@/components/goal-bar/goal-bar.tsx";
-import { GoalStep } from "@/components/goal-step/goal-step.tsx";
+import { List } from "@/components/list/list.tsx";
+import { GoalProgress } from "@/components/goal-progress/goal-progress.tsx";
+import { GoalStepRow } from "@/components/goal-step-row/goal-step-row.tsx";
 import type { GoalView } from "@shared/todos/index.ts";
 import { openSteps, titleAt } from "@/lib/notes/goals.ts";
 import type { StoredNote } from "@/lib/notes/model.ts";
@@ -19,11 +19,11 @@ export function GoalBody({ goal, notes }: GoalBodyProps) {
   return (
     <div className={styles.body}>
       {goal.why && <p className={styles.why}>{goal.why}</p>}
-      <GoalBar goal={goal} />
+      <GoalProgress goal={goal} />
       {goal.next && (
         <GoalSection title={copy.goals.nextStep}>
           <List variant="plain">
-            <GoalStep
+            <GoalStepRow
               step={goal.next}
               goal={goal.title}
               subject={titleAt(notes, goal.next.path)}
@@ -36,7 +36,7 @@ export function GoalBody({ goal, notes }: GoalBodyProps) {
         <GoalSection title={copy.goals.targets} count={goal.targets.length}>
           <List variant="plain">
             {goal.targets.map((step) => (
-              <GoalStep
+              <GoalStepRow
                 key={`${step.path}::${step.text}`}
                 step={step}
                 goal={goal.title}
@@ -50,7 +50,7 @@ export function GoalBody({ goal, notes }: GoalBodyProps) {
         <GoalSection title={copy.goals.todos} count={steps.length}>
           <List variant="plain">
             {steps.map((step) => (
-              <GoalStep
+              <GoalStepRow
                 key={`${step.path}::${step.text}`}
                 step={step}
                 goal={goal.title}

@@ -4,6 +4,7 @@ import {
   BellSimpleIcon,
   CheckIcon,
   InfoIcon,
+  TrashIcon,
   WarningIcon,
   XIcon,
   type Icon,
@@ -12,10 +13,11 @@ import type { ReactNode } from "react";
 import type { ToastAction } from "./toast-store.ts";
 import styles from "./toast.module.css";
 
-export type ToastVariant = "success" | "error" | "warning" | "info" | "neutral";
+export type ToastVariant = "success" | "deleted" | "error" | "warning" | "info" | "neutral";
 
 const icons: Record<ToastVariant, Icon> = {
   success: CheckIcon,
+  deleted: TrashIcon,
   error: XIcon,
   warning: WarningIcon,
   info: InfoIcon,

@@ -1,0 +1,82 @@
+.check {
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 0.125rem solid var(--border-strong);
+  background: transparent;
+  color: var(--text-on-accent);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast) var(--motion-easing),
+    border-color var(--motion-fast) var(--motion-easing),
+    scale var(--motion-fast) var(--motion-easing);
+}
+
+.round {
+  border-radius: var(--radius-full);
+}
+
+.square {
+  border-radius: var(--radius-sm);
+}
+
+.check[data-state="checked"] {
+  border-color: var(--status-done);
+  background: var(--status-done);
+}
+
+button.check:active:not(:disabled) {
+  scale: 0.9;
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  width: var(--font-size-body-xs);
+  height: var(--font-size-body-xs);
+  animation: pop var(--motion-pop) var(--motion-easing) 1;
+}
+
+.mark svg {
+  width: 100%;
+  height: 100%;
+}
+
+.isDisabled {
+  border-style: dashed;
+  border-color: var(--text-disabled);
+  background: var(--background-disabled);
+  cursor: not-allowed;
+}
+
+@keyframes pop {
+  0% {
+    scale: 0.4;
+  }
+  60% {
+    scale: 1.15;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+@media (hover: hover) {
+  button.check:hover:not(:disabled) {
+    border-color: var(--status-done);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button.check:active:not(:disabled) {
+    scale: 1;
+  }
+
+  .mark {
+    animation: none;
+  }
+}

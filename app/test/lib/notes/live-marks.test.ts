@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { liveSegments } from "@/lib/notes/live-marks.ts";
-import { toggleMarks } from "@/lib/notes/markers.ts";
 
 const none = { names: [], tags: [] };
 
@@ -48,23 +47,5 @@ describe("liveSegments", () => {
   it("draws a dash at a line start as a bullet only when asked", () => {
     expect(liveSegments("- milk", none)[0]).toEqual({ text: "- ", marks: ["bullet"] });
     expect(liveSegments("- milk", none, false)[0]?.marks).toEqual([]);
-  });
-});
-
-describe("toggleMarks", () => {
-  it("bolds the word at the caret and keeps the caret in place", () => {
-    expect(toggleMarks("call mom now", 6, 6, "**")).toEqual({
-      value: "call **mom** now",
-      start: 8,
-      end: 8,
-    });
-  });
-
-  it("takes bold off the word at the caret", () => {
-    expect(toggleMarks("call **mom** now", 8, 8, "**")).toEqual({
-      value: "call mom now",
-      start: 6,
-      end: 6,
-    });
   });
 });

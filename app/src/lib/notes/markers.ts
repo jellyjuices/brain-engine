@@ -4,46 +4,7 @@ export interface Edit {
   end: number;
 }
 
-const WORD = /[\p{L}\p{N}_]/u;
 const GAP = /[ \t]/;
-
-function isWrapped(before: string, after: string, mark: string): boolean {
-  if (!before.endsWith(mark) || !after.startsWith(mark)) return false;
-  const outBefore = before[before.length - mark.length - 1] ?? "";
-  const outAfter = after[mark.length] ?? "";
-  if (outBefore === mark[0] || outAfter === mark[0]) return false;
-  return mark !== "_" || (!WORD.test(outBefore) && !WORD.test(outAfter));
-}
-
-export function wrapMarks(value: string, start: number, end: number, mark: string): Edit {
-  const before = value.slice(0, start);
-  const inner = value.slice(start, end);
-  const after = value.slice(end);
-  if (isWrapped(before, after, mark)) {
-    const at = start - mark.length;
-    return {
-      value: before.slice(0, at) + inner + after.slice(mark.length),
-      start: at,
-      end: at + inner.length,
-    };
-  }
-  return {
-    value: before + mark + inner + mark + after,
-    start: start + mark.length,
-    end: end + mark.length,
-  };
-}
-
-export function toggleMarks(value: string, start: number, end: number, mark: string): Edit {
-  if (start !== end) return wrapMarks(value, start, end, mark);
-  let from = start;
-  let to = end;
-  while (from > 0 && WORD.test(value[from - 1]!)) from--;
-  while (to < value.length && WORD.test(value[to]!)) to++;
-  const edit = wrapMarks(value, from, to, mark);
-  const caret = edit.start + (start - from);
-  return { value: edit.value, start: caret, end: caret };
-}
 
 function lineRange(value: string, start: number, end: number): [number, number] {
   const last = end > start && value[end - 1] === "\n" ? end - 1 : end;

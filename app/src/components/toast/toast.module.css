@@ -49,6 +49,10 @@
   animation: swipe-out var(--motion-fast) var(--motion-easing) forwards;
 }
 
+.deleted {
+  --toast-tone: var(--toast-error);
+}
+
 .error {
   --toast-tone: var(--toast-error);
   --toast-shape: var(--shape-burst);

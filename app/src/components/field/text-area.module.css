@@ -1,0 +1,22 @@
+.textArea {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  padding: var(--space-sm) 0 var(--space-lg);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--font-size-body-lg);
+  line-height: var(--font-leading-relaxed);
+  resize: none;
+  overflow-y: auto;
+}
+
+.textArea::placeholder {
+  color: var(--text-secondary);
+}
+
+.textArea:focus-visible {
+  outline: none;
+}

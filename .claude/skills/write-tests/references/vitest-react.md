@@ -34,7 +34,7 @@ Never `await new Promise(r => setTimeout(r, n))`. Pick the recipe that fits:
 
 ## Screens that send when they close
 
-`AddScreen`, `NoteEdit` and `WriteScreen` send their text when they unmount. `cleanup()` in `afterEach` unmounts them, so the send lands in the next test. Record what each test typed, and in `afterEach` call `cleanup()` and then `await vi.waitFor` until the outbox holds exactly that. See `typed` in `add-autosave.test.tsx` and `leaving` in `note-edit-autosave.test.tsx`. Reason: this leak made the suite fail about 1 run in 5.
+`AddScreen`, `NoteEdit` and `JournalScreen` send their text when they unmount. `cleanup()` in `afterEach` unmounts them, so the send lands in the next test. Record what each test typed, and in `afterEach` call `cleanup()` and then `await vi.waitFor` until the outbox holds exactly that. See `leaving` in `note-edit-autosave.test.tsx`. Reason: this leak made the suite fail about 1 run in 5.
 
 ## Fetch and the Worker
 

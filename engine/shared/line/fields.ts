@@ -1,5 +1,5 @@
 import { formatTodoLine, type TodoLine } from "./line.ts";
-import { isOutcome, SEP, type KnownToken, type LinkKey, type Outcome, type Token } from "./tokens.ts";
+import { isOutcome, SEP, type BareKey, type KnownToken, type LinkKey, type Outcome, type Token, type ValueKey } from "./tokens.ts";
 
 export interface TodoFields {
   text: string;
@@ -24,33 +24,34 @@ type PatchKey = Exclude<keyof TodoPatch, "text" | "done">;
 const RANKED: PatchKey[] = ["with", "re", "toward", "due", "every", "outcome", "doneAt", "dropped"];
 const PATCH_ORDER: PatchKey[] = [...RANKED, "about", "check", "from"];
 
+type ValueSetter = (fields: TodoFields, value: string) => void;
+
+const pushLink =
+  (key: LinkKey): ValueSetter =>
+  (fields, value) => {
+    (fields[key] ??= []).push(value);
+  };
+
+const VALUE_SETTERS: Record<ValueKey, ValueSetter> = {
+  with: pushLink("with"),
+  re: pushLink("re"),
+  toward: pushLink("toward"),
+  due: (f, v) => (f.due = v),
+  every: (f, v) => (f.every = v),
+  about: (f, v) => (f.about = v),
+  from: (f, v) => (f.from = v),
+  done: (f, v) => (f.doneAt = v),
+};
+
+function addBare(fields: TodoFields, key: BareKey): void {
+  if (key === "dropped" || key === "check") fields[key] = true;
+  else fields.outcome = key;
+}
+
 function addField(fields: TodoFields, token: Token): void {
-  if ("raw" in token) {
-    (fields.unknown ??= []).push(token.raw);
-    return;
-  }
-  switch (token.key) {
-    case "with":
-    case "re":
-    case "toward":
-      (fields[token.key] ??= []).push(token.value);
-      return;
-    case "due":
-    case "every":
-    case "about":
-    case "from":
-      fields[token.key] = token.value;
-      return;
-    case "done":
-      fields.doneAt = token.value;
-      return;
-    case "dropped":
-    case "check":
-      fields[token.key] = true;
-      return;
-    default:
-      fields.outcome = token.key;
-  }
+  if ("raw" in token) (fields.unknown ??= []).push(token.raw);
+  else if ("value" in token) VALUE_SETTERS[token.key](fields, token.value);
+  else addBare(fields, token.key);
 }
 
 export function fieldsOf(todo: TodoLine): TodoFields {

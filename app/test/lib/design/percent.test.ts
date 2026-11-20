@@ -11,7 +11,7 @@ describe("percentOf", () => {
     [3, 0, 0],
   ];
 
-  for (const [done, total, expected] of cases) {
-    it(`${done} of ${total} is ${expected}%`, () => assert.equal(percentOf(done, total), expected));
-  }
+  it.each(cases)("%i of %i is %i%%", (done, total, expected) =>
+    assert.equal(percentOf(done, total), expected),
+  );
 });

@@ -13,7 +13,7 @@ async function crossTargetFlow(step: GoalStep): Promise<void> {
   const note = await getNote(step.path);
   const body = note && crossTarget(note.body, step.text, todayIso());
   if (!note || !body) {
-    toast(copy.save.failed, { tone: "error" });
+    toast(copy.toast.failed, { tone: "error" });
     return;
   }
   await putNotes([{ ...note, body }]);

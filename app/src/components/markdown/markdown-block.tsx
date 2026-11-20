@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { List } from "@/components/row/list.tsx";
+import { List } from "@/components/list/list.tsx";
 import styles from "./markdown.module.css";
 import { InlineText } from "./inline-text.tsx";
 import { ListNodes } from "./list-nodes.tsx";

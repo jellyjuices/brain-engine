@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import { areaKeys } from "../../tokens/areas.ts";
 import { Chip } from "../components/chip/chip.tsx";
-import { AreaShape } from "../components/area-shape/area-shape.tsx";
+import { AreaSwatch } from "../components/area-swatch/area-swatch.tsx";
 import { areaSurface, areaVar, mixGlow, mixGradient } from "@/lib/design/area-mix.ts";
 
 export const label: CSSProperties = {
@@ -16,7 +16,7 @@ export const name = (areas: string[]) => areas.map((a) => areaKeys[a].label).joi
 export const KeyRow = ({ slug }: { slug: string }) => (
   <div style={{ display: "grid", gap: "var(--space-xs)" }}>
     <div style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)" }}>
-      <AreaShape areas={[slug]} size="sm" />
+      <AreaSwatch areas={[slug]} size="sm" />
       <strong>{areaKeys[slug].label}</strong>
       <span style={label}>hue {areaKeys[slug].hue}</span>
     </div>
@@ -88,7 +88,7 @@ export const MixCell = ({ areas }: { areas: string[] }) => (
       }}
     />
     <div style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)" }}>
-      <AreaShape areas={areas} />
+      <AreaSwatch areas={areas} />
       <strong style={{ fontSize: "var(--font-size-body-sm)" }}>{name(areas)}</strong>
     </div>
     <div
@@ -101,7 +101,7 @@ export const MixCell = ({ areas }: { areas: string[] }) => (
     <div style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)" }}>
       <Chip label="Tag" areas={areas} />
       <span style={{ ...label, flex: 1 }}>muted text</span>
-      <AreaShape areas={areas} size="sm" />
+      <AreaSwatch areas={areas} size="sm" />
     </div>
   </div>
 );

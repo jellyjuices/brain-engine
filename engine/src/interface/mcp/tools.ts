@@ -4,7 +4,7 @@
 import { ROUTES, type Route } from "../routes/table.ts";
 import { HttpError } from "../server-auth.ts";
 import { snapshot, withCheck } from "../server-check.ts";
-import { TextBody } from "../server-context.ts";
+import { TextBody } from "../server-send.ts";
 import { INPUTS } from "./inputs.ts";
 import type { Input, Json } from "./schema.ts";
 

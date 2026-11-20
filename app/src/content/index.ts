@@ -7,12 +7,13 @@ import { lock } from "./lock.ts";
 import { nav } from "./nav.ts";
 import { notes } from "./notes.ts";
 import { report } from "./report.ts";
-import { save } from "./save.ts";
+import { toast } from "./toast.ts";
 import { settings } from "./settings.ts";
 import { sync } from "./sync.ts";
 import { today } from "./today.ts";
 import { todo } from "./todo.ts";
 import { todos } from "./todos.ts";
+import { sort } from "./sort.ts";
 
 export const copy = {
   add,
@@ -24,10 +25,11 @@ export const copy = {
   nav,
   notes,
   report,
-  save,
+  toast,
   settings,
   sync,
   today,
   todo,
   todos,
+  sort,
 };

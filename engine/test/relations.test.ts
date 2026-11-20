@@ -60,7 +60,7 @@ test("the index finds relations both ways and to-dos that name a subject", async
 
   // A change to the file updates the index.
   note(root, "projects/acme.md", "Project", "Acme", "# People\n");
-  const later = Date.now() / 1000 + 5;
+  const later = 4_102_444_800;
   (await import("node:fs")).utimesSync(join(root, "projects/acme.md"), later, later);
   assert.equal(relationsOf(root, "people/omar.md").in.length, 0);
 });

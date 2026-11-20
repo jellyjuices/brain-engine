@@ -9,7 +9,9 @@
 
 import { unlinkSync } from "node:fs";
 import { join, posix } from "node:path";
-import { DIRS, folderOf, type Note, str, titleOf, today, typeOf } from "../core/notes.ts";
+import { type Note, titleOf, today, typeOf } from "../core/notes.ts";
+import { namesOf as sharedNamesOf, subjectsNamed as sharedSubjectsNamed } from "../../shared/sort/index.ts";
+import { sortSubjects, toSortSubject } from "../sort/guess.ts";
 import { readNote } from "../core/files.ts";
 import { changeFiles } from "../core/log.ts";
 import { addLoop, addNoteLine } from "../todos/todos.ts";
@@ -20,27 +22,12 @@ import { parseWhen } from "../todos/when-words.ts";
 
 export type When = { kind: "today" | "date" | "someday" | "waiting" | "note"; due?: string };
 
-const TYPE_RANK = ["Event", "Person", "Group", "Place", "Thing", "Topic", "Project", "Area"];
-
-const live = (n: Note) => folderOf(n) !== DIRS.archive && str(n.meta.status) !== "deprecated" && !(typeOf(n) === "Event" && ["done", "cancelled"].includes(String(n.meta.status)));
-
-export function namesOf(n: Note): string[] {
-  const aliases = Array.isArray(n.meta.aliases) ? n.meta.aliases.map(String) : [];
-  const title = titleOf(n);
-  const names = [title, title.split(",")[0], ...aliases];
-  if (typeOf(n) === "Person") names.push(title.split(/[\s,]+/)[0]);
-  return [...new Set(names.map((x) => x.trim().toLowerCase()).filter((x) => x.length >= 2))];
-}
-
-const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-const named = (text: string, name: string) => new RegExp(`(^|[^\\p{L}\\p{N}])${esc(name)}($|[^\\p{L}\\p{N}])`, "iu").test(text);
+export const namesOf = (n: Note): string[] => sharedNamesOf(toSortSubject(n));
 
 /** Subjects the text names, most specific type first. */
 export function subjectsNamed(notes: Note[], text: string): Note[] {
-  return notes
-    .filter((n) => live(n) && TYPE_RANK.includes(typeOf(n) ?? ""))
-    .filter((n) => namesOf(n).some((nm) => named(text, nm)))
-    .sort((a, b) => TYPE_RANK.indexOf(typeOf(a)!) - TYPE_RANK.indexOf(typeOf(b)!) || titleOf(b).length - titleOf(a).length);
+  const byPath = new Map(notes.map((n) => [n.path, n]));
+  return sharedSubjectsNamed(sortSubjects(notes), text).map((s) => byPath.get(s.path)!);
 }
 
 const isPerson = (n: Note) => typeOf(n) === "Person";
@@ -86,12 +73,13 @@ export interface FileOpts {
   feeling?: boolean;
   /** A link back to the journal entry the line came from. */
   from?: string;
+  check?: boolean;
 }
 
 export function fileInto(root: string, notes: Note[], into: string, text: string, when: When, opts: FileOpts = {}): string {
   const about = opts.about?.trim() || undefined;
   if (when.kind === "note") {
-    const parts = [opts.feeling && "feeling", text, about && `about ${about}`, opts.from && `from ${opts.from}`];
+    const parts = [opts.feeling && "feeling", text, about && `about ${about}`, opts.check && "check", opts.from && `from ${opts.from}`];
     addNoteLine(root, into, parts.filter(Boolean).join(SEP), opts.date ?? today());
     return "note";
   }
@@ -99,7 +87,7 @@ export function fileInto(root: string, notes: Note[], into: string, text: string
   const links = (paths: string[] = []) => paths.filter((p) => p !== into && byPath.has(p)).map((p) => linkFrom(into, byPath.get(p)!));
   const [w, re] = [links(opts.with), links(opts.re)];
   const outcome = when.kind === "date" ? undefined : when.kind;
-  addLoop(root, into, { text, due: when.kind === "someday" || when.kind === "waiting" ? undefined : when.due, outcome, ...(w.length && { with: w }), ...(re.length && { re }), ...(about && { about }), ...(opts.from && { from: opts.from }) });
+  addLoop(root, into, { text, due: when.kind === "someday" || when.kind === "waiting" ? undefined : when.due, outcome, ...(w.length && { with: w }), ...(re.length && { re }), ...(about && { about }), ...(opts.check && { check: true }), ...(opts.from && { from: opts.from }) });
   return "to-do";
 }
 

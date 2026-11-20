@@ -16,8 +16,8 @@ function addButton() {
 }
 
 function finishClosing() {
-  const blob = document.querySelector('[class*="addBlob"]');
-  if (blob) fireEvent.animationEnd(blob, { animationName: styles["add-deflate"] });
+  const blob = document.querySelector(`.${styles.addSurface}`)!;
+  fireEvent.animationEnd(blob, { animationName: styles["add-deflate"] });
 }
 
 async function holdAdd() {

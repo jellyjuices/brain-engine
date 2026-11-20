@@ -63,31 +63,61 @@ function initialize(c: RpcCtx, params: Json): Json {
   return { protocolVersion: LEGACY.includes(asked) ? asked : LEGACY[0], capabilities: { tools: {} }, serverInfo: { name: "brain", version: c.version }, instructions: INSTRUCTIONS };
 }
 
-/** One JSON-RPC message in, one reply out. A notification gets 202 with no body. */
-export async function dispatch(c: RpcCtx, msg: unknown): Promise<Reply> {
-  if (!isObj(msg) || msg.jsonrpc !== "2.0" || typeof msg.method !== "string") return fail(400, undefined, -32600, "Invalid request: send one JSON-RPC 2.0 object.");
-  if (!("id" in msg)) return { status: 202 };
+interface Call {
+  c: RpcCtx;
+  id: string | number;
+  method: string;
+  params: Json;
+  modern: boolean;
+}
+
+type Method = (call: Call) => Json | Reply | Promise<Json | Reply>;
+
+const METHODS: Record<string, Method> = {
+  ping: () => ({}),
+  "server/discover": () => ({ supportedVersions: [MODERN, ...LEGACY], capabilities: { tools: {} }, instructions: INSTRUCTIONS }),
+  "tools/list": () => ({ tools: TOOLS.map((t) => t.def) }),
+  "tools/call": ({ c, id, params }) => callTool(c, id, params),
+};
+
+function methodFor(call: Call): Method | undefined {
+  if (call.method === "initialize") return call.modern ? undefined : ({ c, params }) => initialize(c, params);
+  return Object.hasOwn(METHODS, call.method) ? METHODS[call.method] : undefined;
+}
+
+function checkLegacy(c: RpcCtx, id: Id, method: string): Reply | undefined {
+  const v = c.header("mcp-protocol-version");
+  if (method === "initialize" || !v || LEGACY.includes(v)) return undefined;
+  return fail(400, id, -32022, "Unsupported protocol version", { supported: [MODERN, ...LEGACY], requested: v });
+}
+
+const isReply = (r: Json | Reply): r is Reply => "status" in r && typeof r.status === "number" && "body" in r;
+
+function reply(call: Call, result: Json): Reply {
+  const extra = call.modern ? { resultType: "complete", _meta: { [`${META}serverInfo`]: { name: "brain", version: call.c.version } } } : {};
+  return { status: 200, body: { jsonrpc: "2.0", id: call.id, result: { ...result, ...extra } } };
+}
+
+function parseCall(c: RpcCtx, msg: Json & { method: string }): Call | Reply {
   const id = msg.id;
   if (typeof id !== "string" && typeof id !== "number") return fail(400, undefined, -32600, "Invalid request: id must be text or a number.");
-  const method = msg.method;
   const params = isObj(msg.params) ? msg.params : {};
   const meta = isObj(params._meta) ? params._meta : {};
   const modern = `${META}protocolVersion` in meta || c.header("mcp-protocol-version") === MODERN;
-  if (modern) {
-    const bad = checkModern(c, id, method, params, meta);
-    if (bad) return bad;
-  } else if (method !== "initialize") {
-    const v = c.header("mcp-protocol-version");
-    if (v && !LEGACY.includes(v)) return fail(400, id, -32022, "Unsupported protocol version", { supported: [MODERN, ...LEGACY], requested: v });
-  }
-  let result: Json | Reply;
-  if (method === "initialize" && !modern) result = initialize(c, params);
-  else if (method === "ping") result = {};
-  else if (method === "server/discover") result = { supportedVersions: [MODERN, ...LEGACY], capabilities: { tools: {} }, instructions: INSTRUCTIONS };
-  else if (method === "tools/list") result = { tools: TOOLS.map((t) => t.def) };
-  else if (method === "tools/call") result = await callTool(c, id, params);
-  else return fail(modern ? 404 : 200, id, -32601, `Method not found: ${method}`);
-  if ("status" in result && typeof result.status === "number" && "body" in result) return result as Reply;
-  const extra = modern ? { resultType: "complete", _meta: { [`${META}serverInfo`]: { name: "brain", version: c.version } } } : {};
-  return { status: 200, body: { jsonrpc: "2.0", id, result: { ...result, ...extra } } };
+  const bad = modern ? checkModern(c, id, msg.method, params, meta) : checkLegacy(c, id, msg.method);
+  return bad ?? { c, id, method: msg.method, params, modern };
+}
+
+const isRequest = (msg: unknown): msg is Json & { method: string } => isObj(msg) && msg.jsonrpc === "2.0" && typeof msg.method === "string";
+
+/** One JSON-RPC message in, one reply out. A notification gets 202 with no body. */
+export async function dispatch(c: RpcCtx, msg: unknown): Promise<Reply> {
+  if (!isRequest(msg)) return fail(400, undefined, -32600, "Invalid request: send one JSON-RPC 2.0 object.");
+  if (!("id" in msg)) return { status: 202 };
+  const call = parseCall(c, msg);
+  if ("status" in call) return call;
+  const run = methodFor(call);
+  if (!run) return fail(call.modern ? 404 : 200, call.id, -32601, `Method not found: ${call.method}`);
+  const result = await run(call);
+  return isReply(result) ? result : reply(call, result);
 }

@@ -1,6 +1,6 @@
 import styles from "./fingerprint-row.module.css";
 import { useEffect, useState } from "react";
-import { Row } from "@/components/row/row.tsx";
+import { ListRow } from "@/components/list/list-row.tsx";
 import { confirmSheet } from "@/components/sheet/confirm-sheet.tsx";
 import { toast } from "@/components/toast/toast-store.ts";
 import { enroll, forget, isEnrolled, isSupported } from "@/lib/lock/fingerprint.ts";
@@ -34,7 +34,7 @@ export function FingerprintRow() {
   }
 
   return (
-    <Row
+    <ListRow
       hidden={!supported}
       title={<span id="fp-label">{copy.settings.fingerprint}</span>}
       sub={copy.settings.fingerprintHint}

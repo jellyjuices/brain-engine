@@ -1,6 +1,6 @@
-import { Empty } from "@/components/empty/empty.tsx";
-import { List } from "@/components/row/list.tsx";
-import { Row } from "@/components/row/row.tsx";
+import { EmptyState } from "@/components/empty-state/empty-state.tsx";
+import { List } from "@/components/list/list.tsx";
+import { ListRow } from "@/components/list/list-row.tsx";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { archiveRows } from "@/lib/notes/folders.ts";
@@ -15,11 +15,11 @@ export function ArchiveView() {
     <>
       <PageHeader title={copy.notes.archive} fallback="/brain" />
       {notes && !rows.length ? (
-        <Empty title={copy.notes.emptyFolder} />
+        <EmptyState title={copy.notes.emptyFolder} />
       ) : (
         <List>
           {rows.map((n) => (
-            <Row
+            <ListRow
               key={n.path}
               {...typeLook(n.type)}
               href={noteHref(n.path)}

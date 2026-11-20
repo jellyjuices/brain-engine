@@ -17,7 +17,7 @@
 5. One view shows at a time. Switching is one tap.
 6. Ticking a to-do takes it off To-dos. It becomes a done line on its subject's timeline. It offers an optional note and one optional follow-up.
 7. A to-do can point up to a goal. Date, people and subject are all optional.
-8. If a rare entry is left unsorted, an "Unsorted entries" banner shows. Tapping it opens the Sort screen.
+8. If a rare entry is left unsorted, an "Unsorted entries" banner shows. Tapping it opens the unsorted entries.
 9. A subject's page keeps all its to-dos in one list, open and done, in the note's order. A done one can be marked not done, edited or deleted from its sheet. The card at the top shows one "Soon" line: the next to-do, or the next event if it comes first, with its date shown once.
 10. A repeating to-do is one line that rolls forward. It is never done for good. Done for now moves it to its next date and adds a dated line to the subject's history. Skip this time moves it on with no history line. Stop repeating makes it a normal to-do. No copies are made.
 

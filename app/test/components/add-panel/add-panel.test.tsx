@@ -23,8 +23,8 @@ describe("AddPanel", () => {
     await user.click(screen.getByRole("button", { name: "Add" }));
     expect(screen.getAllByRole("menuitem")).toHaveLength(3);
     await user.click(screen.getByRole("button", { name: "Close", expanded: true }));
-    const blob = document.querySelector('[class*="addBlob"]');
-    if (blob) fireEvent.animationEnd(blob, { animationName: styles["add-deflate"] });
+    const blob = document.querySelector(`.${styles.addSurface}`)!;
+    fireEvent.animationEnd(blob, { animationName: styles["add-deflate"] });
     expect(screen.queryByRole("menuitem")).toBeNull();
   });
 
@@ -33,7 +33,7 @@ describe("AddPanel", () => {
     render(<AddPanel />);
     await user.click(screen.getByRole("button", { name: "Add" }));
     await user.click(screen.getByRole("menuitem", { name: "Other" }));
-    expect(go).toHaveBeenCalledWith("/new");
+    expect(go).toHaveBeenCalledWith("/add");
   });
 
   it("turns the button into save while writing a to-do", async () => {

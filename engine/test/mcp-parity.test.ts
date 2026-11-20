@@ -8,7 +8,7 @@ import { tmpdir } from "node:os";
 import { addThread } from "../src/intake/threads.ts";
 import { issueAgentToken } from "../src/interface/server-agent.ts";
 import { HttpError } from "../src/interface/server-auth.ts";
-import { TextBody } from "../src/interface/server-context.ts";
+import { TextBody } from "../src/interface/server-send.ts";
 import { findTool, runTool, TOOLS } from "../src/interface/mcp/tools.ts";
 import { apiBrain, now, startApi } from "./api-helpers.ts";
 
@@ -75,8 +75,9 @@ test("T4: the steps cover every tool once", () => {
   assert.deepEqual(STEPS.map(([n]) => n).sort(), TOOLS.map((t) => t.def.name).sort());
 });
 
-test("T4: each tool gives the same result as its route", async () => {
+test("T4: each tool gives the same result as its route", async (t) => {
   const api = await startApi({ agentRate: 10_000 });
+  t.after(() => api.close());
   const agent = issueAgentToken(api.agentFile);
   const root = apiBrain();
   for (const r of [api.root, root]) for (const question of ["What fills your week?", "What made-up place calms you?"]) addThread(r, { question, lens: "now" });
@@ -85,22 +86,18 @@ test("T4: each tool gives the same result as its route", async () => {
   const seenHttp: Seen = {};
   const seenTool: Seen = {};
   const failed: string[] = [];
-  try {
-    for (const [name, argsOf] of STEPS) {
-      const { route } = findTool(name)!;
-      const httpArgs = argsOf(seenHttp);
-      const tool = await viaTool(name, argsOf(seenTool), root, toolAgentFile);
-      const http = await callRoute(api.base, agent, route.method, route.path, route.prefix, httpArgs);
-      assert.equal(tool.status, http.status, `${name}: status`);
-      assert.equal(normal(tool.data), normal(http.data), `${name}: result`);
-      if (http.status !== 200) failed.push(name);
-      seenHttp[name] = http.data;
-      seenTool[name] = tool.data;
-    }
-    assert.deepEqual(failed, []);
-  } finally {
-    api.close();
+  for (const [name, argsOf] of STEPS) {
+    const { route } = findTool(name)!;
+    const httpArgs = argsOf(seenHttp);
+    const tool = await viaTool(name, argsOf(seenTool), root, toolAgentFile);
+    const http = await callRoute(api.base, agent, route.method, route.path, route.prefix, httpArgs);
+    assert.equal(tool.status, http.status, `${name}: status`);
+    assert.equal(normal(tool.data), normal(http.data), `${name}: result`);
+    if (http.status !== 200) failed.push(name);
+    seenHttp[name] = http.data;
+    seenTool[name] = tool.data;
   }
+  assert.deepEqual(failed, []);
 });
 
 const REST: Record<string, string> = { "/api/notes/": "path", "/api/drafts/": "id", "/api/reports/": "name", "/api/goals/": "path", "/api/decisions/": "path" };

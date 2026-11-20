@@ -74,7 +74,7 @@ describe("lock screen and vault", () => {
     await submit("pw one");
     expect(vault.hasKey()).toBe(true);
     expect(session.isUnlocked()).toBe(true);
-    expect(document.querySelector('[role="dialog"]')).toBeNull();
+    expect(screen.queryByRole("dialog")).toBeNull();
   });
 
   it("a stamp with no key still shows the lock (what a reload looks like)", async () => {

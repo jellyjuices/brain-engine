@@ -3,7 +3,17 @@ import { appendFileSync, existsSync, readFileSync, unlinkSync } from "node:fs";
 import { join } from "node:path";
 import { LOG_FILE, nowStamp, parse } from "./notes.ts";
 import { writeAtomic } from "./files.ts";
-import { diffLines } from "../todos/undo.ts";
+
+/** The smallest block of lines that changed between two texts. */
+export function diffLines(path: string, before: string, after: string): UndoStep {
+  const beforeLines = before.split("\n");
+  const afterLines = after.split("\n");
+  let start = 0;
+  while (start < beforeLines.length && start < afterLines.length && beforeLines[start] === afterLines[start]) start++;
+  let endA = beforeLines.length, endB = afterLines.length;
+  while (endA > start && endB > start && beforeLines[endA - 1] === afterLines[endB - 1]) { endA--; endB--; }
+  return { path, line: start, removed: beforeLines.slice(start, endA), added: afterLines.slice(start, endB) };
+}
 
 /** What `brain undo` needs to reverse one file change: at line `line`, `added` replaced `removed`. `file` marks a file the change made or deleted. */
 export interface UndoStep {

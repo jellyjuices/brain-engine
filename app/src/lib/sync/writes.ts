@@ -4,6 +4,7 @@ import type { Decision } from "./local-edit.ts";
 import { toStored } from "@/lib/notes/model.ts";
 import { enqueue, list, registerHandler, remove } from "./outbox.ts";
 import { putNotes } from "@/lib/storage/store.ts";
+import { registerRelationWrites } from "./relation-writes.ts";
 import type {
   InboxPayload,
   DonePayload,
@@ -45,6 +46,7 @@ export async function sendEdit(p: EditPayload): Promise<ApiResult> {
 }
 
 export function registerWrites() {
+  registerRelationWrites();
   registerHandler("inbox", (item) => {
     const { text, into, tags } = item.payload as InboxPayload;
     return api("/api/inbox", {
@@ -149,8 +151,8 @@ export function queueInboxDrop(path: string) {
   return enqueue<InboxDropPayload>("inbox-drop", { path });
 }
 
-export function queueFile(title: string, text: string) {
-  return enqueue<FilePayload>("file", { title, text });
+export function queueFile(title: string, text: string, asks: string[] = []) {
+  return enqueue<FilePayload>("file", { title, text, ...(asks.length && { asks }) });
 }
 
 export function queueBirthday(path: string, birthday: string) {

@@ -24,7 +24,8 @@ test("journal: a title is the first words, cut at a word break, with no trailing
   assert.equal(titleFrom(MORNING), "Woke up early, and the shed");
   assert.equal(titleFrom("Rain!!"), "Rain");
   assert.equal(titleFrom("  ...  "), "Journal");
-  assert.equal(titleFrom("Supercalifragilisticexpialidocious ".repeat(4)).length <= 60, true);
+  const long = titleFrom("Supercalifragilisticexpialidocious ".repeat(4));
+  assert.ok(long.length <= 60, `got ${long.length} chars: ${long}`);
 });
 
 test("journal: two adds on one day make two notes, each whole, with its own title and slug", () => withApi(async (a) => {

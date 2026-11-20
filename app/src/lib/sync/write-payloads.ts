@@ -57,6 +57,7 @@ export interface InboxDropPayload {
 export interface FilePayload {
   title: string;
   text: string;
+  asks?: string[];
 }
 export interface BirthdayPayload {
   path: string;

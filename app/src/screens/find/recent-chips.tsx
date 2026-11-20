@@ -4,7 +4,7 @@ import { Chips } from "@/components/chip/chips.tsx";
 import { Chip } from "@/components/chip/chip.tsx";
 import { recentSearches } from "@/lib/notes/recent-searches.ts";
 import { SectionHeader } from "@/components/section-header/section-header.tsx";
-import { Empty } from "@/components/empty/empty.tsx";
+import { EmptyState } from "@/components/empty-state/empty-state.tsx";
 import { copy } from "@/content/index.ts";
 
 export function RecentChips({ onPick }: { onPick: (q: string) => void }) {
@@ -13,7 +13,7 @@ export function RecentChips({ onPick }: { onPick: (q: string) => void }) {
     void recentSearches().then(setRecent);
   }, []);
   if (!recent) return null;
-  if (!recent.length) return <Empty size="sm" title={copy.notes.findHint} />;
+  if (!recent.length) return <EmptyState size="sm" title={copy.notes.findHint} />;
   return (
     <>
       <SectionHeader title={copy.notes.recent} />

@@ -2,7 +2,7 @@ import styles from "./find.module.css";
 import { useEffect, useRef, useState } from "react";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { SearchInput } from "@/components/field/search-input.tsx";
-import { SyncLine } from "@/components/sync-line/sync-line.tsx";
+import { SyncStatus } from "@/components/sync-status/sync-status.tsx";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { rememberSearch } from "@/lib/notes/recent-searches.ts";
 import { fromServerSearch, type RemoteSearch } from "@/lib/notes/server-search.ts";
@@ -64,7 +64,7 @@ export function FindScreen() {
           input.current?.blur();
         }}
       />
-      <SyncLine />
+      <SyncStatus />
       <div className={styles.results} aria-live="polite">
         {!q ? (
           <RecentChips
