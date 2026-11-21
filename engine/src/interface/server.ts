@@ -8,6 +8,7 @@ import { snapshot, withCheck, withUndoId } from "./server-check.ts";
 import { logMark } from "../core/log.ts";
 import { matchRoute } from "./routes/table.ts";
 import { handleMcp, isMcp } from "./mcp/http.ts";
+import { startJobs } from "../helper/worker.ts";
 
 export interface ServerOptions {
   agentTokenFile?: string;
@@ -76,7 +77,10 @@ export function serve(root: string, opts: { host?: string; port?: number } = {},
   const server = createServer(root, loadToken(tokenPath(), say));
   return new Promise((resolve, reject) => {
     server.once("error", reject);
-    server.listen(port, host, () => say(`brain serve is listening on http://${host}:${port}`));
+    server.listen(port, host, () => {
+      say(`brain serve is listening on http://${host}:${port}`);
+      startJobs(root);
+    });
     server.once("close", () => resolve(0));
     for (const sig of ["SIGINT", "SIGTERM"] as const) process.once(sig, () => server.close());
   });

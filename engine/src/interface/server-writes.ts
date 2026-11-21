@@ -9,6 +9,7 @@ import { change } from "../todos/undo.ts";
 import { dropDone, editTodoText, reopen } from "../todos/reopen.ts";
 import { skip, stopRepeat } from "../todos/repeat.ts";
 import { inboxPath } from "./routes/capture.ts";
+import { jobsForAsks } from "../helper/worker.ts";
 import { doneWith, dropWith } from "../todos/wrapup.ts";
 import { HttpError, MAX_FILE } from "./server-auth.ts";
 import { afterWrite, asUserError, type Ctx, existingNote, fileText, fullNoteJson, hash, safeNotePath, text, textList } from "./server-context.ts";
@@ -65,7 +66,8 @@ export function addFile(c: Ctx) {
     const note = newNote(c.root, "Note", title, { description: `File added from your device: ${title}`.slice(0, 150), tags: ["reference"], ...(asks.length && { asks }) });
     return writeNote(c.root, note.path, note.meta, `${body.trimEnd()}\n`);
   });
-  return { path: made.path, created: true };
+  const jobs = jobsForAsks(c.root, made.path, asks);
+  return { path: made.path, created: true, ...(jobs.length && { jobs }) };
 }
 
 export function inboxDrop(c: Ctx) {

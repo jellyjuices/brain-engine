@@ -3,6 +3,9 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+export const TEST_CONFIG = mkdtempSync(join(tmpdir(), "brain-config-"));
+process.env.BRAIN_CONFIG = TEST_CONFIG;
+
 export const REPO = join(dirname(fileURLToPath(import.meta.url)), "..");
 export const STARTER = join(REPO, "..", "starter");
 export const BIN = join(REPO, "bin", "brain.ts");

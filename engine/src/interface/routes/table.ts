@@ -12,6 +12,7 @@ import { dropDraft, listDrafts, oneDraft, saveDraft } from "./drafts.ts";
 import { addRelation, deleteNote, makeNote, relationsRoute } from "./notes.ts";
 import { moveLineRoute, retagRoute, sortedRoute } from "./sorted.ts";
 import { findRoute, logRoute, todosRoute } from "./reads.ts";
+import { jobsRoute, retryJobRoute, startJob, stopJobRoute, warmHelper } from "./jobs.ts";
 
 export type Method = "GET" | "POST" | "PUT" | "DELETE";
 export type Handler = (c: Ctx, rest: string) => unknown;
@@ -81,6 +82,11 @@ export const ROUTES: Route[] = [
   r("GET", "/api/intake/next", "intake_next", "Open intake questions.", "Use to start an intake.", intakeNext),
   r("POST", "/api/intake/save", "intake_save", "Save an intake answer.", "Use after the owner answers.", intakeSave),
   r("POST", "/api/intake/skip", "intake_skip", "Park an intake question.", "Use when the owner passes.", intakeSkip),
+  r("GET", "/api/jobs", "jobs", "Whether the home helper is on, and its jobs on file asks, newest first.", "Read before a file ask, so you skip one a job is doing.", jobsRoute),
+  r("POST", "/api/jobs", "start_job", "Start a home helper job on a file ask. Owner only.", "", startJob, { owner: true }),
+  r("POST", "/api/jobs/retry", "retry_job", "Try a failed job again. Owner only.", "", retryJobRoute, { owner: true }),
+  r("POST", "/api/jobs/stop", "stop_job", "Stop a waiting or working job. Owner only.", "", stopJobRoute, { owner: true }),
+  r("POST", "/api/helper/warm", "warm_helper", "Load the home helper's model. Owner only.", "", warmHelper, { owner: true }),
 ];
 
 export function matchRoute(method: string, pathname: string): { route: Route; rest: string } {

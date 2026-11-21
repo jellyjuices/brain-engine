@@ -114,4 +114,5 @@ export const INPUTS: Record<string, Input> = {
   intake_next: NONE,
   intake_save: obj<IntakeSave>({ lens: req(str()), question: req(str()), line: req(str()), by: str(), raw: str() }),
   intake_skip: obj<{ question: string }>({ question: req(str()) }),
+  jobs: obj<{ note?: string }>({ note: str("A note path. Leave it out for every job.") }),
 };

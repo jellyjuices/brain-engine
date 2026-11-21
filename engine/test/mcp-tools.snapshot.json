@@ -855,5 +855,24 @@
       "destructiveHint": false,
       "openWorldHint": false
     }
+  },
+  {
+    "name": "jobs",
+    "description": "Whether the home helper is on, and its jobs on file asks, newest first. Read before a file ask, so you skip one a job is doing.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "note": {
+          "type": "string",
+          "description": "A note path. Leave it out for every job."
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
   }
 ]

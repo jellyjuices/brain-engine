@@ -42,6 +42,7 @@ const STEPS: Step[] = [
   ["add_relation", () => ({ from: "people/alex-sample.md", to: SHED, role: "helper" })],
   ["intake_save", () => ({ lens: "now", question: "What fills your week?", line: "Building a shed." })],
   ["intake_skip", () => ({ question: "What made-up place calms you?" })],
+  ["jobs", () => ({})],
 ];
 
 const normal = (x: unknown) =>
