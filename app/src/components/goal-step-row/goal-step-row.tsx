@@ -1,5 +1,5 @@
 import { Checkbox } from "@/components/checkbox/checkbox.tsx";
-import { TodoRow } from "@/components/todo-row/todo-row.tsx";
+import { TodoRow, type TodoRowSurface } from "@/components/todo-row/todo-row.tsx";
 import { doneStep } from "@/flows/goal-flow.ts";
 import type { GoalStep as Step } from "@shared/todos/index.ts";
 import { niceDate, noteHref, todayIso } from "@/lib/notes/model.ts";
@@ -12,14 +12,22 @@ export interface GoalStepRowProps {
   goal: string;
   subject: string;
   showSubject?: boolean;
+  surface?: TodoRowSurface;
 }
 
-export function GoalStepRow({ step, goal, subject, showSubject = false }: GoalStepRowProps) {
+export function GoalStepRow({
+  step,
+  goal,
+  subject,
+  showSubject = false,
+  surface,
+}: GoalStepRowProps) {
   const date = step.done ? step.doneAt : step.due;
   const title = plainText(step.text);
   return (
     <TodoRow
       title={title}
+      surface={surface}
       start={
         <Checkbox
           checked={step.done}

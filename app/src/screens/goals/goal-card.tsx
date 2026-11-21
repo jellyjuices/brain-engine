@@ -28,7 +28,12 @@ export function GoalCard({ goal, notes }: GoalCardProps) {
         <section aria-label={copy.goals.nextStep}>
           <SectionHeader title={copy.goals.nextStep} as="h3" />
           <List variant="plain">
-            <GoalStepRow step={next} goal={goal.title} subject={titleAt(notes, next.path)} />
+            <GoalStepRow
+              step={next}
+              goal={goal.title}
+              subject={titleAt(notes, next.path)}
+              surface="secondary"
+            />
           </List>
         </section>
       )}

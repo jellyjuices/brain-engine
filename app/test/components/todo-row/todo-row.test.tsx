@@ -9,6 +9,13 @@ import { laterAction } from "@/components/todo-row/todo-row-actions.tsx";
 afterEach(cleanup);
 
 describe("TodoRow", () => {
+  it("puts the surface on the row", () => {
+    const { container, rerender } = render(<TodoRow title="Call Ana" />);
+    expect((container.firstChild as HTMLElement).className).toMatch(/primary/);
+    rerender(<TodoRow title="Call Ana" surface="secondary" />);
+    expect((container.firstChild as HTMLElement).className).toMatch(/secondary/);
+  });
+
   it("offers Tomorrow in the tray and runs it", async () => {
     const onLater = vi.fn();
     render(<TodoRow title="Call Ana" actions={[laterAction(onLater)]} />);

@@ -28,6 +28,7 @@ export function NoteBody({ note }: { note: StoredNote }) {
         showSubject={false}
         done={loop.done}
         tickNow
+        surface="secondary"
       />
     );
   }

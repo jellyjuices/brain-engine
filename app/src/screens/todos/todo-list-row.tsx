@@ -29,6 +29,7 @@ export function TodoListRow({ todo, now, showSubject }: TodoListRowProps) {
   return (
     <TodoRow
       title={title}
+      surface="primary"
       start={<Checkbox label={title} onCheckedChange={() => void tickTodo(ref, goal)} />}
       tag={showSubject ? todo.noteTitle : undefined}
       when={whenLabel(

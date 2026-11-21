@@ -1,4 +1,4 @@
-import { TodoRow } from "./todo-row.tsx";
+import { TodoRow, type TodoRowSurface } from "./todo-row.tsx";
 import { laterAction } from "./todo-row-actions.tsx";
 import { Checkbox } from "@/components/checkbox/checkbox.tsx";
 import { openTodo, tickTodo, tomorrow } from "@/flows/todo-flow.ts";
@@ -12,9 +12,10 @@ export interface TodoRefRowProps {
   showSubject?: boolean;
   done?: boolean;
   tickNow?: boolean;
+  surface?: TodoRowSurface;
 }
 
-export function TodoRefRow({ todo, showSubject = true, done, tickNow }: TodoRefRowProps) {
+export function TodoRefRow({ todo, showSubject = true, done, tickNow, surface }: TodoRefRowProps) {
   const title = plainText(todo.text);
   const tag = showSubject && todo.kind !== "event" ? todo.subject : undefined;
   function doneMenu() {
@@ -29,6 +30,7 @@ export function TodoRefRow({ todo, showSubject = true, done, tickNow }: TodoRefR
         title={title}
         tag={tag}
         checked
+        surface={surface}
         start={<Checkbox checked label={title} onCheckedChange={doneMenu} />}
         onOpen={doneMenu}
         onMenu={doneMenu}
@@ -39,6 +41,7 @@ export function TodoRefRow({ todo, showSubject = true, done, tickNow }: TodoRefR
     <TodoRow
       title={title}
       tag={tag}
+      surface={surface}
       when={whenLabel(todo, todayIso())}
       start={
         <Checkbox

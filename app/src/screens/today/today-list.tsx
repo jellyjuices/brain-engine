@@ -18,7 +18,7 @@ export function TodayList({ data }: { data: TodayData }) {
             <SectionHeader title={g.label} tone={g.id === "overdue" ? "late" : "default"} />
             <List>
               {items.map((i) => (
-                <TodoRefRow key={i.ref} todo={makeTodo(i)} />
+                <TodoRefRow key={i.ref} todo={makeTodo(i)} surface="secondary" />
               ))}
             </List>
           </section>

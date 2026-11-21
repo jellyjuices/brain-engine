@@ -7,6 +7,7 @@ export function SubjectTodoRow({ todo, subject }: { todo: CardTodo; subject: str
     <TodoRefRow
       todo={makeTodo({ ...todo, subject: todo.noteTitle })}
       showSubject={todo.noteTitle !== subject}
+      surface="secondary"
     />
   );
 }

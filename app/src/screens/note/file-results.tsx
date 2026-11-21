@@ -46,6 +46,7 @@ export function FileResults({ note, notes }: { note: StoredNote; notes: StoredNo
                     path: t.note.path,
                     subject: t.note.title,
                   })}
+                  surface="primary"
                 />
               ))}
             </List>

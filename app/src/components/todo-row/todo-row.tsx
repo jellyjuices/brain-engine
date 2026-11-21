@@ -15,6 +15,8 @@ import { useLongPress } from "./use-long-press.ts";
 import { useSwipe } from "./use-swipe.ts";
 import styles from "./todo-row.module.css";
 
+export type TodoRowSurface = "primary" | "secondary";
+
 export type TodoRowProps = {
   title: string;
   tag?: string;
@@ -29,7 +31,7 @@ export type TodoRowProps = {
   markLabels?: { people?: string; goal?: string; from?: string };
   start?: ReactNode;
   actions?: TodoRowAction[];
-  surface?: "primary" | "secondary";
+  surface?: TodoRowSurface;
   checked?: boolean;
   disabled?: boolean;
   pressed?: boolean;

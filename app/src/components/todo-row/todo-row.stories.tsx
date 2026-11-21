@@ -107,6 +107,16 @@ export const OnSecondary: Story = {
     ),
   ],
 };
+export const OnPrimary: Story = {
+  args: { surface: "primary", defaultSwiped: true },
+  decorators: [
+    (Story) => (
+      <div style={{ background: "var(--background-primary)" }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
 export const List: Story = {
   render: (args) => (
     <ul style={{ margin: 0, padding: 0, maxWidth: "var(--layout-max-width)" }}>

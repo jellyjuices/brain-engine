@@ -26,6 +26,7 @@ export function GoalBody({ goal, notes }: GoalBodyProps) {
         <GoalSection title={copy.goals.nextStep}>
           <List variant="plain">
             <GoalStepRow
+              surface="primary"
               step={goal.next}
               goal={goal.title}
               subject={titleAt(notes, goal.next.path)}
@@ -39,6 +40,7 @@ export function GoalBody({ goal, notes }: GoalBodyProps) {
           <List variant="plain">
             {goal.targets.map((step) => (
               <GoalStepRow
+                surface="primary"
                 key={`${step.path}::${step.text}`}
                 step={step}
                 goal={goal.title}
@@ -53,6 +55,7 @@ export function GoalBody({ goal, notes }: GoalBodyProps) {
           <List variant="plain">
             {steps.map((step) => (
               <GoalStepRow
+                surface="primary"
                 key={`${step.path}::${step.text}`}
                 step={step}
                 goal={goal.title}
