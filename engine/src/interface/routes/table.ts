@@ -9,7 +9,7 @@ import { TextBody } from "../server-send.ts";
 import { addFile, addPerson, addSubject, doneRoute, dropRoute, editNote, editTodoRoute, inboxDrop, moveRoute, reopenRoute, setBirthday, skipRoute, stopRepeatRoute, undoRoute } from "../server-writes.ts";
 import { cardRoute, intakeNext, intakeSave, intakeSkip, listRoute, notesSince, oneNote, report, todayRoute } from "../server-reads.ts";
 import { newAgentToken, revokeAgent } from "./agent.ts";
-import { addRoute, sortRoute, unsortedRoute } from "./capture.ts";
+import { addRoute, appAddRoute, sortRoute, unsortedRoute } from "./capture.ts";
 import { decisionRoute, goalRoute, goalsRoute } from "./goals.ts";
 import { addJournal } from "./journal.ts";
 import { dropDraft, listDrafts, oneDraft, saveDraft } from "./drafts.ts";
@@ -75,7 +75,7 @@ export const ROUTES: Route[] = [
   r("GET", "/api/list", "list", "List notes by type, tag, area or status.", "Use to browse.", listRoute, HIDDEN),
   r("GET", "/api/cal.ics", "calendar", "The calendar feed.", "Use for dated items as iCalendar text.", (c) => new TextBody(calendarFeed(c.root), "text/calendar; charset=utf-8"), HIDDEN),
   r("GET", "/api/reports/", "report", "A report: today, weekly or area/<slug>.", "Use for a Markdown summary.", report, { prefix: true, ...HIDDEN }),
-  r("POST", "/api/inbox", "inbox", "The app's add. Same as /api/add.", "Prefer add.", addRoute, HIDDEN),
+  r("POST", "/api/inbox", "inbox", "The app's add. A to-do always waits in the inbox to be sorted.", "Prefer add.", appAddRoute, HIDDEN),
   r("POST", "/api/people", "add_person", "Make a Person note.", "Use when someone new comes up.", addPerson, HIDDEN),
   r("POST", "/api/journal", "add_journal", "Add a journal entry, whole, as its own note. It waits to be sorted.", "Use for a dated journal entry.", addJournal, HIDDEN),
   r("POST", "/api/subjects", "add_subject", "Make a Place or Thing note.", "Use for a new place or thing.", addSubject, HIDDEN),

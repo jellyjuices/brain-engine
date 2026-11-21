@@ -268,8 +268,8 @@ test("local app: the cookie opens the API on this Mac only; a write needs this e
   assert.equal((await raw("POST", "/api/inbox", { ...COOKIE, Origin: "http://evil.example" }, item)).status, 401);
   const ok = await raw("POST", "/api/inbox", { ...COOKIE, ...origin }, item);
   assert.equal(ok.status, 200, ok.body);
-  assert.equal(JSON.parse(ok.body).saved, "filed", "+ Add here files on the note, like brain pull");
-  assert.match(readFileSync(join(root, "projects/visit.md"), "utf8"), /Ask about the referral/);
+  assert.equal(JSON.parse(ok.body).saved, "inbox", "+ Add here waits in the inbox to be sorted");
+  assert.doesNotMatch(readFileSync(join(root, "projects/visit.md"), "utf8"), /Ask about the referral/);
 }));
 
 test("people: add a person, no copy on retry, set a birthday", () => withApi(async (a) => {

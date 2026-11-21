@@ -21,11 +21,10 @@ This spec says how each flow works in the real app.
 
 ### A2. The toast says where it went
 
-- After a to-do saves: "Added to Gym", detail "Fri, Nov 20" when the text names a day.
-- No home and no `@` or `#`: "Added to Unsorted".
+- After a to-do saves: "Added to Unsorted", detail "Fri, Nov 20" when the text names a day. A picked home does not change this: the to-do waits in Unsorted until the owner sorts it.
 - Actions: Move and Undo.
   - Undo sends `undo`.
-  - Move sends `undo`, then opens the Add panel with the same text, so the owner picks another home.
+  - Move opens the Unsorted screen. It never undoes the save.
 
 ### A3. Unsorted to-dos
 

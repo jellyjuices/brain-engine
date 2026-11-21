@@ -1,8 +1,7 @@
-import { requestAdd } from "@/components/add-panel/add-request.ts";
 import type { Suggestion } from "@/lib/notes/mention.ts";
 import { longDate, todayIso } from "@/lib/notes/model.ts";
 import { dayInText } from "@/lib/notes/when-word.ts";
-import { getNote } from "@/lib/storage/store.ts";
+import { navigate } from "@/lib/platform/router.ts";
 import { queueInbox } from "@/lib/sync/writes.ts";
 import { saveFlow, type DoneToast } from "./save-flow.ts";
 import { undoSaved } from "./undo-flow.ts";
@@ -15,11 +14,6 @@ export interface TodoAdd {
   home: Suggestion | null;
 }
 
-async function placeName(into: string | undefined, home: Suggestion | null): Promise<string> {
-  if (into) return (await getNote(into))?.title ?? home?.title ?? copy.sort.unsorted;
-  return home?.title ?? copy.sort.unsorted;
-}
-
 export async function addTodo(add: TodoAdd): Promise<boolean> {
   const into = add.into ?? (add.home?.kind === "subject" ? add.home.value : undefined);
   const tags =
@@ -29,13 +23,10 @@ export async function addTodo(add: TodoAdd): Promise<boolean> {
   const day = dayInText(add.text, todayIso());
   let itemId = "";
   const done: DoneToast = {
-    message: copy.sort.addedTo(await placeName(into, add.home)),
+    message: copy.sort.addedTo(copy.sort.unsorted),
     ...(day && { detail: longDate(day) }),
     actions: [
-      {
-        label: copy.sort.move,
-        onClick: () => void undoSaved(itemId).then((ok) => ok && requestAdd({ text: add.text })),
-      },
+      { label: copy.sort.move, onClick: () => navigate("inbox") },
       { label: copy.common.undo, onClick: () => void undoSaved(itemId) },
     ],
   };

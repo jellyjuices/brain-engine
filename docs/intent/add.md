@@ -32,8 +32,9 @@ The owner, on the phone between tasks, or at the laptop mid-work. Often tired. O
 - No title field. The first line is the title.
 - No blank note editor. The owner edits entries; they do not start notes from scratch.
 - No voice feature in the app. The OS provides it.
-- A to-do with a subject goes straight into that subject's `# To-dos`. A to-do with no subject goes to General (`areas/general.md`).
-- An add with a tag, person or relation counts as sorted. Its text goes to that subject, and no capture is left behind. See [helpers.md](helpers.md).
+- Every to-do and journal entry added in the app waits in Unsorted first, even with a subject, tag or person picked. The owner sorts it there. Nothing is filed out of sight. See [helpers.md](helpers.md).
+- A helper's add (the `add` tool) still files at once when it names a subject, tag or person.
+- "Move" on the toast opens Unsorted. It never deletes the add. "Undo" is the only way to take an add back.
 - Each journal entry is its own journal note, kept whole and dated. A day can have many. Its title comes from its first words, and the owner can change it. Each sorted bit links back to it.
 - Journal entries wait for a Claude chat to be split into bits. See [helpers.md](helpers.md).
 - An add that is cut off can be picked up where it stopped.

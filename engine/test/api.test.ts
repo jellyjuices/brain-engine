@@ -28,8 +28,20 @@ test("add: with a person it is filed on them and no capture is left", () => with
   assert.equal((await a.call("GET", "/api/unsorted")).data.count, 0);
 }));
 
+test("the app's add always lands in the inbox, even with a home, a tag or a person", () => withApi(async (a) => {
+  const homed = await a.call("POST", "/api/inbox", { client_id: "h1", text: "peptide checkin", into: SHED });
+  const tagged = await a.call("POST", "/api/inbox", { client_id: "h2", text: "book a physio visit", tags: ["health"] });
+  assert.deepEqual([homed.data.saved, tagged.data.saved], ["inbox", "inbox"]);
+  assert.match(homed.data.path, /^inbox\//);
+  assert.match(tagged.data.path, /^inbox\//);
+  assert.doesNotMatch(await body(a, SHED), /peptide/);
+  assert.doesNotMatch(await body(a, "areas/health.md"), /physio/);
+  assert.equal(inboxFiles(a.root).length, 2);
+  assert.equal((await a.call("GET", "/api/unsorted")).data.count, 2);
+}));
+
 test("add: a tag files into its area, a subject pick files there with the person as · with", () => withApi(async (a) => {
-  const tagged = await a.call("POST", "/api/inbox", { client_id: "t1", text: "book a physio visit", tags: ["health"] });
+  const tagged = await a.call("POST", "/api/add", { client_id: "t1", text: "book a physio visit", tags: ["health"] });
   assert.equal(tagged.data.path, "areas/health.md");
   assert.match(await body(a, "areas/health.md"), /book a physio visit/);
   const about = await a.call("POST", "/api/add", { client_id: "s1", text: "today: measure the door", about: [SHED], people: [DANA] });

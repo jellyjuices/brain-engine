@@ -1,5 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { addTodo } from "@/flows/add-flow.ts";
+import type { Suggestion } from "@/lib/notes/mention.ts";
+import { toast } from "@/components/toast/toast-store.ts";
+import { navigate } from "@/lib/platform/router.ts";
+import { undoSaved } from "@/flows/undo-flow.ts";
 
 const queueInbox = vi.hoisted(() => vi.fn());
 
@@ -14,6 +18,11 @@ vi.mock("@/lib/sync/sync.ts", () => ({
   syncState: () => ({ offline: false }),
 }));
 vi.mock("@/components/toast/toast-store.ts", () => ({ toast: vi.fn() }));
+vi.mock("@/lib/platform/router.ts", async (original) => ({
+  ...(await original<object>()),
+  navigate: vi.fn(),
+}));
+vi.mock("@/flows/undo-flow.ts", () => ({ undoSaved: vi.fn() }));
 
 const text = "Book the cottage for July";
 
@@ -43,5 +52,36 @@ describe("addTodo", () => {
     await addTodo({ text, tags: ["summer"], home } as Parameters<typeof addTodo>[0]);
 
     expect(queueInbox).toHaveBeenCalledWith(...want);
+  });
+});
+
+describe("addTodo toast", () => {
+  const home: Suggestion = {
+    key: "areas/health.md",
+    kind: "subject",
+    value: "areas/health.md",
+    title: "Health",
+  };
+
+  async function savedToast() {
+    await addTodo({ text, tags: [], home });
+    const [message, options] = vi.mocked(toast).mock.calls[0] ?? [];
+    const actions = typeof options === "object" ? (options.actions ?? []) : [];
+    return { message, actions };
+  }
+
+  it("says the to-do waits in Unsorted, even with a home picked", async () => {
+    const { message } = await savedToast();
+
+    expect(message).toBe("Added to Unsorted");
+  });
+
+  it("Move opens the Unsorted screen and never undoes the save", async () => {
+    const { actions } = await savedToast();
+
+    actions.find((a: { label: string }) => a.label === "Move")?.onClick();
+
+    expect(navigate).toHaveBeenCalledWith("inbox");
+    expect(undoSaved).not.toHaveBeenCalled();
   });
 });

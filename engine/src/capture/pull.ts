@@ -133,13 +133,13 @@ function chosenHome(notes: Note[], item: PendingItem, picked: { target?: Note },
 }
 
 /** Save one app item: on its note when `into`, a pick or the sorter names a filed note, else in the inbox. "skipped" = already saved. */
-export function saveItem(root: string, item: PendingItem, guess?: SortGuess): { saved: "filed" | "inbox" | "skipped"; path?: string } {
+export function saveItem(root: string, item: PendingItem, guess?: SortGuess, hold = false): { saved: "filed" | "inbox" | "skipped"; path?: string } {
   const notes = loadAll(root);
   const existing = notes.find((n) => n.meta.client_id === item.client_id);
   if (existing) return { saved: "skipped", path: existing.path };
   if (alreadyFiled(root, item.client_id)) return { saved: "skipped" };
   const picked = pickedHome(notes, item);
-  const { target, check } = chosenHome(notes, item, picked, guess);
+  const { target, check } = hold ? { target: undefined, check: false } : chosenHome(notes, item, picked, guess);
   if (target) {
     fileOnNote(root, notes, target, item, picked, check);
     return { saved: "filed", path: target.path };

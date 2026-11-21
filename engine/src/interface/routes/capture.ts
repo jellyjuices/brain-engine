@@ -26,8 +26,13 @@ function writer(c: Ctx): string | undefined {
 
 const notePaths = (v: unknown, name: string) => textList(v, name)?.map((p) => safeNotePath(p, true));
 
-export async function addRoute(c: Ctx): Promise<AddResponse> {
-  const t = text(c.body.text, "text")!.trim();
+export const addRoute = (c: Ctx) => add(c, false);
+
+/** The app's add. A to-do always waits in the inbox, so the owner sees it and sorts it there. */
+export const appAddRoute = (c: Ctx) => add(c, true);
+
+async function add(c: Ctx, hold: boolean): Promise<AddResponse> {
+  const t =text(c.body.text, "text")!.trim();
   if (!t) throw new HttpError(400, `Missing "text".`);
   if (Buffer.byteLength(t) > MAX_CAPTURE) throw new HttpError(413, "A capture can be 64 KB at most.");
   const clientId = text(c.body.client_id, "client_id")!;
@@ -59,8 +64,9 @@ export async function addRoute(c: Ctx): Promise<AddResponse> {
     people: notePaths(c.body.people, "people"),
     by: writer(c),
   };
-  const guess = await guessItem(c.root, item, await routeEmbedder(c.root));
-  const { saved, path } = afterWrite(c.root, () => saveItem(c.root, item, guess));
+  const holdIt = hold && !kind;
+  const guess = holdIt ? undefined : await guessItem(c.root, item, await routeEmbedder(c.root));
+  const { saved, path } = afterWrite(c.root, () => saveItem(c.root, item, guess, holdIt));
   clearDraft(c.root, c.body.draft_id);
   return { path, client_id: clientId, saved };
 }

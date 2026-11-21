@@ -58,13 +58,13 @@ describe("AddPanel suggested home", () => {
     expect(await screen.findByRole("button", { name: "Sort to Gym" })).toBeInTheDocument();
   });
 
-  it("files the to-do into the picked home and names it in the toast", async () => {
+  it("sends the picked home with the to-do and the toast says it waits in Unsorted", async () => {
     const user = await typeTodo("pay the gym fee fri");
     await user.click(await screen.findByRole("button", { name: "Sort to Gym" }));
     await user.click(screen.getByRole("button", { name: "Save" }));
     expect([queueInbox.mock.calls[0], sent[0]?.done]).toMatchObject([
       ["pay the gym fee fri", "places/gym.md", []],
-      { message: "Added to Gym", detail: "Fri Nov 20" },
+      { message: "Added to Unsorted", detail: "Fri Nov 20" },
     ]);
   });
 });
