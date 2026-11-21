@@ -5,8 +5,8 @@ const thursday = "2026-11-19";
 
 describe("dayInText", () => {
   it.each([
-    ["call Louis fri", "2026-11-20"],
-    ["call Louis on Thursday", "2026-11-26"],
+    ["call Riley fri", "2026-11-20"],
+    ["call Riley on Thursday", "2026-11-26"],
     ["send it tomorrow", "2026-11-20"],
     ["book it next week", "2026-11-23"],
     ["due 2026-12-01", "2026-12-01"],

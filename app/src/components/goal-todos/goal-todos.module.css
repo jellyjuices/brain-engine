@@ -1,0 +1,4 @@
+.added {
+  display: grid;
+  gap: var(--space-xs);
+}

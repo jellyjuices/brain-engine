@@ -62,15 +62,15 @@ describe("quick add tool bar", () => {
   it("Mention opens note suggestions and a pick writes the name with its @", async () => {
     const { user, box } = await openTodo("Call");
     await user.click(screen.getByRole("button", { name: "Mention" }));
-    await user.click(await screen.findByRole("button", { name: /Aisha/ }));
-    expect(box).toHaveTextContent("Call @Aisha");
+    await user.click(await screen.findByRole("button", { name: /Alex/ }));
+    expect(box).toHaveTextContent("Call @Alex");
   });
 
   it("a picked name is drawn as a mention", async () => {
     const { user } = await openTodo("Call");
     await user.click(screen.getByRole("button", { name: "Mention" }));
-    await user.click(await screen.findByRole("button", { name: /Aisha/ }));
-    expect(screen.getByText("@Aisha").className).toMatch(/liveMention/);
+    await user.click(await screen.findByRole("button", { name: /Alex/ }));
+    expect(screen.getByText("@Alex").className).toMatch(/liveMention/);
   });
 
   it("Tag opens tag suggestions and a pick saves the tag with the to-do", async () => {
@@ -82,10 +82,10 @@ describe("quick add tool bar", () => {
   });
 
   it("Escape closes the suggestions and keeps the box open", async () => {
-    const { user } = await openTodo("Call @Ai");
-    await screen.findByRole("button", { name: /Aisha/ });
+    const { user } = await openTodo("Call @Al");
+    await screen.findByRole("button", { name: /Alex/ });
     await user.keyboard("{Escape}");
-    expect(screen.queryByRole("button", { name: /Aisha/ })).toBeNull();
+    expect(screen.queryByRole("button", { name: /Alex/ })).toBeNull();
     expect(screen.getByRole("textbox", { name: "To-do" })).toBeInTheDocument();
   });
 
@@ -98,7 +98,7 @@ describe("quick add tool bar", () => {
   });
 
   it("typing @ opens note suggestions", async () => {
-    await openTodo("Call @Ai");
-    expect(await screen.findByRole("button", { name: /Aisha/ })).toBeInTheDocument();
+    await openTodo("Call @Al");
+    expect(await screen.findByRole("button", { name: /Alex/ })).toBeInTheDocument();
   });
 });

@@ -93,8 +93,8 @@ describe("richSegments", () => {
   });
 
   it("marks a picked name inside bold as both", () => {
-    const segs = richSegments(parseRich("**Call @Aisha**"), { names: ["Aisha"], tags: [] });
-    expect(segs[1]).toEqual({ text: "@Aisha", marks: ["bold", "mention"] });
+    const segs = richSegments(parseRich("**Call @Alex**"), { names: ["Alex"], tags: [] });
+    expect(segs[1]).toEqual({ text: "@Alex", marks: ["bold", "mention"] });
   });
 
   it("draws a line dash as a bullet only for lists", () => {

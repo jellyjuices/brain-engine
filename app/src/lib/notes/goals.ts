@@ -34,6 +34,10 @@ export function goalHref(path: string): string {
   return `/goal/${path.split("/").map(encodeURIComponent).join("/")}`;
 }
 
+export function goalTodosHref(path: string): string {
+  return `/goal-todos/${path.split("/").map(encodeURIComponent).join("/")}`;
+}
+
 export function openSteps(goal: GoalView): GoalStep[] {
   const next = goal.next;
   const open = goal.toward.filter((s) => !s.done);

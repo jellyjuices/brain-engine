@@ -38,7 +38,11 @@ export function SearchInput({
         autoFocus={autoFocus}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && onEnter?.()}
+        onKeyDown={(e) => {
+          if (e.key !== "Enter" || !onEnter) return;
+          e.preventDefault();
+          onEnter();
+        }}
       />
       {value && (
         <button

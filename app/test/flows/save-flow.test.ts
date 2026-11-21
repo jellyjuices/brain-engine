@@ -39,8 +39,8 @@ describe("saveFlow", () => {
   });
 
   it("names where it went with a day line under the words", async () => {
-    await saveFlow(() => Promise.resolve(item), { message: "Added to Gym", detail: "Fri Nov 20" });
-    expect(toast).toHaveBeenCalledWith("Added to Gym", { detail: "Fri Nov 20" });
+    await saveFlow(() => Promise.resolve(item), { message: "Added to Depot", detail: "Fri Nov 20" });
+    expect(toast).toHaveBeenCalledWith("Added to Depot", { detail: "Fri Nov 20" });
   });
 
   it("says the write waits on this device when it is still in the outbox", async () => {

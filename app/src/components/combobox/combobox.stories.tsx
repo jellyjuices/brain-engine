@@ -14,7 +14,7 @@ const meta = {
     suggestions: [
       { id: "home", label: "Home", hint: "Area" },
       { id: "health", label: "Health", hint: "Area" },
-      { id: "northwind", label: "Northwind", hint: "Client" },
+      { id: "project", label: "Sample project", hint: "Project" },
       { id: "sample-trip", label: "Sample trip", hint: "Project" },
       { id: "sam", label: "Sam Sample", hint: "Person" },
     ],

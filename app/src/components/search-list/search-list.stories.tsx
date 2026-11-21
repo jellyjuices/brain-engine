@@ -4,11 +4,11 @@ import { SearchList, type SearchItem } from "./search-list.tsx";
 import { typeLook } from "@/lib/notes/kinds.ts";
 
 const NOTES = [
-  { title: "Louis", type: "Person" },
-  { title: "Gym", type: "Place" },
-  { title: "Northwind", type: "Project" },
-  { title: "Run a half marathon", type: "Goal" },
-  { title: "Standing desk", type: "Thing" },
+  { title: "Sample person", type: "Person" },
+  { title: "Sample place", type: "Place" },
+  { title: "Sample project", type: "Project" },
+  { title: "Sample goal", type: "Goal" },
+  { title: "Sample thing", type: "Thing" },
 ];
 
 const items: SearchItem<string>[] = NOTES.map((n) => ({

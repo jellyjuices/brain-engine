@@ -12,14 +12,14 @@ import { WizardStep } from "./wizard-step.tsx";
 import { copy } from "@/content/index.ts";
 
 const COUNT = 3;
-const NAME = "Louis";
+const NAME = "Sample person";
 const subjects = [
-  { id: "gym", title: "Gym", type: "Place" },
-  { id: "work", title: "Northwind", type: "Subject" },
+  { id: "place", title: "Sample place", type: "Place" },
+  { id: "project", title: "Sample project", type: "Subject" },
 ];
 const lines = [
-  { id: "call", title: "Call Louis about the move", sub: "To-do · Moving" },
-  { id: "dinner", title: "Dinner with Louis on Friday", sub: "Journal · 2026-11-13" },
+  { id: "todo", title: "Sample to-do", sub: "To-do · Sample note" },
+  { id: "journal", title: "Sample journal entry", sub: "Journal · 2026-11-13" },
 ];
 
 function toggle(set: Set<string>, id: string) {

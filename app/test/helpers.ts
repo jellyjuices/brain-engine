@@ -29,27 +29,27 @@ export function fixture(): StoredNote[] {
   return [
     note(
       "areas/fitness.md",
-      "# To-dos\n\n- [ ] Make a gym schedule · due 2026-11-05 · today\n- [ ] Buy a mat · due 2026-11-09\n- [x] Book a trainer · done 2026-11-05\n- [x] Skip the pool · done 2026-11-05 · dropped\n\n# Notes\n\n- 2026-11-01 · Started again.\n",
-      { type: "Area", title: "Fitness", description: "Moving more." },
+      "# To-dos\n\n- [ ] Make a sample plan · due 2026-11-05 · today\n- [ ] Buy a sample item · due 2026-11-09\n- [x] Book a sample visit · done 2026-11-05\n- [x] Skip a sample step · done 2026-11-05 · dropped\n\n# Notes\n\n- 2026-11-01 · Sample note.\n",
+      { type: "Area", title: "Fitness", description: "Sample area." },
     ),
     note(
-      "people/aisha.md",
-      "# To-dos\n\n- [ ] Follow up on the invoice · due 2026-11-03\n- [ ] Hear back about the quote · waiting\n- [ ] Call back · today · with [Aisha](aisha.md)\n\n# People\n\n- [Em](em.md) · sister · since 2020\n",
+      "people/alex.md",
+      "# To-dos\n\n- [ ] Follow up on the report · due 2026-11-03\n- [ ] Hear back about the quote · waiting\n- [ ] Call back · today · with [Alex](alex.md)\n\n# People\n\n- [Sam](sam.md) · sample role · since 2020\n",
       {
         type: "Person",
-        title: "Aisha",
-        description: "Co-founder at Atlas.",
+        title: "Alex",
+        description: "Sample description.",
         meta: { type: "Person" },
       },
     ),
-    note("people/em.md", "# Notes\n\n- 2026-11-02 · Likes tea.\n", {
+    note("people/sam.md", "# Notes\n\n- 2026-11-02 · Sample fact.\n", {
       type: "Person",
-      title: "Em",
-      description: "Sister.",
+      title: "Sam",
+      description: "Sample relation.",
     }),
     note("events/checkup.md", "# Prep\n", {
       type: "Event",
-      title: "Checkup",
+      title: "A sample event",
       status: "upcoming",
       meta: { type: "Event", date: "2026-11-05", status: "upcoming" },
     }),

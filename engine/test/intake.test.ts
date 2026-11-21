@@ -154,7 +154,7 @@ test("the brain command runs thread and intake subcommands", () => {
   assert.equal(r.status, 0, r.stderr);
   r = run("thread", "next", "--json");
   assert.equal(JSON.parse(r.stdout).depth, 2);
-  r = run("intake", "save", "day", "Gym, then groceries.");
+  r = run("intake", "save", "day", "Sample text, then more text.");
   assert.equal(r.status, 0, r.stderr);
   r = run("intake", "done", "day");
   assert.equal(r.status, 0, r.stderr);

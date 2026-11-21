@@ -11,8 +11,8 @@ import { unlockTestVault } from "../../helpers.ts";
 import { reply } from "../../shell/shell-setup.tsx";
 
 const GET_FIT: GoalView = {
-  path: "goals/get-fit.md",
-  title: "Get fit",
+  path: "goals/sample-goal.md",
+  title: "Sample goal",
   status: "active",
   percent: 40,
   done: 2,
@@ -22,31 +22,36 @@ const GET_FIT: GoalView = {
   areas: ["health"],
   recent: 2,
   next: {
-    text: "Book a trainer",
+    text: "Book a sample visit",
     done: false,
-    path: "projects/gym-plan.md",
-    goal: "goals/get-fit.md",
-    ref: "projects/gym-plan.md::Book a trainer",
+    path: "projects/sample-project.md",
+    goal: "goals/sample-goal.md",
+    ref: "projects/sample-project.md::Book a sample visit",
   },
   targets: [
-    { text: "Bench 205 lb", done: false, path: "goals/get-fit.md", goal: "goals/get-fit.md" },
+    {
+      text: "Second sample target",
+      done: false,
+      path: "goals/sample-goal.md",
+      goal: "goals/sample-goal.md",
+    },
   ],
   toward: [
     {
-      text: "Book a trainer",
+      text: "Book a sample visit",
       done: false,
-      path: "projects/gym-plan.md",
-      goal: "goals/get-fit.md",
-      ref: "projects/gym-plan.md::Book a trainer",
+      path: "projects/sample-project.md",
+      goal: "goals/sample-goal.md",
+      ref: "projects/sample-project.md::Book a sample visit",
     },
   ],
   wins: [
     {
       date: "2026-11-02",
-      text: "Bench 185 lb",
+      text: "First sample target",
       kind: "target",
-      path: "goals/get-fit.md",
-      goal: "goals/get-fit.md",
+      path: "goals/sample-goal.md",
+      goal: "goals/sample-goal.md",
     },
   ],
   subgoals: [
@@ -59,7 +64,7 @@ const GET_FIT: GoalView = {
       total: 2,
     },
   ],
-  decisions: [{ path: "decisions/join-a-gym.md", title: "Join a gym?", status: "open" }],
+  decisions: [{ path: "decisions/sample-decision.md", title: "Sample decision?", status: "open" }],
 };
 
 function serve() {
@@ -69,7 +74,7 @@ function serve() {
       Promise.resolve(
         url === "/api/goals"
           ? reply(200, { goals: [GET_FIT] })
-          : url === "/api/goals/goals/get-fit.md"
+          : url === "/api/goals/goals/sample-goal.md"
             ? reply(200, GET_FIT)
             : reply(404, { error: "No goal" }),
       ),
@@ -90,8 +95,8 @@ describe("Goals tab", () => {
   it("shows each goal with its percent bar", async () => {
     serve();
     render(<GoalsScreen />);
-    const card = await screen.findByRole("article", { name: "Get fit" });
-    expect(within(card).getByRole("progressbar", { name: "Get fit" })).toHaveAttribute(
+    const card = await screen.findByRole("article", { name: "Sample goal" });
+    expect(within(card).getByRole("progressbar", { name: "Sample goal" })).toHaveAttribute(
       "aria-valuenow",
       "40",
     );
@@ -108,15 +113,15 @@ describe("Goals tab", () => {
   it("puts subgoals and the goal's own decisions under it", async () => {
     serve();
     render(<GoalsScreen />);
-    const card = await screen.findByRole("article", { name: "Get fit" });
+    const card = await screen.findByRole("article", { name: "Sample goal" });
     expect(
       within(card)
         .getAllByRole("link")
         .map((a) => a.getAttribute("href")),
     ).toEqual([
-      "/goal/goals/get-fit.md",
+      "/goal/goals/sample-goal.md",
       "/goal/goals/run-more.md",
-      "/note/decisions/join-a-gym.md",
+      "/note/decisions/sample-decision.md",
     ]);
   });
 
@@ -133,24 +138,61 @@ describe("goal page subjects", () => {
       "fetch",
       vi.fn(() => Promise.resolve(reply(200, { ...GET_FIT, areas: ["health", "fitness"] }))),
     );
-    go("/goal/goals/get-fit.md");
+    go("/goal/goals/sample-goal.md");
     render(<GoalScreen />);
-    const header = (await screen.findByRole("heading", { name: "Get fit" })).closest("header");
+    const header = (await screen.findByRole("heading", { name: "Sample goal" })).closest("header");
     expect(header).not.toBeNull();
     expect(within(header as HTMLElement).getByText("Health")).toBeInTheDocument();
     expect(within(header as HTMLElement).getByText("Fitness")).toBeInTheDocument();
   });
 });
 
+describe("goal page add to-do", () => {
+  const EMPTY: GoalView = { ...GET_FIT, next: undefined, targets: [], toward: [] };
+
+  function serveGoal(goal: GoalView) {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() => Promise.resolve(reply(200, goal))),
+    );
+    go("/goal/goals/sample-goal.md");
+    render(<GoalScreen />);
+  }
+
+  it("the header Add to-do button opens the add to-dos page for that goal", async () => {
+    const user = userEvent.setup();
+    serveGoal(GET_FIT);
+    await screen.findByRole("region", { name: copy.goals.targets });
+    await user.click(screen.getByRole("button", { name: copy.goals.addTodo }));
+    expect(location.pathname).toBe("/goal-todos/goals/sample-goal.md");
+  });
+
+  it("a goal with no to-dos shows an empty state with its own Add to-do button", async () => {
+    const user = userEvent.setup();
+    serveGoal(EMPTY);
+    expect(await screen.findByText(copy.goals.noTodosTitle)).toBeVisible();
+    const buttons = screen.getAllByRole("button", { name: copy.goals.addTodo });
+    expect(buttons).toHaveLength(2);
+    await user.click(buttons[1]!);
+    expect(location.pathname).toBe("/goal-todos/goals/sample-goal.md");
+  });
+
+  it("a goal with to-dos shows no empty state", async () => {
+    serveGoal(GET_FIT);
+    await screen.findByRole("region", { name: copy.goals.targets });
+    expect(screen.queryByText(copy.goals.noTodosTitle)).toBeNull();
+  });
+});
+
 describe("goal page", () => {
   it.each([
-    [copy.goals.nextStep, "Book a trainer"],
-    [copy.goals.targets, "Bench 205 lb"],
-    [copy.goals.wins, "Bench 185 lb"],
-    [copy.goals.projects, "gym-plan"],
+    [copy.goals.nextStep, "Book a sample visit"],
+    [copy.goals.targets, "Second sample target"],
+    [copy.goals.wins, "First sample target"],
+    [copy.goals.projects, "sample-project"],
   ])("shows %s", async (section, text) => {
     serve();
-    go("/goal/goals/get-fit.md");
+    go("/goal/goals/sample-goal.md");
     render(<GoalScreen />);
     const part = await screen.findByRole("region", { name: section });
     expect(within(part).getByText(text)).toBeInTheDocument();

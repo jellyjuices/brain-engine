@@ -30,8 +30,8 @@ const meta = {
   args: {
     open: true,
     onOpenChange: () => {},
-    title: "Send the sample invoice",
-    description: "Northwind · Today",
+    title: "Sample to-do",
+    description: "Sample project · Today",
     closeLabel: "Close",
     children: null,
   },

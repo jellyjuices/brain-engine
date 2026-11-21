@@ -7,6 +7,7 @@ import { fetchGoal } from "@/lib/sync/goals-api.ts";
 import { Chip } from "@/components/chip/chip.tsx";
 import { Chips } from "@/components/chip/chips.tsx";
 import { areaLabel } from "@/lib/design/area-mix.ts";
+import { AddTodoButton } from "./add-todo-button.tsx";
 import { GoalBody } from "./goal-body.tsx";
 import styles from "./goal.module.css";
 import { copy } from "@/content/index.ts";
@@ -22,6 +23,7 @@ export function GoalScreen() {
         kicker={copy.goals.kicker}
         fallback="/goals"
         areas={goal.kind === "ready" ? goal.data.areas : undefined}
+        action={goal.kind === "ready" ? <AddTodoButton path={goal.data.path} /> : undefined}
       >
         {goal.kind === "ready" && goal.data.areas.length > 0 && (
           <div className={styles.areas}>

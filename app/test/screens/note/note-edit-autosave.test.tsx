@@ -8,8 +8,8 @@ import { list, remove } from "@/lib/sync/outbox.ts";
 import { NoteEdit } from "@/screens/note/note-edit.tsx";
 import { fakeTimeouts, fixture, unlockTestVault } from "../../helpers.ts";
 
-const FITNESS = { ...fixture()[0]!, body: "Gym three times a week." };
-const EM = { ...fixture()[2]!, body: "Likes tea." };
+const FITNESS = { ...fixture()[0]!, body: "Sample text three times a week." };
+const SAM = { ...fixture()[2]!, body: "Sample fact." };
 
 beforeAll(unlockTestVault);
 let leaving: string[];
@@ -26,7 +26,7 @@ beforeEach(async () => {
     vi.fn(() => Promise.reject(new TypeError("offline"))),
   );
   await clearStore();
-  await putNotes([FITNESS, EM]);
+  await putNotes([FITNESS, SAM]);
   await Promise.all((await list()).map((item) => remove(item.id)));
 });
 
@@ -48,12 +48,12 @@ describe("note edit autosave", () => {
   });
 
   it("keeps the edit on the phone after a pause", async () => {
-    await typeMore(" Swim on Sunday.", FITNESS, fakeTimeouts());
+    await typeMore(" More text on Sunday.", FITNESS, fakeTimeouts());
     await vi.advanceTimersByTimeAsync(DRAFT_MS);
     vi.useRealTimers();
     await vi.waitFor(async () =>
       expect(await readDraft(FITNESS.path)).toEqual({
-        text: "Gym three times a week. Swim on Sunday.",
+        text: "Sample text three times a week. More text on Sunday.",
         tags: FITNESS.tags,
         base: FITNESS.hash,
       }),
@@ -61,19 +61,19 @@ describe("note edit autosave", () => {
   });
 
   it("sends the edit when you leave the screen", async () => {
-    const view = await typeMore(" Swim on Sunday.");
+    const view = await typeMore(" More text on Sunday.");
     view.unmount();
     await vi.waitFor(async () =>
-      expect(await sentBodies()).toEqual(["Gym three times a week. Swim on Sunday."]),
+      expect(await sentBodies()).toEqual(["Sample text three times a week. More text on Sunday."]),
     );
   });
 
   it("sends nothing when you leave without a change", async () => {
     const view = render(<NoteEdit note={FITNESS} />);
     view.unmount();
-    (await typeMore(" Oolong on Fridays.", EM)).unmount();
+    (await typeMore(" More text on Fridays.", SAM)).unmount();
     await vi.waitFor(async () => expect(await sentBodies()).toHaveLength(1));
-    expect(await sentBodies()).toEqual(["Likes tea. Oolong on Fridays."]);
+    expect(await sentBodies()).toEqual(["Sample fact. More text on Fridays."]);
   });
 
   it("opens with the edit kept on the phone", async () => {

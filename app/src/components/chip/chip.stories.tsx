@@ -5,7 +5,7 @@ import { Chip } from "./chip.tsx";
 const meta = {
   title: "Components/Tag chip",
   component: Chip,
-  args: { label: "Northwind", variant: "tag", disabled: false },
+  args: { label: "Sample project", variant: "tag", disabled: false },
   argTypes: { variant: { control: "inline-radio", options: ["tag", "check", "accent"] } },
 } satisfies Meta<typeof Chip>;
 

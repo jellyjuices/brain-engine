@@ -6,7 +6,7 @@ const views = [
   { value: "today", label: "Today" },
   { value: "soon", label: "Soon" },
   { value: "no-date", label: "No date" },
-  { value: "northwind", label: "Northwind" },
+  { value: "sample", label: "Sample view" },
   { value: "all", label: "All views" },
 ];
 
@@ -34,6 +34,6 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {};
 export const WithDisabled: Story = {
   args: {
-    views: [...views.slice(0, 3), { value: "northwind", label: "Northwind", disabled: true }],
+    views: [...views.slice(0, 3), { value: "sample", label: "Sample view", disabled: true }],
   },
 };

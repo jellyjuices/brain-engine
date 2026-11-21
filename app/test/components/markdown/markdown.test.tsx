@@ -44,16 +44,16 @@ describe("markdown renderer", () => {
 
   it("turns links between notes into in-app links, resolved from the note's folder", () => {
     const out = within(
-      renderMarkdown("See [Aisha](../people/aisha.md) and [Em](em.md#top).", {
+      renderMarkdown("See [Alex](../people/alex.md) and [Sam](sam.md#top).", {
         path: "areas/fitness.md",
       }),
     );
-    expect(out.getByRole("link", { name: /Aisha/ })).toHaveAttribute(
+    expect(out.getByRole("link", { name: /Alex/ })).toHaveAttribute(
       "href",
-      "/note/people/aisha.md",
+      "/note/people/alex.md",
     );
-    expect(out.getByRole("link", { name: "Em" })).toHaveAttribute("href", "/note/areas/em.md");
-    expect(out.getByRole("link", { name: /Aisha/ })).not.toHaveAttribute("target");
+    expect(out.getByRole("link", { name: "Sam" })).toHaveAttribute("href", "/note/areas/sam.md");
+    expect(out.getByRole("link", { name: /Alex/ })).not.toHaveAttribute("target");
   });
 
   it("opens web links outside, safely, and drops script links to plain text", () => {

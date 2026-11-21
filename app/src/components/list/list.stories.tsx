@@ -21,8 +21,8 @@ type Story = StoryObj<typeof meta>;
 export const Plain: Story = {
   render: (args) => (
     <List {...args}>
-      <ListRow title="Call Louis about the move" sub="To-do · Moving" onClick={fn()} />
-      <ListRow title="Dinner with Louis on Friday" sub="Journal · 2026-11-13" onClick={fn()} />
+      <ListRow title="Sample to-do" sub="To-do · Sample note" onClick={fn()} />
+      <ListRow title="Sample journal entry" sub="Journal · 2026-11-13" onClick={fn()} />
       <ListRow title="Read only" />
     </List>
   ),
@@ -31,11 +31,11 @@ export const Plain: Story = {
 export const WithKindIcons: Story = {
   render: (args) => (
     <List {...args}>
-      <ListRow {...kindLook("person")} title="Louis" sub="Person" chevron onClick={fn()} />
-      <ListRow {...kindLook("place")} title="Gym" sub="Place" chevron onClick={fn()} />
+      <ListRow {...kindLook("person")} title="Sample person" sub="Person" chevron onClick={fn()} />
+      <ListRow {...kindLook("place")} title="Sample place" sub="Place" chevron onClick={fn()} />
       <ListRow
         {...kindLook("goal")}
-        title="Run a half marathon"
+        title="Sample goal"
         sub="Goal"
         chevron
         onClick={fn()}
@@ -58,9 +58,9 @@ export const Variants: Story = {
 function Checks() {
   const [on, setOn] = useState(new Set(["b"]));
   const items = [
-    { id: "a", title: "Gym" },
-    { id: "b", title: "Northwind" },
-    { id: "c", title: "Home" },
+    { id: "a", title: "Sample place" },
+    { id: "b", title: "Sample project" },
+    { id: "c", title: "Sample thing" },
   ];
   return (
     <List variant="ghost">

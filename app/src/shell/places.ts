@@ -27,7 +27,7 @@ export const GOALS: Place = {
   label: copy.nav.goals,
   icon: TargetIcon,
   href: "/goals",
-  screens: ["goals", "goal"],
+  screens: ["goals", "goal", "goal-todos"],
 };
 
 export const FIND: Place = {

@@ -57,7 +57,7 @@ export const Ramps = () => (
   </Block>
 );
 
-const sample = { display: "Due today", body: "Send the sample invoice", number: "62%" } as const;
+const sample = { display: "Due today", body: "Sample to-do", number: "62%" } as const;
 
 export const TypeScale = () => (
   <Block title="Type">

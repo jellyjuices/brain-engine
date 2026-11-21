@@ -31,8 +31,8 @@ const meta = {
   render: Live,
   parameters: { layout: "fullscreen" },
   args: {
-    title: "Send the sample invoice",
-    tag: "Northwind",
+    title: "Sample to-do",
+    tag: "Sample project",
     areas: ["client-work"],
     when: { label: "Today", status: "today" },
     checked: false,
@@ -63,18 +63,18 @@ export const Full: Story = {
 };
 export const Overdue: Story = {
   args: {
-    title: "Book the sample appointment",
+    title: "Sample overdue to-do",
     tag: "Home",
     areas: ["home"],
     when: { label: "Tue, Nov 10", status: "overdue" },
   },
 };
 export const Waiting: Story = {
-  args: { title: "Get the sample quote back", when: { label: "Sam", status: "waiting" } },
+  args: { title: "Sample waiting to-do", when: { label: "Sample person", status: "waiting" } },
 };
 export const Someday: Story = {
   args: {
-    title: "Learn a sample recipe",
+    title: "Sample someday to-do",
     tag: "General",
     areas: ["general"],
     when: { label: "Someday", status: "someday" },
@@ -82,7 +82,7 @@ export const Someday: Story = {
 };
 export const NeedsCheck: Story = {
   args: {
-    title: "Call about the sample quote",
+    title: "Sample to-do to check",
     tag: "Health",
     areas: ["health"],
     check: true,

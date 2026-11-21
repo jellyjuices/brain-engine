@@ -328,7 +328,7 @@
       "properties": {
         "path": {
           "type": "string",
-          "description": "A note path, like people/dana-cole.md."
+          "description": "A note path, like people/alex-sample.md."
         }
       },
       "required": [
@@ -411,7 +411,7 @@
         },
         "into": {
           "type": "string",
-          "description": "A note path, like people/dana-cole.md."
+          "description": "A note path, like people/alex-sample.md."
         },
         "when": {
           "type": "string",
@@ -424,7 +424,7 @@
             "properties": {
               "into": {
                 "type": "string",
-                "description": "A note path, like people/dana-cole.md."
+                "description": "A note path, like people/alex-sample.md."
               },
               "when": {
                 "type": "string",
@@ -563,7 +563,7 @@
             "properties": {
               "to": {
                 "type": "string",
-                "description": "A note path, like people/dana-cole.md."
+                "description": "A note path, like people/alex-sample.md."
               },
               "role": {
                 "type": "string"
@@ -630,7 +630,7 @@
       "properties": {
         "path": {
           "type": "string",
-          "description": "A note path, like people/dana-cole.md."
+          "description": "A note path, like people/alex-sample.md."
         },
         "body": {
           "type": "string",
@@ -675,7 +675,7 @@
       "properties": {
         "path": {
           "type": "string",
-          "description": "A note path, like people/dana-cole.md."
+          "description": "A note path, like people/alex-sample.md."
         }
       },
       "required": [
@@ -697,11 +697,11 @@
       "properties": {
         "from": {
           "type": "string",
-          "description": "A note path, like people/dana-cole.md."
+          "description": "A note path, like people/alex-sample.md."
         },
         "to": {
           "type": "string",
-          "description": "A note path, like people/dana-cole.md."
+          "description": "A note path, like people/alex-sample.md."
         },
         "role": {
           "type": "string"

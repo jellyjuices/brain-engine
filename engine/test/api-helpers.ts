@@ -12,7 +12,7 @@ export const now = today();
 
 export function apiBrain(): string {
   const root = makeBrain();
-  writeFileSync(join(root, "people/dana-cole.md"), "---\ntype: Person\ntitle: Dana Cole\ndescription: A made-up neighbour.\n---\n\n# To-dos\n\n# Notes\n");
+  writeFileSync(join(root, "people/alex-sample.md"), "---\ntype: Person\ntitle: Alex Sample\ndescription: A sample person.\n---\n\n# To-dos\n\n# Notes\n");
   writeFileSync(join(root, "projects/garden-shed.md"), `---\ntype: Project\ntitle: Garden shed\ndescription: Build a small shed.\n---\n\n# To-dos\n\n- [ ] Buy cedar boards · due ${now}\n- [ ] Pick a roof colour\n- [ ] Ask about the permit · waiting\n- [ ] Pour the base · due ${addDays(now, 3)}\n\n# Notes\n`);
   return root;
 }

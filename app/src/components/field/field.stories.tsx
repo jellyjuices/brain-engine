@@ -9,7 +9,7 @@ import { TextField } from "./text-field.tsx";
 const meta = {
   title: "Components/Field",
   component: TextField,
-  args: { label: "Name", value: "", placeholder: "Louis", onChange: fn() },
+  args: { label: "Name", value: "", placeholder: "Enter a name", onChange: fn() },
 } satisfies Meta<typeof TextField>;
 
 export default meta;
@@ -43,7 +43,7 @@ function Pick({ start }: { start?: string }) {
       placeholder="Pick a place"
       icon={MapPinIcon}
       value={value}
-      onPick={() => setValue("Gym")}
+      onPick={() => setValue("Sample place")}
       onClear={() => setValue(undefined)}
     />
   );
@@ -51,8 +51,8 @@ function Pick({ start }: { start?: string }) {
 
 export const Text_: Story = { name: "Text", render: () => <Text /> };
 export const Multiline: Story = { render: () => <Text multiline /> };
-export const Filled: Story = { args: { value: "Louis" } };
+export const Filled: Story = { args: { value: "Sample name" } };
 export const HiddenLabel: Story = { args: { hideLabel: true } };
 export const Search_: Story = { name: "Search", render: () => <Search /> };
 export const PickEmpty: Story = { render: () => <Pick /> };
-export const PickFilled: Story = { render: () => <Pick start="Gym" /> };
+export const PickFilled: Story = { render: () => <Pick start="Sample place" /> };

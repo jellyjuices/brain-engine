@@ -13,6 +13,10 @@ export type ComboboxProps = {
   onPick?: (item: Suggestion) => void;
   disabled?: boolean;
   hideLabel?: boolean;
+  value?: string;
+  onValueChange?: (value: string) => void;
+  onSubmit?: (value: string) => void;
+  clearOnPick?: boolean;
 };
 
 export function Combobox({
@@ -22,19 +26,29 @@ export function Combobox({
   onPick,
   disabled,
   hideLabel,
+  value: controlled,
+  onValueChange,
+  onSubmit,
+  clearOnPick,
 }: ComboboxProps) {
   const id = useId();
-  const [value, setValue] = useState("");
+  const [own, setOwn] = useState("");
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
+  const value = controlled ?? own;
   const query = value.trim().toLowerCase();
   const items = query
     ? suggestions.filter((s) => s.label.toLowerCase().includes(query))
     : suggestions;
   const shown = open && items.length > 0;
 
+  function setValue(next: string) {
+    setOwn(next);
+    onValueChange?.(next);
+  }
+
   function pick(item: Suggestion) {
-    setValue(item.label);
+    setValue(clearOnPick ? "" : item.label);
     setOpen(false);
     onPick?.(item);
   }
@@ -52,7 +66,7 @@ export function Combobox({
   const keys: Record<string, (() => void) | undefined> = {
     ArrowDown: () => move(1),
     ArrowUp: () => move(-1),
-    Enter: shown ? choose : undefined,
+    Enter: shown ? choose : onSubmit && (() => onSubmit(value)),
   };
 
   function onKeyDown(e: KeyboardEvent<HTMLInputElement>) {

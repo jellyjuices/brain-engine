@@ -1,4 +1,6 @@
+import { EmptyState } from "@/components/empty-state/empty-state.tsx";
 import { List } from "@/components/list/list.tsx";
+import { AddTodoButton } from "./add-todo-button.tsx";
 import { GoalProgress } from "@/components/goal-progress/goal-progress.tsx";
 import { GoalStepRow } from "@/components/goal-step-row/goal-step-row.tsx";
 import type { GoalView } from "@shared/todos/index.ts";
@@ -60,6 +62,13 @@ export function GoalBody({ goal, notes }: GoalBodyProps) {
             ))}
           </List>
         </GoalSection>
+      )}
+      {goal.targets.length === 0 && steps.length === 0 && (
+        <EmptyState
+          title={copy.goals.noTodosTitle}
+          body={copy.goals.noTodosBody}
+          action={<AddTodoButton path={goal.path} />}
+        />
       )}
       <GoalLinks goal={goal} notes={notes} />
     </div>

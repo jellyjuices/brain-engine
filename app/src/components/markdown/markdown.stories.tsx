@@ -1,23 +1,23 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Markdown } from "./markdown.tsx";
 
-const SRC = `# Moving plan
+const SRC = `# Sample note
 
-Call **Louis** about the move. See [[Gym]] for the new address.
+Text with **bold**. See [[Sample place]] for more.
 
 ## To do
 
-- [ ] Book the truck
-- [x] Pack the books
+- [ ] Open to-do
+- [x] Done to-do
 - Plain item
 
 1. First
 2. Second
 
-> Keep the receipts.
+> A quote.
 
 \`\`\`
-box-count: 12
+code: sample
 \`\`\`
 
 ---
@@ -27,7 +27,7 @@ Done.`;
 const meta = {
   title: "Components/Markdown",
   component: Markdown,
-  args: { src: SRC, path: "notes/moving.md" },
+  args: { src: SRC, path: "notes/sample.md" },
 } satisfies Meta<typeof Markdown>;
 
 export default meta;

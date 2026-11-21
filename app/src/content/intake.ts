@@ -1,6 +1,6 @@
 export const intake = {
   answer: "Your answer",
-  answerPlaceholder: "Say it your way",
+  answerPlaceholder: "Enter your answer",
   next: "Next",
   later: "Skip",
   laterDone: "Skipped",

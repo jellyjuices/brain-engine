@@ -1,5 +1,5 @@
 import "fake-indexeddb/auto";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { clearToasts } from "@/components/toast/toast-store.ts";
@@ -24,7 +24,7 @@ beforeEach(async () => {
     "fetch",
     vi.fn((url: string) =>
       url === "/api/notes"
-        ? Promise.resolve(reply(200, { path: "goals/get-strong.md", created: true }))
+        ? Promise.resolve(reply(200, { path: "goals/sample-goal.md", created: true }))
         : Promise.reject(new TypeError("offline")),
     ),
   );
@@ -56,7 +56,7 @@ async function openAtName() {
 
 async function reachAreas() {
   const user = await openAtName();
-  await user.type(screen.getByLabelText(words.name), "Get strong");
+  await user.type(screen.getByLabelText(words.name), "Sample goal");
   await user.click(screen.getByRole("button", { name: words.next }));
   await user.click(screen.getByRole("button", { name: copy.sort.skip }));
   await user.click(screen.getByRole("button", { name: copy.sort.skip }));
@@ -72,9 +72,9 @@ describe("Goal builder", () => {
 
   it("asks why the goal matters once it has a name", async () => {
     const user = await openAtName();
-    await user.type(screen.getByLabelText(words.name), "Get strong");
+    await user.type(screen.getByLabelText(words.name), "Sample goal");
     await user.click(screen.getByRole("button", { name: words.next }));
-    expect(screen.getByRole("heading", { name: words.whyQuestion("Get strong") })).toBeVisible();
+    expect(screen.getByRole("heading", { name: words.whyQuestion("Sample goal") })).toBeVisible();
   });
 
   it("cannot add the goal until a life area is picked", async () => {
@@ -86,36 +86,68 @@ describe("Goal builder", () => {
     const user = await reachAreas();
     await user.click(screen.getByRole("button", { name: /Fitness/ }));
     expect(
-      screen.getByRole("button", { name: words.addTo("Get strong", ["Fitness"]) }),
+      screen.getByRole("button", { name: words.addTo("Sample goal", ["Fitness"]) }),
     ).toBeEnabled();
   });
 
   it("adds the goal with its why, targets and life area", async () => {
     const user = await openAtName();
-    await user.type(screen.getByLabelText(words.name), "Get strong");
+    await user.type(screen.getByLabelText(words.name), "Sample goal");
     await user.click(screen.getByRole("button", { name: words.next }));
-    await user.type(screen.getByLabelText(words.whyLabel), "Feel good on hikes.");
+    await user.type(screen.getByLabelText(words.whyLabel), "Sample reason.");
     await user.click(screen.getByRole("button", { name: words.next }));
-    await user.type(screen.getByLabelText(words.targetsLabel), "Bench 185 lb{Enter}Bench 205 lb");
+    const search = screen.getByRole("combobox");
+    await user.type(search, "First sample to-do");
+    await user.click(screen.getByRole("button", { name: copy.goals.addTodo }));
+    await user.type(search, "Second sample to-do{Enter}");
+    expect(screen.getByRole("heading", { name: new RegExp(copy.goals.todosAdded) })).toBeVisible();
+    expect(screen.getByText("First sample to-do")).toBeVisible();
     await user.click(screen.getByRole("button", { name: words.next }));
     await user.click(screen.getByRole("button", { name: /Fitness/ }));
-    await user.click(screen.getByRole("button", { name: words.addTo("Get strong", ["Fitness"]) }));
+    await user.click(screen.getByRole("button", { name: words.addTo("Sample goal", ["Fitness"]) }));
     await vi.waitFor(() => expect(location.pathname).toBe("/goals"));
     expect(sentGoal()).toEqual({
       type: "Goal",
-      title: "Get strong",
+      title: "Sample goal",
       areas: ["fitness"],
-      fields: { why: "Feel good on hikes." },
-      sections: { "# Targets": ["- [ ] Bench 185 lb", "- [ ] Bench 205 lb"] },
+      fields: { why: "Sample reason." },
+      sections: { "# Targets": ["- [ ] First sample to-do", "- [ ] Second sample to-do"] },
     });
+  });
+
+  it("moves a ticked existing to-do into the added list and back out when tapped again", async () => {
+    const user = await openAtName();
+    await user.type(screen.getByLabelText(words.name), "Sample goal");
+    await user.click(screen.getByRole("button", { name: words.next }));
+    await user.click(screen.getByRole("button", { name: words.next }));
+    await user.click(screen.getByRole("combobox"));
+    await user.click(screen.getByRole("option", { name: /Buy a sample item/ }));
+    const added = screen.getByRole("region", { name: copy.goals.todosAdded });
+    expect(within(added).getByRole("button", { name: /Buy a sample item/ })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    await user.click(within(added).getByRole("button", { name: /Buy a sample item/ }));
+    expect(screen.queryByRole("region", { name: copy.goals.todosAdded })).toBeNull();
+  });
+
+  it("typing the name of an existing to-do adds that to-do, not a new one", async () => {
+    const user = await openAtName();
+    await user.type(screen.getByLabelText(words.name), "Sample goal");
+    await user.click(screen.getByRole("button", { name: words.next }));
+    await user.click(screen.getByRole("button", { name: words.next }));
+    await user.type(screen.getByRole("combobox"), "buy a sample item");
+    await user.click(screen.getByRole("button", { name: copy.goals.addTodo }));
+    const added = screen.getByRole("region", { name: copy.goals.todosAdded });
+    expect(within(added).getByText("Fitness")).toBeVisible();
   });
 
   it("the back arrow goes back a step and keeps what was typed", async () => {
     const user = await openAtName();
-    await user.type(screen.getByLabelText(words.name), "Get strong");
+    await user.type(screen.getByLabelText(words.name), "Sample goal");
     await user.click(screen.getByRole("button", { name: words.next }));
     await user.click(screen.getByRole("button", { name: copy.common.back }));
-    expect(screen.getByLabelText(words.name)).toHaveValue("Get strong");
+    expect(screen.getByLabelText(words.name)).toHaveValue("Sample goal");
   });
 
   it("stays on the last step and says so when the Mac turns the goal down", async () => {
@@ -130,7 +162,7 @@ describe("Goal builder", () => {
     render(<Toasts />);
     const user = await reachAreas();
     await user.click(screen.getByRole("button", { name: /Fitness/ }));
-    await user.click(screen.getByRole("button", { name: words.addTo("Get strong", ["Fitness"]) }));
+    await user.click(screen.getByRole("button", { name: words.addTo("Sample goal", ["Fitness"]) }));
     expect(await screen.findByText(copy.toast.rejected)).toBeVisible();
     expect(location.pathname).toBe("/build/goal");
   });
@@ -142,7 +174,7 @@ describe("Goal builder", () => {
     );
     const user = await reachAreas();
     await user.click(screen.getByRole("button", { name: /Fitness/ }));
-    await user.click(screen.getByRole("button", { name: words.addTo("Get strong", ["Fitness"]) }));
+    await user.click(screen.getByRole("button", { name: words.addTo("Sample goal", ["Fitness"]) }));
     await vi.waitFor(() => expect(location.pathname).toBe("/goals"));
     expect((await list()).map((item) => item.kind)).toEqual(["goal"]);
   });

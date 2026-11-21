@@ -21,7 +21,7 @@ describe("back with a sheet open", () => {
   it("closes the sheet and stays on the screen", async () => {
     let answer: Promise<string | null> = Promise.resolve(null);
     act(() => {
-      answer = openSheet<string>("Fitness", () => <p>Make a gym schedule</p>);
+      answer = openSheet<string>("Fitness", () => <p>Make a sample plan</p>);
     });
     await act(pressBack);
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());

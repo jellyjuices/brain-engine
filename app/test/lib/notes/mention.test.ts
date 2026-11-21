@@ -14,33 +14,33 @@ function person(path: string, title: string): StoredNote {
 
 describe("findTrigger", () => {
   it("finds @ and # after a space or at the start", () => {
-    expect(findTrigger("call @Ai", 8)).toEqual({ kind: "mention", start: 5, query: "Ai" });
+    expect(findTrigger("call @Al", 8)).toEqual({ kind: "mention", start: 5, query: "Al" });
     expect(findTrigger("#mon", 4)).toEqual({ kind: "tag", start: 0, query: "mon" });
     expect(findTrigger("see @", 5)).toEqual({ kind: "mention", start: 4, query: "" });
   });
   it("lets a name have one space", () => {
-    expect(findTrigger("@Aisha Ph", 9)?.query).toBe("Aisha Ph");
+    expect(findTrigger("@Alex Ph", 8)?.query).toBe("Alex Ph");
   });
   it("ignores emails, headings, other lines and tags with spaces", () => {
     expect(findTrigger("ab@mail", 7)).toBeNull();
     expect(findTrigger("# Notes", 7)).toBeNull();
     expect(findTrigger("## ", 3)).toBeNull();
-    expect(findTrigger("@Ai\nnext", 8)).toBeNull();
-    expect(findTrigger("@Aisha  x", 9)).toBeNull();
+    expect(findTrigger("@Al\nnext", 8)).toBeNull();
+    expect(findTrigger("@Alex  x", 8)).toBeNull();
   });
 });
 
 describe("mentionSuggestions", () => {
   const notes = [
-    person("people/aisha.md", "Aisha Haddad"),
-    person("people/lucia.md", "Lucia Aishaova"),
-    { ...person("groups/x.md", "Aisha club"), type: "Group" },
-    { ...person(".archive/old.md", "Aisha old") },
+    person("people/alex.md", "Alex Sample"),
+    person("people/lucia.md", "Lucia Alexova"),
+    { ...person("groups/x.md", "Alex club"), type: "Group" },
+    { ...person(".archive/old.md", "Alex old") },
   ];
   it("lists live subjects that match, names that start with the words first", () => {
-    const got = mentionSuggestions(notes, "areas/fitness.md", "2026-11-07", "ais");
-    expect(got.map((s) => s.title)).toEqual(["Aisha club", "Aisha Haddad", "Lucia Aishaova"]);
-    expect(got[1]!.value).toBe("[Aisha Haddad](../people/aisha.md)");
+    const got = mentionSuggestions(notes, "areas/fitness.md", "2026-11-07", "ale");
+    expect(got.map((s) => s.title)).toEqual(["Alex club", "Alex Sample", "Lucia Alexova"]);
+    expect(got[1]!.value).toBe("[Alex Sample](../people/alex.md)");
   });
   it("offers dates as ISO days", () => {
     const got = mentionSuggestions(notes, "areas/fitness.md", "2026-11-07", "tom");
@@ -59,10 +59,10 @@ describe("tagSuggestions", () => {
 
 describe("replaceTrigger", () => {
   it("swaps the typed words for the pick and adds a space", () => {
-    const t = { kind: "mention" as const, start: 5, query: "Ai" };
-    expect(replaceTrigger("call @Ai", t, 8, "[Aisha](a.md)")).toEqual({
-      value: "call [Aisha](a.md) ",
-      caret: 19,
+    const t = { kind: "mention" as const, start: 5, query: "Al" };
+    expect(replaceTrigger("call @Al", t, 8, "[Alex](a.md)")).toEqual({
+      value: "call [Alex](a.md) ",
+      caret: 18,
     });
   });
   it("removes a tag's words without a double space", () => {

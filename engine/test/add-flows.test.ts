@@ -70,14 +70,14 @@ test("make_note takes fields, areas, parent, sections, relations and todos in on
     areas: ["health", "fitness"],
     parent: "run-far",
     sections: { "# Targets": ["- [ ] Stretch daily"] },
-    relations: [{ to: "people/dana-cole.md", role: "coach" }],
+    relations: [{ to: "people/alex-sample.md", role: "sample role" }],
     todos: ["Buy a mat", { text: "Book a class", when: "tomorrow" }],
   });
   assert.equal(r.status, 200);
   const n = parse(file(a.root, r.data.path));
   assert.deepEqual([n.meta.why, n.meta.areas, n.meta.parent], ["Fewer injuries", ["health", "fitness"], "run-far"]);
   assert.match(n.body, /# Targets\n\n- \[ \] Stretch daily/);
-  assert.match(n.body, /# People\n\n- \[Dana Cole\]\(\.\.\/people\/dana-cole\.md\) · coach/);
+  assert.match(n.body, /# People\n\n- \[Alex Sample\]\(\.\.\/people\/alex-sample\.md\) · sample role/);
   assert.match(n.body, new RegExp(`# To-dos\\n\\n- \\[ \\] Buy a mat\\n- \\[ \\] Book a class · due ${addDays(today(), 1)}`));
   const undo = await a.call("POST", "/api/undo");
   assert.equal(undo.status, 200);

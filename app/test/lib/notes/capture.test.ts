@@ -4,9 +4,9 @@ import { inboxText, setWhenWord, tagsInUse } from "@/lib/notes/capture.ts";
 
 describe("setWhenWord", () => {
   it("adds, swaps and clears the When word", () => {
-    expect(setWhenWord("call Aisha", "tomorrow")).toBe("tomorrow: call Aisha");
-    expect(setWhenWord("tomorrow: call Aisha", "2026-11-20")).toBe("2026-11-20: call Aisha");
-    expect(setWhenWord("today: call Aisha", "")).toBe("call Aisha");
+    expect(setWhenWord("call Alex", "tomorrow")).toBe("tomorrow: call Alex");
+    expect(setWhenWord("tomorrow: call Alex", "2026-11-20")).toBe("2026-11-20: call Alex");
+    expect(setWhenWord("today: call Alex", "")).toBe("call Alex");
   });
   it("leaves a colon that is not a When word", () => {
     expect(setWhenWord("Idea: a shed", "someday")).toBe("someday: Idea: a shed");

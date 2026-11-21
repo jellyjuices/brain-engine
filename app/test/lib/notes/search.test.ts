@@ -6,41 +6,41 @@ import { fixture, NOW, note } from "../../helpers.ts";
 describe("local search", () => {
   const notes = [
     ...fixture(),
-    note("resources/gym-tips.md", "How to start lifting at the gym. Plan your week.", {
+    note("resources/plan-tips.md", "How to start drafting a plan. Plan your week.", {
       type: "Note",
-      title: "Gym tips",
-      description: "Lifting basics",
+      title: "Plan tips",
+      description: "Drafting basics",
     }),
     note("topics/fit.md", "Nothing about it", {
       type: "Topic",
       title: "Fit for life",
-      tags: ["gym"],
+      tags: ["plan"],
     }),
   ];
 
   it("ranks an exact title above a title match above a body match", () => {
-    const hits = searchLocal(notes, "gym");
-    expect(hits[0]!.path).toBe("resources/gym-tips.md");
+    const hits = searchLocal(notes, "plan");
+    expect(hits[0]!.path).toBe("resources/plan-tips.md");
     expect(hits.map((h) => h.path)).toContain("areas/fitness.md");
     expect(hits.findIndex((h) => h.path === "areas/fitness.md")).toBeGreaterThan(0);
-    expect(searchLocal(notes, "Aisha")[0]!.path).toBe("people/aisha.md");
+    expect(searchLocal(notes, "Alex")[0]!.path).toBe("people/alex.md");
   });
 
   it("needs every word and finds tags and descriptions", () => {
-    expect(searchLocal(notes, "gym schedule").map((h) => h.path)).toEqual(["areas/fitness.md"]);
-    expect(searchLocal(notes, "lifting basics")[0]!.path).toBe("resources/gym-tips.md");
-    expect(searchLocal(notes, "gym").map((h) => h.path)).toContain("topics/fit.md");
+    expect(searchLocal(notes, "sample plan").map((h) => h.path)).toEqual(["areas/fitness.md"]);
+    expect(searchLocal(notes, "drafting basics")[0]!.path).toBe("resources/plan-tips.md");
+    expect(searchLocal(notes, "plan").map((h) => h.path)).toContain("topics/fit.md");
     expect(searchLocal(notes, "zzzz")).toEqual([]);
     expect(searchLocal(notes, "   ")).toEqual([]);
   });
 
   it("shows a snippet from the body and puts archived notes last", () => {
-    expect(searchLocal(notes, "lifting")[0]!.snippet).toContain("start lifting");
+    expect(searchLocal(notes, "drafting")[0]!.snippet).toContain("start drafting");
     const withArchive = [
       ...notes,
-      note(".archive/gym.md", "gym gym gym gym gym", { title: "Gym" }),
+      note(".archive/plan.md", "plan plan plan plan plan", { title: "Plan" }),
     ];
-    expect(searchLocal(withArchive, "gym").at(-1)!.path).toBe(".archive/gym.md");
+    expect(searchLocal(withArchive, "plan").at(-1)!.path).toBe(".archive/plan.md");
   });
 });
 
@@ -48,36 +48,36 @@ describe("local card", () => {
   const notes = fixture();
 
   it("matches a subject by title, people before areas", () => {
-    expect(matchSubject(notes, "aisha")?.path).toBe("people/aisha.md");
+    expect(matchSubject(notes, "alex")?.path).toBe("people/alex.md");
     expect(matchSubject(notes, "fit")?.path).toBe("areas/fitness.md");
     expect(matchSubject(notes, "nothing")).toBeUndefined();
   });
 
   it("builds To do, Next, Lately and People with roles", () => {
-    const aisha = notes.find((n) => n.path === "people/aisha.md")!;
-    const card = buildCard(notes, aisha, NOW);
-    expect(card.todo.map((t) => t.text)).toContain("Follow up on the invoice");
+    const alex = notes.find((n) => n.path === "people/alex.md")!;
+    const card = buildCard(notes, alex, NOW);
+    expect(card.todo.map((t) => t.text)).toContain("Follow up on the report");
     expect(buildCard(notes, notes[0]!, NOW).next).toMatchObject({
       date: NOW,
-      text: "Make a gym schedule",
+      text: "Make a sample plan",
     });
     expect(card.relations).toContainEqual(
       expect.objectContaining({
         direction: "out",
-        title: "Em",
-        role: "sister",
+        title: "Sam",
+        role: "sample role",
         time: "since 2020",
         heading: "People",
       }),
     );
-    const em = buildCard(
+    const sam = buildCard(
       notes,
-      notes.find((n) => n.path === "people/em.md")!,
+      notes.find((n) => n.path === "people/sam.md")!,
       NOW,
     );
-    expect(em.relations).toContainEqual(
-      expect.objectContaining({ direction: "in", title: "Aisha" }),
+    expect(sam.relations).toContainEqual(
+      expect.objectContaining({ direction: "in", title: "Alex" }),
     );
-    expect(em.history[0]!.text).toBe("Likes tea.");
+    expect(sam.history[0]!.text).toBe("Sample fact.");
   });
 });

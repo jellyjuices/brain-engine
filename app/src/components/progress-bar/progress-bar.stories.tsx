@@ -5,7 +5,7 @@ const meta = {
   title: "Components/Progress bar",
   component: ProgressBar,
   args: {
-    label: "Run a sample 10K",
+    label: "Sample goal",
     done: 5,
     total: 12,
     countLabel: "5 of 12",
@@ -33,7 +33,7 @@ export const Goal: Story = {};
 export const WithAreas: Story = { args: { areas: ["fitness", "health"] } };
 export const Small: Story = {
   args: {
-    label: "Read 12 sample books",
+    label: "Another sample goal",
     done: 3,
     total: 12,
     countLabel: "Next: pick book 4",

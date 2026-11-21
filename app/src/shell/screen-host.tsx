@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import clsx from "clsx";
 import styles from "./screen-host.module.css";
 import { useRoute } from "@/hooks/use-route.ts";
@@ -6,7 +6,6 @@ import { DEFAULT_ROUTE, type Route } from "@/lib/platform/router.ts";
 import { SCREENS } from "./screens.ts";
 import { copy } from "@/content/index.ts";
 
-const LEAVE_MS = 160;
 const PADDED = new Set(["today", "find", "areas", "note"]);
 const FLUSH = new Set(["journal"]);
 
@@ -14,7 +13,7 @@ function screenKey(route: Route): string {
   return `${route.name}/${route.rest}?${route.params}`;
 }
 
-function ScreenFrame({ route, leaving }: { route: Route; leaving?: boolean }) {
+function ScreenFrame({ route }: { route: Route }) {
   const { title, Component } = SCREENS[route.name];
   const editing = route.name === "note" && route.params.has("edit");
   return (
@@ -23,7 +22,6 @@ function ScreenFrame({ route, leaving }: { route: Route; leaving?: boolean }) {
         styles.screen,
         PADDED.has(route.name) && styles.padded,
         (FLUSH.has(route.name) || editing) && styles.flush,
-        leaving && styles.leaving,
       )}
       aria-label={title}
     >
@@ -35,19 +33,6 @@ function ScreenFrame({ route, leaving }: { route: Route; leaving?: boolean }) {
 export function ScreenHost() {
   const route = useRoute();
   const key = screenKey(route);
-  const [shown, setShown] = useState({ key, route });
-  const [leaving, setLeaving] = useState<{ key: string; route: Route } | null>(null);
-
-  if (shown.key !== key) {
-    setLeaving(shown);
-    setShown({ key, route });
-  }
-
-  useEffect(() => {
-    if (!leaving) return;
-    const timer = setTimeout(() => setLeaving(null), LEAVE_MS);
-    return () => clearTimeout(timer);
-  }, [leaving]);
 
   useEffect(() => {
     const title = SCREENS[route.name].title;
@@ -57,8 +42,7 @@ export function ScreenHost() {
 
   return (
     <div className={styles.screenHost}>
-      {leaving && <ScreenFrame key={leaving.key} route={leaving.route} leaving />}
-      <ScreenFrame key={shown.key} route={shown.route} />
+      <ScreenFrame key={key} route={route} />
     </div>
   );
 }

@@ -26,7 +26,7 @@ const meta = {
     open: true,
     onOpenChange: () => {},
     message: "Done",
-    detail: "Send the sample invoice",
+    detail: "Sample to-do",
     variant: "success",
     actions: act("Undo"),
     duration: 6000,

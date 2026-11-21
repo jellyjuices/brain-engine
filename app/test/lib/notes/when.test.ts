@@ -12,8 +12,8 @@ describe("When chip", () => {
     expect(previewWhen("buy milk", NOW)).toEqual({ kind: "inbox", label: "Inbox" });
   });
   it("reads today, tomorrow, someday, waiting and note", () => {
-    expect(previewWhen("today: call Aisha", NOW)).toEqual({ kind: "today", label: "Today" });
-    expect(previewWhen("tomorrow: call Aisha", NOW)).toMatchObject({
+    expect(previewWhen("today: call Alex", NOW)).toEqual({ kind: "today", label: "Today" });
+    expect(previewWhen("tomorrow: call Alex", NOW)).toMatchObject({
       kind: "date",
       label: "Tomorrow, Fri, Nov 6",
     });

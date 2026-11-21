@@ -63,7 +63,7 @@ describe("reopen and edit on the local copy", () => {
   });
 
   it("reopen on an event changes nothing", () => {
-    const event = { ...todo("Checkup"), kind: "event" as const, ref: "events/checkup.md" };
+    const event = { ...todo("A sample event"), kind: "event" as const, ref: "events/checkup.md" };
     expect(applyDecision(shed, event, { kind: "reopen" }, "2026-11-05")).toBeNull();
   });
 });

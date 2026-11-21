@@ -333,7 +333,7 @@ test("files: an unknown way to use a file is 400", () => withApi(async (a) => {
 }));
 
 test("inbox: sort an item into a person with a day, or archive it", () => withApi(async (a) => {
-  const person = await a.call("POST", "/api/people", { name: "Dana Cole" });
+  const person = await a.call("POST", "/api/people", { name: "Alex Sample" });
   const one = await a.call("POST", "/api/inbox", { client_id: "c1", text: "Call about the quote" });
   const sorted = await a.call("POST", "/api/sort", { path: one.data.path, into: person.data.path, when: "2026-12-01" });
   assert.equal(sorted.status, 200);

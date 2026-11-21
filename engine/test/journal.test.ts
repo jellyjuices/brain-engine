@@ -7,8 +7,8 @@ import { titleFrom } from "../src/capture/journal.ts";
 import { parse } from "../src/core/notes.ts";
 
 const SHED = "projects/garden-shed.md";
-const DANA = "people/dana-cole.md";
-const MORNING = "Woke up early, and the shed roof leaks again!\n\n  Dana lent us her ladder,   which was kind.";
+const ALEX = "people/alex-sample.md";
+const MORNING = "Woke up early, and the shed roof leaks again!\n\n  Alex lent us a ladder,   which was kind.";
 const EVENING = "Quiet night. Read two chapters.";
 const ONE = "journal/2026-11-14-0930-woke-up-early-and-the-shed.md";
 const TWO = "journal/2026-11-14-2105-quiet-night-read-two-chapters.md";
@@ -54,19 +54,19 @@ test("journal: Unsorted counts waiting journals next to captures", () => withApi
 
 test("journal: a sort files bits in two subjects with links back, keeps the note whole, and one undo reverses it", () => withApi(async (a) => {
   await twoJournals(a);
-  const before = [file(a.root, SHED), file(a.root, DANA), file(a.root, ONE)];
+  const before = [file(a.root, SHED), file(a.root, ALEX), file(a.root, ONE)];
   const bits = [
     { into: SHED, when: "someday", kind: "to-do", text: "fix the shed roof leak" },
-    { into: DANA, when: "note", kind: "feeling", text: "grateful she lent the ladder", about: "the ladder" },
+    { into: ALEX, when: "note", kind: "feeling", text: "grateful they lent the ladder", about: "the ladder" },
   ];
   const r = await a.call("POST", "/api/sort", { path: ONE, bits });
   assert.equal(r.status, 200);
-  assert.deepEqual([r.data.filed, r.data.kept, r.data.deleted], [[SHED, DANA], ONE, undefined]);
+  assert.deepEqual([r.data.filed, r.data.kept, r.data.deleted], [[SHED, ALEX], ONE, undefined]);
   const link = `from [Woke up early, and the shed](../${ONE})`;
   const shedLine = `- [ ] fix the shed roof leak · someday · ${link}`;
-  const danaLine = `- 2026-11-14 · feeling · grateful she lent the ladder · about the ladder · ${link}`;
+  const alexLine = `- 2026-11-14 · feeling · grateful they lent the ladder · about the ladder · ${link}`;
   assert.equal(file(a.root, SHED).includes(shedLine), true, `missing ${shedLine}`);
-  assert.equal(file(a.root, DANA).includes(danaLine), true, `missing ${danaLine}`);
+  assert.equal(file(a.root, ALEX).includes(alexLine), true, `missing ${alexLine}`);
   const n = parse(file(a.root, ONE));
   assert.equal(n.body, `${MORNING}\n`);
   assert.match(String(n.meta.sorted), /^\d{4}-\d{2}-\d{2}$/);
@@ -75,7 +75,7 @@ test("journal: a sort files bits in two subjects with links back, keeps the note
   const log = await a.call("GET", "/api/log?n=1");
   assert.match(log.data.entries[0].msg, /^sorted journal\/2026-11-14-0930-.* into /);
   assert.equal((await a.call("POST", "/api/undo", {})).status, 200);
-  assert.deepEqual([file(a.root, SHED), file(a.root, DANA), file(a.root, ONE)], before);
+  assert.deepEqual([file(a.root, SHED), file(a.root, ALEX), file(a.root, ONE)], before);
   assert.equal((await a.call("GET", "/api/unsorted")).data.count, 2);
 }));
 

@@ -21,6 +21,10 @@
   color: var(--text-secondary);
 }
 
+.action {
+  margin-top: var(--space-sm);
+}
+
 .small {
   align-items: flex-start;
   padding: var(--space-xl) var(--space-sm);

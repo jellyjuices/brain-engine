@@ -3,7 +3,7 @@ import type { StoredNote } from "./model.ts";
 export interface GoalDraft {
   title: string;
   why: string;
-  targets: string;
+  targets: string[];
   areas: string[];
 }
 
@@ -27,12 +27,11 @@ export function areaChoices(notes: StoredNote[]): AreaChoice[] {
     .sort((a, b) => a.title.localeCompare(b.title));
 }
 
-function targetLines(text: string): string[] {
-  return text
-    .split("\n")
-    .map((line) => line.replace(/^\s*(?:[-*]\s*)?(?:\[[ xX]\]\s*)?/, "").trim())
+function targetLines(texts: string[]): string[] {
+  return texts
+    .map((text) => text.replace(/\s+/g, " ").trim())
     .filter(Boolean)
-    .map((line) => `- [ ] ${line}`);
+    .map((text) => `- [ ] ${text}`);
 }
 
 export function pickedTitles(choices: AreaChoice[], picked: Set<string>): string[] {

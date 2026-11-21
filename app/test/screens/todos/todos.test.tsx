@@ -42,7 +42,7 @@ describe("To-dos screen", () => {
   it("opens on Today with only dated to-dos", async () => {
     draw();
     const late = await screen.findByRole("region", { name: copy.today.overdue });
-    expect(within(late).getByRole("button", { name: "Follow up on the invoice" })).toBeVisible();
+    expect(within(late).getByRole("button", { name: "Follow up on the report" })).toBeVisible();
   });
 
   it("a tap on a view tab shows that view", async () => {
@@ -57,17 +57,17 @@ describe("To-dos screen", () => {
   it("a ticked to-do leaves the list", async () => {
     const user = userEvent.setup();
     draw();
-    await user.click(await screen.findByRole("checkbox", { name: "Make a gym schedule" }));
+    await user.click(await screen.findByRole("checkbox", { name: "Make a sample plan" }));
     await screen.findByText(copy.todos.doneOn("Fitness"));
     await vi.waitFor(() =>
-      expect(screen.queryByRole("checkbox", { name: "Make a gym schedule" })).toBeNull(),
+      expect(screen.queryByRole("checkbox", { name: "Make a sample plan" })).toBeNull(),
     );
   });
 
   it.skip("the done toast says where it went and offers Follow-up and Undo", async () => {
     const user = userEvent.setup();
     draw();
-    await user.click(await screen.findByRole("checkbox", { name: "Make a gym schedule" }));
+    await user.click(await screen.findByRole("checkbox", { name: "Make a sample plan" }));
     const note = await screen.findByText(copy.todos.doneOn("Fitness"));
     expect(
       within(note.parentElement as HTMLElement)

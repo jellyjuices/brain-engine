@@ -13,6 +13,7 @@ const SCREEN_NAMES = [
   "todos",
   "goals",
   "goal",
+  "goal-todos",
   "today",
   "find",
   "add",

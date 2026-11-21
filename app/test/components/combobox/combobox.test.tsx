@@ -6,7 +6,7 @@ import { Combobox, type Suggestion } from "@/components/combobox/combobox.tsx";
 afterEach(cleanup);
 
 const subjects: Suggestion[] = [
-  { id: "louis", label: "Louis Moreau", hint: "Person" },
+  { id: "riley", label: "Riley Chen", hint: "Person" },
   { id: "health", label: "Health" },
   { id: "garden", label: "Garden" },
 ];
@@ -64,8 +64,8 @@ describe("SuggestInput", () => {
     const { input, onPick } = field();
     await user.click(input);
 
-    await user.click(screen.getByRole("option", { name: /Louis Moreau/ }));
+    await user.click(screen.getByRole("option", { name: /Riley Chen/ }));
 
-    expect(onPick.mock.calls[0]?.[0]?.id).toBe("louis");
+    expect(onPick.mock.calls[0]?.[0]?.id).toBe("riley");
   });
 });

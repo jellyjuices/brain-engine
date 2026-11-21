@@ -25,14 +25,14 @@ describe("find results", () => {
 
   it("shows a person's card before the answer line", async () => {
     const people = [
-      note("people/aisha.md", "# Notes\n\nMet at the market.", { title: "Aisha", type: "Person" }),
-      note("areas/home.md", "# Notes\n\nAisha called about the fence quote.", { title: "Home" }),
+      note("people/alex.md", "# Notes\n\nSample note text.", { title: "Alex", type: "Person" }),
+      note("areas/home.md", "# Notes\n\nAlex called about the sample quote.", { title: "Home" }),
     ];
-    render(<FindResults q="aisha" notes={people} remote={null} />);
+    render(<FindResults q="alex" notes={people} remote={null} />);
     const links = await screen.findAllByRole("link");
     expect(links.map((link) => link.textContent).slice(0, 2)).toEqual([
-      "AishaPerson",
-      "Notes Aisha called about the fence quote.Home",
+      "AlexPerson",
+      "Notes Alex called about the sample quote.Home",
     ]);
   });
 

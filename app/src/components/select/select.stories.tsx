@@ -24,7 +24,7 @@ const meta = {
     items: [
       { value: "home", label: "Home" },
       { value: "health", label: "Health" },
-      { value: "northwind", label: "Northwind" },
+      { value: "project", label: "Sample project" },
       { value: "trip", label: "Sample trip", disabled: true },
     ],
   },
@@ -34,5 +34,5 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Empty: Story = {};
-export const Picked: Story = { args: { value: "northwind" } };
+export const Picked: Story = { args: { value: "project" } };
 export const Disabled: Story = { args: { disabled: true } };

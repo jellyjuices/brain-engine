@@ -22,7 +22,7 @@ const STEPS: Step[] = [
   ["read_note", () => ({ path: SHED })],
   ["edit_note", (s) => ({ path: SHED, body: `${s.read_note.body}\nA made-up line.\n`, base: s.read_note.hash })],
   ["unsorted", () => ({})],
-  ["relations", () => ({ path: "people/dana-cole.md" })],
+  ["relations", () => ({ path: "people/alex-sample.md" })],
   ["intake_next", () => ({})],
   ["goals", () => ({})],
   ["goal", () => ({ path: "goals/run-far.md" })],
@@ -37,7 +37,7 @@ const STEPS: Step[] = [
   ["undo", () => ({})],
   ["log", () => ({ n: 5 })],
   ["make_note", () => ({ type: "Goal", title: "Run a made-up 10k" })],
-  ["add_relation", () => ({ from: "people/dana-cole.md", to: SHED, role: "helper" })],
+  ["add_relation", () => ({ from: "people/alex-sample.md", to: SHED, role: "helper" })],
   ["intake_save", () => ({ lens: "now", question: "What fills your week?", line: "Building a shed." })],
   ["intake_skip", () => ({ question: "What made-up place calms you?" })],
 ];

@@ -32,7 +32,7 @@ beforeEach(async () => {
   vi.setSystemTime(new Date("2026-11-19T10:00:00"));
   queueInbox.mockClear();
   sent.length = 0;
-  await putNotes([note("places/gym.md", "", { title: "Gym", type: "Place" })]);
+  await putNotes([note("places/depot.md", "", { title: "Depot", type: "Place" })]);
 });
 afterEach(() => {
   vi.useRealTimers();
@@ -54,16 +54,16 @@ async function typeTodo(text: string) {
 
 describe("AddPanel suggested home", () => {
   it("offers a subject the to-do names", async () => {
-    await typeTodo("pay the gym fee fri");
-    expect(await screen.findByRole("button", { name: "Sort to Gym" })).toBeInTheDocument();
+    await typeTodo("pay the depot fee fri");
+    expect(await screen.findByRole("button", { name: "Sort to Depot" })).toBeInTheDocument();
   });
 
   it("sends the picked home with the to-do and the toast says it waits in Unsorted", async () => {
-    const user = await typeTodo("pay the gym fee fri");
-    await user.click(await screen.findByRole("button", { name: "Sort to Gym" }));
+    const user = await typeTodo("pay the depot fee fri");
+    await user.click(await screen.findByRole("button", { name: "Sort to Depot" }));
     await user.click(screen.getByRole("button", { name: "Save" }));
     expect([queueInbox.mock.calls[0], sent[0]?.done]).toMatchObject([
-      ["pay the gym fee fri", "places/gym.md", []],
+      ["pay the depot fee fri", "places/depot.md", []],
       { message: "Added to Unsorted", detail: "Fri Nov 20" },
     ]);
   });

@@ -10,7 +10,7 @@ const meta = {
     date: "2026-11-12",
     dateLabel: "Nov 12",
     kind: "fact",
-    text: "The sample lease ends in March",
+    text: "Sample fact",
   },
   decorators: [
     (Story) => (
@@ -45,10 +45,10 @@ export const FeelingWithBefore: Story = {
   },
 };
 export const Done: Story = {
-  args: { date: "2026-10-30", dateLabel: "Oct 30", kind: "done", text: "Shipped the sample page" },
+  args: { date: "2026-10-30", dateLabel: "Oct 30", kind: "done", text: "Sample done to-do" },
 };
 export const Decision: Story = {
-  args: { kind: "decision", text: "Stay freelance or go full time?", onOpen: fn() },
+  args: { kind: "decision", text: "Sample decision", onOpen: fn() },
 };
 export const ManyAreas: Story = {
   args: {

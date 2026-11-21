@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { withApi } from "./api-helpers.ts";
 
 const SHED = "projects/garden-shed.md";
-const DANA = "people/dana-cole.md";
+const ALEX = "people/alex-sample.md";
 const inboxFiles = (root: string) => readdirSync(join(root, "inbox")).filter((f) => f.endsWith(".md"));
 const body = async (a: { call: Function }, path: string) => (await a.call("GET", `/api/notes/${path}`)).data.body as string;
 
@@ -19,11 +19,11 @@ test("add: the app's queued payload with no picks waits in the inbox, and Unsort
 }));
 
 test("add: with a person it is filed on them and no capture is left", () => withApi(async (a) => {
-  const r = await a.call("POST", "/api/add", { client_id: "p1", text: "tomorrow: return the ladder", people: [DANA] });
+  const r = await a.call("POST", "/api/add", { client_id: "p1", text: "tomorrow: return the ladder", people: [ALEX] });
   assert.equal(r.status, 200);
   assert.equal(r.data.saved, "filed");
-  assert.equal(r.data.path, DANA);
-  assert.match(await body(a, DANA), /- \[ \] return the ladder · due /);
+  assert.equal(r.data.path, ALEX);
+  assert.match(await body(a, ALEX), /- \[ \] return the ladder · due /);
   assert.deepEqual(inboxFiles(a.root), []);
   assert.equal((await a.call("GET", "/api/unsorted")).data.count, 0);
 }));
@@ -44,9 +44,9 @@ test("add: a tag files into its area, a subject pick files there with the person
   const tagged = await a.call("POST", "/api/add", { client_id: "t1", text: "book a physio visit", tags: ["health"] });
   assert.equal(tagged.data.path, "areas/health.md");
   assert.match(await body(a, "areas/health.md"), /book a physio visit/);
-  const about = await a.call("POST", "/api/add", { client_id: "s1", text: "today: measure the door", about: [SHED], people: [DANA] });
+  const about = await a.call("POST", "/api/add", { client_id: "s1", text: "today: measure the door", about: [SHED], people: [ALEX] });
   assert.equal(about.data.path, SHED);
-  assert.match(await body(a, SHED), /- \[ \] measure the door · with \[Dana Cole\]\(\.\.\/people\/dana-cole\.md\) · due /);
+  assert.match(await body(a, SHED), /- \[ \] measure the door · with \[Alex Sample\]\(\.\.\/people\/alex-sample\.md\) · due /);
   assert.deepEqual(inboxFiles(a.root), []);
   assert.equal((await a.call("POST", "/api/add", { client_id: "x", text: "hi", people: "nope" })).status, 400);
 }));
@@ -71,28 +71,28 @@ test("done, move and delete a to-do by ref, then read the views back", () => wit
 test("sort: a capture split into two subjects is one log entry, and one undo reverses all of it", () => withApi(async (a) => {
   const cap = await a.call("POST", "/api/inbox", { client_id: "c1", text: "shed and ladder thoughts" });
   const capText = readFileSync(join(a.root, cap.data.path), "utf8");
-  const before = [await body(a, SHED), await body(a, DANA)];
-  const sorted = await a.call("POST", "/api/sort", { path: cap.data.path, bits: [{ into: SHED, when: "someday", text: "paint the shed" }, { into: DANA, when: "note", text: "lent us a ladder" }] });
+  const before = [await body(a, SHED), await body(a, ALEX)];
+  const sorted = await a.call("POST", "/api/sort", { path: cap.data.path, bits: [{ into: SHED, when: "someday", text: "paint the shed" }, { into: ALEX, when: "note", text: "lent us a ladder" }] });
   assert.equal(sorted.status, 200);
-  assert.deepEqual(sorted.data.filed, [SHED, DANA]);
+  assert.deepEqual(sorted.data.filed, [SHED, ALEX]);
   assert.equal(sorted.data.deleted, cap.data.path);
   assert.equal(existsSync(join(a.root, cap.data.path)), false);
   assert.match(await body(a, SHED), /paint the shed · someday/);
-  assert.match(await body(a, DANA), /lent us a ladder/);
+  assert.match(await body(a, ALEX), /lent us a ladder/);
   const log = await a.call("GET", "/api/log?n=1");
   assert.match(log.data.entries[0].msg, /^sorted inbox\//);
   assert.equal(log.data.entries[0].undoable, true);
   assert.equal((await a.call("POST", "/api/undo", {})).status, 200);
   assert.equal(readFileSync(join(a.root, cap.data.path), "utf8"), capText);
-  assert.deepEqual([await body(a, SHED), await body(a, DANA)], before);
+  assert.deepEqual([await body(a, SHED), await body(a, ALEX)], before);
   assert.equal((await a.call("GET", "/api/unsorted")).data.count, 1);
 }));
 
 test("sort: one into and a When, the app's payload; no into goes to General", () => withApi(async (a) => {
   const one = await a.call("POST", "/api/inbox", { client_id: "c2", text: "call the lumber yard" });
-  const r = await a.call("POST", "/api/sort", { path: one.data.path, into: DANA, when: "2026-12-01" });
-  assert.equal(r.data.into, DANA);
-  assert.match(await body(a, DANA), /- \[ \] call the lumber yard · due 2026-12-01/);
+  const r = await a.call("POST", "/api/sort", { path: one.data.path, into: ALEX, when: "2026-12-01" });
+  assert.equal(r.data.into, ALEX);
+  assert.match(await body(a, ALEX), /- \[ \] call the lumber yard · due 2026-12-01/);
   const two = await a.call("POST", "/api/inbox", { client_id: "c3", text: "sort the drawer" });
   assert.equal((await a.call("POST", "/api/sort", { path: two.data.path, when: "someday" })).data.into, "areas/general.md");
   assert.equal((await a.call("POST", "/api/sort", { path: two.data.path, bits: [] })).status, 400);
@@ -120,10 +120,10 @@ test("find gives hits and the card; a write that breaks a link reports it in che
   const found = await a.call("GET", "/api/find?q=Garden%20shed");
   assert.equal(found.data.card.subject.path, SHED);
   assert.deepEqual([SHED].filter((p) => !found.data.hits.map((h: { path: string }) => h.path).includes(p)), []);
-  const note = await a.call("GET", `/api/notes/${DANA}`);
-  const edit = await a.call("PUT", `/api/notes/${DANA}`, { body: `${note.data.body}\n- see [Nobody](nobody.md)\n`, base: note.data.hash });
+  const note = await a.call("GET", `/api/notes/${ALEX}`);
+  const edit = await a.call("PUT", `/api/notes/${ALEX}`, { body: `${note.data.body}\n- see [Nobody](nobody.md)\n`, base: note.data.hash });
   assert.equal(edit.status, 200);
-  assert.deepEqual(edit.data.check.filter((i: { path: string; level: string; message: string }) => i.path === DANA && i.level === "error" && /broken link/.test(i.message)).map((i: { path: string }) => i.path), [DANA]);
+  assert.deepEqual(edit.data.check.filter((i: { path: string; level: string; message: string }) => i.path === ALEX && i.level === "error" && /broken link/.test(i.message)).map((i: { path: string }) => i.path), [ALEX]);
   const clean = await a.call("POST", "/api/add", { client_id: "k1", text: "note: likes tea", about: [SHED] });
   assert.equal(clean.data.check, undefined);
 }));

@@ -28,7 +28,7 @@ export function TodoResolveStep({ todo, now, finish, show, step }: TodoResolveSt
       />
       <TextField
         label={done ? copy.todo.whatHappened : copy.todo.why}
-        placeholder={done ? copy.todo.whatHappenedExample : copy.todo.whyExample}
+        placeholder={done ? copy.todo.whatHappenedPlaceholder : copy.todo.whyPlaceholder}
         multiline
         autoFocus
         enterKeyHint="done"

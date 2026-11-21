@@ -44,11 +44,11 @@ describe("outbox kinds", () => {
       vi.fn().mockImplementation(async () => reply(200, {})),
     );
     await queueInbox("plain");
-    await queueInbox("tomorrow: ask", "people/aisha.md");
+    await queueInbox("tomorrow: ask", "people/alex.md");
     expect((await flush()).sent).toHaveLength(2);
     expect(calls().map((c) => c[0])).toEqual(["/api/inbox", "/api/inbox"]);
     expect(bodyOf(0)).not.toHaveProperty("into");
-    expect(bodyOf(1)).toMatchObject({ text: "tomorrow: ask", into: "people/aisha.md" });
+    expect(bodyOf(1)).toMatchObject({ text: "tomorrow: ask", into: "people/alex.md" });
   });
 
   it("done, move and drop post to their routes with the stable ref and the answers", async () => {
@@ -56,7 +56,7 @@ describe("outbox kinds", () => {
       "fetch",
       vi.fn().mockImplementation(async () => reply(200, {})),
     );
-    await queueDecision("areas/fitness.md::Gym", {
+    await queueDecision("areas/fitness.md::Sample to-do", {
       kind: "done",
       happened: " Sent it ",
       follow_up: "tomorrow: print",
@@ -73,7 +73,7 @@ describe("outbox kinds", () => {
       ["/api/done", "POST"],
     ]);
     expect(bodyOf(0)).toEqual({
-      ref: "areas/fitness.md::Gym",
+      ref: "areas/fitness.md::Sample to-do",
       happened: "Sent it",
       follow_up: "tomorrow: print",
     });
@@ -87,12 +87,12 @@ describe("outbox kinds", () => {
       "fetch",
       vi.fn().mockImplementation(async () => reply(200, {})),
     );
-    await queueDecision("areas/fitness.md::Gym", { kind: "reopen" });
+    await queueDecision("areas/fitness.md::Sample to-do", { kind: "reopen" });
     await queueDecision("areas/fitness.md::Mat", { kind: "edit", text: " Buy a new mat " });
     await flush();
     expect(calls().map((c) => c[0])).toEqual(["/api/reopen", "/api/edit-todo"]);
     expect([bodyOf(0), bodyOf(1)]).toEqual([
-      { ref: "areas/fitness.md::Gym" },
+      { ref: "areas/fitness.md::Sample to-do" },
       { ref: "areas/fitness.md::Mat", text: "Buy a new mat" },
     ]);
   });
@@ -159,7 +159,7 @@ describe("edit", () => {
   it("two waiting edits to one note become one: newest text, oldest base", async () => {
     await queueEdit("areas/fitness.md", "first", "h1");
     await queueEdit("areas/fitness.md", "second", "h-local");
-    await queueEdit("people/em.md", "other", "e1");
+    await queueEdit("people/sam.md", "other", "e1");
     const waiting = await edit();
     expect(waiting).toHaveLength(1);
     expect(waiting[0]!.payload).toEqual({ path: "areas/fitness.md", body: "second", base: "h1" });
@@ -224,11 +224,11 @@ describe("a 409: changed on the Mac", () => {
 
 describe("a change, its Undo and the local copy", () => {
   const todo = {
-    text: "Make a gym schedule",
+    text: "Make a sample plan",
     path: "areas/fitness.md",
     subject: "Fitness",
     kind: "todo" as const,
-    ref: "areas/fitness.md::Make a gym schedule",
+    ref: "areas/fitness.md::Make a sample plan",
   };
 
   it("shows at once, queues the write, and Undo before it is sent just pulls it back", async () => {
@@ -236,11 +236,11 @@ describe("a change, its Undo and the local copy", () => {
     await putNotes(fixture());
     const change = await applyChange(todo, { kind: "done" }, NOW);
     expect(change.label).toBe("Done");
-    expect((await getNote(todo.path))!.body).toContain("- [x] Make a gym schedule");
+    expect((await getNote(todo.path))!.body).toContain("- [x] Make a sample plan");
     expect(await list()).toHaveLength(1);
     expect(await undoChange(change)).toBe(true);
     expect(await list()).toHaveLength(0);
-    expect((await getNote(todo.path))!.body).toContain("- [ ] Make a gym schedule");
+    expect((await getNote(todo.path))!.body).toContain("- [ ] Make a sample plan");
   });
 
   it.each([
@@ -289,7 +289,7 @@ describe("a change, its Undo and the local copy", () => {
     await putNotes(fixture());
     const first = await applyChange(todo, { kind: "done" }, NOW);
     await applyChange(
-      { ...todo, text: "Buy a mat", ref: "areas/fitness.md::Buy a mat" },
+      { ...todo, text: "Buy a sample item", ref: "areas/fitness.md::Buy a sample item" },
       { kind: "drop" },
       NOW,
     );

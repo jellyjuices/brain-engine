@@ -3,6 +3,7 @@ import type { ScreenName } from "@/lib/platform/router.ts";
 import { BrainScreen } from "@/screens/brain/brain.tsx";
 import { FindScreen } from "@/screens/find/find.tsx";
 import { GoalScreen } from "@/screens/goal/goal.tsx";
+import { GoalTodosScreen } from "@/screens/goal-todos/goal-todos.tsx";
 import { GoalsScreen } from "@/screens/goals/goals.tsx";
 import { InboxScreen } from "@/screens/inbox/inbox.tsx";
 import { IntakeScreen } from "@/screens/intake/intake.tsx";
@@ -21,6 +22,7 @@ export const SCREENS: Record<ScreenName, { title: string; Component: ComponentTy
   todos: { title: copy.nav.todos, Component: TodosScreen },
   goals: { title: copy.nav.goals, Component: GoalsScreen },
   goal: { title: copy.goals.kicker, Component: GoalScreen },
+  "goal-todos": { title: copy.goals.addTodosTitle, Component: GoalTodosScreen },
   today: { title: copy.nav.today, Component: TodayScreen },
   find: { title: copy.nav.find, Component: FindScreen },
   add: { title: copy.nav.add, Component: AddScreen },

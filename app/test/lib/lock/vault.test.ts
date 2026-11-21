@@ -282,7 +282,7 @@ describe("sealed storage", () => {
   it("round trips notes, meta and outbox items through the same public API", async () => {
     await vault.unlockWithPassword(PW);
     await store.putNotes(fixture());
-    expect((await store.getNote("people/aisha.md"))?.title).toBe("Aisha");
+    expect((await store.getNote("people/alex.md"))?.title).toBe("Alex");
     await store.setMeta("lastSync", "2026-11-05T00:00:00Z");
     expect(await store.getMeta("lastSync")).toBe("2026-11-05T00:00:00Z");
     const item = await outbox.enqueue("add", { text: SECRET });
@@ -359,10 +359,10 @@ describe("sealed storage", () => {
     await store.putNotes(fixture());
     expect(await store.allNotes()).toHaveLength(fixture().length);
     vault.lockVault();
-    await expect(store.getNote("people/aisha.md")).rejects.toBeInstanceOf(vault.LockedError);
+    await expect(store.getNote("people/alex.md")).rejects.toBeInstanceOf(vault.LockedError);
     await vault.unlockWithPassword(PW);
-    await store.putNotes([], ["people/aisha.md"]);
-    expect(await store.getNote("people/aisha.md")).toBeUndefined();
+    await store.putNotes([], ["people/alex.md"]);
+    expect(await store.getNote("people/alex.md")).toBeUndefined();
   });
 
   it("an outbox count and remove work without the key (the password-changed path needs the count)", async () => {

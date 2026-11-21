@@ -17,7 +17,7 @@ interface IntakeSave { lens: string; question: string; line: string; by?: string
 
 const REF = "A to-do ref from todos or today.";
 const WHEN = "today, tomorrow, someday, waiting, note, or a date like 2026-05-04.";
-const PATH = "A note path, like people/dana-cole.md.";
+const PATH = "A note path, like people/alex-sample.md.";
 const PATHS = "Note paths.";
 const BY = "Your name. It goes on the generated label.";
 

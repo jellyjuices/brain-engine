@@ -4,7 +4,9 @@ import { WizardStep } from "@/components/wizard-step/wizard-step.tsx";
 import { saveGoal } from "@/flows/goal-build-flow.ts";
 import { useNotes } from "@/hooks/use-notes.ts";
 import { areaChoices, pickedTitles } from "@/lib/notes/goal-draft.ts";
+import { openTodoPicks, type TodoPick } from "@/lib/notes/goal-link.ts";
 import { back } from "@/lib/platform/router.ts";
+import { GoalTodos } from "@/components/goal-todos/goal-todos.tsx";
 import { GoalAreas } from "./goal-areas.tsx";
 import { copy } from "@/content/index.ts";
 
@@ -16,7 +18,7 @@ export function GoalBuild() {
   const [step, setStep] = useState(0);
   const [title, setTitle] = useState("");
   const [why, setWhy] = useState("");
-  const [targets, setTargets] = useState("");
+  const [todos, setTodos] = useState<TodoPick[]>([]);
   const [areas, setAreas] = useState<Set<string>>(new Set());
   const [busy, setBusy] = useState(false);
   if (!notes) return null;
@@ -25,7 +27,11 @@ export function GoalBuild() {
 
   async function add() {
     setBusy(true);
-    const ok = await saveGoal({ title: name, why, targets, areas: [...areas] });
+    const targets = todos.filter((t) => !t.path).map((t) => t.text);
+    const ok = await saveGoal(
+      { title: name, why, targets, areas: [...areas] },
+      todos.filter((t) => t.path),
+    );
     if (!ok) setBusy(false);
   }
 
@@ -66,20 +72,8 @@ export function GoalBuild() {
     );
   if (step === 2)
     return (
-      <WizardStep
-        {...shared}
-        {...skip}
-        question={words.targetsQuestion(name)}
-        hint={words.targetsHint}
-      >
-        <TextField
-          label={words.targetsLabel}
-          placeholder={words.targetsPlaceholder}
-          multiline
-          autoFocus
-          value={targets}
-          onChange={setTargets}
-        />
+      <WizardStep {...shared} {...skip} question={words.todosQuestion(name)} hint={words.todosHint}>
+        <GoalTodos choices={openTodoPicks(notes)} items={todos} onChange={setTodos} />
       </WizardStep>
     );
   return (

@@ -31,22 +31,22 @@ async function typeInto(text: string) {
 
 describe("note edit mentions and tags", () => {
   it("@ lists people and puts a link to the picked one", async () => {
-    const { user, field } = await typeInto("Call @Ai");
-    await user.click(await screen.findByRole("button", { name: /Aisha/ }));
-    expect(field).toHaveValue("Call [Aisha](../people/aisha.md) ");
+    const { user, field } = await typeInto("Call @Al");
+    await user.click(await screen.findByRole("button", { name: /Alex/ }));
+    expect(field).toHaveValue("Call [Alex](../people/alex.md) ");
   });
 
   it("# lists tags and adds the picked one as a removable tag", async () => {
-    const { user, field } = await typeInto("Gym #mon");
+    const { user, field } = await typeInto("Sample #mon");
     await user.click(await screen.findByRole("button", { name: /#money/ }));
-    expect(field).toHaveValue("Gym ");
+    expect(field).toHaveValue("Sample ");
     expect(screen.getByRole("button", { name: "Remove #money" })).toBeInTheDocument();
   });
 
   it("Escape hides the list", async () => {
-    const { user } = await typeInto("Call @Ai");
-    await screen.findByRole("button", { name: /Aisha/ });
+    const { user } = await typeInto("Call @Al");
+    await screen.findByRole("button", { name: /Alex/ });
     await user.keyboard("{Escape}");
-    expect(screen.queryByRole("button", { name: /Aisha/ })).toBeNull();
+    expect(screen.queryByRole("button", { name: /Alex/ })).toBeNull();
   });
 });

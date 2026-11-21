@@ -1,0 +1,11 @@
+.body {
+  display: grid;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-md) var(--space-3xl);
+}
+
+.hint {
+  margin: 0;
+  font-size: var(--font-size-body-md);
+  color: var(--text-secondary);
+}

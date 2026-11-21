@@ -5,11 +5,17 @@
 }
 
 .card {
+  position: relative;
   display: grid;
   gap: var(--space-md);
   padding: var(--space-lg);
   border-radius: var(--radius-lg);
   background: var(--background-secondary);
+}
+
+.card > section,
+.card > a {
+  position: relative;
 }
 
 .title {
@@ -23,4 +29,20 @@
 .title a {
   color: var(--text-primary);
   text-decoration: none;
+}
+
+.title a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+}
+
+.title a:focus-visible {
+  outline: none;
+}
+
+.title a:focus-visible::after {
+  outline: 0.125rem solid var(--border-focus);
+  outline-offset: var(--space-2xs);
 }

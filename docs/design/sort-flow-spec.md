@@ -40,18 +40,18 @@ This spec says how each flow works in the real app.
 ## B. Building out a person
 
 
-### B1. How do you know Louis?
+### B1. How do you know <name>?
 
 - Rows like the `@` drawer: shape and type on each.
 - "Suggested" first: subjects named in the same lines as the person. Then "All subjects".
 - Pick one or more. A picked row ends in a check.
 - Next sends one `relation` per pick (`/api/relations`, from the person to the subject).
 
-### B2. Add notes to Louis?
+### B2. Add notes to <name>?
 
 - Lists live notes and to-dos whose text names the person (by full name or first name) and do not yet link to them.
 - Each row ends in an Add pill. A picked pill turns green and says "Added".
-- The button says "Add 2 to Louis". With none picked it says "Done".
+- The button says "Add 2 to <name>". With none picked it says "Done".
 - Add sends one `relation` per pick, from the note to the person.
 - Skip on either step moves on. The last step returns to the person's page.
 
@@ -84,8 +84,8 @@ This spec says how each flow works in the real app.
 New screen `/build/<person|place|thing>`. It replaces the name sheet and the old `/person/<path>` page. One `WizardStep` per step, buttons at the bottom, 3 steps.
 
 - Step 1, "Who are you adding?" / "Where is it?" / "What are you adding?": the name, plus a birthday for a person. The button says "Add a person" (or place, thing). It saves, the toast says "Added to People", and the screen goes on to step 2. There is no Back here: the note exists.
-- Step 2, "How do you know Louis?" (a place or thing: "What goes with Gym?"): B1 above. Skip and Next go on. No Back: relations are sent.
-- Step 3, "Add notes to Louis?": B2 above. No Back (step 2 was sent). Skip and the last button go to the note's page.
+- Step 2, "How do you know <name>?" (a place or thing: "What goes with <name>?"): B1 above. Skip and Next go on. No Back: relations are sent.
+- Step 3, "Add notes to <name>?": B2 above. No Back (step 2 was sent). Skip and the last button go to the note's page.
 - Close (×) on step 1 goes back. On steps 2 and 3 it goes to the note's page.
 - The file screen is one step, so it shows no step count or bar.
 - The New screen and the Brain folders' add buttons open the builder.

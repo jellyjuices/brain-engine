@@ -126,8 +126,8 @@ describe("rich formatting in the add box", () => {
   it("typing @ then picking keeps the bold around it", async () => {
     const { user, box } = await openTodo("Call");
     await user.click(screen.getByRole("button", { name: "Bold" }));
-    typeInto(box, "Call @Ai");
-    await user.click(await screen.findByRole("button", { name: /Aisha/ }));
-    expect(screen.getByText("@Aisha").className).toMatch(/liveBold.*liveMention/);
+    typeInto(box, "Call @Al");
+    await user.click(await screen.findByRole("button", { name: /Alex/ }));
+    expect(screen.getByText("@Alex").className).toMatch(/liveBold.*liveMention/);
   });
 });
