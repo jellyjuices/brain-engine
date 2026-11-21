@@ -64,13 +64,10 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 
 **Limits:** design tokens only. Shared parts from `app/src/components/`. Owner words only.
 
-**Now:** P1 to P3 are in progress.
+**Now:** the first three "Done when" lines are true in code. To-do rows take `surface` from every caller. Subject chips need a whole name of 3+ letters or a sure guess, and skip the word still being typed. Format buttons are ghost at rest and pressed while on. The owner has not yet checked them on the phone.
 
 | # | Step | Size | Needs |
 | --- | --- | --- | --- |
-| P1 | To-do row `surface` prop, passed by every caller | Small | none |
-| P2 | Subject chips: named or sure guesses only, no chip from a half-typed word | Small | none |
-| P3 | Format buttons: ghost at rest, pressed look when on | Small | none |
 | P4 | UX safety sweep: list each write and each screen, check Undo, confirm and the four states. Write the gaps here, then fix them in batches | Medium | none |
 | P5 | Visual sweep: the owner lists what looks off on the phone, and agents fix it with `build-ui` | Small each | owner list |
 
@@ -99,6 +96,7 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | S4 | Re-guess captures already in Unsorted | Small | C |
 | S5 | Hit-rate check on the real brain | Small | owner runs it |
 | S6 | Meaning on the phone, once `embedQuery` is real | Medium | none |
+| S7 | Shared core: raise `MIN_NAME` in `engine/shared/sort/names.ts` from 2 to 3, to match the app chips | Small | owner yes |
 
 ## Track R: Remote work on the Mac mini
 
@@ -167,4 +165,5 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | E2 | Old repeat copies on note pages: check they read well | Small | none |
 | E3 | Repeat history line for a to-do in another note: link it to the subject | Small | none |
 | E4 | Dead code: 11 unused exports in `engine/` | Small | none |
+| E6 | Gates fail on old work: `app/test/lib/notes/goal-draft.test.ts` expects "Sample goal" for the input "Get strong", and Prettier flags 5 files (`list.stories.tsx`, `markdown.test.tsx`, `save-flow.test.ts`, `goal-draft.test.ts`, `goals.test.ts`) | Small | none |
 | E5 | Test cleanup. Skipped: `app/test/shell/shell-frame/shell-frame.test.tsx` (tab bar rows; Settings now sits in the To-dos header) and `app/test/shell/unsorted-banner/unsorted-banner.test.tsx` (the banner now sits in To-dos). Brittle: Add panel tests find the blob by part of a class name; `mention.test.tsx` no longer checks the look | Small | after the UI settles |
