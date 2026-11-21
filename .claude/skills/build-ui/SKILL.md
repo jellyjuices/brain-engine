@@ -18,7 +18,7 @@ A UI change is done when it works in context on every screen that shows it, and 
    - Find which layer already sets a value before you add it again.
 5. Pick parts from the table in `web-ui.md`. Close fit: add a prop or variant. New part only if nothing fits, then add a row to the table.
 6. Words go in `src/content/`. Logic goes in `lib/`. The flow goes in `flows/`. The component only draws and calls the flow.
-7. Add or change tests with the `write-tests` skill. A feature that breaks an old test on purpose: build the feature, skip the old test and add it to the test cleanup row in `docs/plan/handoff.md`.
+7. Add or change tests with the `write-tests` skill. A feature that breaks an old test on purpose: build the feature, skip the old test and add it to step E5 in `docs/plan/roadmap.md`.
 8. Run `npm run gates`. Then run the `web-reviewer` agent and fix its findings.
 9. Tell the owner what changed and what to look at on the phone, as a short list of taps.
 

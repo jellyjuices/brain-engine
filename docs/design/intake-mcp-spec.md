@@ -132,7 +132,7 @@ The server today offers tools only. It needs two more MCP parts: `prompts` and `
 - The skill's "fix a mistake" text names `undo_id` for intake saves only. After this spec every write returns one.
 - The intent's outcome 3 (resume a cut-off intake): `intake_next` with `status: open` plus `intake_status` already do it. No new tool. The `intake` prompt says to start there.
 - Outcome 5 (each lens line shows the date and a link to the raw talk): already true for `full` privacy lines. `headline` lines have no raw talk, so no link.
-- Outcome 6 (add new material such as a workbook): not part of this spec. It is row 24 in the handoff, and the workbook-to-lens mapping is an open question in the intent.
+- Outcome 6 (add new material such as a workbook): not part of this spec. It is part of step R4 in the [roadmap](../plan/roadmap.md), and the workbook-to-lens mapping is an open question in the intent.
 
 ## Order of work
 

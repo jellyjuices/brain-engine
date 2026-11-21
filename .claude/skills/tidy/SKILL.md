@@ -12,7 +12,7 @@ Pick the modes the owner asked for. Run them one at a time. Fix, don't report, u
 ### Code
 
 1. Run fallow `analyze` (or `fallow dead-code --format json --quiet | jq`). Fix critical and high first.
-2. Dead exports and files: delete them. Check with `symbol_impact` first. Engine dead code is tracked as #6 in `docs/plan/handoff.md`.
+2. Dead exports and files: delete them. Check with `symbol_impact` first. Engine dead code is tracked as E4 in `docs/plan/roadmap.md`.
 3. Duplication: `find_dupes`. Merge copies into one part or one `lib/` function. In the app, two parts for one idea become one part with a variant (see `web-ui.md`).
 4. Complexity and size: `check_health`, `npm run size`. Split a file over 200 lines by role, not by line count.
 5. Read a part's render before you judge its name. Rename by the table in `web-ui.md` Naming.

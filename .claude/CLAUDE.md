@@ -19,7 +19,7 @@ After a web app change, use the `web-reviewer` subagent. After an engine change,
 | Something is broken                                 | `fix-bug` skill                                        |
 | Write or fix tests                                  | `write-tests` skill                                    |
 | Clean up, dead code, tokens, docs, branches         | `tidy` skill; docs check with the `docs-auditor` agent |
-| What's next, status, write the handoff              | `handoff` skill                                        |
+| What's next, status, plan or wrap up the work       | `roadmap` skill                                        |
 | Search or read across many files                    | `Explore` agent, or pass `model: "sonnet"`             |
 
 ## Reading code: small outputs only

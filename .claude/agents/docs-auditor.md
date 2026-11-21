@@ -13,7 +13,7 @@ Scope, unless the caller names files: `AGENTS.md`, `.claude/CLAUDE.md`, `.claude
 For each file, check:
 
 1. **Wrong**: a path, script, part, prop, route or command that no longer exists. Check each one with `ls`, `grep` or fallow.
-2. **Stale**: a row in `docs/plan/handoff.md` that is done in code; a spec in `docs/design/` for a flow that changed.
+2. **Stale**: a step or "Done when" line in `docs/plan/roadmap.md` that is done in code; a spec in `docs/design/` for a flow that changed.
 3. **Duplicated**: the same rule in two files. Say which file should own it.
 4. **Bloated**: history, past decisions, hard values the code already holds (sizes, colours), or a paragraph where one line works.
 5. **Words**: words the owner sees that are not in the list in `AGENTS.md`, em dashes, US spelling.
