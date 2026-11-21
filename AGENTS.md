@@ -15,7 +15,7 @@ This repo is the code for a second brain. The notes live in a separate brain fol
 | Machine setup | `ops/setup.sh`, `ops/config/`, `ops/scripts/`, `ops/hooks/` | Setup, config templates, the gate scripts and the git hook |
 | New brain | `starter/` | Copied into an empty brain folder by `setup.sh` |
 
-Where it runs: one always-on home server, a Mac mini, holds the one copy of the brain. The laptop and the phone send adds and edits to it.
+Where it runs: one always-on home server holds the one copy of the brain. The owner's devices send adds and edits to it. Today the home server runs on macOS (launchd jobs, SwiftBar).
 
 Intent for every part: [docs/intent/README.md](docs/intent/README.md). When the intent and the code disagree, the intent wins: change the intent doc first.
 
@@ -57,3 +57,10 @@ One `package.json` at the root holds every dependency and every script. `npm ins
 ## Words the owner sees
 
 Use only these words in any screen, menu, help text or agent doc: **add, done, move, delete, find, to-do, note, subject, goal, decision, sort, view, journal, intake, When, About what.** Never say absorb, triage, loop, outcome, drop, park or schedule. Code names may still use them. The list comes from [docs/intent/README.md](docs/intent/README.md).
+
+Name machines by their role, not their brand. The engine is for anyone, on any hardware.
+
+- **home server**: the one always-on machine that holds the brain. Never "the Mac" or "the Mac mini".
+- **your devices**, **this device**: what the owner adds and reads from, such as a phone, laptop or tablet. Never "the phone" or "the laptop" when any device fits.
+- Keep a brand or platform word only where the fact is true for that platform: `launchd`, SwiftBar, `setup.sh` on macOS, a test run on a named machine.
+- Code names may keep `mac` or `phone`. Words on a screen, in help text, in an error and in a doc follow the rule.
