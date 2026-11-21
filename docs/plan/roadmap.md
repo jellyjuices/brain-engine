@@ -44,7 +44,7 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | # | Task | Notes |
 | --- | --- | --- |
 | A | Make `~/.config/brain/privacy-words.txt` | Template: `ops/config/privacy-words.example.txt`. Without it the privacy scan checks nothing |
-| B | Say yes to the model download, about 37 GB | Track R. Picks and test in [local-models.md](../design/local-models.md) |
+| B | Say yes to the jobs spec | Track R2. [jobs-spec.md](../design/jobs-spec.md). R3 waits on it |
 | C | Should a phone add with a sure guess file at once? | [helpers.md](../intent/helpers.md) aim 1 says sorted within minutes. Today every app add waits in Unsorted. Change the intent or the code |
 | D | Stage 6 of the intake points to `resources/values-list.md`, which does not exist | Write the list, or drop the file and let stage 6 ask without it |
 
@@ -127,7 +127,7 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | # | Step | Size | Needs |
 | --- | --- | --- | --- |
 | R1 | Tunnel check from outside | Small | owner says go |
-| R2 | Run the model test in [local-models.md](../design/local-models.md), then spec jobs in `brain serve`: routes to list, start and retry | Medium | B |
+| R2 | Spec jobs in `brain serve` on `qwen3.6:35b-mlx` ([local-models.md](../design/local-models.md)): routes to list, start and retry; load per job, unload after | Medium | none |
 | R3 | Ollama runner and job worker in `brain serve` | Large | R2 |
 | R4 | Intake in the phone app, on server steps. Includes "Start the intake" from a file page | Large | R2, D |
 | R5 | Remove `brain intake` and `brain thread`. Update `AGENTS.md`, `brain-cli.md`, CLI help; run `brain migrate` | Small | R4 |

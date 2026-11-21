@@ -27,20 +27,17 @@ Load on demand: `keep_alive` "10m" during an intake, "0" after the last backgrou
 - Too slow for a phone turn: Qwen3.8-27B (dense, about 8 tokens a second). Fine for an overnight job.
 - No good fit: GLM-4.7-Flash (built for code), ERNIE 4.5 (2025, no Ollama tag).
 
-## Unknown until tested
+## Chosen: `qwen3.6:35b-mlx` (owner, 2026-11-21)
 
-- Whether the 23 GB tag stays fully on the GPU under the default limit.
-- How long a cold 16k prompt takes to read. Estimate 10 to 30 seconds on the 35B.
-- JSON reliability on MLX.
+Tested on the Mac mini on 2026-11-20 with 18 made-up tasks (comprehension, dates, logic, split, sort, format rules, intake, summary, easy code):
 
-## Test (after the owner says yes to about 37 GB of downloads)
+- Every machine-scored check matched Claude Haiku and Claude Sonnet: sort 15/15, format rules 11/11, code 10/10, all JSON valid.
+- 40 to 85 tokens a second. Most replies took 0.5 to 2.5 seconds.
+- Cold start: 12 s to load, 23 s to read the first prompt. Warm up the model before the owner waits on it.
+- `ollama ps`: 25 GB, 100% GPU, MLX runner.
+- Memory: swap grew from 0.75 GB to 12.7 GB while loaded. The model fits, but it pushes other apps out. Rule: load per job and unload after. Never keep it loaded all day.
 
-1. `ollama pull qwen3.6:35b-mlx`, then the 9B, the 4B and the embedding model.
-2. Note `sysctl vm.swapusage`.
-3. `ollama run qwen3.6:35b-mlx --verbose "Write three warm, short intake questions about a new goal."`
-4. `ollama ps`: the model must show 100% GPU. Swap must not grow.
-5. Run 20 sample splits with a JSON schema through `/api/chat`. Pass: 20 of 20 valid, 50+ tokens a second.
-6. If the 35B fails step 4 or 5, use the 9B for intake and split.
+Only `qwen3.6:35b-mlx` is downloaded. The 9B, the 4B and the embedding model are not.
 
 ## Sources
 
