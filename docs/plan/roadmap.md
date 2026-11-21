@@ -1,6 +1,6 @@
 # Roadmap
 
-Updated 2026-11-20. This lists what is left to build, and how we know each part is done. The intent for every part is in [docs/intent/](../intent/README.md). When this file and the intent disagree, the intent wins.
+Updated 2026-11-21. This lists what is left to build, and how we know each part is done. The intent for every part is in [docs/intent/](../intent/README.md). When this file and the intent disagree, the intent wins.
 
 ## How this file works
 
@@ -44,7 +44,7 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | # | Task | Notes |
 | --- | --- | --- |
 | A | Make `~/.config/brain/privacy-words.txt` | Template: `ops/config/privacy-words.example.txt`. Without it the privacy scan checks nothing |
-| B | Say yes to the jobs spec | Track R2. [jobs-spec.md](../design/jobs-spec.md). R3 waits on it |
+| B | Say yes to the jobs spec and its 4 open questions | Track R. [jobs-spec.md](../design/jobs-spec.md). R3 waits on it |
 | C | Should a phone add with a sure guess file at once? | [helpers.md](../intent/helpers.md) aim 1 says sorted within minutes. Today every app add waits in Unsorted. Change the intent or the code |
 | F | When the server refuses a write, where does the owner's text go? | Pick: keep it in Unsorted with a "Didn't save" mark, so nothing is lost. Or keep it on the phone with "Try again" and "Copy" |
 | D | Stage 6 of the intake points to `resources/values-list.md`, which does not exist | Write the list, or drop the file and let stage 6 ask without it |
@@ -65,13 +65,12 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 
 **Limits:** design tokens only. Shared parts from `app/src/components/`. Owner words only.
 
-**Now:** the first three "Done when" lines are true in code. To-do rows take `surface` from every caller. Subject chips need a whole name of 3+ letters or a sure guess, and skip the word still being typed. Format buttons are ghost at rest and pressed while on. The owner has not yet checked them on the phone.
+**Now:** the first three "Done when" lines are true in code. To-do rows take `surface` from every caller. Subject chips need a whole name of 3+ letters or a sure guess, and skip the word still being typed. Format buttons are ghost at rest and pressed while on. The owner has not yet checked them on the phone. Data loss fixes are in: "Keep Mac version" asks first; inbox delete and note edit have Undo that also restores the phone's copy; an offline write keeps Undo. `saveFlow` shows Undo only when the server returns an undo id, or while the write is queued.
 
 | # | Step | Size | Needs |
 | --- | --- | --- | --- |
-| P4a | Data loss: confirm on "Keep Mac's" (`note-conflict.tsx`); Undo on inbox delete (`inbox-flow.ts`) and note edit (`note-edit.tsx`); keep Undo on offline writes (`save-flow.ts`) | Medium | in progress |
 | P4b | A write the server refuses is dropped from the outbox (`outbox.ts:140`), and the owner's text is lost | Small | F |
-| P4c | Undo and "where it went" on every other write: sort, journal, file, subject, link, goal, goal target, birthday, partner, skip question. Toasts that say only "Saved" or "Sorted" name the place | Medium | P4a |
+| P4c | "Where it went" on every write: toasts that say only "Saved" or "Sorted" name the place. Check each write's route returns an undo id (goal target edits the note directly, so it has none) | Medium | none |
 | P4d | Screen states: no screen has a real loading or error state. Journal, add and file have no empty or offline state. Goals and goal use one message for offline and missing | Medium | none |
 | P5 | Visual sweep: the owner lists what looks off on the phone, and agents fix it with `build-ui` | Small each | owner list |
 
@@ -90,13 +89,13 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 
 **Limits:** no AI needed to sort. A sort writes one log entry. An unsure filing carries `· check`.
 
-**Now:** the shared core is in `engine/shared/sort/`: named subjects first, then the nearest subject by words. `brain pull` files with it. The app sends every phone add with `hold`, so it waits in Unsorted. The Unsorted banner opens the `inbox` screen, one sheet per row. A filed line cannot be moved, and the sorter does not learn.
+**Now:** the shared core is in `engine/shared/sort/`: named subjects first, then the nearest subject by words. `brain pull` files with it. The app sends every phone add with `hold`, so it waits in Unsorted. The Unsorted banner opens the `inbox` screen, one sheet per row. The engine has `GET /api/sorted`, `POST /api/move-line` and `POST /api/retag`, logged and undoable; the app does not use them yet. The sorter does not learn. `moveLine` in `engine/src/capture/sorted.ts` is the place to hook learning.
 
 | # | Step | Size | Needs |
 | --- | --- | --- | --- |
-| S1 | Sort routes: `GET /api/sorted`, move a filed line, change its tag. Each logged and undoable | Medium | none |
 | S2 | Unsorted screen: guess per row, one-tap accept, pick another, clear all in one go, resume where left | Medium | `design-mock` first |
-| S3 | Learned moves: a move teaches the sorter | Medium | S1 |
+| S3 | Learned moves: a move teaches the sorter | Medium | none |
+| S8 | App: Move and change tag on a filed line, from a note page and from the toast after a sort | Medium | S2 design |
 | S4 | Re-guess captures already in Unsorted | Small | C |
 | S5 | Hit-rate check on the real brain | Small | owner runs it |
 | S6 | Meaning on the phone, once `embedQuery` is real | Medium | none |
@@ -129,14 +128,13 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 
 **Limits:** no paid AI. No background Claude runs. Privacy rules enforced in the server. A helper never speaks first.
 
-**Now:** 24 MCP tools at `/mcp`, tools only, agent token, rate limit. The intake runs as `brain intake` and `brain thread` in a Claude chat. Ollama is not wired in. File asks are stored, but nothing works through them. The tool list and privacy rules in [intake-mcp-spec.md](../design/intake-mcp-spec.md) feed R2 and R4.
+**Now:** 26 MCP tools at `/mcp`, tools only, agent token, rate limit. The intake runs as `brain intake` and `brain thread` in a Claude chat. No model is wired in. File asks are stored, but nothing works through them. The design is in [jobs-spec.md](../design/jobs-spec.md); its intake steps reuse the tools in [intake-mcp-spec.md](../design/intake-mcp-spec.md).
 
 | # | Step | Size | Needs |
 | --- | --- | --- | --- |
 | R1 | Tunnel check from outside | Small | owner says go |
-| R2 | Spec jobs in `brain serve` on `qwen3.6:35b-mlx` ([local-models.md](../design/local-models.md)): routes to list, start and retry; load per job, unload after | Medium | none |
-| R3 | Ollama runner and job worker in `brain serve` | Large | R2 |
-| R4 | Intake in the phone app, on server steps. Includes "Start the intake" from a file page | Large | R2, D |
+| R3 | Home helper add-on: config, runner, job store, worker, routes and the split, enrich and questions jobs. Steps 1 to 5 of [jobs-spec.md](../design/jobs-spec.md) | Large | B |
+| R4 | Intake in the phone app, on server steps, plus file page job states. Steps 6 to 8 of [jobs-spec.md](../design/jobs-spec.md) | Large | B, D |
 | R5 | Remove `brain intake` and `brain thread`. Update `AGENTS.md`, `brain-cli.md`, CLI help; run `brain migrate` | Small | R4 |
 | R6 | Start the server on demand (optional) | Medium | owner wants it |
 
