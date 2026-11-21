@@ -4,7 +4,6 @@ import { dayInText } from "@/lib/notes/when-word.ts";
 import { navigate } from "@/lib/platform/router.ts";
 import { queueInbox } from "@/lib/sync/writes.ts";
 import { saveFlow, type DoneToast } from "./save-flow.ts";
-import { undoSaved } from "./undo-flow.ts";
 import { copy } from "@/content/index.ts";
 
 export interface TodoAdd {
@@ -21,18 +20,10 @@ export async function addTodo(add: TodoAdd): Promise<boolean> {
       ? [...add.tags, add.home.value]
       : add.tags;
   const day = dayInText(add.text, todayIso());
-  let itemId = "";
   const done: DoneToast = {
     message: copy.sort.addedTo(copy.sort.unsorted),
     ...(day && { detail: longDate(day) }),
-    actions: [
-      { label: copy.sort.move, onClick: () => navigate("inbox") },
-      { label: copy.common.undo, onClick: () => void undoSaved(itemId) },
-    ],
+    actions: [{ label: copy.sort.move, onClick: () => navigate("inbox") }],
   };
-  return saveFlow(async () => {
-    const item = await queueInbox(add.text, into, tags);
-    itemId = item.id;
-    return item;
-  }, done);
+  return saveFlow(() => queueInbox(add.text, into, tags), done);
 }

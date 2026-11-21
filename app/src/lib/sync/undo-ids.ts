@@ -10,6 +10,10 @@ export function rememberUndoId(itemId: string, data: unknown) {
   if (undoIds.size > KEEP && oldest !== undefined) undoIds.delete(oldest);
 }
 
+export function hasUndoId(itemId: string): boolean {
+  return undoIds.has(itemId);
+}
+
 export function takeUndoId(itemId: string): string | undefined {
   const id = undoIds.get(itemId);
   undoIds.delete(itemId);

@@ -3,7 +3,6 @@ import { addTodo } from "@/flows/add-flow.ts";
 import type { Suggestion } from "@/lib/notes/mention.ts";
 import { toast } from "@/components/toast/toast-store.ts";
 import { navigate } from "@/lib/platform/router.ts";
-import { undoSaved } from "@/flows/undo-flow.ts";
 
 const queueInbox = vi.hoisted(() => vi.fn());
 
@@ -22,7 +21,6 @@ vi.mock("@/lib/platform/router.ts", async (original) => ({
   ...(await original<object>()),
   navigate: vi.fn(),
 }));
-vi.mock("@/flows/undo-flow.ts", () => ({ undoSaved: vi.fn() }));
 
 const text = "Book the cottage for July";
 
@@ -76,12 +74,11 @@ describe("addTodo toast", () => {
     expect(message).toBe("Added to Unsorted");
   });
 
-  it("Move opens the Unsorted screen and never undoes the save", async () => {
+  it("Move opens the Unsorted screen", async () => {
     const { actions } = await savedToast();
 
     actions.find((a: { label: string }) => a.label === "Move")?.onClick();
 
     expect(navigate).toHaveBeenCalledWith("inbox");
-    expect(undoSaved).not.toHaveBeenCalled();
   });
 });

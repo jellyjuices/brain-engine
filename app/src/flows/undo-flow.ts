@@ -7,6 +7,6 @@ export async function undoSaved(itemId: string): Promise<boolean> {
   if (ok) {
     settle();
     toast(copy.toast.undone);
-  } else toast(copy.toast.undoTooLate, { tone: "error" });
+  } else toast(copy.toast.nothingToUndo, { tone: "error" });
   return ok;
 }

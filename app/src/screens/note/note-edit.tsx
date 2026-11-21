@@ -75,13 +75,20 @@ export function NoteEdit({ note: opened }: { note: StoredNote }) {
     saver.drop();
     if (same(next, sent.current)) return;
     sent.current = next;
+    let before = note;
     const ok = await saveFlow(
       async () => {
         const fresh = (await getNote(note.path)) ?? note;
+        before = fresh;
         await putNotes([{ ...fresh, body: next.text, tags: next.tags }]);
         return queueEdit(note.path, next.text, base.current, next.tags);
       },
       async () => ((await getConflict(note.path)) ? copy.toast.conflict : copy.toast.saved),
+      false,
+      async () => {
+        await putNotes([before]);
+        base.current = before.hash;
+      },
     );
     if (ok) base.current = (await getNote(note.path))?.hash ?? base.current;
     else update(next);

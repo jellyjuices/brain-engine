@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { saveFlow } from "@/flows/save-flow.ts";
 import type { OutboxItem } from "@/lib/sync/outbox.ts";
+import { rememberUndoId } from "@/lib/sync/undo-ids.ts";
 import { copy } from "@/content/index.ts";
 
 const outbox = vi.hoisted(() => ({
@@ -15,6 +16,8 @@ vi.mock("@/lib/sync/sync.ts", () => ({
   syncState: () => ({ offline: false }),
 }));
 vi.mock("@/components/toast/toast-store.ts", () => ({ toast }));
+
+const undo = { label: "Undo", onClick: expect.any(Function) };
 
 const item: OutboxItem = { id: "a1", kind: "inbox", payload: {}, created_at: "now" };
 
@@ -46,10 +49,20 @@ describe("saveFlow", () => {
     expect(toast).toHaveBeenCalledWith("Added to Depot", { detail: "Fri Nov 20" });
   });
 
+  it("offers Undo when the Mac gave back an undo id", async () => {
+    rememberUndoId("a1", { undo_id: "7a3c9e01" });
+    await saveFlow(() => Promise.resolve(item), "Saved");
+    expect(toast).toHaveBeenCalledWith("Saved", { actions: [undo] });
+  });
+
   it("says the write waits on this device when it is still in the outbox", async () => {
     outbox.has.mockResolvedValue(true);
     await saveFlow(() => Promise.resolve(item), "Saved");
-    expect(toast).toHaveBeenCalledWith(expect.any(String), { tone: "offline", ms: 5000 });
+    expect(toast).toHaveBeenCalledWith(expect.any(String), {
+      tone: "offline",
+      ms: 5000,
+      actions: [undo],
+    });
   });
 
   it("says the Mac refused the write when it was dropped", async () => {

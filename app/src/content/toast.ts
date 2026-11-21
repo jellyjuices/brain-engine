@@ -7,6 +7,7 @@ export const toast = {
   rejected: "Mac refused it. Try again",
   skipped: "1 change didn't sync",
   undone: "Undone",
+  nothingToUndo: "Nothing to undo",
   undoTooLate: "Too late to undo",
   fileTooBig: "File too big. Limit 60 KB",
   fileEmpty: "File is empty",

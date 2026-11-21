@@ -69,7 +69,7 @@ describe("undoSaved", () => {
     expect(undoBodies()).toEqual([{ id: "7a3c9e01" }]);
   });
 
-  it("an add that landed with no undo id is too late and sends no undo", async () => {
+  it("an add that landed with no undo id is has nothing to undo and sends no undo", async () => {
     vi.stubGlobal("fetch", answering({ path: "inbox/cottage.md" }));
     const item = await queueInbox("Book the cottage for July");
     await land(item.id);
@@ -77,7 +77,7 @@ describe("undoSaved", () => {
     await undoSaved(item.id);
     await sendAll();
 
-    expect([undoBodies(), toast.mock.calls[0]?.[0]]).toEqual([[], "Too late to undo"]);
+    expect([undoBodies(), toast.mock.calls[0]?.[0]]).toEqual([[], "Nothing to undo"]);
   });
 
   it("a second Undo tap on the same add sends no second undo", async () => {

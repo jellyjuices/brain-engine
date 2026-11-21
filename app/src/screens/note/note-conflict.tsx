@@ -1,6 +1,7 @@
 import styles from "./note.module.css";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { Button } from "@/components/button/button.tsx";
+import { confirmSheet } from "@/components/sheet/confirm-sheet.tsx";
 import { toast } from "@/components/toast/toast-store.ts";
 import { longDate, type StoredNote } from "@/lib/notes/model.ts";
 import { back } from "@/lib/platform/router.ts";
@@ -19,6 +20,11 @@ export function NoteConflict({ note, conflict }: { note: StoredNote; conflict: C
       void flush().then(() => syncNow());
       toast(copy.toast.keptMine);
     } else {
+      const choice = await confirmSheet(copy.notes.keepMacTitle, copy.notes.keepMacBody, [
+        { id: "mac", label: copy.notes.keepMacGo, variant: "danger" },
+        { id: "back", label: copy.notes.goBack, variant: "outlined" },
+      ]);
+      if (choice !== "mac") return;
       await keepMacCopy(note.path);
       toast(copy.toast.keptMac);
     }
