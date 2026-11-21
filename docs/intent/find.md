@@ -33,4 +33,4 @@ The owner, when they need one fact fast, often on the phone and away from home.
 - The device fetches the model on its own, the first time it is on Wi-Fi. Until it loads, word search still works.
 - The phone is Android with Chrome. The app is installed to the home screen and asks for lasting storage, so Chrome does not clear it.
 - No AI service is needed for search.
-- Plain-question answers come from a Claude chat until the local model runs on the home server. Answers always cite note paths.
+- Plain-question answers come from the local model add-on when it is on, or from a Claude chat. With neither, Find still finds by words and meaning. Answers always cite note paths.

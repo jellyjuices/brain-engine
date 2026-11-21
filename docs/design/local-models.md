@@ -1,6 +1,6 @@
-# Local models on the Mac mini
+# Local model add-on: one example setup
 
-Research for roadmap step R2, 2026-11-20. Nothing is downloaded yet. The test below decides the final pick.
+The brain needs no AI. A local model is an add-on, like the calendar, and it stays off until the owner turns it on in config. This page is one tested setup for a 32 GB Apple silicon home server, researched on 2026-11-20. Another owner may pick a smaller model or skip the add-on.
 
 ## The machine
 

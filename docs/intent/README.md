@@ -87,6 +87,7 @@ Never absorb, triage, loop or outcome.
 | The 12 types in `.schema/types.yaml`, plus Goal (`goals/`) and Decision (`decisions/`). | Goals and choices need their own home. |
 | The brain holds every to-do. A client's own task tool gets a link, never a copy. | Two task homes drift. |
 | Local and free. No paid AI. | No bill and no service can lock the owner out. |
+| Every part works with no AI. A local model is an add-on, like the calendar, turned on in config. | Anyone can run the engine on any machine. AI makes it nicer, never possible. |
 | No live links to outside apps. A data import now and then is fine. | The owner is not tied to one app. |
 | Voice comes from the phone keyboard or the OS. | Nothing to build or keep up. |
 | Git history is the backup of the notes, private and local. The notes have no remote. | Any change can be undone, and the notes never leave the server. |

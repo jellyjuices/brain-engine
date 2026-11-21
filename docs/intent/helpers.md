@@ -21,7 +21,7 @@
 9. With no helper running, everything still works. Entries wait, and the owner can sort by hand.
 10. A capture is deleted once it is sorted. Git history keeps it. This holds for a helper's sort and for the owner's own sort at add, by a tag, person or relation.
 11. A file the owner adds keeps the ways they ticked as `asks` on its note: `split`, `enrich`, `intake`. A helper does each one and takes it out of `asks`. The file page shows a working row for each ask still there.
-12. While no AI runs on the home server, the asks wait for a Claude chat the owner starts. Once Ollama runs, `brain serve` works through them on its own.
+12. With no local model set up, the asks wait for a Claude chat the owner starts, or for the owner. With the local model add-on on, `brain serve` works through them on its own.
 
 ## User
 
@@ -31,7 +31,7 @@ The owner, a moment after they add something, and when they tap the "Unsorted en
 
 - Local and free. No paid AI.
 - No background Claude runs. Claude works only in a chat the owner starts.
-- Ollama on the home server takes over AI sorting once it runs. Until then, journal entries and rants wait for a Claude chat.
+- A local model is an add-on, never a need. When the owner turns it on, it helps sort journal entries and rants. When it is off, they wait for a Claude chat or the owner.
 - The sort runs on the home server, inside the brain server.
 - Never invent a fact. When unsure, file to the best guess and add `· check` to the line.
 - Never decide for the owner, diagnose them, or label them or their mood.

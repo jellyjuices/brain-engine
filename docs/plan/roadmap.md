@@ -98,23 +98,26 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | S6 | Meaning on the phone, once `embedQuery` is real | Medium | none |
 | S7 | Shared core: raise `MIN_NAME` in `engine/shared/sort/names.ts` from 2 to 3, to match the app chips | Small | owner yes |
 
-## Track R: Remote work on the Mac mini
+## Track R: Remote work and the local model add-on
 
-**Intent:** the owner runs an intake or a long job on the Mac mini from the phone, from anywhere, without Claude. Local and free. See [system.md](../intent/system.md) and [me-and-intake.md](../intent/me-and-intake.md).
+**Intent:** the owner runs an intake or a long job on the home server from the phone, from anywhere, without Claude. The engine is for anyone, so every part works with no AI. A local model is an add-on, like the calendar. See [system.md](../intent/system.md) and [me-and-intake.md](../intent/me-and-intake.md).
 
 **The gap:** MCP helps only when a Claude chat drives it, so it cannot meet this intent alone. It stays as a thin door for agents. Each route is already a tool, so it costs almost nothing to keep.
 
-**Road (owner said yes, 2026-11-20):** jobs inside `brain serve`. The Mac mini is an Apple M6 with 32 GB of memory and Ollama 0.40 installed, no models yet.
+**Road (owner said yes, 2026-11-20):** jobs inside `brain serve`. This owner's setup: Apple M6, 32 GB, `qwen3.6:35b-mlx` on Ollama ([local-models.md](../design/local-models.md)).
 
 - A job is a note's ask (`split`, `enrich`, `intake`) or a new kind, such as a sort sweep. File asks already store this.
-- `brain serve` works through jobs one at a time with a local model (Ollama). Every write carries `generated`, is logged and can be undone.
+- With the add-on on, `brain serve` works through jobs one at a time. Every write carries `generated`, is logged and can be undone.
+- With it off, asks wait for a Claude chat or the owner, as today.
 - The phone shows each job: waiting, working, done or failed.
-- The phone app runs the intake itself. The server asks the next question and saves the answer. The local model turns answers into notes and to-dos, as a job.
+- The phone app runs the intake itself on server steps. The model only adds the summary step when it is on.
 
 **Done when:**
 
+- With no model set up, every screen works and none shows a control that cannot run.
+- The add-on turns on and off by config only. No model name or address in code.
 - Away from home, the owner starts an intake on the phone, answers questions, and sees the notes and to-dos it made. No Claude.
-- The owner adds a file with "split" on the phone and later sees the parts, each marked `generated`.
+- With the add-on on, the owner adds a file with "split" on the phone and later sees the parts, each marked `generated`.
 - The phone shows each job's state. A failed job says why and offers to try again.
 - A job never runs twice at once, and it survives a restart of `brain serve`.
 - The tunnel check passes: the token works from outside, the rate limit answers 429, a revoked token stops at once.

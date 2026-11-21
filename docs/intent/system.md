@@ -24,8 +24,10 @@ The owner, on any device. Also the agents that read and write the brain for them
 
 ## Constraints
 
-- Local and free. No paid AI. Ollama runs on the home server later.
-- Until Ollama runs, Claude works only in chats the owner starts. No background Claude runs.
+- Local and free. No paid AI.
+- The engine is for anyone who wants a second brain. Every part works with no AI at all.
+- A local model on the home server is an add-on, like the calendar. It is off until the owner sets it up in config. With it on, `brain serve` works through helper jobs on its own. With it off, nothing looks broken. Example setup: [local-models.md](../design/local-models.md).
+- Claude works only in chats the owner starts. No background Claude runs.
 - Embeddings run inside brain with Transformers.js, on the server and in the app, with the same small model (see [find.md](find.md)).
 - The phone is Android with Chrome. The laptop is a MacBook. The home server is a Mac mini.
 - The terminal CLI is not a goal. It can be deprecated once the MCP server covers what agents need.
