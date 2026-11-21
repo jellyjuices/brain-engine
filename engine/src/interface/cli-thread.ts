@@ -16,16 +16,19 @@ function add(c: CliContext): number {
 
 const listLine = (t: Thread) => `${t.starred ? pc.yellow("* ") : "  "}${pc.bold(t.question)}  ${pc.dim([t.status, t.lens, `depth ${t.depth}`, t.path].join(" · "))}`;
 
-function printList(items: Thread[]) {
+const LIST_CAP = 10;
+
+function printList(items: Thread[], all: boolean) {
   if (!items.length) out(pc.dim("No threads."));
-  for (const thread of items) out(listLine(thread));
+  for (const thread of all ? items : items.slice(0, LIST_CAP)) out(listLine(thread));
+  if (!all && items.length > LIST_CAP) out(pc.dim(`and ${items.length - LIST_CAP} more`));
 }
 
 function list(c: CliContext): number {
   const { flags } = c;
   const items = listThreads(c.root, { status: flags.open ? "open" : flags.status, lens: flags.lens, area: flags.area });
   if (flags.json) c.json(items);
-  else printList(items);
+  else printList(items, !!flags.all);
   return 0;
 }
 

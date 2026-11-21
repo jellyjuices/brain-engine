@@ -1,6 +1,6 @@
 {
   "name": "brain-engine",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "description": "The code for a second brain: the brain command, the server, the phone app, the Worker and the design system.",
   "type": "module",

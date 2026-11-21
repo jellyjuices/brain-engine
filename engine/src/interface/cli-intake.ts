@@ -9,6 +9,7 @@ import { addSubjectFact, intakePrompts, setRole } from "../intake/subjects.ts";
 import { saveSubject } from "../intake/subject-save.ts";
 import { fileIntakeTodo } from "../intake/intake-todo.ts";
 import { endSummary } from "../intake/intake-end.ts";
+import { stageText, validStages } from "../intake/intake-resume.ts";
 import { type CliContext, fail, out, plural, restText } from "./cli-shared.ts";
 
 type Handler = (c: CliContext) => number;
@@ -119,14 +120,25 @@ function status(c: CliContext): number {
   return 0;
 }
 
+function stage(c: CliContext): number {
+  const n = Number(c.args[1]);
+  if (!c.args[1] || !Number.isInteger(n)) return fail(validStages());
+  try {
+    out(stageText(c.root, n));
+    return 0;
+  } catch (e) {
+    return fail((e as Error).message);
+  }
+}
+
 function dump(c: CliContext): number {
-  if (c.args[0] || process.stdin.isTTY) return fail("Use: brain intake <status|save|ask|subject|fact|role|todo|end|redact|privacy|done>, or pipe text in: one line is one note.");
+  if (c.args[0] || process.stdin.isTTY) return fail("Use: brain intake <status|stage|save|ask|subject|fact|role|todo|end|redact|privacy|done>, or pipe text in: one line is one note.");
   const notes = brainDump(c.root, readFileSync(0, "utf8"), { single: c.flags.single, area: c.flags.area });
   c.report(notes.map(summary), `${pc.green("Saved")} ${plural(notes.length, "note")} to inbox/.`);
   return 0;
 }
 
-const INTAKE: Record<string, Handler> = { status, save, ask, subject, fact, role, todo, end, redact: redactWords, privacy, done };
+const INTAKE: Record<string, Handler> = { status, stage, save, ask, subject, fact, role, todo, end, redact: redactWords, privacy, done };
 
 export async function intakeCommand(c: CliContext): Promise<number> {
   return (INTAKE[c.args[0] ?? ""] ?? dump)(c);

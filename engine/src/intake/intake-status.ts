@@ -2,6 +2,7 @@ import { folderOf, type Note, str, typeOf } from "../core/notes.ts";
 import { loadAll } from "../core/files.ts";
 import { lensPath, lensPrivacy, readSettings, STAGES, stagesDone, THREAD_STATUS, type ThreadStatus } from "./lenses.ts";
 import { intakeBlocks } from "./lens-answers.ts";
+import { type LastQuestion, lastQuestion } from "./intake-resume.ts";
 import { listThreads } from "./threads.ts";
 
 export type StageState = "done" | "started" | "not started" | "skipped";
@@ -19,6 +20,9 @@ export interface StageStatus {
 export interface IntakeStatus {
   stages: StageStatus[];
   next?: StageStatus;
+  current?: { n: number; name: string };
+  openThreads: number;
+  lastQuestion?: LastQuestion;
   threads: Record<ThreadStatus, number>;
   openLoops: { captured: number; inInbox: number; sorted: number };
 }
@@ -45,9 +49,13 @@ export function intakeStatus(root: string, notes = loadAll(root)): IntakeStatus 
     if (s in threads) threads[s]++;
   }
   const inInbox = intake.filter((n) => folderOf(n) === "inbox" && !n.meta.outcome).length;
+  const next = stages.find((s) => s.state !== "done" && s.state !== "skipped");
   return {
     stages,
-    next: stages.find((s) => s.state !== "done" && s.state !== "skipped"),
+    next,
+    current: next && { n: next.n, name: next.name },
+    openThreads: threads.open,
+    lastQuestion: lastQuestion(root),
     threads,
     openLoops: { captured: intake.length, inInbox, sorted: intake.length - inInbox },
   };

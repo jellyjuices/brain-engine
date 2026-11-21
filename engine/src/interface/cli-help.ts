@@ -15,7 +15,8 @@ ${pc.bold("Upkeep")}
   brain swiftbar                print the menu bar icon and inbox count (used by the SwiftBar plugin)
 
 ${pc.bold("Intake")}
-  brain intake status           progress per stage, threads and open to-dos
+  brain intake status           progress per stage, threads and open to-dos; --json also gives the current stage, open threads and the last question
+  brain intake stage <n>        one stage's row and its module, from the brain's stages file (0 to 11)
   brain intake save <lens> "…"  add the distilled line to me/<lens>.md   [--session N --quote "…" --raw "full answer" --question "…"]
   brain intake ask "what the owner said"  the one question for an unknown subject, and offers to make a note   [--json]
   brain intake subject "Name"   make a subject note from his answer   [--type person|group|place|thing|topic --role "…" --about <note> --fact "…"]
@@ -27,7 +28,7 @@ ${pc.bold("Intake")}
   brain intake privacy <lens> <level>  how much to write down: full, headline or skip
   brain intake done <stage>     mark a stage done (0 to 11, a name or a lens)
   brain thread add "question" --lens <lens>   save a thread in me/<lens>.md   [--depth --star]
-  brain thread list             list threads       [--open --status --lens --area]
+  brain thread list             list the first 10 threads, then how many more   [--all --open --status --lens --area]
   brain thread next             the best open thread to talk about next   [--lens]
   brain thread set <name>       change a thread    [--status open|talked|parked|closed --star --unstar]
 
