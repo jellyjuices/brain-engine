@@ -6,6 +6,11 @@ import type { Suggestion } from "./mention.ts";
 
 const LIMIT = 3;
 const MIN_LETTERS = 3;
+const MIN_NAME = 3;
+
+function settled(text: string): string {
+  return text.replace(/[\p{L}\p{N}'-]+$/u, "");
+}
 
 function words(text: string): Set<string> {
   return new Set(text.toLowerCase().match(/[\p{L}\p{N}'-]+/gu) ?? []);
@@ -24,9 +29,11 @@ export function subjectsNamed(notes: StoredNote[], text: string): StoredNote[] {
 }
 
 export function homeGuesses(notes: StoredNote[], text: string): Suggestion[] {
-  if (text.replace(/\W/g, "").length < MIN_LETTERS) return [];
-  const guess = sortOnDevice(text, notes);
-  const paths = guess.into ? [guess.into, ...guess.re, ...guess.people] : [];
+  const done = settled(text);
+  if (done.replace(/\W/g, "").length < MIN_LETTERS) return [];
+  const guess = sortOnDevice(done, notes, MIN_NAME);
+  const clear = guess.how === "named" || (guess.how === "near" && guess.sure);
+  const paths = guess.into && clear ? [guess.into, ...guess.re, ...guess.people] : [];
   const subjects: Suggestion[] = byPaths(notes, paths).map((n) => ({
     key: n.path,
     kind: "subject",
@@ -34,7 +41,7 @@ export function homeGuesses(notes: StoredNote[], text: string): Suggestion[] {
     title: n.title,
     value: n.path,
   }));
-  const said = words(text);
+  const said = words(done);
   const tags: Suggestion[] = tagsInUse(notes)
     .filter((t) => t.length >= MIN_LETTERS && said.has(t.toLowerCase()))
     .map((t) => ({ key: `tag:${t}`, kind: "tag", title: t, value: t }));

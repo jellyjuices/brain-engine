@@ -1,5 +1,11 @@
 import { rank, type Entry } from "@shared/search/index.ts";
-import { guessHome, sortWords, type SortGuess, type SortSubject } from "@shared/sort/index.ts";
+import {
+  guessHome,
+  namesOf,
+  sortWords,
+  type SortGuess,
+  type SortSubject,
+} from "@shared/sort/index.ts";
 import { isLive, type StoredNote } from "@/lib/notes/model.ts";
 import { SUBJECT_TYPES } from "@/lib/notes/types.ts";
 import { syncDeviceIndex } from "./find-on-device.ts";
@@ -21,12 +27,23 @@ export function deviceSubjects(notes: readonly StoredNote[]): SortSubject[] {
     .map(toSortSubject);
 }
 
-export function sortOnDevice(text: string, notes: readonly StoredNote[]): SortGuess {
+function longNamesOnly(subject: SortSubject, minName: number): SortSubject {
+  const aliases = namesOf(subject).filter((name) => name.length >= minName);
+  return { path: subject.path, type: subject.type, title: "", aliases };
+}
+
+export function sortOnDevice(
+  text: string,
+  notes: readonly StoredNote[],
+  minName?: number,
+): SortGuess {
   const words = sortWords(text);
   const index = syncDeviceIndex(notes);
   const ids = words.length ? index.words(words.join(" ")) : [];
   const entries = ids
     .map((id) => index.entry(id))
     .filter((entry): entry is Entry => entry !== undefined);
-  return guessHome(text, deviceSubjects(notes), rank(text, entries, [ids]));
+  const subjects = deviceSubjects(notes);
+  const named = minName ? subjects.map((s) => longNamesOnly(s, minName)) : subjects;
+  return guessHome(text, named, rank(text, entries, [ids]));
 }

@@ -9,7 +9,7 @@ const notes = [depot, riley, terms];
 
 describe("homeGuesses", () => {
   it("offers subjects named in the text, then tags, by first name for a person", () => {
-    const guesses = homeGuesses(notes, "call Riley about the depot contracts fri");
+    const guesses = homeGuesses(notes, "call Riley about the depot contracts fri ");
     expect(guesses.map((g) => [g.kind, g.title])).toEqual([
       ["subject", "Depot"],
       ["subject", "Riley Chen"],
@@ -34,8 +34,23 @@ describe("homeGuesses with no name in the text", () => {
   );
 
   it("offers the subject whose lines share the words", () => {
-    const guesses = homeGuesses([...notes, machines], "pump the valve and oil the gear");
+    const guesses = homeGuesses([...notes, machines], "pump the valve and oil the gear ");
     expect(guesses.map((g) => g.title)).toEqual(["Machines"]);
+  });
+
+  it("offers nothing when only one word is shared", () => {
+    expect(homeGuesses([...notes, machines], "buy a valve today ")).toEqual([]);
+  });
+
+  it("ignores the word still being typed", () => {
+    expect(homeGuesses(notes, "pay the depo")).toEqual([]);
+    expect(homeGuesses(notes, "pay the depot")).toEqual([]);
+    expect(homeGuesses(notes, "pay the depot ").map((g) => g.title)).toEqual(["Depot"]);
+  });
+
+  it("ignores names shorter than three letters", () => {
+    const al = note("people/al.md", "", { title: "Al", type: "Person" });
+    expect(homeGuesses([al], "ask al about the plan ")).toEqual([]);
   });
 });
 
