@@ -48,10 +48,7 @@ describe("markdown renderer", () => {
         path: "areas/fitness.md",
       }),
     );
-    expect(out.getByRole("link", { name: /Alex/ })).toHaveAttribute(
-      "href",
-      "/note/people/alex.md",
-    );
+    expect(out.getByRole("link", { name: /Alex/ })).toHaveAttribute("href", "/note/people/alex.md");
     expect(out.getByRole("link", { name: "Sam" })).toHaveAttribute("href", "/note/areas/sam.md");
     expect(out.getByRole("link", { name: /Alex/ })).not.toHaveAttribute("target");
   });

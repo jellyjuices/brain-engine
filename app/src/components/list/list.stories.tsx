@@ -33,13 +33,7 @@ export const WithKindIcons: Story = {
     <List {...args}>
       <ListRow {...kindLook("person")} title="Sample person" sub="Person" chevron onClick={fn()} />
       <ListRow {...kindLook("place")} title="Sample place" sub="Place" chevron onClick={fn()} />
-      <ListRow
-        {...kindLook("goal")}
-        title="Sample goal"
-        sub="Goal"
-        chevron
-        onClick={fn()}
-      />
+      <ListRow {...kindLook("goal")} title="Sample goal" sub="Goal" chevron onClick={fn()} />
     </List>
   ),
 };

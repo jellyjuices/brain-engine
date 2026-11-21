@@ -30,8 +30,18 @@ const GOAL: GoalView = {
   recent: 1,
   targets: [],
   toward: [
-    { text: "Book a sample visit", done: false, path: "projects/sample-project.md", goal: "goals/sample-goal.md" },
-    { text: "Sample step", done: false, path: "goals/sample-goal.md", goal: "goals/sample-goal.md" },
+    {
+      text: "Book a sample visit",
+      done: false,
+      path: "projects/sample-project.md",
+      goal: "goals/sample-goal.md",
+    },
+    {
+      text: "Sample step",
+      done: false,
+      path: "goals/sample-goal.md",
+      goal: "goals/sample-goal.md",
+    },
     { text: "Run 5 km", done: false, path: "goals/run-more.md", goal: "goals/run-more.md" },
   ],
   wins: [],
@@ -50,7 +60,9 @@ const GOAL: GoalView = {
 
 describe("goal notes", () => {
   it("crosses the open target under # Targets with today's date", () => {
-    expect(crossTarget(BODY, "Second sample target", "2026-11-05")?.split("\n").slice(6, 8)).toEqual([
+    expect(
+      crossTarget(BODY, "Second sample target", "2026-11-05")?.split("\n").slice(6, 8),
+    ).toEqual([
       "- [x] First sample target · done 2026-10-02",
       "- [x] Second sample target · done 2026-11-05",
     ]);

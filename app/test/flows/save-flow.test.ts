@@ -39,7 +39,10 @@ describe("saveFlow", () => {
   });
 
   it("names where it went with a day line under the words", async () => {
-    await saveFlow(() => Promise.resolve(item), { message: "Added to Depot", detail: "Fri Nov 20" });
+    await saveFlow(() => Promise.resolve(item), {
+      message: "Added to Depot",
+      detail: "Fri Nov 20",
+    });
     expect(toast).toHaveBeenCalledWith("Added to Depot", { detail: "Fri Nov 20" });
   });
 

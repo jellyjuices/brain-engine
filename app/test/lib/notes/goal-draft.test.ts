@@ -15,7 +15,13 @@ describe("goalRequest", () => {
       title: "Get strong",
       areas: ["fitness", "health"],
       fields: { why: "Feel good on hikes." },
-      sections: { "# Targets": ["- [ ] First sample target", "- [ ] Second sample target", "- [ ] Third sample target"] },
+      sections: {
+        "# Targets": [
+          "- [ ] First sample target",
+          "- [ ] Second sample target",
+          "- [ ] Third sample target",
+        ],
+      },
     });
   });
 
