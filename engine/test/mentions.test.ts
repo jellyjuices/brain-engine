@@ -69,6 +69,44 @@ test("secondMentions finds a name in new text that already shows in a note", () 
   assert.deepEqual(secondMentions(root, "Nothing here"), []);
 });
 
+function twoNotes(first: string, second: string, third = ""): string[] {
+  const root = makeBrain();
+  note(root, "projects/a.md", "Project", "Pa", `# Notes\n\n${first}\n`);
+  note(root, "projects/b.md", "Project", "Pb", `# Notes\n\n${second}\n`);
+  if (third) note(root, "projects/c.md", "Project", "Pc", `# Notes\n\n${third}\n`);
+  return Object.values(warns(root)).flat().filter((m) => /no note/.test(m));
+}
+
+test("a common word capitalised only at the start of a sentence is not a name", () => {
+  const found = twoNotes("Harvest went well.\nLearning helps.", "Harvest was late.\nLearning again.", "We should harvest early.");
+  assert.deepEqual(found, []);
+});
+
+test("a faith or nationality word is not a name", () => {
+  const found = twoNotes("- 2026-11-01 · Read about Buddhist art and Canadian food.", "- 2026-11-02 · More on the Buddhist calendar, Canadian dishes.");
+  assert.deepEqual(found, []);
+});
+
+test("a small leading word is trimmed from a name", () => {
+  const found = twoNotes("- 2026-11-01 · Off Gridwork is hard.", "- 2026-11-02 · we love Off Gridwork soon.");
+  assert.deepEqual(found, ["Gridwork shows in 2 notes, no note. Make one? Who, where, doing, have, or know?"]);
+});
+
+test("a possessive name stays whole and its last word is not split off", () => {
+  const found = twoNotes("- 2026-11-01 · we bought Marlowe's Thistle tea.", "- 2026-11-02 · we want more Marlowe's Thistle tea, and Thistle again.");
+  assert.deepEqual(found, ["Marlowe's Thistle shows in 2 notes, no note. Make one? Who, where, doing, have, or know?"]);
+});
+
+test("a name with no cue and no first name is not called a Person", () => {
+  const found = twoNotes("- 2026-11-01 · Zorbex is back.", "- 2026-11-02 · Zorbex again.");
+  assert.deepEqual(found, ["Zorbex shows in 2 notes, no note. Make one? Who, where, doing, have, or know?"]);
+});
+
+test("a first name list hit is called a Person", () => {
+  const found = twoNotes("- 2026-11-01 · Fiona is back.", "- 2026-11-02 · Fiona again.");
+  assert.deepEqual(found, ["Fiona shows in 2 notes, no note. Make a Person?"]);
+});
+
 test("languages and place words are not guessed as a Person", () => {
   const root = makeBrain();
   for (const n of ["a", "b"]) note(root, `projects/${n}.md`, "Project", `P${n}`, "# Notes\n\n- 2026-11-01 · Talk to Mac and Vancouver folks, my English is fine, French too.\n");

@@ -39,6 +39,12 @@ One `package.json` at the root holds every dependency and every script. `npm ins
 - **Commit by path. Never push to `main`.** The owner pushes `main`. A push to any other branch is fine.
 - **Never edit a brain folder from here** except through `setup.sh` or the `brain` command.
 - Never run a dev server or Storybook, except as [phone-preview.md](.claude/rules/phone-preview.md) says. Verify with typecheck, lint, tests and build.
+- **Bump the version with every commit that changes code** in `engine/`, `app/`, `worker/` or `ops/`. The version lives in the root `package.json`, and the app shows it in Settings.
+  - A normal change bumps the second number: `npm version minor --no-git-tag-version` (0.3.0 to 0.4.0).
+  - A release or a big change, only when the owner says so, bumps the first number: `npm version major --no-git-tag-version` (0.9.0 to 1.0.0).
+  - The third number stays 0.
+  - A commit that changes only docs or agent files does not bump.
+  - Stage `package.json` and `package-lock.json` with the change. Agents that do not commit do not bump. The one who commits bumps once.
 
 ## Working alongside other agents
 
