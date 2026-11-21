@@ -65,12 +65,12 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 
 **Limits:** design tokens only. Shared parts from `app/src/components/`. Owner words only.
 
-**Now:** the first three "Done when" lines are true in code. To-do rows take `surface` from every caller. Subject chips need a whole name of 3+ letters or a sure guess, and skip the word still being typed. Format buttons are ghost at rest and pressed while on. The owner has not yet checked them on a small screen. Data loss fixes are in: keeping the server's version of a note asks first; inbox delete and note edit have Undo that also restores the device's copy; an offline write keeps Undo. `saveFlow` shows Undo only when the server returns an undo id, or while the write is queued.
+**Now:** the first three "Done when" lines are true in code. To-do rows take `surface` from every caller. Subject chips need a whole name of 3+ letters or a sure guess, and skip the word still being typed. Format buttons are ghost at rest and pressed while on. The owner has not yet checked them on a small screen. Data loss fixes are in: keeping the server's version of a note asks first; inbox delete and note edit have Undo that also restores the device's copy; an offline write keeps Undo. `saveFlow` shows Undo only when the server returns an undo id, or while the write is queued. Every toast names where the change went.
 
 | # | Step | Size | Needs |
 | --- | --- | --- | --- |
 | P4b | A write the server refuses is dropped from the outbox (`outbox.ts:140`), and the owner's text is lost | Small | F |
-| P4c | "Where it went" on every write: toasts that say only "Saved" or "Sorted" name the place. Check each write's route returns an undo id (goal target edits the note directly, so it has none) | Medium | none |
+| P4c | Ticking a goal target edits the note body (`goal-flow.ts:20`), so it has no Undo. Use the cross-off route from E1 | Small | E1 |
 | P4d | Screen states: no screen has a real loading or error state. Journal, add and file have no empty or offline state. Goals and goal use one message for offline and missing | Medium | none |
 | P5 | Visual sweep: the owner lists what looks off on a small screen, and agents fix it with `build-ui` | Small each | owner list |
 
