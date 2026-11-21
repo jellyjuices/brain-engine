@@ -52,7 +52,6 @@ export function writeNote(root: string, rel: string, meta: Meta, body: string): 
   return readNote(root, rel);
 }
 
-/** Move a note. Writes the new file first, then removes the old one. */
 export function moveNote(root: string, from: string, to: string, meta: Meta, body: string): Note {
   const note = writeNote(root, to, meta, body);
   if (from !== to) unlinkSync(join(root, from));

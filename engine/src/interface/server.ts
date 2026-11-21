@@ -1,10 +1,3 @@
-// `brain serve`: the one way in for the app, the menu bar and helpers. JSON over node:http on loopback only.
-//
-// Every /api/ route except /api/health needs `Authorization: Bearer <token>`. The Worker sends the owner token; the
-// phone never holds it. Helpers send the agent token (server-agent.ts). Writes call the same functions as the
-// `brain` command, so they log to .log.jsonl and undo can reverse them. Every write re-indexes and checks the notes
-// it changed (server-check.ts). The routes and their shapes: routes/table.ts and api-types.ts.
-
 import { createServer as httpServer, type IncomingMessage, type Server } from "node:http";
 import { health } from "./server-reads.ts";
 import { readBody } from "./server-context.ts";
@@ -48,7 +41,6 @@ async function handle(root: string, token: string, req: IncomingMessage, agentFi
   return before ? withUndoId(root, mark, withCheck(root, before, result)) : result;
 }
 
-/** The server, not yet listening. Tests call this with a temp brain, a test token and a temp agent token file. */
 export function createServer(root: string, token: string, opts: ServerOptions = {}): Server {
   const agentFile = opts.agentTokenFile ?? agentTokenPath();
   const limit = new RateLimit(opts.agentRate ?? AGENT_RATE);
@@ -77,7 +69,6 @@ export function checkHost(host: string): void {
   if (!LOOPBACK.has(host)) throw new Error(`brain serve only listens on this Mac (127.0.0.1). It will not bind ${host}. Use the tunnel to reach it.`);
 }
 
-/** Start listening and stay up until the process is stopped. */
 export function serve(root: string, opts: { host?: string; port?: number } = {}, say: (s: string) => void = console.log): Promise<number> {
   const host = opts.host ?? "127.0.0.1";
   const port = opts.port ?? DEFAULT_PORT;

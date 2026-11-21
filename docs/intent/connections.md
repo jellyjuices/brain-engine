@@ -26,6 +26,8 @@ The owner, when they want to see how one part of their life ties to others, or t
 - The web reads links that already exist in the notes. It adds none.
 - Colour shows the kind of item, the same colour everywhere.
 - Names only, never raw Markdown links.
+- A relation is a line under a type heading, for example `# People`: `- [Omar](../people/omar.md) · co-founder · since 2025`. The link, then an optional role in the owner's words, then an optional time or status.
+- A relation is written on one side only. The index stores each line once, and the other side is found by looking up its target.
 
 ## Open questions
 

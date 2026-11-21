@@ -1,7 +1,3 @@
-// Journal notes: one note per entry, journal/YYYY-MM-DD-HHMM-<slug>.md, type Journal. The body is the entry, whole.
-// DECISION: `sorted: false` in the frontmatter while it waits; a sort sets `sorted: <date>`. The body never changes.
-// DECISION: the slug comes from the title once. The owner may edit `title` later; links use the path, so they hold.
-
 import { existsSync } from "node:fs";
 import { join, posix } from "node:path";
 import { type Meta, type Note, nowStamp, str, titleOf, today, typeOf } from "../core/notes.ts";
@@ -15,7 +11,6 @@ const TITLE_WORDS = 6;
 const TITLE_MAX = 60;
 const DAY = /^\d{4}-\d{2}-\d{2}$/;
 
-/** A title from the first words of the entry: about 6 words, cut at a word break, no trailing punctuation. No AI. */
 export function titleFrom(text: string): string {
   const words = text.trim().split(/\s+/).filter(Boolean).slice(0, TITLE_WORDS);
   let title = words.join(" ");
@@ -26,25 +21,20 @@ export function titleFrom(text: string): string {
 const isJournal = (n: Note) => typeOf(n) === JOURNAL && n.path.startsWith("journal/");
 const isWaiting = (n: Note) => isJournal(n) && n.meta.sorted === false;
 
-/** Journal notes that wait to be sorted, oldest first. */
 export function waitingJournals(notes: Note[]): Note[] {
   return notes.filter(isWaiting).sort((a, b) => str(a.meta.date)!.localeCompare(str(b.meta.date)!));
 }
 
 export interface JournalInput {
   text: string;
-  /** YYYY-MM-DD. Defaults to the day of `at`, then today. */
   day?: string;
-  /** ISO time; its HH:MM goes in the path and in `date`. */
   at?: string;
   title?: string;
   about?: { title: string; path: string };
   by?: string;
-  /** Ends the log line, so a retry can be found. */
   tag?: string;
 }
 
-/** Write one journal note. The same text on the same day returns that note, so a retry makes no copy. */
 export function addJournalNote(root: string, notes: Note[], input: JournalInput): { path: string; created: boolean; title: string } {
   const at = input.at ?? nowStamp();
   const day = input.day ?? (DAY.test(at.slice(0, 10)) ? at.slice(0, 10) : today());
@@ -61,7 +51,6 @@ export function addJournalNote(root: string, notes: Note[], input: JournalInput)
   return { path, created: true, title };
 }
 
-/** The journal note an earlier add with this client_id made, from the log. */
 export function journalFor(root: string, mark: string): { path: string; title: string } | undefined {
   const hit = readLog(root).find((e) => e.msg.startsWith("journal ") && e.msg.endsWith(mark));
   const path = hit?.msg.split(" ")[1];
@@ -70,10 +59,6 @@ export function journalFor(root: string, mark: string): { path: string; title: s
 
 const linkBack = (from: string, n: Note) => `[${titleOf(n)}](${posix.relative(posix.dirname(from), n.path)})`;
 
-/**
- * Sort one journal note into bits. Each bit links back with `· from`. The note stays whole; `sorted` gets the date.
- * DECISION: the bits and the mark are one log entry, so one undo takes every bit out and the note waits again.
- */
 export function sortJournal(root: string, notes: Note[], path: string, bits: SortBit[]): { into: string[]; kept: string } {
   if (!existsSync(join(root, path))) throw new Error(`No note at ${path}.`);
   const note = readNote(root, path);

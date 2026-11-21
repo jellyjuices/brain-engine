@@ -4,7 +4,6 @@ import type { Outcome } from "../../shared/line/index.ts";
 const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 const DAYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
-/** Read a When answer: today, tomorrow, a weekday, a date, someday or waiting. */
 export function parseWhen(when: string, now = today()): { due?: string; outcome?: Outcome; label: string } {
   const word = when.trim().toLowerCase();
   if (word === "today") return { due: now, label: "today" };
@@ -32,7 +31,6 @@ export function parseWhen(when: string, now = today()): { due?: string; outcome?
   throw new Error(`Say when: today, tomorrow, a weekday, nov 20, YYYY-MM-DD, someday or waiting. Not "${when}".`);
 }
 
-/** The one Person note this name means: the full title, the first name, or the file name. Undefined if none or more than one. */
 export function personNamed(notes: Note[], name: string): Note | undefined {
   const want = name.trim().toLowerCase();
   if (!want) return undefined;
@@ -48,7 +46,6 @@ export function personNamed(notes: Note[], name: string): Note | undefined {
   );
 }
 
-/** The one non-person subject note with this title (a thing, topic, project, place, group or event). */
 export function subjectTitled(notes: Note[], title: string): Note | undefined {
   const want = title.trim().toLowerCase();
   const hits = notes.filter((n) => !["Person", "Capture", "Lens", "Journal", "Area"].includes(typeOf(n) ?? "") && !n.path.startsWith(".") && titleOf(n).toLowerCase() === want);

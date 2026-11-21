@@ -1,7 +1,6 @@
 import type { Relation } from "./relations.ts";
 import { openIndex, updateIndex } from "./search.ts";
 
-/** Relations both ways: lines in this note (out) and lines in other notes that point here (in). */
 export function relationsOf(root: string, path: string): { out: Relation[]; in: Relation[] } {
   updateIndex(root);
   const db = openIndex(root);
@@ -21,7 +20,6 @@ export function relationsOf(root: string, path: string): { out: Relation[]; in: 
   }
 }
 
-/** To-dos in other notes that name this subject with `· with` or `· re`. */
 export function todosNaming(root: string, path: string, opts: { done?: boolean } = {}): { path: string; text: string; done: boolean }[] {
   updateIndex(root);
   const db = openIndex(root);

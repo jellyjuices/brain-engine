@@ -1,11 +1,3 @@
-// What happens after the owner finishes or drops a to-do: "What happened?", "Follow-up?" and "Why?".
-//
-// The write logic takes the answers as arguments. One change, one undo: the tick, the note line and
-// the follow-up all log as a single entry.
-//
-// DECISION: a follow-up with no When prefix is a to-do for today. The owner just said they need to do it, so it
-// should show up, not vanish into someday. Prefixes work as in `brain add` ("tomorrow: call Dr").
-
 import { typeOf } from "../core/notes.ts";
 import { loadAll } from "../core/files.ts";
 import { fileInto, splitPrefix, subjectsNamed, type When } from "../capture/file.ts";
@@ -23,7 +15,6 @@ export interface FollowUp {
   text: string;
 }
 
-/** Tick a to-do with the answers. Blank answers are skipped. */
 export function doneWith(root: string, ref: string, a: DoneAnswers = {}): ReturnType<typeof done> & { followUp?: FollowUp } {
   const item = resolve(root, ref);
   const follow = a.follow_up?.trim();
@@ -46,7 +37,6 @@ export function doneWith(root: string, ref: string, a: DoneAnswers = {}): Return
   return { ...result, ...(followUp && { followUp }) };
 }
 
-/** Drop a to-do with the reason. A blank reason is skipped. */
 export function dropWith(root: string, ref: string, why?: string): ReturnType<typeof drop> {
   return drop(root, ref, { note: why });
 }

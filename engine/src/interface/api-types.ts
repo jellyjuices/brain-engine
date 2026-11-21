@@ -1,5 +1,3 @@
-// Request and response shapes for every `brain serve` route. The MCP layer imports these: one tool per route.
-
 import type { AnswerCard, FeedVector, FindHit, Meaning } from "../core/search.ts";
 import type { Issue } from "../core/schema.ts";
 import type { Relation } from "../core/relations.ts";
@@ -17,7 +15,6 @@ export interface CheckIssue {
   message: string;
 }
 
-/** Every write. `check` lists what the check found on the notes the write changed; it is left off when all is well. */
 export interface WriteResult {
   check?: CheckIssue[];
 }
@@ -27,17 +24,13 @@ export interface AddRequest {
   text: string;
   created_at?: string;
   into?: string;
-  /** Note paths for About what. With kind "feeling": the side, in the owner's words. */
   about?: string[] | string;
   people?: string[];
   tags?: string[];
   by?: string;
   draft_id?: string;
-  /** A When word or date, like tomorrow or 2026-11-20. The text stays as typed. */
   when?: string;
-  /** "journal" writes the text whole as its own journal note, where it waits to be sorted. "fact" and "feeling" write one dated line into `into`. */
   kind?: "todo" | "journal" | "fact" | "feeling";
-  /** A journal note's title. With none, the first words of the text. */
   title?: string;
 }
 
@@ -85,7 +78,6 @@ export interface SortBitRequest {
   about?: string;
 }
 
-/** Either one `into` and `when` for the whole capture, or `bits` for a capture split into several lines. `path` may be a journal note. */
 export interface SortRequest {
   path: string;
   into?: string;
@@ -97,7 +89,6 @@ export interface SortRequest {
 export interface SortResponse extends WriteResult {
   into: string;
   filed: string[];
-  /** A sorted capture is `deleted`; a sorted journal note is `kept` whole. */
   deleted?: string;
   kept?: string;
 }
@@ -115,7 +106,6 @@ export interface UnsortedResponse {
   items: UnsortedItem[];
 }
 
-/** One hit per note, best first. `answer` is the top line, cited by path. `meaning` says how the meaning list ran. */
 export interface FindResponse {
   card?: Card;
   answer: AnswerCard | null;
@@ -123,7 +113,6 @@ export interface FindResponse {
   hits: FindHit[];
 }
 
-/** The changes feed. `vectors` holds only entries embedded since `since`, int8 in base64; a new `model` means fetch all again. */
 export interface NotesSinceResponse {
   now: string;
   notes: ReturnType<typeof noteJson>[];

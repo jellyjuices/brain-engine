@@ -1,4 +1,3 @@
-// T9 setup: a made-up brain, its 30 questions and a fake embedder with hand-made concept vectors.
 import { mkdirSync, readFileSync, utimesSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import type { Embedder } from "../src/core/embed.ts";

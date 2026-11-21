@@ -1,7 +1,3 @@
-// After every write: re-index, then run the check on the notes the write changed.
-// DECISION: the check reports, it does not reject. The write is already on disk and logged, so the owner can undo it.
-// The issues ride on the answer as `check`, and only when there are some.
-
 import { existsSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { notePaths } from "../core/files.ts";
@@ -46,7 +42,6 @@ export function withCheck(root: string, before: Snapshot, result: unknown): unkn
   return issues.length && isPlainObject(result) ? { ...result, check: issues } : result;
 }
 
-/** Put the id of the change this write made on the answer, so the caller can undo exactly that change. */
 export function withUndoId(root: string, mark: number, result: unknown): unknown {
   const id = undoIdSince(root, mark);
   return id && isPlainObject(result) ? { ...result, undo_id: id } : result;

@@ -1,6 +1,3 @@
-// One MCP tool per route in routes/table.ts. Owner-only routes and routes marked `mcp: false` are left out. A call runs the route's own handler in
-// process, wrapped the way server.ts wraps it: a write is snapshotted, then re-indexed and checked (server-check.ts).
-
 import { ROUTES, type Route } from "../routes/table.ts";
 import { HttpError } from "../server-auth.ts";
 import { snapshot, withCheck, withUndoId } from "../server-check.ts";
@@ -37,7 +34,6 @@ export const findTool = (name: string) => BY_NAME.get(name);
 
 const segments = (v: string) => v.split("/").map(encodeURIComponent).join("/");
 
-/** Build the request the route would get over HTTP, then run it. Throws HttpError just as the route does. */
 export async function runTool(tool: Tool, args: Json, root: string, agentFile: string): Promise<unknown> {
   const { route, input } = tool;
   const fields = { ...args };
@@ -57,7 +53,6 @@ export async function runTool(tool: Tool, args: Json, root: string, agentFile: s
   return before ? withUndoId(root, mark, withCheck(root, before, result)) : result;
 }
 
-/** Plain text for the agent, never over MAX_RESULT bytes. */
 export function capText(result: unknown): string {
   const full = result instanceof TextBody ? result.text : JSON.stringify(result) ?? "null";
   if (Buffer.byteLength(full) <= MAX_RESULT) return full;

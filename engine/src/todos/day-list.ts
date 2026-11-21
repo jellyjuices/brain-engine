@@ -26,7 +26,6 @@ function groupOf(due: string | undefined, outcome: string | undefined, now: stri
   return undefined;
 }
 
-/** Today's list: overdue, today, then waiting. */
 export function dayList(root: string): Item[] {
   const notes = loadAll(root);
   const now = today();
@@ -50,12 +49,10 @@ export function dayList(root: string): Item[] {
 }
 
 const REF = "::";
-/** A stable ref for one to-do: its note path and exact text. Menus use it because list numbers change. */
 export function ref(path: string, text: string): string {
   return `${path}${REF}${text}`;
 }
 
-/** An upcoming event by its note path. Its stable ref is the path alone. */
 function eventByPath(root: string, path: string): Item | undefined {
   if (path.includes("..") || path.startsWith("/") || !existsSync(join(root, path))) return undefined;
   const note = readNote(root, path);
@@ -63,7 +60,6 @@ function eventByPath(root: string, path: string): Item | undefined {
   return due ? { n: 0, group: "today", kind: "event", text: titleOf(note), path, subject: titleOf(note), due } : undefined;
 }
 
-/** Words from an open to-do, a stable `path::text` ref, or an event path. */
 export function resolve(root: string, ref: string): Item {
   const needle = ref.trim();
   if (!needle) throw new Error("Say which to-do: a number from the list, or words from it.");

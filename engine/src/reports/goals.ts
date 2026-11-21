@@ -1,12 +1,3 @@
-// Goal and Decision views, computed on read from the notes. Nothing here is stored in a note.
-//
-// DECISION: percent = done / total over the goal's `# Targets` checklist lines plus its steps, plus the same for its subgoals
-// (one level). A step is a to-do in the goal's own `# To-dos`, a to-do anywhere with `· toward` this goal, or a to-do in a
-// Project linked to this goal in either direction. Each to-do counts once. Dropped lines do not count.
-// DECISION: wins are computed, never written: a done target or a done `· toward` to-do is a win, dated by its `done` token.
-// DECISION: "+N this month" counts both targets and steps done in the last 30 days.
-// DECISION: the next step is the open to-do with the soonest due, else the first open target.
-
 import { addDays, areasOf, descOf, extractLinks, folderOf, slugOf, str, titleOf, today, typeOf, DIRS, type Note } from "../core/notes.ts";
 import { parentSlug } from "../core/schema-kinds.ts";
 import { decisionsUnder } from "./decisions.ts";
@@ -130,7 +121,6 @@ export function goalView(notes: Note[], path: string): GoalView | undefined {
   };
 }
 
-/** Every top-level goal with its percent. A subgoal shows under its parent only. */
 export function goalList(notes: Note[]): GoalRef[] {
   const links = projectLinks(notes);
   return notes

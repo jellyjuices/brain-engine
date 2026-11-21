@@ -1,5 +1,3 @@
-// The Decision view, computed on read. A decision links to a goal through its `# Goals` relation section.
-
 import { descOf, DIRS, folderOf, str, titleOf, typeOf, type Note } from "../core/notes.ts";
 import { relationsIn } from "../core/relations.ts";
 import { sectionRange } from "../../shared/line/index.ts";
@@ -21,7 +19,6 @@ function decisionRef(n: Note): DecisionRef {
   return { path: n.path, title: titleOf(n), status: str(n.meta.status) ?? "open", ...(by && { decide_by: by }) };
 }
 
-/** Decisions whose `# Goals` section links to this goal. */
 export function decisionsUnder(notes: Note[], goal: string): DecisionRef[] {
   return notes
     .filter((n) => isDecision(n) && folderOf(n) !== DIRS.archive && relationsIn(n).some((r) => r.heading === "Goals" && r.to === goal))

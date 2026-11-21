@@ -22,4 +22,4 @@ Reason: big tool output stays in the chat and is read again on every call.
 ## Hooks
 
 - After you edit a Markdown file, a hook runs `brain index`. Do not run it yourself after each edit.
-- When you stop, a hook runs `brain check`. If it fails, fix what it reports. Do not work around the hook.
+- When you stop, a hook runs `brain check`. If it fails, fix what it reports. Do not work around the hook. If a stop was already forced once by the hook, the next stop goes through, so it never loops.

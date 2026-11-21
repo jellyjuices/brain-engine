@@ -5,7 +5,6 @@ import { join } from "node:path";
 import { test } from "node:test";
 import { startService, stopService, type Run } from "../src/interface/service.ts";
 
-/** A fake launchctl: tracks loaded jobs and records every call. */
 function fakeLaunchd(loaded = new Set<string>()) {
   const calls: string[] = [];
   const run: Run = ([cmd, a, b]) => {

@@ -5,12 +5,6 @@ import { readNote, writeNote } from "../core/files.ts";
 import { log } from "../core/log.ts";
 import { ensureLens, LENSES, lensPath, lensPrivacy, needLens, PRIVACY, THREAD_STATUS, THREADS_HEADING } from "./lenses.ts";
 
-// Threads are open questions saved for a later chat. They live as checklist lines in the
-// "# Open threads" section of their lens note, not as separate files:
-//
-//   - [ ] What made weeks feel lighter in the past? · ★ · depth 2 · 2026-11-04
-//   - [x] Who do you talk to after a hard call? · talked · 2026-11-04
-
 const TSEP = " · ";
 
 export interface ThreadInput {
@@ -19,7 +13,6 @@ export interface ThreadInput {
   depth?: number;
   star?: boolean;
   by?: string;
-  /** Kept for older callers. Threads follow their lens privacy and live in the lens note. */
   area?: string;
   from?: string;
   privacy?: string;
@@ -86,7 +79,6 @@ function threadsInLens(root: string, slug: string): { note?: Note; items: (Threa
   return { note: note, items };
 }
 
-/** Save an open question as a line in its lens note. Makes the lens note if needed. */
 export function addThread(root: string, t: ThreadInput): ThreadSummary {
   const question = t.question.trim().replace(/\s*\n\s*/g, " ");
   if (!question) throw new Error("A thread needs a question.");
@@ -105,7 +97,6 @@ export function addThread(root: string, t: ThreadInput): ThreadSummary {
     lines.push("", THREADS_HEADING, "");
     range = [lines.length, lines.length];
   }
-  // drop the old "Run `brain thread list`" hint line if it is there
   for (let i = range[1] - 1; i >= range[0]; i--) if (/^Run `brain thread list/.test(lines[i])) { lines.splice(i, 1); range[1]--; }
   let at = range[1];
   while (at > range[0] && lines[at - 1].trim() === "") at--;
@@ -123,7 +114,6 @@ export function listThreads(root: string, f: { status?: string; lens?: string; a
     .sort(rankThreads);
 }
 
-/** Starred first, then shallowest, then the one waiting longest. */
 function rankThreads(a: ThreadSummary, b: ThreadSummary): number {
   return Number(b.starred) - Number(a.starred) || a.depth - b.depth || (a.created ?? "").localeCompare(b.created ?? "") || a.question.localeCompare(b.question);
 }
@@ -132,7 +122,6 @@ export function nextThread(root: string, f: { lens?: string } = {}): ThreadSumma
   return listThreads(root, { status: "open", lens: f.lens })[0];
 }
 
-/** Change a thread's status or star. Finds it by words from the question. */
 export function updateThread(root: string, query: string, ch: { status?: string; star?: boolean; by?: string }): ThreadSummary {
   if (ch.status && !(THREAD_STATUS as readonly string[]).includes(ch.status)) throw new Error(`status must be one of: ${THREAD_STATUS.join(", ")}`);
   const needle = query.toLowerCase().trim();

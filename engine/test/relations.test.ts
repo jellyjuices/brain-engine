@@ -58,7 +58,6 @@ test("the index finds relations both ways and to-dos that name a subject", async
   assert.deepEqual(todosNaming(root, "topics/advil.md", { done: false }), [{ path: "areas/health.md", text: "Ask about Advil", done: false }]);
   assert.equal(todosNaming(root, "topics/advil.md").length, 2);
 
-  // A change to the file updates the index.
   note(root, "projects/acme.md", "Project", "Acme", "# People\n");
   const later = 4_102_444_800;
   (await import("node:fs")).utimesSync(join(root, "projects/acme.md"), later, later);

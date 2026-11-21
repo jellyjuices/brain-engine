@@ -36,7 +36,6 @@ export function oneNote(c: Ctx, rawPath: string) {
   return fullNoteJson(c.root, loadAll(c.root), note);
 }
 
-/** Same JSON as `brain find --json`: the card and hits, or just hits when no subject matches. */
 export function cardRoute(c: Ctx) {
   const query = c.url.searchParams.get("q") ?? "";
   if (!query.trim()) throw new HttpError(400, `Missing "q".`);

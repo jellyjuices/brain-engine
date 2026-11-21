@@ -103,14 +103,14 @@ test("repeat rules parse, and the next due date steps forward", () => {
   assert.equal(nextDue("2 weeks", "2026-11-05", "2026-11-05"), "2026-11-19");
   assert.equal(nextDue("month", "2027-01-31", "2027-01-31"), "2027-02-28");
   assert.equal(nextDue("year", "2028-02-29", "2028-02-29"), "2029-02-28");
-  assert.equal(nextDue("mon", "2026-11-05", "2026-11-05"), "2026-11-09"); // a Thursday
-  assert.equal(nextDue("day", "2026-11-01", "2026-11-05"), "2026-11-06"); // skips missed days
-  assert.equal(nextDue("weekday", "2026-11-06", "2026-11-06"), "2026-11-09"); // Friday to Monday
+  assert.equal(nextDue("mon", "2026-11-05", "2026-11-05"), "2026-11-09");
+  assert.equal(nextDue("day", "2026-11-01", "2026-11-05"), "2026-11-06");
+  assert.equal(nextDue("weekday", "2026-11-06", "2026-11-06"), "2026-11-09");
   assert.equal(nextDue("month on the 1st", "2026-11-05", "2026-11-05"), "2026-12-01");
   assert.equal(nextDue("month on the 31st", "2027-01-31", "2027-01-31"), "2027-02-28");
   assert.equal(nextDue("month on the 31st", "2027-02-28", "2027-02-28"), "2027-03-31");
-  assert.equal(nextDue("week", "2026-10-02", "2026-11-05"), "2026-11-06"); // keeps the Friday rhythm
-  assert.equal(nextDue("week when done", "2026-10-02", "2026-11-05"), "2026-11-12"); // counts from today
+  assert.equal(nextDue("week", "2026-10-02", "2026-11-05"), "2026-11-06");
+  assert.equal(nextDue("week when done", "2026-10-02", "2026-11-05"), "2026-11-12");
   assert.equal(parseEvery("every week on the 3rd"), null);
   assert.equal(parseEvery("every month on the 32nd"), null);
   assert.equal(fieldsFor("- [ ] Water plants · due 2026-11-06 · every 3 days when done").every, "3 days when done");

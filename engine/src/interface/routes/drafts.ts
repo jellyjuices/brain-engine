@@ -1,6 +1,3 @@
-// Resumable flows: a multi-step add, sort or builder saves its state here, so the owner can pick it up later.
-// Drafts live in .brain/drafts/<id>.json, made by brain and never a note. An add, sort or make with `draft_id` clears it.
-
 import { randomBytes } from "node:crypto";
 import { existsSync, mkdirSync, readdirSync, readFileSync, unlinkSync } from "node:fs";
 import { join } from "node:path";
@@ -25,7 +22,6 @@ function readDraft(root: string, id: string): Draft {
   return JSON.parse(readFileSync(file, "utf8")) as Draft;
 }
 
-/** Remove a draft once its flow is done. A missing draft is fine: a retry may come after the first one cleared it. */
 export function clearDraft(root: string, id: unknown): void {
   if (typeof id !== "string" || !id) return;
   const file = draftFile(root, id);

@@ -93,7 +93,7 @@ test("undo refuses when the line changed since", () => {
 
 test("when words map to dates and tokens", () => {
   assert.deepEqual(parseWhen("today", "2026-11-05"), { due: "2026-11-05", label: "today" });
-  assert.equal(parseWhen("fri", "2026-11-05").due, "2026-11-06"); // a Thursday
+  assert.equal(parseWhen("fri", "2026-11-05").due, "2026-11-06");
   assert.equal(parseWhen("thu", "2026-11-05").due, "2026-11-12");
   assert.deepEqual(parseWhen("someday"), { outcome: "someday", label: "someday" });
   assert.throws(() => parseWhen("soon"));
@@ -109,7 +109,6 @@ test("brain help names the commands that are left, and an old command fails with
   assert.match(old.stderr + old.stdout, /Unknown command: add/);
 });
 
-// ---- R9: what happened, follow-up, why ----
 
 import { doneWith, dropWith } from "../src/todos/wrapup.ts";
 import { loadAll } from "../src/core/files.ts";
@@ -133,10 +132,8 @@ test("done with a follow-up adds a to-do in the same subject, with the brain add
   const text = file(root);
   assert.match(text, new RegExp(`- \\[ \\] Call back about the test · due ${addDays(now, 1)}`));
   assert.match(text, /- \[x\] Ask about Advil/);
-  // No prefix means today.
   doneWith(root, "Book the sleep test", { follow_up: "Pick up the results" });
   assert.match(file(root), new RegExp(`- \\[ \\] Pick up the results · due ${now}\\n`));
-  // One undo per done: the tick, the note and the follow-up go together.
   undo(root);
   undo(root);
   assert.equal(file(root), before);

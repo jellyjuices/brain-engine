@@ -1,5 +1,3 @@
-// Journal notes: one note per entry, kept whole. Each waits (`sorted: false`) until it is sorted into bits.
-
 import { addJournalNote, journalFor, sortJournal, waitingJournals } from "../../capture/journal.ts";
 import type { SortBit } from "../../capture/file.ts";
 import { alreadyFiled, phoneMark } from "../../capture/pull.ts";
@@ -13,7 +11,6 @@ const DAY = /^\d{4}-\d{2}-\d{2}$/;
 
 export const isJournalPath = (raw: unknown): raw is string => typeof raw === "string" && raw.startsWith("journal/");
 
-/** An add marked as journal. A retry with the same client_id or the same text makes no copy. */
 export function addJournalEntry(c: Ctx, body: { text: string; client_id: string; created_at?: string; title?: string; by?: string }) {
   if (alreadyFiled(c.root, body.client_id)) return { saved: "skipped" as const, ...journalFor(c.root, phoneMark(body.client_id)) };
   const r = afterWrite(c.root, () => addJournalNote(c.root, loadAll(c.root), { text: body.text, at: body.created_at, title: body.title, by: body.by, tag: phoneMark(body.client_id) }));
@@ -27,7 +24,6 @@ function aboutOf(c: Ctx): { title: string; path: string } | undefined {
   return { title: titleOf(note), path: note.path };
 }
 
-/** The phone's Journal: one note per entry, whole. The same text that day returns that note. */
 export function addJournal(c: Ctx) {
   const date = text(c.body.date, "date")!.trim();
   if (!DAY.test(date) || Number.isNaN(Date.parse(date))) throw new HttpError(400, `"date" must look like 2026-11-05.`);
@@ -41,7 +37,6 @@ export function addJournal(c: Ctx) {
   return afterWrite(c.root, () => addJournalNote(c.root, loadAll(c.root), input));
 }
 
-/** Sort one journal note into its bits. The note stays whole and stops waiting. */
 export function sortJournalRoute(c: Ctx, raw: string, bits: SortBit[]) {
   const path = safeNotePath(raw, true);
   for (const b of bits) existingNote(c.root, b.into);

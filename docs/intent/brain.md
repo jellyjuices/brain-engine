@@ -38,5 +38,9 @@ The owner, before they meet someone, when they weigh a client, when they want th
 - A helper groups feeling quotes by what they are about. The owner drags a quote to fix it. A helper never labels their mood.
 - Feelings about the owner themselves live in lenses (see [me-and-intake.md](me-and-intake.md)).
 - Lines from other notes that link here show through backlinks. Nothing is copied.
+- On a subject's card, "notes linked to it" means notes that link to the subject, minus areas, lenses, daily notes and captures. An area links to many subjects, so its to-dos would be noise on each card.
+- Related also holds the links of the subject's own events, so a visit's background notes (like the health history) show on the person's card.
+- In History, the subject's own note and its events count whole. Any other note counts only the lines that link to the subject.
+- Find picks the subject a search is about: an exact title or slug first, then a title that holds every word. Ties go to who and what before doing and knowing: Person, Group, Place, Thing, Topic, Project, Event, Note, Area, Lens.
 - No scheduled review, no streaks, no missed-day counts.
 - The archive holds every finished note and stays searchable.

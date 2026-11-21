@@ -3,7 +3,6 @@ import { areasOfNote, live, type Loop } from "./todos.ts";
 
 const CLOSED = ["decided", "dropped"];
 
-/** An open Decision with a `decide_by` date counts as one to-do on that date, with no line in the note. */
 export function decideByLoops(notes: Note[]): Loop[] {
   const out: Loop[] = [];
   for (const n of notes) {

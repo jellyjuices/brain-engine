@@ -1,7 +1,3 @@
-// JSON Schema for tool inputs, typed against the request shapes the routes use.
-// DECISION: a required field must be wrapped in `req()` and an optional one must not. The compiler checks both ways
-// against the request type, so a field added to api-types.ts without a schema change does not build.
-
 export type Json = Record<string, unknown>;
 
 const REQUIRED = Symbol("required");
@@ -10,7 +6,6 @@ type Opt = Json & { readonly [REQUIRED]?: never };
 
 type Props<T> = { [K in keyof T]-?: object extends Pick<T, K> ? Opt : Req };
 
-/** A tool's input: its schema, and which field fills the end of a prefix route's path (`/api/notes/<path>`). */
 export interface Input {
   schema: Json;
   rest?: string;

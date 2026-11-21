@@ -1,5 +1,4 @@
 #!/bin/bash
-# Shows whether each brain job is loaded, and whether brain serve answers. Changes nothing.
 UID_NOW=$(id -u)
 for label in com.brain.daily com.brain.pull com.brain.serve com.brain.tunnel; do
   if launchctl print "gui/$UID_NOW/$label" >/dev/null 2>&1; then

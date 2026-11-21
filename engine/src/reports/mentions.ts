@@ -3,10 +3,6 @@ import { DIRS, folderOf, type Note, titleOf, typeOf } from "../core/notes.ts";
 import { loadAll } from "../core/files.ts";
 import { SUBJECT_TYPES } from "./card.ts";
 
-// DECISION: both checks are warnings and print at most MAX_WARN_LINES lines each, so a big brain
-// does not drown the owner. A note that already links to a subject once is not warned about plain mentions
-// of it. Names must be 1-3 capitalised words; single words at the start of a sentence are skipped.
-
 export const MAX_WARN_LINES = 10;
 const MENTION_TYPES = ["Person", "Group", "Place", "Thing", "Topic", "Project"];
 const filed = (n: Note) => folderOf(n) !== "inbox" && folderOf(n) !== DIRS.archive && folderOf(n) !== "journal";
@@ -20,7 +16,6 @@ const STOP = new Set(
   mac english french spanish german italian japanese chinese portuguese korean arabic hindi`.split(/\s+/),
 );
 
-/** Prose only: no code, links, URLs, comments or markup. Links go because their text is already linked. */
 function plainText(body: string): string {
   return body
     .replace(/^(```|~~~)[\s\S]*?^\1.*$/gm, " ")
@@ -33,7 +28,6 @@ function plainText(body: string): string {
 
 const reEsc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-/** [note path, message] for each filed note that spells out a subject's title without linking it. */
 export function unlinkedMentions(notes: Note[]): [string, string][] {
   const subjects = notes.filter((n) => filed(n) && MENTION_TYPES.includes(typeOf(n) ?? "") && titleOf(n).trim().length >= 3);
   const out: [string, string][] = [];
@@ -48,19 +42,16 @@ export function unlinkedMentions(notes: Note[]): [string, string][] {
   return out.slice(0, MAX_WARN_LINES);
 }
 
-/** Single words that name a place, not a person. These get "who, where, doing, have, or know?" and no guess. */
-const PLACE_WORDS = new Set("toronto ontario canada vancouver montreal ottawa calgary halifax quebec winnipeg mississauga hamilton kitchener waterloo".split(" "));
+const PLACE_WORDS = new Set("canada vancouver montreal ottawa calgary halifax quebec winnipeg mississauga hamilton kitchener waterloo".split(" "));
 
-/** A single first name is guessed as a Person. A longer name or a known place word is not guessed. */
 export const guessKind = (name: string): "Person" | undefined => (name.includes(" ") || PLACE_WORDS.has(name.toLowerCase()) ? undefined : "Person");
 
 export interface Mention {
   name: string;
-  notes: string[]; // paths of subject notes that use the name
-  suggest: "Person" | undefined; // a single first name is guessed as a Person; otherwise the owner picks
+  notes: string[];
+  suggest: "Person" | undefined;
 }
 
-/** Names that already have a note (title, first name of a person, alias, slug). Lower case. */
 export function knownNames(notes: Note[]): Set<string> {
   const known = new Set<string>();
   for (const note of notes) {
@@ -104,12 +95,10 @@ function namesInLine(line: string): string[] {
   return [...line.matchAll(/\b[A-Z][a-z]+(?: [A-Z][a-z]+){0,2}\b/g)].flatMap((m) => nameFrom(line, m) ?? []);
 }
 
-/** Capitalised names (1-3 words) in the text. Single words at the start of a sentence are not names. */
 export function namesIn(body: string): string[] {
   return plainText(body).split("\n").flatMap(namesInLine);
 }
 
-/** Names with no note that show in 2 or more subject notes. Most-used first. */
 export function mentionedTwice(notes: Note[]): Mention[] {
   const known = knownNames(notes);
   const seen = new Map<string, Set<string>>();
@@ -125,10 +114,6 @@ export function mentionedTwice(notes: Note[]): Mention[] {
 
 const isSubjectType = (n: Note) => SUBJECT_TYPES.includes(typeOf(n) ?? "");
 
-/**
- * Names in `text` that have no note yet but already show in at least one subject note: their second
- * mention. Sort (and later intake) offer "X came up again. Make a note?" for each.
- */
 export function secondMentions(root: string, text: string, notes = loadAll(root)): Mention[] {
   const known = knownNames(notes);
   const used = new Map<string, Set<string>>();

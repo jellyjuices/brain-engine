@@ -1,11 +1,3 @@
-// A subject card: everything about one subject on one screen. `find` prints it first when the
-// words match a subject title, and `show` prints it for the note it opens.
-//
-// DECISION: "notes linked to it" means notes that link to the subject, minus areas, lenses, daily
-// notes and captures. An area links to many subjects; pulling all its to-dos onto each card is noise.
-// DECISION: Related adds the links of the subject's own events, so a visit's background notes
-// (like the health history) show on the person's card.
-
 import { summary, titleOf, typeOf, type Note, type Summary } from "../core/notes.ts";
 import { cardHistory, cardRelated, cardRelations, cardTodos, nextDated, notArchived, type CardScope } from "./card-parts.ts";
 
@@ -30,11 +22,9 @@ export function isSubject(n: Note): boolean {
   return SUBJECT_TYPES.includes(typeOf(n) ?? "") && notArchived(n);
 }
 
-// Who and what come before doing and knowing, so "doctor" finds the doctor before the visit.
 const RANK = ["Person", "Group", "Place", "Thing", "Topic", "Project", "Event", "Note", "Area", "Lens"];
 const rank = (n: Note) => RANK.indexOf(typeOf(n) ?? "");
 
-/** Pick the subject a search is about: an exact title or slug first, then a title that holds every word. */
 export function matchSubject(notes: Note[], query: string): Note | undefined {
   const needle = query.toLowerCase().trim();
   if (!needle) return undefined;
@@ -49,8 +39,6 @@ export function matchSubject(notes: Note[], query: string): Note | undefined {
   );
 }
 
-// DECISION: in History the subject's own note and its events count whole. Any other note counts only for
-// lines that link to the subject, so a project's Greta line does not show on Omar's card.
 export function buildCard(root: string, notes: Note[], n: Note): Card {
   const byPath = new Map(notes.map((x) => [x.path, x]));
   const linking = notes.filter((x) => x.path !== n.path && notArchived(x) && x.links.includes(n.path));
@@ -65,7 +53,6 @@ export function buildCard(root: string, notes: Note[], n: Note): Card {
   return { subject: summary(n), todo, ...(next && { next }), history: cardHistory(scope).slice(0, 3), relations, related, mentions };
 }
 
-/** The card as plain lines for the terminal. */
 export function cardLines(c: Card): string[] {
   const out = [`${c.subject.title}  (${c.subject.type ?? "Note"} · ${c.subject.path})`];
   if (c.subject.description) out.push(`  ${c.subject.description}`);

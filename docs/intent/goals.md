@@ -36,7 +36,9 @@ The owner, when they feel flat or stuck and wants to see why the small things ma
 - Fields: `title`, `description`, `why`, `when` (loose, optional), `status` (active, later, done), `areas` (1 or more), `parent` (optional; set means subgoal).
 - Body: `# Why`, `# Targets` (checklist lines), `# Wins`, `# Notes`, plus relation sections like any note (`# People`, `# Groups`, `# Topics`, `# Related`).
 - A helper may suggest goals from the Future lens. The owner approves each one.
-
-## Open questions
-
-1. What "+2 this month" counts: targets, steps, or both.
+- Everything on a goal is computed on read. Nothing below is written into a note.
+- Percent is done over total, across the `# Targets` checklist lines plus the steps, plus the same for its subgoals (one level). Each to-do counts once. Dropped lines do not count.
+- A step is a to-do in the goal's own `# To-dos`, a to-do anywhere with `· toward` this goal, or a to-do in a Project linked to this goal in either direction.
+- A Win is a done target or a done `· toward` to-do, dated by its `done` token.
+- "+N this month" counts targets and steps done in the last 30 days.
+- The next step is the open to-do with the soonest due date, else the first open target.

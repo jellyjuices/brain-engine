@@ -1,5 +1,3 @@
-// Add, sort and the Unsorted count. An add the owner tagged, or gave a person or a subject, is filed at once.
-
 import { captureText } from "../../todos/absorb.ts";
 import { BIT_KINDS, type SortBit, sortBits, whenFrom } from "../../capture/file.ts";
 import { GENERAL } from "../../capture/picked.ts";
@@ -17,7 +15,6 @@ import { clearDraft } from "./drafts.ts";
 const AGENT_BY = "agent";
 const ADD_KINDS = ["todo", "journal", "fact", "feeling"];
 
-/** Who wrote it. The owner's calls carry no `by`. A helper's call always does, and never an owner's name. */
 function writer(c: Ctx): string | undefined {
   if (c.caller !== "agent") return undefined;
   const by = text(c.body.by, "by", false)?.trim();
@@ -28,7 +25,6 @@ const notePaths = (v: unknown, name: string) => textList(v, name)?.map((p) => sa
 
 export const addRoute = (c: Ctx) => add(c, false);
 
-/** The app's add. A to-do always waits in the inbox, so the owner sees it and sorts it there. */
 export const appAddRoute = (c: Ctx) => add(c, true);
 
 async function add(c: Ctx, hold: boolean): Promise<AddResponse> {
@@ -103,7 +99,6 @@ function kindOf(raw: unknown): SortBit["kind"] {
   return kind as SortBit["kind"];
 }
 
-/** Sort one capture into its subjects. The capture is deleted, and one undo reverses the whole sort. A journal note is kept whole. */
 export function sortRoute(c: Ctx): SortResponse {
   if (isJournalPath(c.body.path)) {
     const r = sortJournalRoute(c, c.body.path, bitsOf(c));
@@ -119,7 +114,6 @@ export function sortRoute(c: Ctx): SortResponse {
   return { into: r.into[0], filed: r.into, deleted: r.deleted };
 }
 
-/** Captures in the inbox and journal notes that wait to be sorted, oldest first. */
 export function unsortedRoute(c: Ctx): UnsortedResponse {
   const notes = loadAll(c.root);
   const captures: UnsortedItem[] = notes

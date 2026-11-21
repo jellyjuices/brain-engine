@@ -1,4 +1,3 @@
-// T4: the MCP server at /mcp over real HTTP on a random port: auth, the tool list, a call, a capped result.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";

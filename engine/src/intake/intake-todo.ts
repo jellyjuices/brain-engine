@@ -5,10 +5,6 @@ import { findNote } from "../reports/find.ts";
 import { change } from "../todos/undo.ts";
 import { record } from "./subjects.ts";
 
-/**
- * File an intake to-do straight into its subject note with When and About what. Never the inbox.
- * `when`: today, tomorrow, a weekday, a date, someday, waiting or note (or a "tomorrow:" prefix on the text).
- */
 export function fileIntakeTodo(root: string, input: string, o: { when?: string; about?: string } = {}): { into: string; as: string; text: string } {
   const notes = loadAll(root);
   const split = splitPrefix(input);

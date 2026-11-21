@@ -1,5 +1,3 @@
-// A new area gets the next unused colour from the area palette in .schema/types.yaml.
-
 import { loadAll } from "./files.ts";
 import { slugOf, str, typeOf } from "./notes.ts";
 import { loadSchema } from "./schema.ts";

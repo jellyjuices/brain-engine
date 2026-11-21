@@ -1,4 +1,3 @@
-// Shared test setup. Tests read only the engine's starter folder, never a real brain.
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -8,7 +7,6 @@ export const REPO = join(dirname(fileURLToPath(import.meta.url)), "..");
 export const STARTER = join(REPO, "..", "starter");
 export const BIN = join(REPO, "bin", "brain.ts");
 
-/** One blank Area note per starter area file: same slug and title, no content. */
 function blankAreas(repo: string, root: string): void {
   mkdirSync(join(root, "areas"), { recursive: true });
   for (const f of readdirSync(join(repo, "areas")).filter((x) => x.endsWith(".md"))) {
@@ -18,7 +16,6 @@ function blankAreas(repo: string, root: string): void {
   }
 }
 
-/** A fresh brain folder with the starter schema, templates and blank areas. Empty note folders. */
 export function makeBrain(): string {
   const root = mkdtempSync(join(tmpdir(), "brain-test-"));
   for (const d of [".schema", ".templates"]) cpSync(join(STARTER, d), join(root, d), { recursive: true });

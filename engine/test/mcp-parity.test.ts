@@ -1,5 +1,3 @@
-// T4: every MCP tool runs its route's handler and gives the same answer as the HTTP route.
-// Two identical fixture brains get the same calls in the same order: one over HTTP with the agent token, one as tools.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { join } from "node:path";
@@ -44,7 +42,6 @@ const STEPS: Step[] = [
   ["intake_skip", () => ({ question: "What made-up place calms you?" })],
 ];
 
-/** Times, hashes, undo ids and calendar stamps differ between two runs; nothing else may. */
 const normal = (x: unknown) =>
   JSON.stringify(x)
     .replace(/"undo_id":"[0-9a-f]{8}"/g, '"undo_id":"<id>"')

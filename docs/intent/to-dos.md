@@ -33,6 +33,11 @@ The owner, first thing in the day, or when they switch to work on one client.
 - Tap a row: open its note. Tap the tick box: done. Long-press: the menu.
 - One menu everywhere: About what? first, When? below (Today, Tomorrow, Weekend, Next week, Someday, a date), Moves me toward (a goal), and a Waiting on someone switch.
 - Undo is always offered after done.
+- Undo stores only the changed lines and checks they are still there. If another agent changed them since, undo stops and says so, and never overwrites their work.
+- A follow-up with no When prefix is a to-do for today. The owner just said they need to do it, so it must show up. Prefixes work as in `brain add` ("tomorrow: call Dr").
+- Putting a to-do on hold with a name that has no note makes a new Person or Thing note, so "search or create new" works the same from every screen.
+- A to-do's stable ref is `path::text`. An event's ref is its note path. List numbers are for the terminal only, because they change.
+- An open Decision with a `decide_by` date counts as one to-do on that date, with no line in the note.
 - A repeating to-do shows its repeat with its date, once, for example "Every week · Tue". Its sheet: Done for now, Skip this time, Edit, Stop repeating, Delete. Mark not done never applies to it.
 - A repeat is the token `· every <rule>`, for example `· every week` or `· every month on the 1st`. `when done` counts the next date from the day it was done.
 - Done copies left from before the rolling rule stay as history. Nothing is migrated.

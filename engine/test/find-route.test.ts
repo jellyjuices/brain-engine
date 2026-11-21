@@ -1,4 +1,3 @@
-// The find route returns fused hits and the answer card; the changes feed carries vectors for changed entries only.
 import { mock, test, type TestContext } from "node:test";
 import assert from "node:assert/strict";
 import { appendFileSync, utimesSync } from "node:fs";

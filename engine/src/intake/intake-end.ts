@@ -4,7 +4,6 @@ import { fresh, LINKABLE, readSession, rel, writeSession } from "./subjects.ts";
 
 const LINK = /\[[^\]]*\]\([^)]*\)/g;
 
-/** Link the first mention of each known subject in the text. Already-linked names are left alone. */
 export function linkKnownNames(notes: Note[], text: string, fromPath: string): string {
   let out = text;
   for (const note of subjectsNamed(notes, text).filter((n) => LINKABLE.includes(typeOf(n) ?? ""))) {
@@ -31,7 +30,6 @@ export interface EndSummary {
   text: string[];
 }
 
-/** What this session built, in plain lines, with how to fix or undo it. Clears the session. */
 export function endSummary(root: string, opts: { keep?: boolean } = {}): EndSummary {
   const session = readSession(root);
   const news = session.changes.filter((c) => c.kind === "new").map((c) => ({ name: c.subject, type: c.type ?? "", path: c.path }));

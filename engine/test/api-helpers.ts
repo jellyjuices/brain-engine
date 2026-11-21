@@ -1,4 +1,3 @@
-// Shared setup for the API contract tests: a temp brain, a test owner token and a temp agent token file.
 import { mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";

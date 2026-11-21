@@ -1,9 +1,3 @@
-// Areas and General (2026-11-14). Dry run by default; --write applies. Run: brain migrate areas-general [--write]
-//   1. `area: x` becomes `areas: [x]`. A Goal or Decision with no areas is listed.
-//   2. Makes areas/general.md from the starter if it is missing.
-//   3. A capture in inbox/ that names only people becomes a to-do in General, `· with` each person. The capture is deleted.
-//   4. `# Open loops` becomes `# To-dos`. Old marks in to-do lines become When tokens. `· today` is removed and the line listed.
-
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, unlinkSync } from "node:fs";
 import { join, resolve } from "node:path";

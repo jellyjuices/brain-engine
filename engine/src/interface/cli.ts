@@ -1,5 +1,3 @@
-// The `brain` command: what the jobs, the hooks and the intake skill run. Adds, to-dos and Find go through `brain serve` (the app and the MCP tools).
-
 import { intakeCommand } from "./cli-intake.ts";
 import { threadCommand } from "./cli-thread.ts";
 import { checkCommand, indexCommand, swiftbarCommand } from "./cli-reports.ts";

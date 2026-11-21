@@ -10,15 +10,10 @@ import { HEADING_OF, label, record, rel, SUBJECT_KINDS } from "./subjects.ts";
 
 export interface SubjectInput {
   name: string;
-  /** Person, Group, Place, Thing or Topic. Default Person. */
   type?: string;
-  /** The owner's word for the role, never guessed. Blank when they skipped. */
   role?: string;
-  /** A note (path, slug or title) the subject is linked to: "Acme" for "co-founder of Acme". */
   about?: string;
-  /** The first fact, in the owner's words. */
   fact?: string;
-  /** One line on what it is. Defaults to the owner's fact or role. */
   description?: string;
   by?: string;
 }
@@ -102,7 +97,6 @@ function writeRelations(m: Made, about?: Note) {
 
 const skippedAll = (input: SubjectInput, role?: string, fact?: string) => !role && !fact && !trimmed(input.description) && !input.about;
 
-/** Make the subject's note from the owner's answer. Writes a relation line (when it is linked to a known note) and a first fact. */
 export function saveSubject(root: string, input: SubjectInput): SubjectResult {
   const name = input.name.trim();
   const role = trimmed(input.role);

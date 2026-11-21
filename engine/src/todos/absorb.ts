@@ -9,7 +9,7 @@ import { toOutcome } from "../../shared/line/index.ts";
 export interface AbsorbPlan {
   capture: string;
   text: string;
-  into?: string; // undefined = no good home found
+  into?: string;
   as: "loop" | "note";
   reason: string;
 }
@@ -17,7 +17,6 @@ export interface AbsorbPlan {
 const STOP = new Set(["with", "from", "that", "this", "have", "about", "into", "more", "some", "make", "start", "plan", "site", "sites", "next", "project", "move", "finish", "remake"]);
 const words = (t: string) => (t.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []).filter((w) => w.length >= 4 && !STOP.has(w));
 
-/** Captures that are sorted (they have an outcome) and not yet absorbed. */
 function absorbable(notes: Note[]): Note[] {
   return notes.filter((n) => typeOf(n) === "Capture" && folderOf(n) !== DIRS.archive && n.meta.outcome && n.meta.outcome !== "drop");
 }
@@ -25,7 +24,6 @@ function absorbable(notes: Note[]): Note[] {
 export const captureText = (n: Note) => n.body.trim().replace(/\s*\n\s*/g, " ");
 const asLoop = (n: Note) => !!toOutcome(str(n.meta.outcome)) || !!n.meta.due;
 
-/** The best home for a capture: a project it names, then its area note. Never a person. */
 export function suggestTarget(notes: Note[], cap: Note): { into?: string; reason: string } {
   const text = captureText(cap);
   const capWords = new Set(words(text));
@@ -49,7 +47,6 @@ export function planAbsorb(root: string, notes = loadAll(root)): AbsorbPlan[] {
   });
 }
 
-/** Move a capture's text into a subject note (as an open loop or a dated note line), then archive the capture. */
 export function absorb(root: string, capturePath: string, into: string): { into: string; as: "loop" | "note"; archived: string } {
   if (!existsSync(join(root, into))) throw new Error(`No note at ${into}.`);
   const cap = readNote(root, capturePath);
@@ -65,7 +62,6 @@ export function absorb(root: string, capturePath: string, into: string): { into:
   return { into, as, archived };
 }
 
-/** Make a new Project or Person note to absorb into. */
 export function newSubject(root: string, type: "Project" | "Person", title: string, description: string, area?: string): string {
   if (!title.trim() || !description.trim()) throw new Error("A new note needs a title and a one-line description.");
   const folder = type === "Project" ? "projects" : "people";

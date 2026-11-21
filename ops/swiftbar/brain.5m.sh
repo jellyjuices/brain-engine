@@ -6,8 +6,6 @@
 # <swiftbar.hideDisablePlugin>true</swiftbar.hideDisablePlugin>
 # <swiftbar.hideAbout>true</swiftbar.hideAbout>
 # <swiftbar.hideSwiftBar>true</swiftbar.hideSwiftBar>
-# Refreshes every 5 minutes (the .5m. in the file name). Link it into your SwiftBar plugin folder.
-# It prints the icon and the inbox count. A click on the icon opens the web app from `brain serve` in a popover.
 CONFIG_ENV="${BRAIN_CONFIG:-$HOME/.config/brain}/env"
 [ -f "$CONFIG_ENV" ] && . "$CONFIG_ENV"
 if [ -z "${BRAIN_HOME:-}" ] || [ -z "${BRAIN_ENGINE:-}" ]; then
@@ -18,7 +16,6 @@ if [ -z "${BRAIN_HOME:-}" ] || [ -z "${BRAIN_ENGINE:-}" ]; then
 fi
 export BRAIN_HOME
 
-# SwiftBar starts plugins with a short PATH, so look for Node in the usual places.
 find_node() {
   [ -n "${NODE:-}" ] && [ -x "$NODE" ] && { echo "$NODE"; return; }
   for n in "$(command -v node 2>/dev/null)" /opt/homebrew/bin/node /usr/local/bin/node "$HOME/.homebrew/bin/node" \

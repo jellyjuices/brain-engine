@@ -1,5 +1,3 @@
-// Things that change notes: capture, new note, tag, sort, triage, intake.
-
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { DIRS, dump, folderOf, type Meta, type Note, nowStamp, parse, tagsOf, today, typeOf } from "../core/notes.ts";
@@ -18,21 +16,18 @@ export interface CaptureInput {
   by?: string;
 }
 
-/** Write one Capture note to inbox/. A repeat clientId returns the existing note. */
 export function capture(root: string, input: CaptureInput): Note {
   if (input.clientId) {
     const existing = loadAll(root).find((n) => n.meta.client_id === input.clientId);
     if (existing) return existing;
   }
-  const created = (input.createdAt ?? nowStamp()).slice(0, 16); // YYYY-MM-DDTHH:MM
-  const stamp = created.replace(":", "").replace("T", "-"); // YYYY-MM-DD-HHMM
+  const created = (input.createdAt ?? nowStamp()).slice(0, 16);
+  const stamp = created.replace(":", "").replace("T", "-");
   const rel = uniquePath(root, "inbox", `${stamp}-${slugify(input.text.split("\n")[0], 40)}`);
-  // Keep labels few: the type and one time stamp. client_id only when the phone sends one (to skip repeats).
   const meta: Meta = { type: "Capture", created };
   if (input.clientId) meta.client_id = input.clientId;
   if (input.tags?.length) meta.tags = input.tags;
   if (input.area) meta.area = input.area;
-  // Who wrote it matters only when it was not the owner.
   if (input.by && !isOwnerWriter(input.by)) meta.generated = { by: input.by, at: created };
   const note = writeNote(root, rel, meta, input.text);
   log(root, `added ${rel}`);
@@ -81,7 +76,6 @@ export function ruleTags(text: string, schema: Schema): string[] {
   return [...found];
 }
 
-/** Add tags to inbox notes from .schema/rules.yaml. Never adds a tag that is not in tags.yaml. */
 export function tagInbox(root: string, dryRun = false): { path: string; added: string[] }[] {
   const schema = loadSchema(root);
   const out: { path: string; added: string[] }[] = [];
@@ -116,7 +110,6 @@ function sortOne(root: string, n: Note, schema: Schema, dryRun = false): SortRes
   return { path: n.path, to };
 }
 
-/** Move inbox notes that have a type, title and description to their folder. */
 export function sortInbox(root: string, dryRun = false): SortResult[] {
   const schema = loadSchema(root);
   return loadAll(root)
@@ -125,7 +118,6 @@ export function sortInbox(root: string, dryRun = false): SortResult[] {
 }
 
 
-/** keep = a fact or an idea with nothing to do. It is filed as a dated note line, not a to-do. */
 const OUTCOMES = ["today", "date", "someday", "waiting", "keep", "drop"] as const;
 export type Outcome = (typeof OUTCOMES)[number];
 
@@ -136,11 +128,9 @@ export interface TriageDecision {
   title?: string;
   description?: string;
   due?: string;
-  /** Set the labels only. Do not file by type (the caller absorbs it into a subject note next). */
   keepCapture?: boolean;
 }
 
-/** Apply one triage decision. drop moves the note to .archive/ (never deletes). */
 export function applyTriage(root: string, path: string, d: TriageDecision): SortResult {
   const note = readNote(root, path);
   const meta: Meta = { ...note.meta, outcome: d.outcome };
@@ -170,7 +160,6 @@ const AREA_QUESTIONS = [
   'What would "handled" look like?',
 ];
 
-/** Round 1: save a brain dump. Each non-empty line becomes its own inbox note. */
 export function brainDump(root: string, text: string, opts: { single?: boolean; area?: string } = {}): Note[] {
   const tags = ["intake"];
   if (opts.single) return [capture(root, { text, tags, area: opts.area })];
@@ -181,7 +170,6 @@ export function brainDump(root: string, text: string, opts: { single?: boolean; 
     .map((line) => capture(root, { text: line, tags, area: opts.area }));
 }
 
-/** Round 3: save the answers to the 5 area questions in the area note. */
 export function saveAreaIntake(root: string, area: string, answers: string[]): Note {
   const rel = `areas/${area}.md`;
   if (!existsSync(join(root, rel))) throw new Error(`no area note at ${rel}`);

@@ -11,24 +11,17 @@ import { updateThread } from "./threads.ts";
 export interface SaveOptions {
   session?: number;
   by?: string;
-  /** One short exact phrase from the owner, kept only when the wording matters. */
   quote?: string;
-  /** the owner's full answer, word for word. Kept in sources/intake/, never in the lens note. Full lenses only. */
   raw?: string;
-  /** The question that was asked. Saved with the raw answer. */
   question?: string;
-  /** Link the first mention of each known subject in the line. Default true. */
   link?: boolean;
-  /** Facts about a subject go to its note, not the lens. Each is a dated note line there. */
   facts?: { into: string; text: string }[];
-  /** Mark this thread talked, in the same change, so one undo reverses both. */
   thread?: string;
 }
 
 export const QUOTE_MAX = 120;
 export const rawPath = (date: string, session?: number) => `sources/intake/${date}${session ? `-session-${session}` : ""}.md`;
 
-/** Append the owner's full answer to the session file in sources/intake/. Returns its path. */
 export function saveRaw(root: string, slug: string, raw: string, opts: { session?: number; question?: string } = {}): string {
   const rel = rawPath(today(), opts.session);
   const full = join(root, rel);
@@ -43,10 +36,6 @@ export function saveRaw(root: string, slug: string, raw: string, opts: { session
   return rel;
 }
 
-/**
- * Save one answer. The lens note gets the distilled line the owner approved (plus an optional short quote).
- * The full answer, when given, goes to sources/intake/ and the line links to it.
- */
 export function saveLensAnswer(root: string, slug: string, text: string, opts: SaveOptions = {}): Note {
   needLens(slug);
   const privacy = lensPrivacy(root, slug);
@@ -90,10 +79,6 @@ export interface RedactResult {
   files: string[];
 }
 
-/**
- * the owner asked to take something back. Remove every intake line, quote and thread that holds the words,
- * and blank the matching raw answers in sources/intake/. This is the one place the intake removes text.
- */
 export function redact(root: string, words: string, by = "claude"): RedactResult {
   const needle = words.trim().toLowerCase();
   if (needle.length < 3) throw new Error("Give at least 3 characters to redact.");

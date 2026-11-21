@@ -24,9 +24,9 @@ const warns = (root: string) => Object.fromEntries(check(root).map((r) => [r.pat
 test("check warns when a subject title is plain text and not linked", () => {
   const w = warns(brain());
   assert.deepEqual(w["projects/acme.md"], ["acme.md mentions Omar, not linked."]);
-  assert.equal(w["projects/linked.md"], undefined); // already links to Omar
-  assert.equal(w["projects/code.md"], undefined); // code and link text are skipped
-  assert.equal(w["people/omar.md"], undefined); // the note itself
+  assert.equal(w["projects/linked.md"], undefined);
+  assert.equal(w["projects/code.md"], undefined);
+  assert.equal(w["people/omar.md"], undefined);
 });
 
 test("check ignores the inbox and the archive for plain mentions", () => {
@@ -42,7 +42,7 @@ test("check warns once for a name with no note in 2+ subjects, and guesses the k
   const all = Object.values(warns(brain())).flat();
   assert.deepEqual(["Priya shows in 2 notes, no note. Make a Person?"].filter((v) => !all.includes(v)), []);
   assert.match(all.join("\n"), /^Tessa shows in 2 notes, no note\. Make a Person\?/m);
-  assert.deepEqual(all.filter((m) => /^Tessa Park/.test(m)), []); // only 1 note
+  assert.deepEqual(all.filter((m) => /^Tessa Park/.test(m)), []);
   assert.deepEqual(all.filter((m) => /^(Omar|The|Weather|Mon)\b.*no note/.test(m)), []);
 });
 
@@ -71,8 +71,8 @@ test("secondMentions finds a name in new text that already shows in a note", () 
 
 test("languages and place words are not guessed as a Person", () => {
   const root = makeBrain();
-  for (const n of ["a", "b"]) note(root, `projects/${n}.md`, "Project", `P${n}`, "# Notes\n\n- 2026-11-01 · Talk to Mac and Toronto folks, my English is fine, French too.\n");
+  for (const n of ["a", "b"]) note(root, `projects/${n}.md`, "Project", `P${n}`, "# Notes\n\n- 2026-11-01 · Talk to Mac and Vancouver folks, my English is fine, French too.\n");
   const all = Object.values(warns(root)).flat();
   assert.deepEqual(all.filter((m) => /^(Mac|English|French)\b/.test(m)), []);
-  assert.deepEqual(["Toronto shows in 2 notes, no note. Make one? Who, where, doing, have, or know?"].filter((w) => !all.includes(w)), []);
+  assert.deepEqual(["Vancouver shows in 2 notes, no note. Make one? Who, where, doing, have, or know?"].filter((w) => !all.includes(w)), []);
 });

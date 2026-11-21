@@ -1,5 +1,3 @@
-// Make a note from a type, delete a note (it moves to .archive/), and relations.
-
 import { posix } from "node:path";
 import { appendToSection } from "../../../shared/line/index.ts";
 import { buildNote } from "../../capture/build.ts";
@@ -16,7 +14,6 @@ import { clearDraft } from "./drafts.ts";
 
 const NOT_MADE_HERE = ["Capture"];
 
-/** A new note from its type's template. A note of that type and title already there is returned, so a retry makes no copy. */
 export function makeNote(c: Ctx): MadeResponse {
   const type = text(c.body.type, "type")!.trim();
   if (NOT_MADE_HERE.includes(type)) throw new HttpError(400, "A capture comes from an add, not from here.");
@@ -31,7 +28,6 @@ export function makeNote(c: Ctx): MadeResponse {
   return { path: note.path, created: true };
 }
 
-/** Never deleted: the note moves to .archive/. One undo brings it back. */
 export function deleteNote(c: Ctx, rawPath: string): DeleteNoteResponse {
   const path = safeNotePath(rawPath, true);
   const note = existingNote(c.root, path);
@@ -47,7 +43,6 @@ export function relationsRoute(c: Ctx): RelationsResponse {
   return { path, out: relationsIn(note), in: incoming };
 }
 
-/** Link two notes with an optional role and time. A relation is written on one side only, so a link either way counts. */
 export function addRelation(c: Ctx): AddRelationResponse {
   const from = safeNotePath(text(c.body.from, "from")!, true);
   const to = safeNotePath(text(c.body.to, "to")!, true);

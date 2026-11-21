@@ -191,7 +191,6 @@ test("token file is made once with mode 600; non-loopback hosts are refused", ()
   assert.doesNotThrow(() => checkHost("127.0.0.1"));
 });
 
-// ---- the web app on this Mac --------------------------------------------------------------------------------
 
 import { request } from "node:http";
 import { mkdirSync } from "node:fs";

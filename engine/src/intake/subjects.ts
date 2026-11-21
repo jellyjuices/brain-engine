@@ -1,11 +1,3 @@
-// Intake builds relations: ask about unknown subjects, link known ones, file to-dos, and summarise.
-//
-// DECISION: a session is a file in .reports/ (git ignores it) so each `brain intake …` call in a
-// non-TTY agent run shares one state: who was asked, who was offered a note, and what got written.
-// DECISION: a subject gets its note when the owner answers (it then has its own facts). A skipped question
-// writes nothing. Every edit to an existing note goes through `change`, so `brain undo` reverses it.
-// A new note itself is not undone by `brain undo`: the summary says to move it to .archive/.
-
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, join, posix } from "node:path";
 import { addNoteLine } from "../todos/todos.ts";
@@ -17,7 +9,6 @@ import { change } from "../todos/undo.ts";
 
 const SESSION_FILE = ".reports/intake-session.json";
 export const SUBJECT_KINDS = ["Person", "Group", "Place", "Thing", "Topic"] as const;
-/** Subject types that get a link in a lens line. Areas are common words, so they stay plain. */
 export const LINKABLE = ["Person", "Group", "Place", "Thing", "Topic", "Project", "Event"];
 export const HEADING_OF: Record<string, string> = { Person: "# People", Group: "# Groups", Project: "# Projects", Place: "# Places", Thing: "# Things", Topic: "# Topics" };
 
@@ -62,23 +53,15 @@ export function record(root: string, c: SessionChange): void {
 const key = (name: string) => name.trim().toLowerCase();
 
 export interface Prompts {
-  /** The one question to ask now, or none. */
   ask?: { name: string; question: string; kind: string };
-  /** Names that came up again with no note. */
   offers: { name: string; prompt: string; kind?: string }[];
 }
 
-/** The one question for an unknown subject. */
 function questionFor(name: string, text: string): string {
   if (/\b(project|working on|building|launch|client|contract|pitch|part in)\b/i.test(text)) return `What is your part in ${name}?`;
   return guessKind(name) === "Person" ? `Who is ${name} to you?` : `What is ${name}?`;
 }
 
-/**
- * Read what the owner just said. Returns at most one question (for the first unknown subject not asked yet
- * this session) and an offer for each subject that came up a second time. Both are remembered, so
- * the same subject is never asked or offered twice in a session.
- */
 export function intakePrompts(root: string, text: string, notes = loadAll(root)): Prompts {
   const session = readSession(root);
   const known = knownNames(notes);
@@ -94,7 +77,6 @@ export function intakePrompts(root: string, text: string, notes = loadAll(root))
 export const rel = (from: string, to: string) => posix.relative(posix.dirname(from), to);
 export const label = (n: Note) => titleOf(n).split(",")[0];
 
-/** Add a dated fact line to an existing subject note. Undoable. */
 export function addSubjectFact(root: string, into: string, text: string): string {
   const note = findNote(loadAll(root), into);
   if (!note) throw new Error(`No note matches "${into}".`);
@@ -103,7 +85,6 @@ export function addSubjectFact(root: string, into: string, text: string): string
   return note.path;
 }
 
-/** Fix one thing the owner has said about a subject: the role on its relation line. Undoable. */
 export function setRole(root: string, subject: string, about: string, role: string): string {
   const notes = loadAll(root);
   const note = findNote(notes, subject);

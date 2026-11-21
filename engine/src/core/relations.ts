@@ -1,11 +1,3 @@
-// Relation lines: who or what a subject is linked to, and the role in the owner's words.
-//
-//   # People
-//   - [Omar](../people/omar.md) · co-founder · since 2025
-//
-// The link, then an optional role, then an optional time or status. A relation is written on one side only.
-// The index stores each line once; the other side is found by looking up `to`.
-
 import { extractLinks, type Note } from "./notes.ts";
 import { sectionRange } from "../../shared/line/index.ts";
 
@@ -13,7 +5,6 @@ const RELATION_HEADINGS = ["# People", "# Groups", "# Projects", "# Places", "# 
 
 const HEADING_OF_TYPE: Record<string, string> = { Person: "# People", Group: "# Groups", Project: "# Projects", Place: "# Places", Thing: "# Things", Topic: "# Topics", Goal: "# Goals", Decision: "# Decisions" };
 
-/** The relation heading a link to a note of this type goes under. */
 export const headingForType = (type: string | undefined): string => HEADING_OF_TYPE[type ?? ""] ?? "# Related";
 
 export interface Relation {
@@ -26,7 +17,6 @@ export interface Relation {
 
 const LINE = /^- (\[[^\]]*\]\([^)\s]+\))(.*)$/;
 
-/** Read one relation line. Null when it is not `- [Name](path)` with optional ` · role · time`. */
 export function parseRelationLine(from: string, heading: string, line: string): Relation | null {
   const match = line.trim().match(LINE);
   if (!match) return null;

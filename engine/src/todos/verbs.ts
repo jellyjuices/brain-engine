@@ -1,10 +1,3 @@
-// The verbs the owner uses on to-dos: done, move, drop and undo.
-//
-// Every change logs what it replaced, so undo can put it back.
-//
-// DECISION: undo stores only the changed lines and checks they are still there. If another agent
-// changed those lines since, undo stops and says so, rather than overwrite their work.
-
 import { readFileSync } from "node:fs";
 import { join, posix } from "node:path";
 import { randomBytes } from "node:crypto";
@@ -18,7 +11,6 @@ import { parseWhen, personNamed, subjectTitled } from "./when-words.ts";
 import { change } from "./undo.ts";
 import { type Item, resolve } from "./day-list.ts";
 
-/** Rewrite the open to-do line with this text in a note. fn returns the new lines for it. */
 function editTodo(root: string, item: Item, fn: (l: TodoLine) => string[]): void {
   const note = readNote(root, item.path);
   const lines = note.body.split("\n");
@@ -39,11 +31,8 @@ function editEvent(root: string, item: Item, fields: Record<string, string>): vo
 
 const where = (item: Item) => (item.kind === "event" ? "" : ` · ${item.subject}`);
 
-/** Extra lines written in the same change as done or drop, so one undo reverses all of it. */
 export interface Extra {
-  /** The answer to "What happened?" (done) or "Why?" (drop). It becomes a dated note line. */
   note?: string;
-  /** Runs after the tick, inside the same change. Used for the follow-up to-do. */
   also?: () => void;
 }
 
@@ -52,7 +41,6 @@ const noteLineFor = (text: string | undefined) => {
   return oneLine ? `- ${today()} · ${oneLine}` : undefined;
 };
 
-/** For an event there is no ticked line, so the note goes under its notes. */
 function eventNote(root: string, item: Item, note: string | undefined): void {
   const oneLine = note?.replace(/\s*\n\s*/g, " ").trim();
   if (oneLine) addNoteLine(root, item.path, oneLine);
@@ -79,11 +67,6 @@ export function done(root: string, ref: string, extra: Extra = {}): { item: Item
   return { item, next, line: `Done: ${item.text}${where(item)}${next ? ` · next due ${next}` : ""} · undo` };
 }
 
-/**
- * Move a to-do. "Put on hold" uses the waiting When with `who` (a person) or `what` (a thing).
- * Who links `· with [Name](...)`, what links `· re [Thing](...)`.
- * DECISION: a name with no note gets a new Person or Thing note, so "search or create new" works the same from every screen.
- */
 export function move(root: string, ref: string, when: string, opts: { who?: string; what?: string } = {}): { item: Item; line: string } {
   const item = resolve(root, ref);
   const w = parseWhen(when);

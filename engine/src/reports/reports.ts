@@ -1,5 +1,3 @@
-// Reports and checks built from the notes: today, weekly, area briefs, the index, check, show.
-
 import { existsSync } from "node:fs";
 import { join, posix } from "node:path";
 import { addDays, areasOf, descOf, DIRS, folderOf, type Note, str, summary, type Summary, tagsOf, titleOf, today, typeOf } from "../core/notes.ts";
@@ -9,7 +7,6 @@ import { allLoops, inArea as loopInArea, loopSummary, whenWord } from "../todos/
 import { allIssues } from "./check-issues.ts";
 import { isOwnerWriter } from "../core/owner.ts";
 
-/** Inbox notes not yet sorted (no outcome). Sorted captures wait in the inbox only until they are absorbed. */
 export const untriaged = (notes: Note[]) => notes.filter((n) => folderOf(n) === "inbox" && !n.meta.outcome);
 
 const DAY = 86_400_000;
@@ -33,9 +30,7 @@ export function todayReport(root: string, notes = loadAll(root)): TodayReport {
   const now = today();
   const soon = addDays(now, 7);
   const open = notes.filter(live);
-  // Things to act on: whole notes with a due date or outcome, plus open loop lines inside notes.
   const whole = open.filter((n) => str(n.meta.outcome) !== "drop").map(summary);
-  // Loops inside a listed event fold into it as bullets, so one visit is one item.
   const events = new Map(whole.filter((s) => s.type === "Event" && s.due).map((s) => [s.path, s]));
   const loose: Summary[] = [];
   for (const todo of allLoops(notes, { done: false })) {

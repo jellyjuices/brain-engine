@@ -1,19 +1,15 @@
-// Load, parse and write notes. A note is a Markdown file with YAML frontmatter.
-
 import { join, posix } from "node:path";
 import YAML from "yaml";
 
-// Background folders are hidden (they start with a dot) so Finder and the folder list stay calm.
 export const DIRS = {
-  archive: ".archive", // dropped and finished notes, never deleted
-  templates: ".templates", // one template per note type
-  schema: ".schema", // types, tags and tag rules
-  reports: ".reports", // generated: today, weekly, area briefs, index
-  cache: ".brain", // search index, safe to delete
+  archive: ".archive",
+  templates: ".templates",
+  schema: ".schema",
+  reports: ".reports",
+  cache: ".brain",
 } as const;
 export const LOG_FILE = ".log.jsonl";
 
-// Folders that hold notes. sources/, scripts/ and the hidden folders above (except .archive) do not.
 export const NOTE_DIRS = ["inbox", "projects", "areas", "people", "groups", "places", "things", "topics", "events", "resources", "journal", "me", "threads", "goals", "decisions", DIRS.archive];
 
 const LINK_RE = /\[[^\]]*\]\(([^)\s]+)\)/g;
@@ -21,17 +17,16 @@ const LINK_RE = /\[[^\]]*\]\(([^)\s]+)\)/g;
 export type Meta = Record<string, unknown>;
 
 export interface Note {
-  path: string; // relative to brain home, forward slashes
+  path: string;
   meta: Meta;
   body: string;
-  mtime: number; // ms
-  links: string[]; // resolved relative paths
+  mtime: number;
+  links: string[];
   error?: string;
 }
 
 export { brainHome } from "./home.ts";
 
-/** Today as YYYY-MM-DD in local time. BRAIN_TODAY overrides it for tests. */
 export function today(): string {
   if (process.env.BRAIN_TODAY) return process.env.BRAIN_TODAY;
   return localDate(new Date());
@@ -48,7 +43,6 @@ export function nowStamp(): string {
   return `${localDate(date)}T${pad2(date.getHours())}:${pad2(date.getMinutes())}:${pad2(date.getSeconds())}`;
 }
 
-/** YAML dates become Date objects; turn them back into ISO strings. */
 function plain(v: unknown): unknown {
   if (v instanceof Date) return v.toISOString().slice(0, 10);
   if (Array.isArray(v)) return v.map(plain);
@@ -63,7 +57,7 @@ export function parse(text: string): { meta: Meta; body: string; error?: string 
   if (end === -1) return { meta: {}, body: text };
   const raw = text.slice(4, end);
   let rest = text.slice(end + 4);
-  rest = rest.replace(/^[^\n]*\n?/, "").replace(/^\n+/, ""); // drop rest of the --- line
+  rest = rest.replace(/^[^\n]*\n?/, "").replace(/^\n+/, "");
   try {
     const meta = YAML.parse(raw) ?? {};
     if (typeof meta !== "object" || Array.isArray(meta)) {
@@ -75,7 +69,6 @@ export function parse(text: string): { meta: Meta; body: string; error?: string 
   }
 }
 
-/** Write frontmatter compactly: top-level keys one per line, lists and small maps on one line. */
 export function dump(meta: Meta, body: string): string {
   const doc = new YAML.Document(meta);
   YAML.visit(doc, {
@@ -126,11 +119,9 @@ export interface Summary {
   due?: string;
   outcome?: string;
   modified: string;
-  /** Open loop lines folded into this note, shown as bullets under it. */
   subitems?: string[];
 }
 
-/** An upcoming Event counts as due on its date, so Today and the menu bar list it. Done or cancelled events do not. */
 const EVENT_CLOSED = ["done", "cancelled"];
 export function eventDue(n: Note): string | undefined {
   if (typeOf(n) !== "Event" || EVENT_CLOSED.includes(String(n.meta.status))) return undefined;

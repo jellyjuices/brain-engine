@@ -22,7 +22,6 @@ function birthdayOf(raw: unknown): string | undefined {
   return b;
 }
 
-/** A new Person note from the phone. A name that is already a Person returns that note, so a retry makes no copy. */
 export function addPerson(c: Ctx) {
   const name = text(c.body.name, "name")!.trim().replace(/\s+/g, " ");
   if (!name) throw new HttpError(400, `Missing "name".`);
@@ -37,7 +36,6 @@ export function addPerson(c: Ctx) {
 
 const SUBJECT_TYPES = ["Place", "Thing"];
 
-/** A new Place or Thing note from the phone. A name that already exists for that type returns that note. */
 export function addSubject(c: Ctx) {
   const type = text(c.body.type, "type")!;
   if (!SUBJECT_TYPES.includes(type)) throw new HttpError(400, `"type" must be Place or Thing.`);
@@ -50,7 +48,6 @@ export function addSubject(c: Ctx) {
   return { path: note.path, created: true };
 }
 
-/** A text file from the phone becomes a Note in resources/. The same title and text returns that note, so a retry makes no copy. */
 const FILE_ASKS = ["split", "intake", "enrich"];
 
 export function addFile(c: Ctx) {
@@ -71,14 +68,12 @@ export function addFile(c: Ctx) {
   return { path: made.path, created: true };
 }
 
-/** Take an inbox item out of the inbox. It moves to .archive/ and is never deleted. */
 export function inboxDrop(c: Ctx) {
   const path = inboxPath(c.body.path, "path");
   existingNote(c.root, path);
   return afterWrite(c.root, () => asUserError(() => applyTriage(c.root, path, { outcome: "drop" })));
 }
 
-/** Set or change the birthday on a Person note. */
 export function setBirthday(c: Ctx) {
   const path = safeNotePath(text(c.body.path, "path")!, true);
   const birthday = birthdayOf(c.body.birthday);
@@ -106,7 +101,6 @@ export const editTodoRoute =(c: Ctx) => afterWrite(c.root, () => asUserError(() 
 
 export const undoRoute = (c: Ctx) => afterWrite(c.root, () => asUserError(() => undoLast(c.root, text(c.body.id, "id", false))));
 
-/** Save an edited body. `base` must be the hash the phone read, else 409 with the note as it is now. */
 function editTags(root: string, raw: unknown): string[] | undefined {
   if (raw === undefined) return undefined;
   if (!Array.isArray(raw) || !raw.every((x) => typeof x === "string")) throw new HttpError(400, `"tags" must be a list of text.`);

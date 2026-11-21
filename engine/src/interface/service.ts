@@ -1,8 +1,3 @@
-// `brain serve` and `brain kill`: turn phone access to this Mac on and off.
-// Phone access is two launchd jobs: com.brain.serve (the API) and com.brain.tunnel (the way in).
-// `kill` also disables them, so they stay off after a restart until `brain serve`.
-// The pull job is left alone: adds from the phone wait in the Worker either way.
-
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { homedir } from "node:os";
@@ -43,7 +38,6 @@ function deps(d: ServiceDeps) {
   };
 }
 
-/** True when launchd is running this process as the serve job. Then `brain serve` is the server itself. */
 export const runByLaunchd = () => process.env.XPC_SERVICE_NAME === "com.brain.serve";
 
 async function waitFor(check: () => boolean | Promise<boolean>, sleep: (ms: number) => Promise<void>, tries = 20): Promise<boolean> {
@@ -59,7 +53,6 @@ export interface ServiceResult {
   lines: string[];
 }
 
-/** Turn phone access on: enable and load each job that has a plist. */
 export async function startService(d: ServiceDeps = {}): Promise<ServiceResult> {
   const { run, uid, agentsDir, sleep, health } = deps(d);
   const lines: string[] = [];
@@ -80,7 +73,6 @@ export async function startService(d: ServiceDeps = {}): Promise<ServiceResult> 
   return { ok: up && lines.length === 1, lines };
 }
 
-/** Turn phone access off: unload and disable both jobs, so they stay off after a restart. */
 export async function stopService(d: ServiceDeps = {}): Promise<ServiceResult> {
   const { run, uid, sleep } = deps(d);
   for (const job of JOBS) {

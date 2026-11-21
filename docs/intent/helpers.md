@@ -39,7 +39,13 @@ The owner, a moment after they add something, and when they tap the "Unsorted en
 - Never edit `sources/`.
 - Never speak first. The owner starts every talk.
 - Every helper write carries `generated`. Only the owner adds `verified`.
-- Each sort writes one log entry listing what went where, so undo works.
+- Each sort writes one log entry listing what went where, so undo works. A sort's lines and the delete of the capture are that one entry.
+- A subject matches a text when its title, its first name (people) or one of its `aliases` shows in the text as whole words. The most specific type wins: event, person, group, place, thing, topic, project, then area. Other named people become `· with`, other named subjects `· re`.
+- `brain add` files straight into a subject only with a When prefix and a match. With no prefix, "to-do or fact?" is a guess, so it goes to the inbox with the best match shown.
+- Any one pick by the owner at add (About what?, a person or a tag) counts as sorted. The text goes straight to that subject and no capture is written. A tag goes to the area note with that slug or tag. A tag that is not an area goes to General.
+- A journal note keeps `sorted: false` in its frontmatter while it waits. A sort sets `sorted: <date>` and never changes the body. The slug comes from the title once. Links use the path, so they hold when the owner edits `title`.
+- A name with no note that shows in 2 or more subject notes gets one offer: "X came up again. Make a note?" Sort and intake make it, and never twice in one session.
+- `brain check` warns, and never rejects, when a filed note spells out a subject's title without linking it. A name of 1 to 3 capitalised words with no note also warns. Single words at the start of a sentence are skipped. A note that already links to a subject once is not warned about plain mentions of it. Each warning list stops at a fixed number of lines, so a big brain does not drown the owner.
 - A file's to-dos and notes link back to the file note. Its intake questions go in a `# Intake` list on the file note.
 - The app never says work is moving when it waits for a helper.
 - `AGENTS.md` and `.claude/rules/` must match this file.

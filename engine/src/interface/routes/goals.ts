@@ -1,5 +1,3 @@
-// Read routes for goals and decisions. Same views as src/reports/goals.ts.
-
 import { loadAll } from "../../core/files.ts";
 import { decisionView } from "../../reports/decisions.ts";
 import { goalList, goalView } from "../../reports/goals.ts";

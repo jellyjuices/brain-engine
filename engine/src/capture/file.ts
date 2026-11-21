@@ -1,12 +1,3 @@
-// One-step filing. A thought goes straight into its subject note, as a to-do or a dated note line.
-// Used by the sort screen and by `brain add` with a When prefix ("tomorrow: ask Dr about Advil").
-//
-// DECISION: a subject "matches" when its title, its first name (people) or one of its `aliases`
-// shows in the text as whole words. Most specific type wins: event, person, group, place, thing,
-// topic, project, then area. Other named people become `· with`, other named subjects `· re`.
-// DECISION: `brain add` skips the inbox only with a When prefix and a match. Without a prefix,
-// "is this a to-do or a fact?" is a guess, so it goes to the inbox with the best match shown.
-
 import { unlinkSync } from "node:fs";
 import { join, posix } from "node:path";
 import { type Note, titleOf, today, typeOf } from "../core/notes.ts";
@@ -24,7 +15,6 @@ export type When = { kind: "today" | "date" | "someday" | "waiting" | "note"; du
 
 export const namesOf = (n: Note): string[] => sharedNamesOf(toSortSubject(n));
 
-/** Subjects the text names, most specific type first. */
 export function subjectsNamed(notes: Note[], text: string): Note[] {
   const byPath = new Map(notes.map((n) => [n.path, n]));
   return sharedSubjectsNamed(sortSubjects(notes), text).map((s) => byPath.get(s.path)!);
@@ -34,7 +24,6 @@ const isPerson = (n: Note) => typeOf(n) === "Person";
 
 const namesAPerson = (notes: Note[], text: string) => subjectsNamed(notes, text).some(isPerson);
 
-/** Where a thought most likely goes: a named subject that is not a person, then the old word match (projects, area). */
 export function bestHome(notes: Note[], text: string, area?: string): { into?: string; reason: string } {
   const hit = subjectsNamed(notes, text).find((n) => !isPerson(n));
   if (hit) return { into: hit.path, reason: `names ${titleOf(hit)}` };
@@ -42,7 +31,6 @@ export function bestHome(notes: Note[], text: string, area?: string): { into?: s
   return suggestTarget(notes, fake);
 }
 
-/** Read a When answer, as a word or a prefix: today, tomorrow, a weekday, a date, someday, waiting or note. */
 export function whenFrom(word: string, now = today()): When | undefined {
   const w = word.trim().toLowerCase();
   if (w === "note") return { kind: "note" };
@@ -54,7 +42,6 @@ export function whenFrom(word: string, now = today()): When | undefined {
   }
 }
 
-/** Split "tomorrow: ask Dr" into its When and the text. */
 export function splitPrefix(input: string, now = today()): { when?: When; text: string } {
   const match = input.match(/^\s*([\p{L}\d-]+):\s+(.+)$/su);
   const when = match ? whenFrom(match[1], now) : undefined;
@@ -63,15 +50,12 @@ export function splitPrefix(input: string, now = today()): { when?: When; text: 
 
 const linkFrom = (from: string, to: Note) => `[${titleOf(to).split(",")[0]}](${posix.relative(posix.dirname(from), to.path)})`;
 
-/** Write the text into a subject note as a to-do or a note line. */
 export interface FileOpts {
   with?: string[];
   re?: string[];
   date?: string;
-  /** What a feeling or a to-do is about, in the owner's words. */
   about?: string;
   feeling?: boolean;
-  /** A link back to the journal entry the line came from. */
   from?: string;
   check?: boolean;
 }
@@ -93,7 +77,6 @@ export function fileInto(root: string, notes: Note[], into: string, text: string
 
 export const BIT_KINDS = ["to-do", "fact", "feeling", "decision"] as const;
 
-/** One line a sort writes. With no `text`, the line is the whole capture. A feeling keeps `· about <words>`. */
 export interface SortBit {
   into: string;
   when: When;
@@ -104,10 +87,6 @@ export interface SortBit {
   about?: string;
 }
 
-/**
- * Sort one capture into one or more subjects, then delete the capture. Git keeps it.
- * DECISION: the lines and the delete are one log entry, so one undo puts the capture back and takes every line out.
- */
 export function sortBits(root: string, notes: Note[], capturePath: string, bits: SortBit[]): { into: string[]; deleted: string } {
   const cap = readNote(root, capturePath);
   if (typeOf(cap) !== "Capture") throw new Error(`${capturePath} is not a capture.`);
@@ -121,12 +100,10 @@ export function sortBits(root: string, notes: Note[], capturePath: string, bits:
   return { into, deleted: capturePath };
 }
 
-/** File one inbox capture in one step: write its line in the subject note, then delete the capture. */
 export function sortCapture(root: string, notes: Note[], capturePath: string, into: string, when: When, opts: { with?: string[] } = {}): { into: string; deleted: string } {
   return { into, deleted: sortBits(root, notes, capturePath, [{ into, when, with: opts.with }]).deleted };
 }
 
-/** `brain add`: with a When prefix and a named subject, file it there. Otherwise save to the inbox. */
 export function smartAdd(root: string, notes: Note[], input: string): { filed: true; into: string; as: string; text: string } | { filed: false; guess?: string; text: string } {
   const { when, text } = splitPrefix(input);
   const hits = subjectsNamed(notes, text);

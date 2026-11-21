@@ -1,6 +1,3 @@
-// The input of every tool, keyed by the route's tool name. Body routes use the request types in api-types.ts.
-// Query routes and the older phone routes have no shared type yet, so their shapes are named here.
-
 import { type AddRelationRequest, type AddRequest, type DeleteTodoRequest, type DoneRequest, DRAFT_KINDS, type MakeNoteRequest, type MoveRequest, type SaveDraftRequest, type SortBitRequest, type SortRequest, type DraftKind } from "../api-types.ts";
 import { TODO_VIEWS, type TodoView } from "../../../shared/todos/index.ts";
 import { type Input, int, NONE, obj, oneOf, req, shape, str, strs } from "./schema.ts";

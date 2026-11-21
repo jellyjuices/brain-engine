@@ -14,7 +14,6 @@ import type { Caller } from "./api-types.ts";
 export const hash = (text: string) => createHash("sha256").update(text).digest("hex");
 export const fileText = (root: string, path: string) => readFileSync(join(root, path), "utf8");
 
-/** A note path from the URL. Only note folders; sources/ and hidden folders stay out; .archive reads only. */
 export function safeNotePath(raw: string, write: boolean): string {
   let path: string;
   try {
@@ -35,7 +34,6 @@ export function existingNote(root: string, path: string): Note {
   return readNote(root, path);
 }
 
-/** One note as the phone gets it. `hash` is what `PUT` sends back as `base`. */
 export function noteJson(root: string, n: Note) {
   return { ...summary(n), meta: n.meta, body: n.body, hash: hash(fileText(root, n.path)) };
 }
@@ -68,7 +66,6 @@ export const text = (v: unknown, name: string, required = true): string | undefi
   return v;
 };
 
-/** Verbs throw plain Errors for things like "No open to-do matches". Those are the caller's mistake: 400. */
 export function asUserError<T>(fn: () => T): T {
   try {
     return fn();
@@ -85,10 +82,6 @@ export function afterWrite<T>(root: string, fn: () => T): T {
   return result;
 }
 
-/**
- * Ask SwiftBar to redraw the menu bar icon, so the inbox count is right at once (it also redraws every 5 minutes).
- * Only the background server does this. Tests and `--foreground` runs never touch SwiftBar.
- */
 function refreshMenuBar(): void {
   if (process.env.XPC_SERVICE_NAME !== "com.brain.serve") return;
   execFile("open", ["-g", "swiftbar://refreshplugin?plugin=brain.5m.sh"], () => {});

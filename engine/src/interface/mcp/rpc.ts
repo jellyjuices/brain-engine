@@ -1,8 +1,3 @@
-// JSON-RPC for MCP over Streamable HTTP, stateless. Dual-era, per the 2026-07-28 spec:
-//   - modern: every request carries its version in `_meta` and mirrors it in headers; no handshake.
-//   - legacy (2025-11-25 and earlier): `initialize`, then plain requests. No session id is minted.
-// DECISION: legacy stays because most agent clients still open with `initialize` today.
-
 import { HttpError } from "../server-auth.ts";
 import type { Json } from "./schema.ts";
 import { capText, findTool, runTool, TOOLS } from "./tools.ts";
@@ -28,13 +23,11 @@ type Id = string | number | undefined;
 const fail = (status: number, id: Id, code: number, message: string, data?: unknown): Reply => ({ status, body: { jsonrpc: "2.0", ...(id !== undefined && { id }), error: { code, message, ...(data !== undefined && { data }) } } });
 const isObj = (x: unknown): x is Json => !!x && typeof x === "object" && !Array.isArray(x);
 
-/** `Mcp-Name` may come as `=?base64?...?=` when the name is not plain ASCII. */
 function decodeName(v: string | undefined): string | undefined {
   const m = v && /^=\?base64\?(.*)\?=$/.exec(v);
   return m ? Buffer.from(m[1], "base64").toString("utf8") : v;
 }
 
-/** A modern request's header and `_meta` checks. Undefined when all is well. */
 function checkModern(c: RpcCtx, id: Id, method: string, params: Json, meta: Json): Reply | undefined {
   const version = meta[`${META}protocolVersion`];
   if (version !== MODERN) return fail(400, id, -32022, "Unsupported protocol version", { supported: [MODERN, ...LEGACY], requested: version });
@@ -110,7 +103,6 @@ function parseCall(c: RpcCtx, msg: Json & { method: string }): Call | Reply {
 
 const isRequest = (msg: unknown): msg is Json & { method: string } => isObj(msg) && msg.jsonrpc === "2.0" && typeof msg.method === "string";
 
-/** One JSON-RPC message in, one reply out. A notification gets 202 with no body. */
 export async function dispatch(c: RpcCtx, msg: unknown): Promise<Reply> {
   if (!isRequest(msg)) return fail(400, undefined, -32600, "Invalid request: send one JSON-RPC 2.0 object.");
   if (!("id" in msg)) return { status: 202 };

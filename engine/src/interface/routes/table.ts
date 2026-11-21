@@ -1,7 +1,3 @@
-// Every `brain serve` route in one table. The MCP layer reads it: one tool per route, named by `tool`.
-// A tool's description is `summary` then `use`, so keep the two together under 30 words.
-// DECISION: a to-do ref is the stable `path::text` string (an event's ref is its note path). List numbers are only for the terminal.
-
 import { calendarFeed } from "../../todos/calendar.ts";
 import { HttpError } from "../server-auth.ts";
 import type { Ctx } from "../server-context.ts";
@@ -22,16 +18,12 @@ export type Handler = (c: Ctx, rest: string) => unknown;
 export interface Route {
   method: Method;
   path: string;
-  /** The path is a prefix; the rest of the URL is passed to the handler. */
   prefix?: boolean;
   tool: string;
   summary: string;
-  /** When an agent should call it. Owner-only routes have none: they are never tools. */
   use?: string;
   handler: Handler;
-  /** Only the owner may call it, never an agent token. */
   owner?: boolean;
-  /** False keeps the route out of the MCP tool list. The app still calls it. Reason: each tool costs tokens in every agent session. */
   mcp?: false;
 }
 

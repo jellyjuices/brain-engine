@@ -4,7 +4,6 @@ import { join } from "node:path";
 import { LOG_FILE, nowStamp, parse } from "./notes.ts";
 import { writeAtomic } from "./files.ts";
 
-/** The smallest block of lines that changed between two texts. */
 export function diffLines(path: string, before: string, after: string): UndoStep {
   const beforeLines = before.split("\n");
   const afterLines = after.split("\n");
@@ -15,7 +14,6 @@ export function diffLines(path: string, before: string, after: string): UndoStep
   return { path, line: start, removed: beforeLines.slice(start, endA), added: afterLines.slice(start, endB) };
 }
 
-/** What `brain undo` needs to reverse one file change: at line `line`, `added` replaced `removed`. `file` marks a file the change made or deleted. */
 export interface UndoStep {
   path: string;
   line: number;
@@ -27,19 +25,15 @@ export interface UndoStep {
 export interface LogEntry {
   at: string;
   msg: string;
-  /** Set on changes that `brain undo` can reverse. */
   id?: string;
   undo?: UndoStep[];
-  /** Set on an undo entry: the id of the change it reversed. */
   undoes?: string;
 }
 
-/** Add one line to .log.jsonl. Append only: cheap, and easy for scripts and agents to read. */
 export function log(root: string, message: string, extra: Omit<LogEntry, "at" | "msg"> = {}): void {
   appendFileSync(join(root, LOG_FILE), JSON.stringify({ at: nowStamp(), msg: message, ...extra } satisfies LogEntry) + "\n", "utf8");
 }
 
-/** The last n log entries, newest first. */
 export function readLog(root: string, n = Infinity): LogEntry[] {
   const path = join(root, LOG_FILE);
   if (!existsSync(path)) return [];
@@ -61,7 +55,6 @@ function stepFor(path: string, before: string | null, after: string | null): Und
   return diffLines(path, before, after);
 }
 
-/** Run a change on several files and log it as one entry, so one undo reverses all of it. A file may be made or deleted. */
 export function changeFiles<T>(root: string, paths: string[], msg: string, fn: () => T): T {
   const unique = [...new Set(paths)];
   const before = unique.map((p) => readOrNull(root, p));
@@ -134,7 +127,6 @@ function pickEntry(entries: LogEntry[], undone: Set<string>, id?: string): LogEn
   return last;
 }
 
-/** Reverse one change: the one with `id`, or else the newest one. Refuses when the newest change cannot be undone, so it never reaches past it. Every step is checked before any file changes. */
 export function undoLast(root: string, id?: string): { msg: string; line: string } {
   const entries = readLog(root);
   const undone = new Set(entries.flatMap((e) => (e.undoes ? [e.undoes] : [])));

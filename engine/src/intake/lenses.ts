@@ -1,5 +1,3 @@
-// The "Know the owner" intake: stages, lens notes in me/, threads in threads/, and progress.
-
 import { existsSync, readFileSync } from "node:fs";
 import YAML from "yaml";
 import { join } from "node:path";
@@ -13,7 +11,6 @@ export interface Lens {
   title: string;
   description: string;
   privacy: Privacy;
-  /** Where this lens stops and the areas start. */
   boundary: string;
 }
 
@@ -22,12 +19,6 @@ export type Privacy = (typeof PRIVACY)[number];
 export const THREAD_STATUS = ["open", "talked", "parked", "closed"] as const;
 export type ThreadStatus = (typeof THREAD_STATUS)[number];
 
-/**
- * Lenses are about who the owner is and how they feel. Areas (areas/) are about what they handle.
- * Each lens says where its line with the areas sits, so one fact lives in one place.
- * A lens note is made the first time the intake saves to it (or sets its privacy). Until then it does not exist.
- * Wellbeing and identity start at headline until the owner changes it in stage 0.
- */
 export const LENSES: Lens[] = [
   { slug: "now", title: "Now", description: "What takes up room in my head, how each area rates from 1 to 10, and the setup of my life.", privacy: "full", boundary: "Ratings, load and setup. To-dos go in the areas." },
   { slug: "day", title: "A real day", description: "What a real day looks like, part by part: where, with whom, and how much energy.", privacy: "full", boundary: "Patterns of a day. Schedules and to-dos go in the areas." },
@@ -66,7 +57,6 @@ const SETTINGS_PATH = "me/settings.yaml";
 export const lensPath = (slug: string) => `me/${slug}.md`;
 const lensBySlug = (slug: string) => LENSES.find((l) => l.slug === slug);
 
-/** Find a stage by number, key, name or one of its lenses. */
 export function findStage(q: string): Stage | undefined {
   const needle = q.toLowerCase().trim();
   return STAGES.find((s) => String(s.n) === needle || s.key === needle || s.name.toLowerCase() === needle || s.lenses.includes(needle));
@@ -78,7 +68,6 @@ export function needLens(slug: string): Lens {
   return lens;
 }
 
-/** Make a lens note if it does not exist yet. Returns its path. */
 export function ensureLens(root: string, slug: string, by = "claude"): string {
   const lens = needLens(slug);
   const rel = lensPath(slug);
@@ -105,7 +94,6 @@ export function ensureLens(root: string, slug: string, by = "claude"): string {
   return rel;
 }
 
-/** The privacy level the owner set for a lens (from its note), or the default. */
 export function lensPrivacy(root: string, slug: string): Privacy {
   const lens = needLens(slug);
   const rel = lensPath(slug);
@@ -114,7 +102,6 @@ export function lensPrivacy(root: string, slug: string): Privacy {
   return (PRIVACY as readonly string[]).includes(privacy ?? "") ? (privacy as Privacy) : lens.privacy;
 }
 
-/** Set how much to write down for one lens: full, headline or skip. */
 export function setLensPrivacy(root: string, slug: string, level: string, by = "claude"): Note {
   needLens(slug);
   if (!(PRIVACY as readonly string[]).includes(level)) throw new Error(`privacy must be one of: ${PRIVACY.join(", ")}`);
@@ -125,7 +112,6 @@ export function setLensPrivacy(root: string, slug: string, level: string, by = "
   return note;
 }
 
-/** Intake settings live in me/settings.yaml: plain settings, not a note. */
 export function readSettings(root: string): Meta {
   const full = join(root, SETTINGS_PATH);
   if (!existsSync(full)) return {};
@@ -143,7 +129,6 @@ export function stagesDone(meta: Meta): Record<string, string> {
   return d && typeof d === "object" && !Array.isArray(d) ? (d as Record<string, string>) : {};
 }
 
-/** Mark a stage done in me/settings.yaml. */
 export function markStageDone(root: string, q: string, _by = "claude"): Stage {
   const stage = findStage(q);
   if (!stage) throw new Error(`unknown stage ${q}. Use a number 0 to 11, a stage name or a lens.`);
@@ -153,4 +138,3 @@ export function markStageDone(root: string, q: string, _by = "claude"): Stage {
   return stage;
 }
 
-/** Append one answer to a lens note, under a dated heading in "# Intake log". */

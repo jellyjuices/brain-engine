@@ -1,7 +1,3 @@
-// `POST /mcp`: the MCP server for agents. Only the agent token gets in, as `Authorization: Bearer <token>`.
-// DECISION: the owner token does not open /mcp. An agent is always the "agent" caller, so owner-only routes stay
-// shut and the agent rate limit always applies. It is the same RateLimit object the /api/ routes use.
-
 import { readFileSync } from "node:fs";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { readAgentToken, type RateLimit } from "../server-agent.ts";
@@ -33,7 +29,6 @@ function reply(res: ServerResponse, status: number, body?: unknown, headers: Rec
 
 const rpcError = (code: number, message: string, data?: unknown) => ({ jsonrpc: "2.0", error: { code, message, ...(data !== undefined && { data }) } });
 
-/** A browser page on another site must not reach this server (DNS rebinding). Agents send no Origin. */
 function badOrigin(req: IncomingMessage): boolean {
   const origin = req.headers.origin;
   if (!origin) return false;

@@ -27,7 +27,6 @@ export function intakeStatus(root: string, notes = loadAll(root)): IntakeStatus 
   const settings = readSettings(root);
   const done = stagesDone(settings);
   const byPath = new Map(notes.map((n) => [n.path, n]));
-  // To-dos from the brain dump: captures tagged intake, wherever they ended up (absorbed ones sit in .archive).
   const intake = notes.filter((n) => typeOf(n) === "Capture" && (Array.isArray(n.meta.tags) ? n.meta.tags.map(String) : []).includes("intake") && n.meta.outcome !== "drop");
   const stages = STAGES.map((s): StageStatus => {
     const lensNotes = s.lenses.map((l) => byPath.get(lensPath(l))).filter((n): n is Note => !!n);

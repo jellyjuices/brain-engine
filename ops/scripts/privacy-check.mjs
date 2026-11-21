@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
-const SKIPPED = /(^|\/)(node_modules\/|package-lock\.json$|[^/]*\.lock$|pnpm-lock\.yaml$)/;
+const SKIPPED = /(^|\/)(node_modules\/|package-lock\.json$|[^/]*\.lock$|pnpm-lock\.yaml$)|^LICENSE$/;
 
 const wordsPath =
   process.env.BRAIN_PRIVACY_WORDS ??

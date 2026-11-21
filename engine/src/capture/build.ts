@@ -1,6 +1,3 @@
-// One-call builder: a new note with its fields, areas, parent, sections, relations and to-dos, written once.
-// One write is one log entry, so one undo takes the whole note back.
-
 import { existsSync } from "node:fs";
 import { join, posix } from "node:path";
 import { appendToSection, LOOPS_HEADING, newTodoLine, type TodoPatch } from "../../shared/line/index.ts";

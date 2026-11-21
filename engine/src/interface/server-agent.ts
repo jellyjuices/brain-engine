@@ -1,7 +1,3 @@
-// The agent token: a second bearer token, for helpers only. It lives beside the server token in ~/.config/brain/.
-// DECISION: the server reads the file on each call, so a new token or a revoke works at once, with no restart.
-// An agent may call every route but the owner-only ones (making or revoking this token), within a rate limit.
-
 import { randomBytes } from "node:crypto";
 import { chmodSync, existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import type { IncomingMessage } from "node:http";
@@ -17,13 +13,11 @@ export function agentTokenPath(): string {
   return process.env.BRAIN_AGENT_TOKEN_FILE || join(homedir(), ".config", "brain", "agent-token");
 }
 
-/** The token, or undefined when there is none. Lines that start with # are comments. */
 export function readAgentToken(path: string): string | undefined {
   if (!existsSync(path)) return undefined;
   return readFileSync(path, "utf8").split("\n").map((l) => l.trim()).find((l) => l && !l.startsWith("#"));
 }
 
-/** Make a new token (32 random bytes, mode 600). The old one stops working at once. */
 export function issueAgentToken(path: string): string {
   const token = randomBytes(32).toString("base64url");
   mkdirSync(dirname(path), { recursive: true });
@@ -44,7 +38,6 @@ export function callerOf(req: IncomingMessage, token: string, agentFile: string)
   return agent && isAuthorized(req, agent) ? "agent" : undefined;
 }
 
-/** A fixed window: at most `limit` calls a minute. `take` gives 0 when the call may go, else the seconds to wait. */
 export class RateLimit {
   private readonly limit: number;
   private start = 0;

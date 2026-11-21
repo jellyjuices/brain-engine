@@ -1,4 +1,3 @@
-// T9: 30 questions on a made-up brain. Fused search must beat words only, and find every typo, Spanish and Japanese one.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { embedPending } from "../src/core/embed.ts";

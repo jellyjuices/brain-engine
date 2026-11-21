@@ -1,4 +1,3 @@
-// Event notes: dated visits and meetings. Tests never read the owner's real notes.
 import { afterEach, test } from "node:test";
 import assert from "node:assert/strict";
 import { writeFileSync } from "node:fs";

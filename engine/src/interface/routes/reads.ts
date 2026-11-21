@@ -1,5 +1,3 @@
-// Find, the to-do views and the log.
-
 import { today } from "../../core/notes.ts";
 import { byDue, inTodoView, TODO_VIEWS, type TodoView } from "../../../shared/todos/index.ts";
 import { loadAll } from "../../core/files.ts";
@@ -17,7 +15,6 @@ const MAX_LOG = 200;
 
 const FILTERS = ["type", "tag", "area", "status"] as const;
 
-/** Fused words, strings and meaning, with the answer card, and the subject card when the words name one and no filter is set. */
 export async function findRoute(c: Ctx): Promise<FindResponse> {
   const params = c.url.searchParams;
   const q = params.get("q") ?? "";
@@ -32,7 +29,6 @@ export async function findRoute(c: Ctx): Promise<FindResponse> {
   return subject ? { card: buildCard(c.root, notes, subject), ...found } : found;
 }
 
-/** One standard view of the open to-dos. Today reads `due` only, never a `· today` token. */
 export function todosRoute(c: Ctx): TodosResponse {
   const view = (c.url.searchParams.get("view") ?? "today") as TodoView;
   if (!TODO_VIEWS.includes(view)) throw new HttpError(400, `"view" must be one of: ${TODO_VIEWS.join(", ")}.`);

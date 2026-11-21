@@ -13,7 +13,6 @@ import { BIN, makeBrain } from "./fixture.ts";
 
 afterEach(() => delete process.env.BRAIN_TODAY);
 
-/** A fresh brain with blank intake settings (never the owner's real ones). */
 function fixture(): string {
   const root = makeBrain();
   mkdirSync(join(root, "me"), { recursive: true });
@@ -215,7 +214,6 @@ test("redact removes the line, its quote, the raw answer and matching threads", 
   assert.throws(() => redact(root, "ab"), /at least 3/);
 });
 
-// ---- R11: intake builds relations ----------------------------------------
 
 import { intakePrompts } from "../src/intake/subjects.ts";
 import { saveSubject } from "../src/intake/subject-save.ts";
@@ -233,8 +231,7 @@ test("an unknown name gets one question per session, and a role is never guessed
   subjectNote(root, "projects/acme.md", "Project", "Acme");
   const first = intakePrompts(root, "I started a thing with Omar at Acme.");
   assert.equal(first.ask?.question, "Who is Omar to you?");
-  assert.equal(intakePrompts(root, "Omar called again.").ask, undefined); // asked once already
-  // the owner skips: nothing is written.
+  assert.equal(intakePrompts(root, "Omar called again.").ask, undefined);
   assert.equal(saveSubject(root, { name: "Omar" }).skipped, true);
   assert.equal(existsSync(join(root, "people", "omar.md")), false);
 });
@@ -250,10 +247,8 @@ test("a fixture intake session makes a relation and nothing lands in inbox", () 
   assert.match(omar, /- \[Acme\]\(\.\.\/projects\/acme\.md\) · co-founder/);
   assert.match(omar, /- 2026-11-05 · Started Acme with me in 2025\./);
   assert.match(omar, /generated:/);
-  // the lens line links the known names, first mention only
   const lens = saveLensAnswer(root, "people", "Omar is my co-founder. Omar and I talk daily.");
   assert.match(lens.body, /- \[Omar\]\(\.\.\/people\/omar\.md\) is my co-founder\. Omar and I talk daily\./);
-  // a to-do is filed with When + About what, never inbox
   const t = fileIntakeTodo(root, "Send Omar the contract", { when: "tomorrow", about: "acme" });
   assert.equal(t.into, "projects/acme.md");
   assert.match(readFileSync(join(root, "projects", "acme.md"), "utf8"), /- \[ \] Send Omar the contract · with \[Omar\]\(\.\.\/people\/omar\.md\) · due 2026-11-06/);
@@ -264,8 +259,7 @@ test("a fixture intake session makes a relation and nothing lands in inbox", () 
   const end = endSummary(root);
   assert.equal(end.text[0], "New: Omar (person), Omar · co-founder of Acme.");
   assert.match(end.text.join("\n"), /use undo/);
-  assert.equal(endSummary(root).text[0], "No new subjects, facts or to-dos this session."); // cleared
-  // each edit is logged so brain undo reverses it
+  assert.equal(endSummary(root).text[0], "No new subjects, facts or to-dos this session.");
   const undoable = readLog(root).filter((e) => e.undo).length;
   assert.ok(undoable >= 3, `got ${undoable}`);
   undo(root);

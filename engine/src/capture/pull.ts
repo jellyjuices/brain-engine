@@ -1,5 +1,3 @@
-// brain pull: fetch captures stored by the relay Worker, write them to inbox/, then ack them.
-
 import { readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
@@ -24,25 +22,17 @@ export interface PendingItem {
   created_at?: string;
   text: string;
   tags?: string[];
-  /** A note path from "+ Add here" on the phone. */
   into?: string;
-  /** Note paths the owner picked under About what? */
   about?: string[];
-  /** Person note paths the owner picked. */
   people?: string[];
-  /** Who wrote it, when it was not the owner. */
   by?: string;
-  /** "todo" makes a to-do line, "fact" a dated note line, "feeling" a feeling line. */
   kind?: "todo" | "fact" | "feeling";
-  /** A When word or date. The text stays as typed. */
   when?: string;
-  /** The side of a feeling line: what it is about, in the owner's words. */
   side?: string;
 }
 
 export interface PullResult {
   pulled: number;
-  /** How many of `pulled` went straight into a subject note instead of the inbox. */
   filed: number;
   skipped: number;
   acked: number;
@@ -52,7 +42,6 @@ export function relayEnvPath(): string {
   return process.env.BRAIN_RELAY_ENV || join(homedir(), ".config", "brain", "relay.env");
 }
 
-/** Read KEY=value lines. Returns null when the file is missing or incomplete. */
 export function readRelayConfig(path = relayEnvPath()): RelayConfig | null {
   let text: string;
   try {
@@ -80,7 +69,6 @@ function isPending(x: unknown): x is PendingItem {
   return !!i && typeof i.client_id === "string" && typeof i.text === "string";
 }
 
-/** The note the phone named, when it is a filed note that exists. Otherwise undefined (the text goes to the inbox). */
 function filedNote(notes: Note[], into: unknown): Note | undefined {
   if (typeof into !== "string") return undefined;
   const note = notes.find((x) => x.path === into);
@@ -102,7 +90,6 @@ export async function saveSorted(root: string, item: PendingItem, embedder: Embe
 
 export const phoneMark = (id: string) => `(phone ${id})`;
 
-/** The When and the text of one item. An explicit `when` leaves the text as typed. With none, a prefix decides, else a to-do for kind todo and a note line for the rest. */
 function whenOfItem(item: PendingItem): { w: When; text: string } {
   const explicit = item.when ? whenFrom(item.when) : undefined;
   if (item.kind === "fact" || item.kind === "feeling") return { w: { kind: "note" }, text: item.text.trim() };
@@ -111,7 +98,6 @@ function whenOfItem(item: PendingItem): { w: When; text: string } {
   return { w: when ?? (item.kind === "todo" ? { kind: "date" } : { kind: "note" }), text };
 }
 
-/** File one phone item in its note. A When prefix picks to-do or date; with none it is a dated note line. */
 function fileOnNote(root: string, notes: Note[], target: Note, item: PendingItem, picked: { with: string[]; re: string[] }, check: boolean): void {
   const { w, text } = whenOfItem(item);
   const hits = subjectsNamed(notes, text).filter((n) => n.path !== target.path);
@@ -132,7 +118,6 @@ function chosenHome(notes: Note[], item: PendingItem, picked: { target?: Note },
   return { target: filedNote(notes, sorted.into ?? undefined), check: !sorted.sure };
 }
 
-/** Save one app item: on its note when `into`, a pick or the sorter names a filed note, else in the inbox. "skipped" = already saved. */
 export function saveItem(root: string, item: PendingItem, guess?: SortGuess, hold = false): { saved: "filed" | "inbox" | "skipped"; path?: string } {
   const notes = loadAll(root);
   const existing = notes.find((n) => n.meta.client_id === item.client_id);
@@ -148,7 +133,6 @@ export function saveItem(root: string, item: PendingItem, guess?: SortGuess, hol
   return { saved: "inbox", path: note.path };
 }
 
-/** Write each item (skipping ones already on disk), then ack. Write always comes before ack. */
 export async function pull(root: string, cfg: RelayConfig): Promise<PullResult> {
   const body = (await (await relay(cfg, "/relay/pending")).json()) as { items?: unknown[] };
   const items = (body.items ?? []).filter(isPending);

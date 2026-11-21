@@ -1,5 +1,3 @@
-// Load the rules in .schema/ and check notes against them.
-
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import YAML from "yaml";

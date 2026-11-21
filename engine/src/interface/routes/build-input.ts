@@ -1,5 +1,3 @@
-// Reads the optional builder parts of a make_note call into a typed spec.
-
 import type { BuildSpec, RelationInput, TodoInput } from "../../capture/build.ts";
 import { HttpError } from "../server-auth.ts";
 import { safeNotePath, text, textList } from "../server-context.ts";

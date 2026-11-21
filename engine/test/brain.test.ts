@@ -20,7 +20,6 @@ function write(root: string, rel: string, text: string) {
 
 const proj = (title: string, extra = "") => `---\ntype: Project\ntitle: ${title}\ndescription: About ${title}.\ntags: [client-work]\n${extra}---\n\nBody of ${title}.\n`;
 
-// ---- parsing -----------------------------------------------------------
 
 test("parse and dump round-trip, with dates as strings", () => {
   const { meta, body } = parse("---\ntype: Project\ndue: 2026-12-01\ntags: [a, b]\n---\n\n# Hello\n");
@@ -41,7 +40,6 @@ test("a capture with no title uses its first line", () => {
   assert.equal(titleOf(n), "Call the accountant");
 });
 
-// ---- check -------------------------------------------------------------
 
 test("check finds missing type, unknown tag, missing description, broken link, duplicate title", () => {
   const root = fixture();
@@ -57,7 +55,6 @@ test("check finds missing type, unknown tag, missing description, broken link, d
   assert.match(byPath["projects/b.md"], /same title as projects\/a.md/);
 });
 
-// ---- capture, intake ---------------------------------------------------
 
 test("capture writes to inbox and ignores a repeat client id", () => {
   const root = fixture();
@@ -86,7 +83,6 @@ test("area intake appends the 5 answers under a dated heading", () => {
   assert.equal(n.meta.type, "Area");
 });
 
-// ---- tag, sort, triage -------------------------------------------------
 
 test("tag rules match whole words and only add known tags", () => {
   const root = fixture();
@@ -170,7 +166,6 @@ test("new Thing carries its renews, from and papers fields", () => {
   assert.deepEqual(["renews", "from", "papers"].filter((k) => !(k in n.meta)), []);
 });
 
-// ---- search ------------------------------------------------------------
 
 test("fts query escapes input and makes the last word a prefix", () => {
   assert.equal(ftsQuery(`hst "OR" (x`), `"hst" "OR" "x"*`);
@@ -191,7 +186,7 @@ test("search finds by word and prefix, filters, and follows changes", () => {
   utimesSync(join(root, "projects/condo.md"), new Date("2100-01-01T00:00:00Z"), new Date("2100-01-01T00:00:00Z"));
   assert.equal(search(root, "high park")[0].path, "projects/condo.md");
   assert.match(search(root, "park")[0].snippet, /\[Park\]/);
-  assert.equal(updateIndex(root).updated, 0); // search already picked up the change
+  assert.equal(updateIndex(root).updated, 0);
   assert.equal(list(root, { area: "client-work" }).some((s) => s.path === "projects/site.md"), true);
 });
 
@@ -202,18 +197,14 @@ test("search puts the note named by the query first", () => {
   write(root, "people/omar-haddad.md", person("Omar", "Friend."));
   write(root, "people/sam-lee.md", person("Sam", "Friend.", "aliases: [Sammy]\n"));
   assert.equal(search(root, "Omar")[0].path, "people/omar-haddad.md");
-  assert.equal(search(root, "haddad")[0].path, "people/omar-haddad.md"); // file name counts as a name
-  assert.equal(search(root, "oma")[0].path, "people/omar-haddad.md"); // prefix of a name
-  assert.equal(search(root, "sammy")[0].path, "people/sam-lee.md"); // alias
+  assert.equal(search(root, "haddad")[0].path, "people/omar-haddad.md");  assert.equal(search(root, "oma")[0].path, "people/omar-haddad.md");  assert.equal(search(root, "sammy")[0].path, "people/sam-lee.md");
   assert.equal(nameTier("Omar Haddad", "Omar", ["omar haddad"]), 0);
 
-  // Filed captures (intake answers, sweeps) are raw copies: hidden unless all is set.
   write(root, ".archive/relations-sweep.md", "---\ntype: Capture\n---\n\nOmar sweep candidates.\n");
   assert.equal(search(root, "sweep").length, 0);
   assert.equal(search(root, "sweep", { all: true })[0].path, ".archive/relations-sweep.md");
 });
 
-// ---- reports -----------------------------------------------------------
 
 test("today lists overdue, due soon, today and active projects", () => {
   const root = fixture();
@@ -265,7 +256,6 @@ test("show finds a note by title and lists backlinks", () => {
   assert.deepEqual(backlinks(notes, "projects/site.md").map((s) => s.title), ["Use Astro"]);
 });
 
-// ---- the command itself ------------------------------------------------
 
 function run(root: string, ...args: string[]) {
   return spawnSync(process.execPath, ["--disable-warning=ExperimentalWarning", BIN, ...args], { env: { ...process.env, BRAIN_HOME: root }, encoding: "utf8" });
@@ -283,7 +273,6 @@ test("brain command: check and index exit codes", () => {
   assert.equal(existsSync(join(root, ".brain/index.db")), true, ".brain/index.db is missing");
 });
 
-// ---- SwiftBar ----------------------------------------------------------
 
 test("swiftbar: the icon shows the inbox count and opens the web app in a popover", async () => {
   const { render, WEB_URL } = await import("../src/interface/swiftbar.ts");

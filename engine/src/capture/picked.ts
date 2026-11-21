@@ -1,7 +1,3 @@
-// The owner's own picks at add: a relation (About what?), a person, or a tag.
-// DECISION: any one of them counts as sorted. The text goes straight to that subject, and no capture is written.
-// A tag goes to the area note with that slug or tag. A tag that is not an area goes to General.
-
 import { DIRS, folderOf, type Note, tagsOf, typeOf } from "../core/notes.ts";
 
 export interface Picks {
@@ -26,7 +22,6 @@ function tagHome(notes: Note[], tags: string[]): Note | undefined {
   return areas.find((a) => a.path === GENERAL);
 }
 
-/** Where the picks send the text, and the other picks as `· with` (people) and `· re` (subjects). */
 export function pickedHome(notes: Note[], p: Picks): { target?: Note; with: string[]; re: string[] } {
   const byPath = new Map(notes.map((n) => [n.path, n]));
   const about = textList(p.about).map((x) => byPath.get(x)).filter(isFiled);
