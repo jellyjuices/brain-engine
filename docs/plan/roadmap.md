@@ -44,7 +44,7 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | # | Task | Notes |
 | --- | --- | --- |
 | A | Make `~/.config/brain/privacy-words.txt` | Template: `ops/config/privacy-words.example.txt`. Without it the privacy scan checks nothing |
-| B | Pick the road for remote work | See track R. Jobs on the Mac mini with a local model, or finish MCP intake for Claude |
+| B | Say yes to the model download, about 37 GB | Track R. Picks and test in [local-models.md](../design/local-models.md) |
 | C | Should a phone add with a sure guess file at once? | [helpers.md](../intent/helpers.md) aim 1 says sorted within minutes. Today every app add waits in Unsorted. Change the intent or the code |
 | D | Stage 6 of the intake points to `resources/values-list.md`, which does not exist | Write the list, or drop the file and let stage 6 ask without it |
 
@@ -104,7 +104,7 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 
 **The gap:** MCP helps only when a Claude chat drives it, so it cannot meet this intent alone. It stays as a thin door for agents. Each route is already a tool, so it costs almost nothing to keep.
 
-**Proposal (owner decides, B):** jobs inside `brain serve`.
+**Road (owner said yes, 2026-11-20):** jobs inside `brain serve`. The Mac mini is an Apple M6 with 32 GB of memory and Ollama 0.40 installed, no models yet.
 
 - A job is a note's ask (`split`, `enrich`, `intake`) or a new kind, such as a sort sweep. File asks already store this.
 - `brain serve` works through jobs one at a time with a local model (Ollama). Every write carries `generated`, is logged and can be undone.
@@ -127,7 +127,7 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | # | Step | Size | Needs |
 | --- | --- | --- | --- |
 | R1 | Tunnel check from outside | Small | owner says go |
-| R2 | Spec: jobs in `brain serve`. Routes to list, start and retry. Which model fits the Mac mini's memory | Medium | B |
+| R2 | Run the model test in [local-models.md](../design/local-models.md), then spec jobs in `brain serve`: routes to list, start and retry | Medium | B |
 | R3 | Ollama runner and job worker in `brain serve` | Large | R2 |
 | R4 | Intake in the phone app, on server steps. Includes "Start the intake" from a file page | Large | R2, D |
 | R5 | Remove `brain intake` and `brain thread`. Update `AGENTS.md`, `brain-cli.md`, CLI help; run `brain migrate` | Small | R4 |
