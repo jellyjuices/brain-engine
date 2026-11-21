@@ -16,13 +16,13 @@ export async function calendarFeed(request: Request, env: Env): Promise<Response
   const token = env.CAL_TOKEN ?? "";
   if (!match || token.length < MIN_TOKEN_LENGTH || !(await safeEqual(match[1]!, token)))
     return notFound();
-  if (!env.MAC_ORIGIN || !env.SERVER_TOKEN) return jsonError("The Mac is offline", 503);
+  if (!env.MAC_ORIGIN || !env.SERVER_TOKEN) return jsonError("Your home server is offline", 503);
   try {
     const res = await fetch(`${env.MAC_ORIGIN.replace(/\/+$/, "")}/api/cal.ics`, {
       headers: { Accept: "text/calendar", Authorization: `Bearer ${env.SERVER_TOKEN}` },
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
-    if (!res.ok) return jsonError("The Mac is offline", 503);
+    if (!res.ok) return jsonError("Your home server is offline", 503);
     return new Response(request.method === "HEAD" ? null : await res.text(), {
       headers: {
         "Content-Type": "text/calendar; charset=utf-8",
@@ -30,6 +30,6 @@ export async function calendarFeed(request: Request, env: Env): Promise<Response
       },
     });
   } catch {
-    return jsonError("The Mac is offline", 503);
+    return jsonError("Your home server is offline", 503);
   }
 }

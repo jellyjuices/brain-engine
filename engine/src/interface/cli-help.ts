@@ -8,9 +8,9 @@ Add, find and tick to-dos in the app, or through the MCP tools at /mcp. This com
 ${pc.bold("Upkeep")}
   brain index [--full]          rebuild the search index and .reports/index.md
   brain check                   find broken links and bad labels
-  brain serve                   turn phone access on (runs in the background)   [--foreground --port --host]
-  brain kill                    turn phone access off, until the next brain serve
-  brain pull                    fetch captures from the phone relay into inbox/   [--json]
+  brain serve                   turn device access on (runs in the background)   [--foreground --port --host]
+  brain kill                    turn device access off, until the next brain serve
+  brain pull                    fetch captures from the device relay into inbox/   [--json]
   brain migrate <name>          show what a one-time change to the notes would do   [--write to apply]
   brain swiftbar                print the menu bar icon and inbox count (used by the SwiftBar plugin)
 

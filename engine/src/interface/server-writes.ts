@@ -27,7 +27,7 @@ export function addPerson(c: Ctx) {
   if (!name) throw new HttpError(400, `Missing "name".`);
   if (name.length > 80) throw new HttpError(400, "A name can be 80 characters at most.");
   const birthday = birthdayOf(c.body.birthday);
-  const description = text(c.body.description, "description", false)?.trim().slice(0, 150) || "Added from the phone.";
+  const description = text(c.body.description, "description", false)?.trim().slice(0, 150) || "Added from your device.";
   const same = loadAll(c.root).find((n) => n.meta.type === "Person" && String(n.meta.title ?? "").toLowerCase() === name.toLowerCase());
   if (same) return { path: same.path, created: false };
   const note = afterWrite(c.root, () => newNote(c.root, "Person", name, { description, ...(birthday && { birthday }) }));
@@ -44,7 +44,7 @@ export function addSubject(c: Ctx) {
   if (name.length > 80) throw new HttpError(400, "A name can be 80 characters at most.");
   const same = loadAll(c.root).find((n) => n.meta.type === type && String(n.meta.title ?? "").toLowerCase() === name.toLowerCase());
   if (same) return { path: same.path, created: false };
-  const note = afterWrite(c.root, () => newNote(c.root, type, name, { description: "Added from the phone." }));
+  const note = afterWrite(c.root, () => newNote(c.root, type, name, { description: "Added from your device." }));
   return { path: note.path, created: true };
 }
 
@@ -62,7 +62,7 @@ export function addFile(c: Ctx) {
   const same = loadAll(c.root).find((n) => n.meta.type === "Note" && String(n.meta.title ?? "") === title && n.body.trim() === body.trim());
   if (same) return { path: same.path, created: false };
   const made = afterWrite(c.root, () => {
-    const note = newNote(c.root, "Note", title, { description: `File added from the phone: ${title}`.slice(0, 150), tags: ["reference"], ...(asks.length && { asks }) });
+    const note = newNote(c.root, "Note", title, { description: `File added from your device: ${title}`.slice(0, 150), tags: ["reference"], ...(asks.length && { asks }) });
     return writeNote(c.root, note.path, note.meta, `${body.trimEnd()}\n`);
   });
   return { path: made.path, created: true };

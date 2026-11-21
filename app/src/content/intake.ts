@@ -8,7 +8,7 @@ export const intake = {
   lineHint: "Fix it so it sounds like you.",
   shortening: "Making it short on this device",
   noneTitle: "No questions waiting",
-  noneBody: "Run the intake on your Mac to add more.",
-  offlineTitle: "Can't reach your Mac",
-  offlineBody: "The intake needs your Mac. Try again soon.",
+  noneBody: "Run the intake on your home server to add more.",
+  offlineTitle: "Can't reach your home server",
+  offlineBody: "The intake needs your home server. Try again soon.",
 };

@@ -40,7 +40,9 @@ describe("api", () => {
   it("returns offline for a 503 from the Mac proxy", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue(reply(503, { error: "The Mac is offline", offline: true })),
+      vi
+        .fn()
+        .mockResolvedValue(reply(503, { error: "Your home server is offline", offline: true })),
     );
     expect(await api("/api/today")).toEqual({ ok: false, offline: true });
   });

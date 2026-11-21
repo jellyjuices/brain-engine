@@ -67,7 +67,7 @@ for (const status of [502, 503, 504, 530]) {
     stub(() => new Response("tunnel", { status }));
     const res = await call(env, "/api/today", { headers: { Cookie: cookie } });
     assert.equal(res.status, 503);
-    assert.deepEqual(await res.json(), { error: "The Mac is offline", offline: true });
+    assert.deepEqual(await res.json(), { error: "Your home server is offline", offline: true });
   });
 }
 
@@ -78,7 +78,7 @@ test("proxy says the Mac is offline on a network failure", async () => {
   });
   const down = await call(env, "/api/today", { headers: { Cookie: cookie } });
   assert.equal(down.status, 503);
-  assert.deepEqual(await down.json(), { error: "The Mac is offline", offline: true });
+  assert.deepEqual(await down.json(), { error: "Your home server is offline", offline: true });
 });
 
 test("proxy is offline when MAC_ORIGIN is not set, and never reached when locked", async () => {
@@ -104,7 +104,7 @@ for (const [method, path] of agentTokenCalls) {
     const seen = stub(() => Response.json({ token: "minted" }));
     const res = await call(env, path, { method, headers: { Cookie: cookie } });
     assert.equal(res.status, 403);
-    assert.deepEqual(await res.json(), { error: "Do this on the Mac" });
+    assert.deepEqual(await res.json(), { error: "Do this on your home server" });
     assert.equal(seen.length, 0);
   });
 }

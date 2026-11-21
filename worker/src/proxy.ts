@@ -5,7 +5,7 @@ const TIMEOUT_MS = 8000;
 const TUNNEL_DOWN = new Set([502, 503, 504, 530]);
 
 function offline() {
-  return json({ error: "The Mac is offline", offline: true }, 503);
+  return json({ error: "Your home server is offline", offline: true }, 503);
 }
 
 function forwardHeaders(request: Request, env: Env): Headers {

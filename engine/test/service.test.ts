@@ -30,7 +30,7 @@ test("serve enables and loads both jobs, then says it is on", async () => {
   const l = fakeLaunchd();
   const r = await startService({ ...base, run: l.run, agentsDir: agents("com.brain.serve", "com.brain.tunnel"), health: async () => true });
   assert.equal(r.ok, true);
-  assert.deepEqual(r.lines, ["Phone access is on."]);
+  assert.deepEqual(r.lines, ["Device access is on."]);
   assert.deepEqual(["enable gui/501/com.brain.serve"].filter((v) => !l.calls.includes(v)), []);
   assert.deepEqual(["enable gui/501/com.brain.tunnel"].filter((v) => !l.calls.includes(v)), []);
   assert.deepEqual([...l.loaded].sort(), ["com.brain.serve", "com.brain.tunnel"]);
@@ -54,7 +54,7 @@ test("serve without a tunnel still starts the server and says so", async () => {
   const l = fakeLaunchd();
   const r = await startService({ ...base, run: l.run, agentsDir: agents("com.brain.serve"), health: async () => true });
   assert.equal(r.ok, false);
-  assert.equal(r.lines[0], "Phone access is on.");
+  assert.equal(r.lines[0], "Device access is on.");
   assert.match(r.lines[1], /tunnel is not set up/);
 });
 

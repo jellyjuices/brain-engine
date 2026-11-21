@@ -118,7 +118,7 @@ test("a valid cookie opens a gated route, no cookie gets 401 with no-store", asy
   const cookie = await login(env);
   const res = await call(env, "/api/today", { headers: { Cookie: cookie } });
   assert.equal(res.status, 503);
-  assert.deepEqual(await res.json(), { error: "The Mac is offline", offline: true });
+  assert.deepEqual(await res.json(), { error: "Your home server is offline", offline: true });
 });
 
 test("an expired cookie is refused", async (t) => {

@@ -11,7 +11,7 @@ export async function pullCommand(c: CliContext): Promise<number> {
   try {
     const result = await pull(root, cfg);
     if (flags.json) json(result);
-    else if (result.pulled) out(`Pulled ${result.pulled} from the phone${result.filed ? ` (${result.filed} added straight to a note)` : ""}.`);
+    else if (result.pulled) out(`Pulled ${result.pulled} from your devices${result.filed ? ` (${result.filed} added straight to a note)` : ""}.`);
     return 0;
   } catch (err) {
     return fail((err as Error).message);

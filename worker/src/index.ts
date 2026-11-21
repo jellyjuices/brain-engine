@@ -45,7 +45,8 @@ async function relay(request: Request, env: Env, pathname: string): Promise<Resp
 
 async function api(request: Request, env: Env, pathname: string): Promise<Response> {
   if (pathname === "/api/health") return json({ ok: true });
-  if (pathname.toLowerCase().startsWith(MAC_ONLY)) return jsonError("Do this on the Mac", 403);
+  if (pathname.toLowerCase().startsWith(MAC_ONLY))
+    return jsonError("Do this on your home server", 403);
   const open = OPEN_API[pathname];
   if (open) return byMethod(open, request, env);
   if (!(await hasValidSession(env, request))) return jsonError("This brain is locked", 401);

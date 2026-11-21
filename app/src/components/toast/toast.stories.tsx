@@ -60,7 +60,7 @@ export const Failed: Story = {
   args: {
     variant: "error",
     message: "Could not add",
-    detail: "The Mac mini is out of reach",
+    detail: "Your home server is out of reach",
     actions: act("Try again"),
   },
 };

@@ -2,7 +2,7 @@ export const settings = {
   title: "Settings",
   unsent: "Not synced",
   unsentOffline: "You're offline. These sync when you reconnect.",
-  unsentHint: "Changes on this device that haven't reached your Mac",
+  unsentHint: "Changes on this device that haven't reached your home server",
   syncNow: "Sync now",
   app: "App",
   version: "Version",

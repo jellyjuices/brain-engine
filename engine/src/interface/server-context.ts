@@ -24,7 +24,7 @@ export function safeNotePath(raw: string, write: boolean): string {
   const parts = path.split("/");
   const bad = !path || path.includes("\0") || path.includes("\\") || path.startsWith("/") || !path.endsWith(".md") || parts.length < 2;
   if (bad || parts.some((p, i) => !p || p === "." || p === ".." || (p.startsWith(".") && !(i === 0 && p === DIRS.archive)))) throw new HttpError(400, "That path is not valid.");
-  if (!NOTE_DIRS.includes(parts[0])) throw new HttpError(403, "That folder is not open to the phone.");
+  if (!NOTE_DIRS.includes(parts[0])) throw new HttpError(403, "That folder is not open to your devices.");
   if (write && parts[0] === DIRS.archive) throw new HttpError(403, "Archived notes are read only.");
   return path;
 }

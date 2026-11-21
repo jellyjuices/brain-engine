@@ -57,7 +57,7 @@ export async function startService(d: ServiceDeps = {}): Promise<ServiceResult> 
   const { run, uid, agentsDir, sleep, health } = deps(d);
   const lines: string[] = [];
   const present = JOBS.filter((j) => existsSync(join(agentsDir, `${j}.plist`)));
-  if (!present.includes("com.brain.serve")) return { ok: false, lines: ["Phone access is not set up yet. Run setup.sh in the brain engine first."] };
+  if (!present.includes("com.brain.serve")) return { ok: false, lines: ["Device access is not set up yet. Run setup.sh in the brain engine first."] };
 
   for (const job of present) {
     const target = `gui/${uid}/${job}`;
@@ -66,10 +66,10 @@ export async function startService(d: ServiceDeps = {}): Promise<ServiceResult> 
     const loaded = run(["bootstrap", `gui/${uid}`, join(agentsDir, `${job}.plist`)]);
     if (!loaded.ok) lines.push(`Could not start ${job}: ${loaded.out}`);
   }
-  if (!present.includes("com.brain.tunnel")) lines.push("The tunnel is not set up, so only this Mac can reach it. See resources/phone-setup.md.");
+  if (!present.includes("com.brain.tunnel")) lines.push("The tunnel is not set up, so only the home server can reach it. See resources/phone-setup.md.");
 
   const up = await waitFor(health, sleep);
-  lines.unshift(up ? "Phone access is on." : "Started, but the server does not answer yet. Check ~/Library/Logs/brain/serve.log.");
+  lines.unshift(up ? "Device access is on." : "Started, but the server does not answer yet. Check ~/Library/Logs/brain/serve.log.");
   return { ok: up && lines.length === 1, lines };
 }
 
@@ -82,6 +82,6 @@ export async function stopService(d: ServiceDeps = {}): Promise<ServiceResult> {
   }
   const gone = await waitFor(() => JOBS.every((j) => !run(["print", `gui/${uid}/${j}`]).ok), sleep);
   return gone
-    ? { ok: true, lines: ["Phone access is off. Adds from the phone wait until you run brain serve."] }
-    : { ok: false, lines: ["Phone access is still stopping. Run brain kill again in a moment."] };
+    ? { ok: true, lines: ["Device access is off. Adds from your devices wait until you run brain serve."] }
+    : { ok: false, lines: ["Device access is still stopping. Run brain kill again in a moment."] };
 }

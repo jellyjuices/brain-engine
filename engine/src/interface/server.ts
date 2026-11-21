@@ -66,7 +66,7 @@ export function createServer(root: string, token: string, opts: ServerOptions = 
 const LOOPBACK = new Set(["127.0.0.1", "localhost", "::1"]);
 
 export function checkHost(host: string): void {
-  if (!LOOPBACK.has(host)) throw new Error(`brain serve only listens on this Mac (127.0.0.1). It will not bind ${host}. Use the tunnel to reach it.`);
+  if (!LOOPBACK.has(host)) throw new Error(`brain serve only listens on the home server itself (127.0.0.1). It will not bind ${host}. Use the tunnel to reach it.`);
 }
 
 export function serve(root: string, opts: { host?: string; port?: number } = {}, say: (s: string) => void = console.log): Promise<number> {

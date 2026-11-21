@@ -1,6 +1,6 @@
 export const today = {
   noNotesTitle: "No notes yet",
-  noNotesBody: "Your notes appear once this phone connects to your Mac.",
+  noNotesBody: "Your notes appear once this device connects to your home server.",
   nothingToday: "Nothing due today",
   overdue: "Overdue",
   noDateYet: "No date",

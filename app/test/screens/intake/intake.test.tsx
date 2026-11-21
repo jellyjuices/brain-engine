@@ -88,10 +88,10 @@ describe("intake screen", () => {
     expect(await screen.findByText("No questions waiting")).toBeInTheDocument();
   });
 
-  it("says when the Mac can't be reached", async () => {
+  it("says when the home server can't be reached", async () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("offline")));
     render(<IntakeScreen />);
-    expect(await screen.findByText("Can't reach your Mac")).toBeInTheDocument();
+    expect(await screen.findByText("Can't reach your home server")).toBeInTheDocument();
   });
 
   it("keeps the full answer as the line when the phone can't summarize", async () => {

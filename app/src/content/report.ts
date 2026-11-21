@@ -7,8 +7,8 @@ export const report = {
   summarize: "Summarize on this device",
   summary: "Summary",
   summaryFailed: "Couldn't summarize. Read the full report below.",
-  offlineTitle: "Can't reach your Mac",
-  offlineBody: "Reports come from your Mac. Try again soon.",
+  offlineTitle: "Can't reach your home server",
+  offlineBody: "Reports come from your home server. Try again soon.",
   missingTitle: "No report here",
   missingBody: "This report does not exist.",
 };

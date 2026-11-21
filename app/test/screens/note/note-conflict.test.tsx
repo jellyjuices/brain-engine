@@ -29,23 +29,23 @@ async function open() {
 }
 
 describe("note conflict", () => {
-  it("Keep Mac version asks first and says the owner's version will be gone", async () => {
+  it("Keep home server version asks first and says the owner's version will be gone", async () => {
     const user = await open();
-    await user.click(screen.getByRole("button", { name: "Keep Mac version" }));
+    await user.click(screen.getByRole("button", { name: "Keep home server version" }));
     expect(await screen.findByText(/Your version will be gone/)).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Go back" }));
   });
 
   it("going back keeps the owner's text and the conflict", async () => {
     const user = await open();
-    await user.click(screen.getByRole("button", { name: "Keep Mac version" }));
+    await user.click(screen.getByRole("button", { name: "Keep home server version" }));
     await user.click(await screen.findByRole("button", { name: "Go back" }));
     expect((await getConflict(FITNESS.path))?.mine).toBe("My careful words");
   });
 
   it("closing the sheet keeps the owner's text too", async () => {
     const user = await open();
-    await user.click(screen.getByRole("button", { name: "Keep Mac version" }));
+    await user.click(screen.getByRole("button", { name: "Keep home server version" }));
     await screen.findByText(/Your version will be gone/);
     await user.keyboard("{Escape}");
     expect((await getConflict(FITNESS.path))?.mine).toBe("My careful words");
@@ -53,7 +53,7 @@ describe("note conflict", () => {
 
   it("confirming drops the owner's version", async () => {
     const user = await open();
-    await user.click(screen.getByRole("button", { name: "Keep Mac version" }));
+    await user.click(screen.getByRole("button", { name: "Keep home server version" }));
     await user.click(await screen.findByRole("button", { name: "Delete my version" }));
     await vi.waitFor(async () => expect(await getConflict(FITNESS.path)).toBeUndefined());
   });

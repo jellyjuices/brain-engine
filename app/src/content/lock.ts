@@ -15,7 +15,7 @@ export const lock = {
   notSetUp: "Brain isn't set up yet.",
   passwordChanged: "Password changed. Unsynced changes cleared",
   locked: "Brain is locked.",
-  fpUnsupported: "This phone doesn't support fingerprint unlock.",
+  fpUnsupported: "This device doesn't support fingerprint unlock.",
   fpSetupFailed: "Couldn't set up fingerprint.",
   fpRelock: "Lock and unlock with your password, then try again.",
   fpSetupCancelled: "Fingerprint setup cancelled.",
