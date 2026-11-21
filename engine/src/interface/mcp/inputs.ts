@@ -1,4 +1,4 @@
-import { type AddRelationRequest, type AddRequest, type DeleteTodoRequest, type DoneRequest, DRAFT_KINDS, type MakeNoteRequest, type MoveRequest, type SaveDraftRequest, type SortBitRequest, type SortRequest, type DraftKind } from "../api-types.ts";
+import { type AddRelationRequest, type AddRequest, type DeleteTodoRequest, type DoneRequest, DRAFT_KINDS, type MakeNoteRequest, type MoveLineRequest, type MoveRequest, type RetagRequest, type SaveDraftRequest, type SortBitRequest, type SortRequest, type DraftKind } from "../api-types.ts";
 import { TODO_VIEWS, type TodoView } from "../../../shared/todos/index.ts";
 import { type Input, int, NONE, obj, oneOf, req, shape, str, strs } from "./schema.ts";
 
@@ -76,6 +76,9 @@ export const INPUTS: Record<string, Input> = {
     draft_id: str(),
   }),
   unsorted: NONE,
+  sorted: NONE,
+  move_line: obj<MoveLineRequest>({ path: req(str("The note the line is in.")), line: req(str("The line exactly as sorted gave it.")), into: req(str(PATH)) }),
+  retag: obj<RetagRequest>({ path: req(str("The note the line is in.")), line: req(str("The line exactly as sorted gave it.")), tag: req(str("A tag or area slug, like health.")) }),
   make_note: obj<MakeNoteRequest>({
     type: req(str("A note type, like Goal, Decision or Project.")),
     title: req(str()),

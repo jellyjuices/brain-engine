@@ -37,7 +37,7 @@ test("T4: one tool per route, and owner-only and hidden routes have none", () =>
   const names = new Set(TOOLS.map((t) => t.def.name));
   const leaked = ROUTES.filter((r) => (r.owner || r.mcp === false) && names.has(r.tool)).map((r) => r.tool);
   assert.deepEqual(leaked, []);
-  assert.equal(TOOLS.length, 24);
+  assert.equal(TOOLS.length, 26);
 });
 
 test("T4: a tool is read-only exactly when its route is a GET", () => {

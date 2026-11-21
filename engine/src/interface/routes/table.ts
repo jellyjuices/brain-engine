@@ -10,6 +10,7 @@ import { decisionRoute, goalRoute, goalsRoute } from "./goals.ts";
 import { addJournal } from "./journal.ts";
 import { dropDraft, listDrafts, oneDraft, saveDraft } from "./drafts.ts";
 import { addRelation, deleteNote, makeNote, relationsRoute } from "./notes.ts";
+import { moveLineRoute, retagRoute, sortedRoute } from "./sorted.ts";
 import { findRoute, logRoute, todosRoute } from "./reads.ts";
 
 export type Method = "GET" | "POST" | "PUT" | "DELETE";
@@ -50,6 +51,9 @@ export const ROUTES: Route[] = [
   r("GET", "/api/decisions/", "decision", "One decision: status, decide-by to-do, goals and what was decided.", "Use with a decision slug or path.", decisionRoute, { prefix: true }),
   r("POST", "/api/sort", "sort", "Sort a capture or journal note into subjects. A capture is deleted; a journal stays whole.", "Use on an item from unsorted.", sortRoute),
   r("GET", "/api/unsorted", "unsorted", "How many captures and journal notes wait, and which.", "Use before you sort.", unsortedRoute),
+  r("GET", "/api/sorted", "sorted", "Lines the sorter filed, by subject, with kind and whether to check.", "Use to review or fix sorting.", sortedRoute),
+  r("POST", "/api/move-line", "move_line", "Move a filed line to another subject. It clears the check mark.", "Use when a line sits in the wrong subject.", moveLineRoute),
+  r("POST", "/api/retag", "retag", "Move a filed line to the area for a tag.", "Use to change a line's tag.", retagRoute, HIDDEN),
   r("POST", "/api/notes", "make_note", "Make a note from a type and a title.", "Use for a new goal, decision or project.", makeNote),
   r("DELETE", "/api/notes/", "delete_note", "Delete a note. It moves to the archive.", "Use only when asked.", deleteNote, { prefix: true, ...HIDDEN }),
   r("PUT", "/api/notes/", "edit_note", "Save an edited note body. Needs the hash it was read at.", "Read the note first.", editNote, { prefix: true }),

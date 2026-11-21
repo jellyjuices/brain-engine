@@ -499,6 +499,51 @@
     }
   },
   {
+    "name": "sorted",
+    "description": "Lines the sorter filed, by subject, with kind and whether to check. Use to review or fix sorting.",
+    "inputSchema": {
+      "type": "object",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "move_line",
+    "description": "Move a filed line to another subject. It clears the check mark. Use when a line sits in the wrong subject.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "The note the line is in."
+        },
+        "line": {
+          "type": "string",
+          "description": "The line exactly as sorted gave it."
+        },
+        "into": {
+          "type": "string",
+          "description": "A note path, like people/alex-sample.md."
+        }
+      },
+      "required": [
+        "path",
+        "line",
+        "into"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "make_note",
     "description": "Make a note from a type and a title. Use for a new goal, decision or project.",
     "inputSchema": {

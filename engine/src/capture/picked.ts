@@ -12,14 +12,20 @@ const textList = (x: unknown): string[] => (Array.isArray(x) ? x.filter((s): s i
 
 const isFiled =(n: Note | undefined): n is Note => !!n && folderOf(n) !== "inbox" && folderOf(n) !== DIRS.archive && typeOf(n) !== "Capture";
 
+const areasOf = (notes: Note[]) => notes.filter((n) => typeOf(n) === "Area" && isFiled(n));
+
+export function areaForTag(notes: Note[], tag: string): Note | undefined {
+  const areas = areasOf(notes);
+  return areas.find((a) => a.path === `areas/${tag}.md`) ?? areas.find((a) => tagsOf(a).includes(tag));
+}
+
 function tagHome(notes: Note[], tags: string[]): Note | undefined {
   if (!tags.length) return undefined;
-  const areas = notes.filter((n) => typeOf(n) === "Area" && isFiled(n));
   for (const tag of tags) {
-    const hit = areas.find((a) => a.path === `areas/${tag}.md`) ?? areas.find((a) => tagsOf(a).includes(tag));
+    const hit = areaForTag(notes, tag);
     if (hit) return hit;
   }
-  return areas.find((a) => a.path === GENERAL);
+  return areasOf(notes).find((a) => a.path === GENERAL);
 }
 
 export function pickedHome(notes: Note[], p: Picks): { target?: Note; with: string[]; re: string[] } {
