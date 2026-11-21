@@ -13,10 +13,31 @@ export const goals = {
   decisions: "Decisions",
   why: "Why",
   noGoalsTitle: "No goals yet",
-  noGoalsBody: "Add a goal from +.",
+  noGoalsBody: "Tap Add goal to start one.",
   offlineTitle: "Can't reach your Mac",
   offlineBody: "Goals come from your Mac. Try again soon.",
   missingTitle: "No goal here",
   missingBody: "This goal does not exist.",
   targetDone: (text: string) => `Done: ${text}`,
+  addGoal: "Add goal",
+  build: {
+    title: "Goal",
+    name: "Goal",
+    nameQuestion: "What is your goal?",
+    nameHint: "A big aim you move toward, like getting strong.",
+    namePlaceholder: "Get strong",
+    whyQuestion: (goal: string) => `Why does ${goal} matter?`,
+    whyHint: "You read this when you feel stuck.",
+    whyLabel: "Why",
+    targetsQuestion: (goal: string) => `What targets lead to ${goal}?`,
+    targetsHint: "One target per line. You cross each one off when you hit it.",
+    targetsLabel: "Targets",
+    targetsPlaceholder: "Bench 185 lb\nBench 205 lb\nBench 225 lb",
+    areasQuestion: (goal: string) => `Which life areas is ${goal} in?`,
+    next: "Next",
+    addTo: (goal: string, areas: string[]) =>
+      areas.length <= 2
+        ? `Add ${goal} to ${areas.join(" and ")}`
+        : `Add ${goal} to ${areas.length} life areas`,
+  },
 };

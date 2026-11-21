@@ -8,10 +8,11 @@ import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { addFile } from "@/flows/create-flow.ts";
 import { copy } from "@/content/index.ts";
 
-type ChoiceId = Extract<KindName, "intake" | "person" | "place" | "thing" | "file">;
+type ChoiceId = Extract<KindName, "intake" | "goal" | "person" | "place" | "thing" | "file">;
 
 const CHOICES: { id: ChoiceId; label: string; hint?: string }[] = [
   { id: "intake", label: copy.nav.intake, hint: copy.add.intakeHint },
+  { id: "goal", label: copy.add.goal, hint: copy.add.goalHint },
   { id: "person", label: copy.add.person },
   { id: "place", label: copy.add.place },
   { id: "thing", label: copy.add.thing },

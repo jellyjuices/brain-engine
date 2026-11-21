@@ -1,5 +1,6 @@
 import "fake-indexeddb/auto";
 import { cleanup, render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { GoalView } from "@shared/todos/index.ts";
 import { go } from "@/lib/platform/router.ts";
@@ -94,6 +95,14 @@ describe("Goals tab", () => {
       "aria-valuenow",
       "40",
     );
+  });
+
+  it("Add goal opens the goal builder", async () => {
+    const user = userEvent.setup();
+    serve();
+    render(<GoalsScreen />);
+    await user.click(screen.getByRole("button", { name: copy.goals.addGoal }));
+    expect(location.pathname).toBe("/build/goal");
   });
 
   it("puts subgoals and the goal's own decisions under it", async () => {

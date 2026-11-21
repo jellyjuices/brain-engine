@@ -5,6 +5,7 @@ import { toStored } from "@/lib/notes/model.ts";
 import { enqueue, list, registerHandler, remove } from "./outbox.ts";
 import { putNotes } from "@/lib/storage/store.ts";
 import { registerRelationWrites } from "./relation-writes.ts";
+import { registerGoalWrites } from "./goal-writes.ts";
 import type {
   InboxPayload,
   DonePayload,
@@ -48,6 +49,7 @@ export async function sendEdit(p: EditPayload): Promise<ApiResult> {
 
 export function registerWrites() {
   registerRelationWrites();
+  registerGoalWrites();
   registerHandler("inbox", (item) => {
     const { text, into, tags } = item.payload as InboxPayload;
     return api("/api/inbox", {

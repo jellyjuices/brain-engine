@@ -8,6 +8,8 @@ export const add = {
   place: "Place",
   thing: "Thing",
   file: "File",
+  goal: "Goal",
+  goalHint: "A big aim, with targets to cross off",
   intakeHint: "Answer one question about you",
   fileHint: "A .txt or .md file",
   addingTo: "Adding to",
