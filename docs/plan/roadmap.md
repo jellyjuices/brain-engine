@@ -46,6 +46,7 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | A | Make `~/.config/brain/privacy-words.txt` | Template: `ops/config/privacy-words.example.txt`. Without it the privacy scan checks nothing |
 | B | Say yes to the jobs spec | Track R2. [jobs-spec.md](../design/jobs-spec.md). R3 waits on it |
 | C | Should a phone add with a sure guess file at once? | [helpers.md](../intent/helpers.md) aim 1 says sorted within minutes. Today every app add waits in Unsorted. Change the intent or the code |
+| F | When the server refuses a write, where does the owner's text go? | Pick: keep it in Unsorted with a "Didn't save" mark, so nothing is lost. Or keep it on the phone with "Try again" and "Copy" |
 | D | Stage 6 of the intake points to `resources/values-list.md`, which does not exist | Write the list, or drop the file and let stage 6 ask without it |
 
 ## Track P: Polish and UX safety
@@ -68,7 +69,10 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 
 | # | Step | Size | Needs |
 | --- | --- | --- | --- |
-| P4 | UX safety sweep: list each write and each screen, check Undo, confirm and the four states. Write the gaps here, then fix them in batches | Medium | none |
+| P4a | Data loss: confirm on "Keep Mac's" (`note-conflict.tsx`); Undo on inbox delete (`inbox-flow.ts`) and note edit (`note-edit.tsx`); keep Undo on offline writes (`save-flow.ts`) | Medium | in progress |
+| P4b | A write the server refuses is dropped from the outbox (`outbox.ts:140`), and the owner's text is lost | Small | F |
+| P4c | Undo and "where it went" on every other write: sort, journal, file, subject, link, goal, goal target, birthday, partner, skip question. Toasts that say only "Saved" or "Sorted" name the place | Medium | P4a |
+| P4d | Screen states: no screen has a real loading or error state. Journal, add and file have no empty or offline state. Goals and goal use one message for offline and missing | Medium | none |
 | P5 | Visual sweep: the owner lists what looks off on the phone, and agents fix it with `build-ui` | Small each | owner list |
 
 ## Track S: Sorting
@@ -168,5 +172,4 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | E2 | Old repeat copies on note pages: check they read well | Small | none |
 | E3 | Repeat history line for a to-do in another note: link it to the subject | Small | none |
 | E4 | Dead code: 11 unused exports in `engine/` | Small | none |
-| E6 | Gates fail on old work: `app/test/lib/notes/goal-draft.test.ts` expects "Sample goal" for the input "Get strong", and Prettier flags 5 files (`list.stories.tsx`, `markdown.test.tsx`, `save-flow.test.ts`, `goal-draft.test.ts`, `goals.test.ts`) | Small | none |
 | E5 | Test cleanup. Skipped: `app/test/shell/shell-frame/shell-frame.test.tsx` (tab bar rows; Settings now sits in the To-dos header) and `app/test/shell/unsorted-banner/unsorted-banner.test.tsx` (the banner now sits in To-dos). Brittle: Add panel tests find the blob by part of a class name; `mention.test.tsx` no longer checks the look | Small | after the UI settles |
