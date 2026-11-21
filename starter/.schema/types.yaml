@@ -30,7 +30,7 @@ event_status: [upcoming, done, cancelled]
 goal_status: [active, later, done]
 project_status: [active, finished, stable, draft, deprecated]
 # The colours an area can take, in the order a new area gets them. Each is a name in the design system.
-area_colors: [health, rest-and-fun, home, money, fitness, personal-projects, client-work, career, business-admin, life-admin, relationships, love-life]
+area_colors: [health, rest-and-fun, home, money, fitness, personal-projects, client-work, career, business-admin, life-admin, relationships, love-life, sense-of-self]
 decision_status: [open, decided, dropped]
 outcome: [today, date, someday, waiting, keep, drop]
 

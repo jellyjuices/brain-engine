@@ -28,6 +28,7 @@ The owner, when they have the energy to reflect. Never on a schedule.
 - Lens writes apply the privacy level in `me/settings.yaml`.
 - Raw talks live in `sources/intake/` and are never edited.
 - Never diagnose, label or explain the owner to themselves. Record only links they make.
+- Sense of self is a life area (`areas/sense-of-self.md`). It holds to-dos and links for building their sense of self. The values, story and identity lenses hold who they are.
 - A lens is about who the owner is and how they feel. An area is about what they handle. Each lens says where its line with the areas sits, so one fact lives in one place.
 - A lens note is made the first time the intake saves to it or sets its privacy. Until then it does not exist. Wellbeing and identity start at `headline` until the owner changes it in stage 0.
 - Open threads are saved questions for a later chat. They live as checklist lines under `# Open threads` in their lens note, not as files: `- [ ] What made weeks feel lighter in the past? · ★ · depth 2 · 2026-11-04`, or `- [x] … · talked · 2026-11-04` once talked.

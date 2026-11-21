@@ -30,7 +30,7 @@ Coverage lists, not forms. At the end of a lens, ask only about what has not com
 
 ## Brain dump joggers
 
-client-work: anyone waiting on you? business-admin: invoices, taxes, contracts? money: bills, subscriptions, big purchases? home: repairs, a move, landlord? health: appointments, check-ups? fitness: program, gear, recovery? career: portfolio, next contracts? love-life: dating, what you want in a partner, what is in the way? relationships: someone to call, something you owe? personal-projects: ideas that keep coming back? life-admin: documents, renewals, errands? rest-and-fun: trips, hobbies?
+client-work: anyone waiting on you? business-admin: invoices, taxes, contracts? money: bills, subscriptions, big purchases? home: repairs, a move, landlord? health: appointments, check-ups? fitness: program, gear, recovery? career: portfolio, next contracts? love-life: dating, what you want in a partner, what is in the way? sense-of-self: what do you stand for, who are you becoming, what feels off? relationships: someone to call, something you owe? personal-projects: ideas that keep coming back? life-admin: documents, renewals, errands? rest-and-fun: trips, hobbies?
 
 **Area check-in** (when an area feels heavy): `brain intake <area>` asks what is going on, what has a date, what worries them most, who else is involved, and what "handled" would look like.
 

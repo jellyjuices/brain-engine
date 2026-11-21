@@ -155,6 +155,15 @@
   --color-area-love-life-700: #85415E;
   --color-area-love-life-800: #602C42;
   --color-area-love-life-900: #321823;
+  --color-area-sense-of-self-100: #FEEFF1;
+  --color-area-sense-of-self-200: #FFD8DC;
+  --color-area-sense-of-self-300: #FEB8C1;
+  --color-area-sense-of-self-400: #F196A4;
+  --color-area-sense-of-self-500: #D77787;
+  --color-area-sense-of-self-600: #B35B6B;
+  --color-area-sense-of-self-700: #89404E;
+  --color-area-sense-of-self-800: #622C36;
+  --color-area-sense-of-self-900: #34181D;
   --color-area-general-100: #F1F4F4;
   --color-area-general-200: #DEE4E4;
   --color-area-general-300: #C6D0CF;
@@ -339,6 +348,10 @@
   --area-love-life-fill: var(--color-area-love-life-600);
   --area-love-life-text: var(--color-area-love-life-800);
   --area-love-life-glow: var(--color-area-love-life-300);
+  --area-sense-of-self-accent: var(--color-area-sense-of-self-700);
+  --area-sense-of-self-fill: var(--color-area-sense-of-self-600);
+  --area-sense-of-self-text: var(--color-area-sense-of-self-800);
+  --area-sense-of-self-glow: var(--color-area-sense-of-self-300);
   --area-general-accent: var(--color-area-general-700);
   --area-general-fill: var(--color-area-general-600);
   --area-general-text: var(--color-area-general-800);
@@ -440,6 +453,10 @@
     --area-love-life-fill: var(--color-area-love-life-400);
     --area-love-life-text: var(--color-area-love-life-200);
     --area-love-life-glow: var(--color-area-love-life-600);
+    --area-sense-of-self-accent: var(--color-area-sense-of-self-300);
+    --area-sense-of-self-fill: var(--color-area-sense-of-self-400);
+    --area-sense-of-self-text: var(--color-area-sense-of-self-200);
+    --area-sense-of-self-glow: var(--color-area-sense-of-self-600);
     --area-general-accent: var(--color-area-general-300);
     --area-general-fill: var(--color-area-general-400);
     --area-general-text: var(--color-area-general-200);

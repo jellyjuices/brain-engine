@@ -15,6 +15,7 @@ export const areaKeys: Record<string, AreaKey> = {
   "life-admin": { hue: 300, label: "Life admin" },
   relationships: { hue: 328, label: "Relationships" },
   "love-life": { hue: 355, label: "Love life" },
+  "sense-of-self": { hue: 10, label: "Sense of self" },
   general: { hue: 190, chroma: 0.12, label: "General" },
 };
 
