@@ -90,3 +90,21 @@ test("proxy is offline when MAC_ORIGIN is not set, and never reached when locked
   assert.equal((await call(env, "/api/today")).status, 401);
   assert.equal(seen.length, 0);
 });
+
+const agentTokenCalls = [
+  ["POST", "/api/agent-token"],
+  ["DELETE", "/api/agent-token"],
+  ["POST", "/api/agent-token/"],
+  ["POST", "/api/Agent-Token"],
+];
+
+for (const [method, path] of agentTokenCalls) {
+  test(`${method} ${path} from a phone session is 403 and never reaches the Mac`, async () => {
+    const { env, cookie } = await setup();
+    const seen = stub(() => Response.json({ token: "minted" }));
+    const res = await call(env, path, { method, headers: { Cookie: cookie } });
+    assert.equal(res.status, 403);
+    assert.deepEqual(await res.json(), { error: "Do this on the Mac" });
+    assert.equal(seen.length, 0);
+  });
+}

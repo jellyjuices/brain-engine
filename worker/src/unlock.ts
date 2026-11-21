@@ -1,14 +1,13 @@
 import {
-  clearFailures,
   clearSessionCookie,
+  clearTries,
   clientKey,
   createSessionCookie,
   hasValidSession,
   isPasswordOff,
   isSessionConfigured,
-  recordFailure,
-  retryAfterSeconds,
   safeEqual,
+  waitBeforeTry,
   type Env,
 } from "./auth.ts";
 import { json, jsonError } from "./headers.ts";
@@ -22,16 +21,14 @@ export async function unlock(env: Env, request: Request): Promise<Response> {
   if (!isSessionConfigured(env))
     return jsonError("The app password is not configured: set PASSWORD and SESSION_SECRET", 503);
   const key = clientKey(request);
-  const wait = await retryAfterSeconds(env, key);
+  const wait = await waitBeforeTry(env, key);
   if (wait > 0)
     return jsonError("Too many attempts. Try again later", 429, { "Retry-After": String(wait) });
 
   const body = (await request.json().catch(() => ({}))) as { password?: unknown };
-  if (typeof body.password !== "string" || !(await safeEqual(body.password, env.PASSWORD))) {
-    await recordFailure(env, key);
+  if (typeof body.password !== "string" || !(await safeEqual(body.password, env.PASSWORD)))
     return jsonError("That password is not right", 401);
-  }
-  await clearFailures(env, key);
+  await clearTries(env, key);
   return json({ unlocked: true }, 200, { "Set-Cookie": await createSessionCookie(env) });
 }
 

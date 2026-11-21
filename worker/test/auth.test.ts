@@ -53,6 +53,36 @@ test("the sixth try after five failures is 429 with Retry-After, even with the r
   );
 });
 
+function wrongGuess(ip: string) {
+  return { ...post({ password: "wrong-horse-battery" }), ip };
+}
+
+test("50 wrong guesses at once from one IP: 5 reach the password check, 45 are 429", async () => {
+  const { env } = makeEnv();
+  const burst = Array.from({ length: 50 }, () => call(env, "/api/unlock", wrongGuess("1.2.3.4")));
+  const statuses = (await Promise.all(burst)).map((res) => res.status).sort((a, b) => a - b);
+  assert.deepEqual(statuses, [...Array(5).fill(401), ...Array(45).fill(429)]);
+});
+
+test("after a 50-guess burst from one IP, the right password from another IP is 200", async () => {
+  const { env } = makeEnv();
+  const burst = Array.from({ length: 50 }, () => call(env, "/api/unlock", wrongGuess("1.2.3.4")));
+  await Promise.all(burst);
+  const res = await call(env, "/api/unlock", { ...post({ password: PASSWORD }), ip: "5.6.7.8" });
+  assert.equal(res.status, 200);
+});
+
+test("after 30 wrong guesses from 30 IPs, the right password from a new IP is 429", async () => {
+  const { env } = makeEnv();
+  const ips = Array.from({ length: 30 }, (_, i) => `2001:db8::${i + 1}`);
+  await Promise.all(ips.map((ip) => call(env, "/api/unlock", wrongGuess(ip))));
+  const res = await call(env, "/api/unlock", {
+    ...post({ password: PASSWORD }),
+    ip: "2001:db8::99",
+  });
+  assert.equal(res.status, 429);
+});
+
 test("a good unlock clears earlier failures", async () => {
   const { env, db } = makeEnv();
   await call(env, "/api/unlock", post({ password: "bad" }));

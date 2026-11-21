@@ -106,36 +106,36 @@ export function clientKey(request: Request): string {
   return request.headers.get("CF-Connecting-IP") || "unknown";
 }
 
-export async function retryAfterSeconds(
+export const ALL_CLIENTS = "*";
+const MAX_ALL_CLIENTS = 30;
+
+export const TAKE_TRY = `INSERT INTO login_attempts (ip, count, first_at) VALUES (?1, 1, ?2)
+  ON CONFLICT(ip) DO UPDATE SET
+    count = CASE WHEN ?2 - first_at >= ?3 THEN 1 ELSE count + 1 END,
+    first_at = CASE WHEN ?2 - first_at >= ?3 THEN ?2 ELSE first_at END
+  RETURNING count, first_at`;
+
+async function takeTry(env: Env, key: string, limit: number, nowSeconds: number): Promise<number> {
+  const row = await env.DB.prepare(TAKE_TRY)
+    .bind(key, nowSeconds, WINDOW_SECONDS)
+    .first<{ count: number; first_at: number }>();
+  if (!row || row.count <= limit) return 0;
+  return Math.max(1, row.first_at + WINDOW_SECONDS - nowSeconds);
+}
+
+export async function waitBeforeTry(
   env: Env,
   key: string,
   nowSeconds = Math.floor(Date.now() / 1000),
 ): Promise<number> {
-  const row = await env.DB.prepare("SELECT count, first_at FROM login_attempts WHERE ip = ?")
-    .bind(key)
-    .first<{ count: number; first_at: number }>();
-  if (!row) return 0;
-  if (nowSeconds - row.first_at >= WINDOW_SECONDS) {
-    await clearFailures(env, key);
-    return 0;
-  }
-  return row.count >= MAX_FAILURES ? row.first_at + WINDOW_SECONDS - nowSeconds : 0;
+  const client = await takeTry(env, key, MAX_FAILURES, nowSeconds);
+  return client || takeTry(env, ALL_CLIENTS, MAX_ALL_CLIENTS, nowSeconds);
 }
 
-export async function recordFailure(
-  env: Env,
-  key: string,
-  nowSeconds = Math.floor(Date.now() / 1000),
-): Promise<void> {
-  await env.DB.prepare(
-    "INSERT INTO login_attempts (ip, count, first_at) VALUES (?, 1, ?) ON CONFLICT(ip) DO UPDATE SET count = count + 1",
-  )
-    .bind(key, nowSeconds)
+export async function clearTries(env: Env, key: string): Promise<void> {
+  await env.DB.prepare("DELETE FROM login_attempts WHERE ip = ? OR ip = ?")
+    .bind(key, ALL_CLIENTS)
     .run();
-}
-
-export async function clearFailures(env: Env, key: string): Promise<void> {
-  await env.DB.prepare("DELETE FROM login_attempts WHERE ip = ?").bind(key).run();
 }
 
 export async function requireRelayToken(env: Env, request: Request): Promise<Response | null> {

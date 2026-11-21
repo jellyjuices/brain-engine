@@ -35,10 +35,20 @@ class FakeStatement {
     return new FakeStatement(this.db, this.sql, args);
   }
 
+  takeTry(): Attempt {
+    const [ip, now, window] = this.args as [string, number, number];
+    const row = this.db.attempts.get(ip);
+    const next =
+      row && now - row.first_at < window
+        ? { count: row.count + 1, first_at: row.first_at }
+        : { count: 1, first_at: now };
+    this.db.attempts.set(ip, next);
+    return next;
+  }
+
   async first<T>(): Promise<T | null> {
     const [a] = this.args as [string];
-    if (this.sql.startsWith("SELECT count, first_at FROM login_attempts"))
-      return (this.db.attempts.get(a) as T) ?? null;
+    if (this.sql.startsWith("INSERT INTO login_attempts")) return this.takeTry() as T;
     if (this.sql.startsWith("SELECT client_id, received_at FROM inbox"))
       return (this.db.inbox.get(a) as T) ?? null;
     throw new Error(`FakeD1 first: unknown SQL ${this.sql}`);
@@ -58,14 +68,9 @@ class FakeStatement {
 
   async run(): Promise<{ success: true }> {
     const [a, b, c, d, e, f] = this.args as [string, string, string, string, number, string | null];
-    if (this.sql.startsWith("INSERT INTO login_attempts")) {
-      const row = this.db.attempts.get(a);
-      this.db.attempts.set(
-        a,
-        row ? { ...row, count: row.count + 1 } : { count: 1, first_at: b as unknown as number },
-      );
-    } else if (this.sql.startsWith("DELETE FROM login_attempts")) {
+    if (this.sql.startsWith("DELETE FROM login_attempts")) {
       this.db.attempts.delete(a);
+      this.db.attempts.delete(b);
     } else if (this.sql.startsWith("INSERT OR IGNORE INTO inbox")) {
       if (!this.db.inbox.has(a))
         this.db.inbox.set(a, {
