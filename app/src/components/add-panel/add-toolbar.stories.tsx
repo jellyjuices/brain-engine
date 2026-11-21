@@ -9,7 +9,7 @@ const meta = {
   component: AddToolbar,
   args: {
     journal: true,
-    actions: { bold: none, italic: none, list: none, tag: none, mention: none },
+    actions: { bold: none, italic: none, list: none, tag: none, link: none },
     pressed: rest,
     drawer: null,
     end: null,
