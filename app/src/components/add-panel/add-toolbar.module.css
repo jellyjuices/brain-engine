@@ -30,3 +30,38 @@
 .end {
   margin-inline-start: auto;
 }
+
+.addToolbarButton {
+  display: grid;
+  place-items: center;
+  min-width: var(--size-control);
+  min-height: var(--size-control);
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.addToolbarGhost {
+  display: grid;
+  place-items: center;
+  width: var(--size-control-sm);
+  height: var(--size-control-sm);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  transition: background-color var(--motion-fast) var(--motion-easing);
+}
+
+.addToolbarGhost > svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.addToolbarButton:active .addToolbarGhost {
+  background: var(--background-pressed);
+}
+
+@media (hover: hover) {
+  .addToolbarButton:hover .addToolbarGhost {
+    background: var(--background-hover);
+  }
+}

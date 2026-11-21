@@ -1,11 +1,12 @@
-import styles from "./add-panel.module.css";
+import styles from "./add-toolbar.module.css";
 import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
+import { Icon } from "@/components/icon/icon.tsx";
 import { KindIcon } from "@/components/kind-icon/kind-icon.tsx";
 
 export function AddToolbarButton({
   icon,
   label,
-  pressed,
+  pressed = false,
   onClick,
 }: {
   icon: PhosphorIcon;
@@ -19,10 +20,15 @@ export function AddToolbarButton({
       className={styles.addToolbarButton}
       aria-label={label}
       aria-pressed={pressed}
-      onMouseDown={(e) => e.preventDefault()}
       onClick={onClick}
     >
-      <KindIcon name="other" icon={icon} variant="secondary" />
+      {pressed ? (
+        <KindIcon name="other" icon={icon} variant="secondary" />
+      ) : (
+        <span className={styles.addToolbarGhost}>
+          <Icon icon={icon} />
+        </span>
+      )}
     </button>
   );
 }

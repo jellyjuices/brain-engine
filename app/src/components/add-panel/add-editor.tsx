@@ -54,10 +54,16 @@ export function AddEditor({
       )
     );
 
+  const pickerOpen = mentions.suggestions.length > 0;
   const bar = (
     <AddToolbar
       journal={kind === "journal"}
       actions={words}
+      pressed={{
+        ...words.formats,
+        tag: pickerOpen && mentions.kind === "tag",
+        mention: pickerOpen && mentions.kind === "mention",
+      }}
       drawer={drawer}
       end={kind === "journal" && <AddExpandButton full={full} onToggle={onToggleFull} />}
     />

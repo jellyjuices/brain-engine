@@ -22,14 +22,18 @@ function keepFocus(e: SyntheticEvent) {
   e.preventDefault();
 }
 
+export type AddToolbarPressed = Record<"bold" | "italic" | "list" | "tag" | "mention", boolean>;
+
 export function AddToolbar({
   journal,
   actions,
+  pressed,
   drawer,
   end,
 }: {
   journal: boolean;
   actions: AddToolbarActions;
+  pressed: AddToolbarPressed;
   drawer: ReactNode;
   end: ReactNode;
 }) {
@@ -37,13 +41,38 @@ export function AddToolbar({
     <div className={styles.addToolbar} onPointerDown={keepFocus} onMouseDown={keepFocus}>
       {drawer}
       <div className={styles.tools} role="toolbar" aria-label={copy.add.format}>
-        <AddToolbarButton icon={TextBIcon} label={copy.add.bold} onClick={actions.bold} />
-        <AddToolbarButton icon={TextItalicIcon} label={copy.add.italic} onClick={actions.italic} />
+        <AddToolbarButton
+          icon={TextBIcon}
+          label={copy.add.bold}
+          pressed={pressed.bold}
+          onClick={actions.bold}
+        />
+        <AddToolbarButton
+          icon={TextItalicIcon}
+          label={copy.add.italic}
+          pressed={pressed.italic}
+          onClick={actions.italic}
+        />
         {journal && (
-          <AddToolbarButton icon={ListBulletsIcon} label={copy.add.list} onClick={actions.list} />
+          <AddToolbarButton
+            icon={ListBulletsIcon}
+            label={copy.add.list}
+            pressed={pressed.list}
+            onClick={actions.list}
+          />
         )}
-        <AddToolbarButton icon={HashIcon} label={copy.common.tag} onClick={actions.tag} />
-        <AddToolbarButton icon={AtIcon} label={copy.add.mention} onClick={actions.link} />
+        <AddToolbarButton
+          icon={HashIcon}
+          label={copy.common.tag}
+          pressed={pressed.tag}
+          onClick={actions.tag}
+        />
+        <AddToolbarButton
+          icon={AtIcon}
+          label={copy.add.mention}
+          pressed={pressed.mention}
+          onClick={actions.link}
+        />
         <div className={styles.end}>{end}</div>
       </div>
     </div>

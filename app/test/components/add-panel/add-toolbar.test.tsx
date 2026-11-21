@@ -102,3 +102,62 @@ describe("quick add tool bar", () => {
     expect(await screen.findByRole("button", { name: /Alex/ })).toBeInTheDocument();
   });
 });
+
+describe("tool bar pressed state", () => {
+  it("all buttons rest unpressed", async () => {
+    await openTodo("Call mom");
+    for (const name of ["Bold", "Italic", "Tag", "Mention"]) {
+      expect(screen.getByRole("button", { name })).toHaveAttribute("aria-pressed", "false");
+    }
+  });
+
+  it.each(["Bold", "Italic"])("%s shows pressed after it is turned on", async (name) => {
+    const { user } = await openTodo("Call mom");
+    await user.click(screen.getByRole("button", { name }));
+    expect(screen.getByRole("button", { name })).toHaveAttribute("aria-pressed", "true");
+    await user.click(screen.getByRole("button", { name }));
+    expect(screen.getByRole("button", { name })).toHaveAttribute("aria-pressed", "false");
+  });
+
+  it("Bold shows pressed when the caret moves into bold text", async () => {
+    const { user, box } = await openTodo("Call mom now");
+    selectEditable(box, 6, 6);
+    await user.click(screen.getByRole("button", { name: "Bold" }));
+    selectEditable(box, 0, 0);
+    fireEvent.select(box);
+    expect(screen.getByRole("button", { name: "Bold" })).toHaveAttribute("aria-pressed", "false");
+    selectEditable(box, 6, 6);
+    fireEvent.select(box);
+    expect(screen.getByRole("button", { name: "Bold" })).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("Tag shows pressed while the tag picker is open", async () => {
+    const { user } = await openTodo("Pay rent");
+    await user.click(screen.getByRole("button", { name: "Tag" }));
+    await screen.findByRole("button", { name: /^#money/ });
+    expect(screen.getByRole("button", { name: "Tag" })).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("Mention shows pressed while the mention picker is open", async () => {
+    const { user } = await openTodo("Call");
+    await user.click(screen.getByRole("button", { name: "Mention" }));
+    await screen.findByRole("button", { name: /Alex/ });
+    expect(screen.getByRole("button", { name: "Mention" })).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("List shows pressed when the caret is on a list line in the journal", async () => {
+    const user = userEvent.setup();
+    render(<AddPanel />);
+    await user.click(screen.getByRole("button", { name: "Add" }));
+    await user.click(screen.getByRole("menuitem", { name: "Journal" }));
+    const box = screen.getByRole("textbox", { name: "Journal" });
+    box.focus();
+    box.textContent = "plain\n- one";
+    selectEditable(box, 9, 9);
+    fireEvent.input(box);
+    expect(screen.getByRole("button", { name: "List" })).toHaveAttribute("aria-pressed", "true");
+    selectEditable(box, 2, 2);
+    fireEvent.select(box);
+    expect(screen.getByRole("button", { name: "List" })).toHaveAttribute("aria-pressed", "false");
+  });
+});

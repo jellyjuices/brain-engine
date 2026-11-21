@@ -11,6 +11,7 @@ import { LIVE_CLASSES } from "@/components/add-input/live-classes.ts";
 import { useMentions } from "@/components/mention-suggestions/use-mentions.ts";
 import { mentionName, setWhenWord } from "@/lib/notes/capture.ts";
 import type { Picked } from "@/lib/notes/live-marks.ts";
+import { NO_FORMATS, formatState, type FormatState } from "@/lib/notes/format-state.ts";
 import { insertTrigger, pasteText, prefixLines, pullTags, type Edit } from "@/lib/notes/markers.ts";
 import type { Suggestion } from "@/lib/notes/mention.ts";
 import { richSegments } from "@/lib/notes/rich-segments.ts";
@@ -43,6 +44,7 @@ export function useAddText(box: RefObject<HTMLDivElement | null>, kind: AddKind,
   const [field] = useState(() => ({ current: editableField(box) }));
   const [text, setText] = useState("");
   const [tags, setTags] = useState<string[]>([]);
+  const [formats, setFormats] = useState<FormatState>(NO_FORMATS);
   const picked = useRef<Picked>({ names: [], tags: [] });
   const rich = useRef(EMPTY_RICH);
   const typing = useRef<Typing | null>(null);
@@ -98,10 +100,22 @@ export function useAddText(box: RefObject<HTMLDivElement | null>, kind: AddKind,
     setText(next);
   }
 
+  function syncFormats() {
+    setFormats(
+      formatState(
+        rich.current,
+        typing.current,
+        field.current.selectionStart,
+        field.current.selectionEnd,
+      ),
+    );
+  }
+
   function place(start: number, end: number) {
     field.current.focus();
     if (box.current) placeLiveCaret(box.current, start, end, LIVE_CLASSES);
     mentions.track();
+    syncFormats();
   }
 
   function apply(change: (value: string, start: number, end: number) => Edit) {
@@ -134,6 +148,7 @@ export function useAddText(box: RefObject<HTMLDivElement | null>, kind: AddKind,
     const at = field.current.selectionStart;
     if (typing.current && typing.current.at !== at) typing.current = null;
     mentions.track();
+    syncFormats();
   }
 
   function onInput(e: FormEvent) {
@@ -142,6 +157,7 @@ export function useAddText(box: RefObject<HTMLDivElement | null>, kind: AddKind,
     if (!(e.nativeEvent as InputEvent).isComposing) paint();
     setText(value);
     mentions.track();
+    syncFormats();
   }
 
   function onPaste(e: ClipboardEvent) {
@@ -172,6 +188,7 @@ export function useAddText(box: RefObject<HTMLDivElement | null>, kind: AddKind,
   return {
     text,
     mentions,
+    formats,
     events: { onInput, onPaste, onSelect, onKeyDown },
     saved,
     bold: () => style(BOLD),

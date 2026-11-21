@@ -136,16 +136,6 @@
   top: var(--vvt, 0);
 }
 
-.addToolbarButton {
-  display: grid;
-  place-items: center;
-  min-width: var(--size-control);
-  min-height: var(--size-control);
-  padding: 0;
-  border: 0;
-  background: transparent;
-}
-
 .addSurfaceJournal::before {
   clip-path: var(--shape-blossom-square);
   animation: none;
