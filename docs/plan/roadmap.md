@@ -170,4 +170,5 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | E2 | Old repeat copies on note pages: check they read well | Small | none |
 | E3 | Repeat history line for a to-do in another note: link it to the subject | Small | none |
 | E4 | Dead code: 11 unused exports in `engine/` | Small | none |
+| E7 | `brain check` asks "Make a Person?" for words that are not people: a common word that starts a sentence, a faith or other proper adjective, a phrase that starts with a small word, the last word of a longer name. Fix in `engine/src/reports/check-issues.ts` and the code that finds unlinked names | Small | in progress |
 | E5 | Test cleanup. Skipped: `app/test/shell/shell-frame/shell-frame.test.tsx` (tab bar rows; Settings now sits in the To-dos header) and `app/test/shell/unsorted-banner/unsorted-banner.test.tsx` (the banner now sits in To-dos). Brittle: Add panel tests find the blob by part of a class name; `mention.test.tsx` no longer checks the look | Small | after the UI settles |
