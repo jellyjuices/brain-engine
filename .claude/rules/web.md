@@ -1,5 +1,5 @@
 ---
-description: Core rules for the phone app and Worker in app/ and worker/ (gates, layout, app flow, React, code style).
+description: Core rules for the app and Worker in app/ and worker/ (gates, layout, app flow, React, code style).
 paths:
   - "app/**"
   - "worker/**"

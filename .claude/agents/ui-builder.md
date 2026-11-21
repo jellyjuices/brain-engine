@@ -21,7 +21,7 @@ Return this, and nothing else:
 Built: <one line>
 Files: <paths>
 Gates: <pass|fail, with the failing gate>
-Look at on the phone: <short list of taps>
+Look at on a small screen: <short list of taps>
 Not mine: <failures outside the change, or "nothing">
 Open: <questions, or "nothing">
 ```

@@ -23,7 +23,7 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 
 - Work in the main checkout, on `main`. Commit by path. Never push. The owner pushes.
 - No worktrees, unless two agents write the same files at the same time.
-- `brain serve` and the jobs run from this checkout on the Mac mini. Keep the gates passing between commits.
+- `brain serve` and the jobs run from this checkout on the home server. Keep the gates passing between commits.
 - After a change to the server, restart it: `launchctl kickstart -k gui/$(id -u)/com.brain.serve`.
 - The owner checks screens by using the app while building. A visual check is not a blocker.
 - The owner approves every structure, tech and design change.
@@ -45,8 +45,8 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | --- | --- | --- |
 | A | Make `~/.config/brain/privacy-words.txt` | Template: `ops/config/privacy-words.example.txt`. Without it the privacy scan checks nothing |
 | B | Say yes to the jobs spec and its 4 open questions | Track R. [jobs-spec.md](../design/jobs-spec.md). R3 waits on it |
-| C | Should a phone add with a sure guess file at once? | [helpers.md](../intent/helpers.md) aim 1 says sorted within minutes. Today every app add waits in Unsorted. Change the intent or the code |
-| F | When the server refuses a write, where does the owner's text go? | Pick: keep it in Unsorted with a "Didn't save" mark, so nothing is lost. Or keep it on the phone with "Try again" and "Copy" |
+| C | Should an add from the app with a sure guess file at once? | [helpers.md](../intent/helpers.md) aim 1 says sorted within minutes. Today every app add waits in Unsorted. Change the intent or the code |
+| F | When the server refuses a write, where does the owner's text go? | Pick: keep it in Unsorted with a "Didn't save" mark, so nothing is lost. Or keep it on the device with "Try again" and "Copy" |
 | D | Stage 6 of the intake points to `resources/values-list.md`, which does not exist | Write the list, or drop the file and let stage 6 ask without it |
 
 ## Track P: Polish and UX safety
@@ -65,14 +65,14 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 
 **Limits:** design tokens only. Shared parts from `app/src/components/`. Owner words only.
 
-**Now:** the first three "Done when" lines are true in code. To-do rows take `surface` from every caller. Subject chips need a whole name of 3+ letters or a sure guess, and skip the word still being typed. Format buttons are ghost at rest and pressed while on. The owner has not yet checked them on the phone. Data loss fixes are in: "Keep Mac version" asks first; inbox delete and note edit have Undo that also restores the phone's copy; an offline write keeps Undo. `saveFlow` shows Undo only when the server returns an undo id, or while the write is queued.
+**Now:** the first three "Done when" lines are true in code. To-do rows take `surface` from every caller. Subject chips need a whole name of 3+ letters or a sure guess, and skip the word still being typed. Format buttons are ghost at rest and pressed while on. The owner has not yet checked them on a small screen. Data loss fixes are in: keeping the server's version of a note asks first; inbox delete and note edit have Undo that also restores the device's copy; an offline write keeps Undo. `saveFlow` shows Undo only when the server returns an undo id, or while the write is queued.
 
 | # | Step | Size | Needs |
 | --- | --- | --- | --- |
 | P4b | A write the server refuses is dropped from the outbox (`outbox.ts:140`), and the owner's text is lost | Small | F |
 | P4c | "Where it went" on every write: toasts that say only "Saved" or "Sorted" name the place. Check each write's route returns an undo id (goal target edits the note directly, so it has none) | Medium | none |
 | P4d | Screen states: no screen has a real loading or error state. Journal, add and file have no empty or offline state. Goals and goal use one message for offline and missing | Medium | none |
-| P5 | Visual sweep: the owner lists what looks off on the phone, and agents fix it with `build-ui` | Small each | owner list |
+| P5 | Visual sweep: the owner lists what looks off on a small screen, and agents fix it with `build-ui` | Small each | owner list |
 
 ## Track S: Sorting
 
@@ -89,7 +89,7 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 
 **Limits:** no AI needed to sort. A sort writes one log entry. An unsure filing carries `· check`.
 
-**Now:** the shared core is in `engine/shared/sort/`: named subjects first, then the nearest subject by words. `brain pull` files with it. The app sends every phone add with `hold`, so it waits in Unsorted. The Unsorted banner opens the `inbox` screen, one sheet per row. The engine has `GET /api/sorted`, `POST /api/move-line` and `POST /api/retag`, logged and undoable; the app does not use them yet. The sorter does not learn. `moveLine` in `engine/src/capture/sorted.ts` is the place to hook learning.
+**Now:** the shared core is in `engine/shared/sort/`: named subjects first, then the nearest subject by words. `brain pull` files with it. The app sends every add with `hold`, so it waits in Unsorted. The Unsorted banner opens the `inbox` screen, one sheet per row. The engine has `GET /api/sorted`, `POST /api/move-line` and `POST /api/retag`, logged and undoable; the app does not use them yet. The sorter does not learn. `moveLine` in `engine/src/capture/sorted.ts` is the place to hook learning.
 
 | # | Step | Size | Needs |
 | --- | --- | --- | --- |
@@ -98,12 +98,12 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | S8 | App: Move and change tag on a filed line, from a note page and from the toast after a sort | Medium | S2 design |
 | S4 | Re-guess captures already in Unsorted | Small | C |
 | S5 | Hit-rate check on the real brain | Small | owner runs it |
-| S6 | Meaning on the phone, once `embedQuery` is real | Medium | none |
+| S6 | Meaning search on a device, once `embedQuery` is real | Medium | none |
 | S7 | Shared core: raise `MIN_NAME` in `engine/shared/sort/names.ts` from 2 to 3, to match the app chips | Small | owner yes |
 
 ## Track R: Remote work and the local model add-on
 
-**Intent:** the owner runs an intake or a long job on the home server from the phone, from anywhere, without Claude. The engine is for anyone, so every part works with no AI. A local model is an add-on, like the calendar. See [system.md](../intent/system.md) and [me-and-intake.md](../intent/me-and-intake.md).
+**Intent:** the owner runs an intake or a long job on the home server from any device, from anywhere, without Claude. The engine is for anyone, so every part works with no AI. A local model is an add-on, like the calendar. See [system.md](../intent/system.md) and [me-and-intake.md](../intent/me-and-intake.md).
 
 **The gap:** MCP helps only when a Claude chat drives it, so it cannot meet this intent alone. It stays as a thin door for agents. Each route is already a tool, so it costs almost nothing to keep.
 
@@ -112,16 +112,16 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 - A job is a note's ask (`split`, `enrich`, `intake`) or a new kind, such as a sort sweep. File asks already store this.
 - With the add-on on, `brain serve` works through jobs one at a time. Every write carries `generated`, is logged and can be undone.
 - With it off, asks wait for a Claude chat or the owner, as today.
-- The phone shows each job: waiting, working, done or failed.
-- The phone app runs the intake itself on server steps. The model only adds the summary step when it is on.
+- The app shows each job: waiting, working, done or failed.
+- The app runs the intake itself on server steps. The model only adds the summary step when it is on.
 
 **Done when:**
 
 - With no model set up, every screen works and none shows a control that cannot run.
 - The add-on turns on and off by config only. No model name or address in code.
-- Away from home, the owner starts an intake on the phone, answers questions, and sees the notes and to-dos it made. No Claude.
-- With the add-on on, the owner adds a file with "split" on the phone and later sees the parts, each marked `generated`.
-- The phone shows each job's state. A failed job says why and offers to try again.
+- Away from home, the owner starts an intake on a device, answers questions, and sees the notes and to-dos it made. No Claude.
+- With the add-on on, the owner adds a file with "split" on a device and later sees the parts, each marked `generated`.
+- The app shows each job's state. A failed job says why and offers to try again.
 - A job never runs twice at once, and it survives a restart of `brain serve`.
 - The tunnel check passes: the token works from outside, the rate limit answers 429, a revoked token stops at once.
 - With no job running, `brain serve` stays near today's idle cost (0% CPU, about 115 MB).
@@ -134,7 +134,7 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | --- | --- | --- | --- |
 | R1 | Tunnel check from outside | Small | owner says go |
 | R3 | Home helper add-on: config, runner, job store, worker, routes and the split, enrich and questions jobs. Steps 1 to 5 of [jobs-spec.md](../design/jobs-spec.md) | Large | B |
-| R4 | Intake in the phone app, on server steps, plus file page job states. Steps 6 to 8 of [jobs-spec.md](../design/jobs-spec.md) | Large | B, D |
+| R4 | Intake in the app, on server steps, plus file page job states. Steps 6 to 8 of [jobs-spec.md](../design/jobs-spec.md) | Large | B, D |
 | R5 | Remove `brain intake` and `brain thread`. Update `AGENTS.md`, `brain-cli.md`, CLI help; run `brain migrate` | Small | R4 |
 | R6 | Start the server on demand (optional) | Medium | owner wants it |
 
@@ -146,7 +146,7 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 
 - Each area in the README has a screen that meets its intent doc.
 - No route points at an old screen, and the old screens are gone.
-- A draft typed on the phone survives a closed app and a lost signal.
+- A draft typed on a device survives a closed app and a lost signal.
 
 | # | Step | Size | Needs |
 | --- | --- | --- | --- |

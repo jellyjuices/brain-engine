@@ -30,4 +30,4 @@ The owner, when something seems off or out of date, or about once a month.
 
 ## Open questions
 
-1. Where Settings opens from on the phone, in the laptop window, and in the menu bar popover.
+1. Where Settings opens from on a small screen, in a large window, and in the menu bar popover.

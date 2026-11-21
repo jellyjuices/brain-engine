@@ -34,7 +34,7 @@ Idea: part. Parts live in `components/<part>/` unless a path is given.
 - Screen header: `PageHeader`. Group header or group label with a count: `SectionHeader`. A field or fact label keeps its own style in its part.
 - Notice with one action: `Banner`.
 - Sheet: `openSheet()`, `confirmSheet()`. Sheet top: `SheetHead`. Sheet buttons: `SheetActions`, primary last.
-- Pick one from a list: `Select`. Sheets, sheet menus and `Select` are a bottom sheet on the phone and a dropdown on desktop, by CSS only.
+- Pick one from a list: `Select`. Sheets, sheet menus and `Select` are a bottom sheet on a small screen and a dropdown on a large one, by CSS only.
 - Short message after an action: `toast()` from `components/toast/toast-store.ts`.
 - Type a value: `TextField`. Long text: `TextArea`. Search: `SearchInput`. Search with suggestions: `Combobox`. Never a new search box.
 - Pick a note, person or tag: `SearchList`. In a sheet: `pickNote()`, `pickTag()`. In another sheet: `PickField`.

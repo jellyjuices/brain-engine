@@ -73,7 +73,7 @@ One JSON file feeds two test runners, so the CLI and the app agree.
 | A screen left open sends its text into the next test | Wait for the test's own send in `afterEach` |
 | One test over 1 s from PBKDF2 | `unlockTestVault()` or `fastPasswordKeys()` from `app/test/helpers.ts` |
 | One root test over 1 s | It runs the `brain` command too often. 3 runs or fewer per test |
-| A test that passes only on the owner's Mac | Pass `BRAIN_HOME: makeBrain()`. Use a fixed clock, never `Date.now()` against a file time |
+| A test that passes only on the owner's machine | Pass `BRAIN_HOME: makeBrain()`. Use a fixed clock, never `Date.now()` against a file time |
 | `expect(x).toBe(true)` or `ok(a === b)` | Compare the value itself. Patterns: "Assert the value" in each reference |
 | `try/finally` and `if` inside a test (`pull.test.ts`, `mcp-parity.test.ts`) | Move setup and cleanup to `t.after`, `beforeEach` or a helper like `withApi()` |
 | `querySelector` or test id when a role or text exists (`markdown.test.tsx`) | `getByRole`, `getByLabelText`, `getByText` |

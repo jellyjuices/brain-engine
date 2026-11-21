@@ -19,7 +19,7 @@
 
 ## User
 
-The owner, when they need one fact fast, often on the phone and away from home.
+The owner, when they need one fact fast, often on a small screen and away from home.
 
 ## Constraints
 
@@ -31,6 +31,6 @@ The owner, when they need one fact fast, often on the phone and away from home.
 - Meaning search covers English. Other languages, such as Japanese and Spanish, are found by word search only.
 - Offline, the device searches its own read-only copy: a light word index plus stored meaning vectors.
 - The device fetches the model on its own, the first time it is on Wi-Fi. Until it loads, word search still works.
-- The phone is Android with Chrome. The app is installed to the home screen and asks for lasting storage, so Chrome does not clear it.
+- The app installs to the home screen of a device. It asks the browser for lasting storage, so the browser does not clear it.
 - No AI service is needed for search.
 - Plain-question answers come from the local model add-on when it is on, or from a Claude chat. With neither, Find still finds by words and meaning. Answers always cite note paths.

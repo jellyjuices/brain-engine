@@ -12,8 +12,8 @@
 ## Outcomes
 
 1. The home server holds the one copy of the brain.
-2. The phone and the laptop send every add and edit to the server. They may keep a read-only copy for offline Find (see [find.md](find.md)).
-3. On the laptop, the brain opens as a menu bar popover and as a window.
+2. Your devices send every add and edit to the server. They may keep a read-only copy for offline Find (see [find.md](find.md)).
+3. On a large screen, the brain opens as a window. On macOS it also opens as a menu bar popover.
 4. Agents work with the brain through an MCP server at `/mcp`, inside the brain server on the server.
 5. One shared to-do line module reads and writes to-do lines for the CLI, the app and the Worker.
 6. Sorting and search run with no paid service.
@@ -29,7 +29,7 @@ The owner, on any device. Also the agents that read and write the brain for them
 - A local model on the home server is an add-on, like the calendar. It is off until the owner sets it up in config. With it on, `brain serve` works through helper jobs on its own. With it off, nothing looks broken. Example setup: [local-models.md](../design/local-models.md).
 - Claude works only in chats the owner starts. No background Claude runs.
 - Embeddings run inside brain with Transformers.js, on the server and in the app, with the same small model (see [find.md](find.md)).
-- The phone is Android with Chrome. The laptop is a MacBook. The home server is a Mac mini.
+- Your devices are any phone, tablet or computer with a modern browser. The home server is any always-on machine. It runs macOS today because the jobs use `launchd`.
 - The terminal CLI is not a goal. It can be deprecated once the MCP server covers what agents need.
 - The daily auto-commit of the notes stays.
 - App code lives in the brain engine repo, apart from the notes. The engine holds no personal data, so anyone can fork it.

@@ -4,7 +4,7 @@ Goal: any AI that connects to `brain serve` can run a full intake with no shell 
 
 ## Why
 
-- Today the intake skill runs the `brain intake` and `brain thread` commands and reads files from the brain folder. An AI on the phone or on another machine has neither.
+- Today the intake skill runs the `brain intake` and `brain thread` commands and reads files from the brain folder. An AI on one of your devices or on another machine has neither.
 - The server has three intake tools. The skill needs about a dozen things. Nine have no tool.
 - The rules live in skill text, which a model can ignore. The server must enforce them.
 

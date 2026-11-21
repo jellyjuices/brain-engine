@@ -1,11 +1,11 @@
 ---
 name: build-ui
-description: Builds or fixes phone app UI in brain-engine so it works in the real app, from an approved mock, a spec, or UI feedback. Use when asked to implement mocks, build a screen or part, fix how something looks or behaves on screen, or make the UI consistent, or for any change under app/src/components, screens, shell or tokens.
+description: Builds or fixes app UI in brain-engine so it works in the real app, from an approved mock, a spec, or UI feedback. Use when asked to implement mocks, build a screen or part, fix how something looks or behaves on screen, or make the UI consistent, or for any change under app/src/components, screens, shell or tokens.
 ---
 
 # Build UI
 
-A UI change is done when it works in context on every screen that shows it, and the owner has looked at it on the phone. Tests do not see motion, layout or click-away.
+A UI change is done when it works in context on every screen that shows it, and the owner has looked at it on a small screen. Tests do not see motion, layout or click-away.
 
 ## Steps
 
@@ -20,7 +20,7 @@ A UI change is done when it works in context on every screen that shows it, and 
 6. Words go in `src/content/`. Logic goes in `lib/`. The flow goes in `flows/`. The component only draws and calls the flow.
 7. Add or change tests with the `write-tests` skill. A feature that breaks an old test on purpose: build the feature, skip the old test and add it to step E5 in `docs/plan/roadmap.md`.
 8. Run `npm run gates`. Then run the `web-reviewer` agent and fix its findings.
-9. Tell the owner what changed and what to look at on the phone, as a short list of taps.
+9. Tell the owner what changed and what to look at on a small screen, as a short list of taps.
 
 ## Rules
 
@@ -38,4 +38,4 @@ A UI change is done when it works in context on every screen that shows it, and 
 - [ ] Every screen that shows the part is fixed, not only the one named.
 - [ ] Spec written for a mock build. Mock files listed for the owner to delete.
 - [ ] `npm run gates` exits 0. `web-reviewer` has no findings left.
-- [ ] Committed by path. The owner has a list of what to check on the phone.
+- [ ] Committed by path. The owner has a list of what to check on a small screen.

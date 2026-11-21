@@ -13,7 +13,7 @@ description: Reads or updates docs/plan/roadmap.md in brain-engine, the one plan
 2. Check each open step and each "Done when" line against the code. A line that is true in code is done.
 3. Reply in three short groups:
    - **Done since last time**: one line each.
-   - **Needs you**: the "For the owner" rows, things to look at on the phone, commands only the owner runs (deploy, push, `rm`, restart). Lettered, so the owner can answer by letter.
+   - **Needs you**: the "For the owner" rows, things to look at on a small screen, commands only the owner runs (deploy, push, `rm`, restart). Lettered, so the owner can answer by letter.
    - **Next, in order**: open steps by what unblocks the most, with size and model (Small and Medium on Sonnet, Large on Opus at medium effort).
 4. Flag any step that looks like it needs re-work, in one line with the reason.
 

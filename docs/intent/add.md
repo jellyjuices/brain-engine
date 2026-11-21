@@ -19,7 +19,7 @@
 
 ## User
 
-The owner, on the phone between tasks, or at the laptop mid-work. Often tired. Often has one hand free.
+The owner, on a small screen between tasks, or on a large one mid-work. Often tired. Often has one hand free.
 
 ## Constraints
 

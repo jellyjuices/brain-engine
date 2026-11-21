@@ -16,7 +16,7 @@ This folder is the one source for what the brain is. Design, docs and code start
 
 The brain is working when:
 
-1. A to-do is saved in under 10 seconds, on the phone or the laptop, with no choice of where it goes.
+1. A to-do is saved in under 10 seconds, on any of your devices, with no choice of where it goes.
 2. Every add shows where it went. Every view gives something back.
 3. Each subject has one full view: to-dos, facts, people, feelings and a timeline.
 4. A big choice has one page that holds every thought on it.
@@ -28,7 +28,7 @@ The brain is working when:
 
 ## User
 
-One person: the owner. They are the only user. Design for a busy person with low energy on many days, for whom long screen time is hard. They use the phone app most, then the laptop. They add from + in a few ways: a quick to-do, a journal entry, an intake, or a step-by-step builder. They do not write notes from scratch.
+One person: the owner. They are the only user. Design for a busy person with low energy on many days, for whom long screen time is hard. They use a small screen most, then a large one. They add from + in a few ways: a quick to-do, a journal entry, an intake, or a step-by-step builder. They do not write notes from scratch.
 
 ## Areas
 
@@ -63,12 +63,12 @@ The tab bar is **To-dos · Goals · + · Find · Brain**.
 
 ### Look
 
-- Mobile first. The phone is the main screen; larger screens adapt from it.
+- Mobile first. Small screens come first; larger screens adapt from them.
 - Sea Glass: dark first, a seafoam accent, light noise, a corner glow, soft flat shapes.
 - Fonts: Hedvig Letters Serif for titles, Atkinson Hyperlegible Next for body and UI, Space Mono for numbers.
 - Each life area has a key colour. An item in several areas shows a mix of their colours.
 - Text always stays neutral. Colour sits on dots, bars and shapes, never on words.
-- The design system lives inside the phone app: parts in `app/src/components/`, tokens in `app/tokens/`.
+- The design system lives inside the app: parts in `app/src/components/`, tokens in `app/tokens/`.
 
 ### Words the owner sees
 
@@ -89,7 +89,7 @@ Never absorb, triage, loop or outcome.
 | Local and free. No paid AI. | No bill and no service can lock the owner out. |
 | Every part works with no AI. A local model is an add-on, like the calendar, turned on in config. | Anyone can run the engine on any machine. AI makes it nicer, never possible. |
 | No live links to outside apps. A data import now and then is fine. | The owner is not tied to one app. |
-| Voice comes from the phone keyboard or the OS. | Nothing to build or keep up. |
+| Voice comes from the device keyboard or the OS. | Nothing to build or keep up. |
 | Git history is the backup of the notes, private and local. The notes have no remote. | Any change can be undone, and the notes never leave the server. |
 
 Where it runs: [system.md](system.md).

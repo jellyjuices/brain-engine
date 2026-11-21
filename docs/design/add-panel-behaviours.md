@@ -17,7 +17,7 @@ Check list for hand-testing later slices. Paths are under `app/src/components/`.
 ## Tool bar (to-do and journal)
 
 - A tool bar sits under the open box: Bold, Italic, List (journal only), Tag, Mention, and Full screen (journal only) at the end. `add-panel/add-toolbar.tsx`
-- It is pinned to the bottom of the visual viewport, right above the tab bar: `--vvt` + `--vvh` - `--size-tabbar` - safe area. With the phone keyboard up, it sits on the keyboard. `add-panel/add-toolbar.module.css`
+- It is pinned to the bottom of the visual viewport, right above the tab bar: `--vvt` + `--vvh` - `--size-tabbar` - safe area. With the on-screen keyboard up, it sits on the keyboard. `add-panel/add-toolbar.module.css`
 - The text box ends above the tool bar (`--add-tools`), so it never covers the line being typed. Full screen ends there too. `add-input/add-input.module.css`
 - Bold and Italic wrap the selection in `**` or `_`; tapped again on a wrapped selection they unwrap. With no selection they put the marks at the caret, caret inside. `lib/notes/markers.ts`
 - List adds `- ` to each selected line, or takes it off when every line has it.
@@ -52,7 +52,7 @@ Check list for hand-testing later slices. Paths are under `app/src/components/`.
 - Tap on button: closed opens kinds, open closes, editing saves (empty text closes). `add-panel/add-panel.tsx`
 - Saving disables the button (`aria-busy`). `add-panel/add-panel.tsx`
 - "Other" kind closes and goes to `/add`. `add-panel/use-add-panel.ts`
-- On a phone keyboard, the tab bar hides unless todo or journal is open (`[data-keyboard]`). `shell/tab-bar/tab-bar.module.css`
+- With an on-screen keyboard, the tab bar hides unless todo or journal is open (`[data-keyboard]`). `shell/tab-bar/tab-bar.module.css`
 
 ## Hold and drag
 
