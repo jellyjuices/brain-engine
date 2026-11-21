@@ -44,7 +44,6 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | # | Task | Notes |
 | --- | --- | --- |
 | A | Make `~/.config/brain/privacy-words.txt` | Template: `ops/config/privacy-words.example.txt`. Without it the privacy scan checks nothing |
-| B | Say yes to the jobs spec and its 4 open questions | Track R. [jobs-spec.md](../design/jobs-spec.md). R3 waits on it |
 | C | Should an add from the app with a sure guess file at once? | [helpers.md](../intent/helpers.md) aim 1 says sorted within minutes. Today every app add waits in Unsorted. Change the intent or the code |
 | F | When the server refuses a write, where does the owner's text go? | Pick: keep it in Unsorted with a "Didn't save" mark, so nothing is lost. Or keep it on the device with "Try again" and "Copy" |
 | D | Stage 6 of the intake points to `resources/values-list.md`, which does not exist | Write the list, or drop the file and let stage 6 ask without it |
@@ -128,13 +127,14 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 
 **Limits:** no paid AI. No background Claude runs. Privacy rules enforced in the server. A helper never speaks first.
 
-**Now:** 26 MCP tools at `/mcp`, tools only, agent token, rate limit. The intake runs as `brain intake` and `brain thread` in a Claude chat. No model is wired in. File asks are stored, but nothing works through them. The design is in [jobs-spec.md](../design/jobs-spec.md); its intake steps reuse the tools in [intake-mcp-spec.md](../design/intake-mcp-spec.md).
+**Now:** 27 MCP tools at `/mcp`, tools only, agent token, rate limit. The intake runs as `brain intake` and `brain thread` in a Claude chat. The design is in [jobs-spec.md](../design/jobs-spec.md), with the owner's picks: file at once with `· check` and Undo, no follow-up questions in v1, jobs run at once, goal ideas at the end. Spec steps 1 and 2 are built in `engine/src/helper/`: config (off unless `BRAIN_HELPER_URL` and `BRAIN_HELPER_MODEL` are set, loopback only), the runner (OpenAI-compatible `/v1`, which honours `keep_alive` and `think: false`), the job store, one worker, and the job routes. No job kind does work yet. A kind returns a plan, and the worker writes it in one change only if the job was not stopped.
 
 | # | Step | Size | Needs |
 | --- | --- | --- | --- |
 | R1 | Tunnel check from outside | Small | owner says go |
-| R3 | Home helper add-on: config, runner, job store, worker, routes and the split, enrich and questions jobs. Steps 1 to 5 of [jobs-spec.md](../design/jobs-spec.md) | Large | B |
-| R4 | Intake in the app, on server steps, plus file page job states. Steps 6 to 8 of [jobs-spec.md](../design/jobs-spec.md) | Large | B, D |
+| R3 | Home helper job kinds: `split`, then `enrich` and `questions`, as plans in `KINDS` in `helper/worker.ts`. Spec steps 3 and 4 | Medium each | none |
+| R3b | `setup.sh` question, a "Home helper (optional)" section in `docs/phone-setup.md`, and `brain check` saying why a non-loopback URL keeps it off. Spec step 5 | Small | none |
+| R4 | Intake in the app, on server steps, plus file page job states. Steps 6 to 8 of [jobs-spec.md](../design/jobs-spec.md) | Large | R3, D |
 | R5 | Remove `brain intake` and `brain thread`. Update `AGENTS.md`, `brain-cli.md`, CLI help; run `brain migrate` | Small | R4 |
 | R6 | Start the server on demand (optional) | Medium | owner wants it |
 
