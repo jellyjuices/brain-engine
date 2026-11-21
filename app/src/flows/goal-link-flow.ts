@@ -7,7 +7,7 @@ import { goalHref } from "@/lib/notes/goals.ts";
 import type { StoredNote } from "@/lib/notes/model.ts";
 import { go } from "@/lib/platform/router.ts";
 import { getNote, putNotes } from "@/lib/storage/store.ts";
-import { flush, type OutboxItem } from "@/lib/sync/outbox.ts";
+import type { OutboxItem } from "@/lib/sync/outbox.ts";
 import { queueEdit } from "@/lib/sync/writes.ts";
 import { saveFlow } from "./save-flow.ts";
 
@@ -20,20 +20,28 @@ async function editNote(path: string, change: (body: string) => string): Promise
   return [await queueEdit(path, body, note.hash)];
 }
 
-async function queueLinks(goal: StoredNote, picks: TodoPick[]): Promise<OutboxItem[]> {
+async function queueLinks(
+  goal: StoredNote,
+  picks: TodoPick[],
+): Promise<{ queued: OutboxItem[]; linked: number }> {
   const byPath = new Map<string, string[]>();
   for (const pick of picks) {
     if (pick.path) byPath.set(pick.path, [...(byPath.get(pick.path) ?? []), pick.text]);
   }
   const queued: OutboxItem[] = [];
+  let linked = 0;
   for (const [path, texts] of byPath) {
     queued.push(
       ...(await editNote(path, (body) =>
-        texts.reduce((next, text) => towardIn(next, text, path, goal) ?? next, body),
+        texts.reduce((next, text) => {
+          const changed = towardIn(next, text, path, goal);
+          if (changed !== null) linked += 1;
+          return changed ?? next;
+        }, body),
       )),
     );
   }
-  return queued;
+  return { queued, linked };
 }
 
 async function queueTargets(goal: StoredNote, texts: string[]): Promise<OutboxItem[]> {
@@ -45,7 +53,9 @@ async function queueTargets(goal: StoredNote, texts: string[]): Promise<OutboxIt
 
 export async function linkTodos(goal: StoredNote, picks: TodoPick[]): Promise<void> {
   try {
-    if ((await queueLinks(goal, picks)).length > 0) await flush();
+    const { queued, linked } = await queueLinks(goal, picks);
+    const last = queued.at(-1);
+    if (last) await saveFlow(() => Promise.resolve(last), copy.goals.linked(linked, goal.title));
   } catch {
     toast(copy.toast.failed, { tone: "error" });
   }
@@ -54,7 +64,8 @@ export async function linkTodos(goal: StoredNote, picks: TodoPick[]): Promise<vo
 export async function addTodosToGoal(goal: StoredNote, items: TodoPick[]): Promise<boolean> {
   const texts = items.filter((item) => !item.path).map((item) => item.text);
   const ok = await saveFlow(async () => {
-    const queued = [...(await queueLinks(goal, items)), ...(await queueTargets(goal, texts))];
+    const links = (await queueLinks(goal, items)).queued;
+    const queued = [...links, ...(await queueTargets(goal, texts))];
     const last = queued.at(-1);
     if (!last) throw new Error("nothing to add");
     return last;

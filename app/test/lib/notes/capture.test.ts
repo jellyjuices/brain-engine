@@ -1,6 +1,26 @@
 import { describe, expect, it } from "vitest";
 import type { StoredNote } from "@/lib/notes/model.ts";
-import { inboxText, setWhenWord, tagsInUse } from "@/lib/notes/capture.ts";
+import { clip, inboxText, setWhenWord, tagsInUse } from "@/lib/notes/capture.ts";
+
+describe("clip", () => {
+  it("cuts a long line to 40 letters ending in an ellipsis", () => {
+    expect(clip("Ask Chantal about the cottage dates for the long weekend in July")).toBe(
+      "Ask Chantal about the cottage dates for…",
+    );
+  });
+  it("keeps a line of exactly 40 letters", () => {
+    const line = "Ask Chantal about the cottage dates now.";
+    expect(line).toHaveLength(40);
+    expect(clip(line)).toBe(line);
+  });
+  it("keeps a short line", () => {
+    expect(clip("Call Alex")).toBe("Call Alex");
+  });
+  it("never splits an emoji at the cut", () => {
+    const line = `${"a".repeat(39)}👩🏽‍🍳 and more`;
+    expect(clip(line)).toBe(`${"a".repeat(39)}…`);
+  });
+});
 
 describe("setWhenWord", () => {
   it("adds, swaps and clears the When word", () => {

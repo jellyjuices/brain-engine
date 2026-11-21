@@ -83,7 +83,8 @@ export function NoteEdit({ note: opened }: { note: StoredNote }) {
         await putNotes([{ ...fresh, body: next.text, tags: next.tags }]);
         return queueEdit(note.path, next.text, base.current, next.tags);
       },
-      async () => ((await getConflict(note.path)) ? copy.toast.conflict : copy.toast.saved),
+      async () =>
+        (await getConflict(note.path)) ? copy.toast.conflict : copy.toast.savedTo(note.title),
       false,
       async () => {
         await putNotes([before]);

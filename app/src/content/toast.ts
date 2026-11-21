@@ -1,5 +1,6 @@
 export const toast = {
   saved: "Saved",
+  savedTo: (place: string) => `Saved to ${place}`,
   added: "Added",
   savedOffline: "Saved offline",
   savedRetry: "Saved. Will sync later",
@@ -12,10 +13,8 @@ export const toast = {
   fileTooBig: "File too big. Limit 60 KB",
   fileEmpty: "File is empty",
   fileAdded: "File added",
-  journalSaved: "Saved to journal",
+  journalSaved: (date: string) => `Saved to journal, ${date}`,
   addedToNote: "Added",
-  sorted: "Sorted",
-  archived: "Deleted",
   keptMine: "Kept yours",
   keptMac: "Kept home server version",
   changeDone: (text: string) => `Done: ${text}`,

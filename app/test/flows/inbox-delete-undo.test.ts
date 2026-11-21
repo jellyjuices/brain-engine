@@ -47,10 +47,10 @@ function undoBodies() {
 }
 
 describe("deleting a capture", () => {
-  it("says Deleted, and Undo asks the Mac to undo it and puts the capture back", async () => {
+  it("names the capture, and Undo restores it through the home server", async () => {
     answering({ undo_id: "9d2f" });
     await archiveInboxItem(capture, () => Promise.resolve());
-    expect(toastSnapshot()[0]?.message).toBe("Deleted");
+    expect(toastSnapshot()[0]?.message).toBe("Deleted: Ask Chantal about the cottage dates");
     await clearStore();
 
     tapUndo();

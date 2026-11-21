@@ -18,7 +18,7 @@ export async function addBirthday(note: StoredNote): Promise<void> {
     const fresh = await freshNote(note);
     await putNotes([{ ...fresh, meta: { ...fresh.meta, birthday } }]);
     return queueBirthday(note.path, birthday);
-  }, copy.toast.saved);
+  }, copy.toast.savedTo(note.title));
 }
 
 export async function addPartner(note: StoredNote): Promise<void> {
@@ -37,5 +37,5 @@ export async function addPartner(note: StoredNote): Promise<void> {
     );
     await putNotes([{ ...fresh, body }]);
     return queueEdit(note.path, body, note.hash);
-  }, copy.toast.saved);
+  }, copy.toast.savedTo(note.title));
 }

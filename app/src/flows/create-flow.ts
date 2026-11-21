@@ -1,7 +1,7 @@
 import { go } from "@/lib/platform/router.ts";
 import { noteAfterSync } from "./build-flow.ts";
 import { dropHeldFile, holdFile, type PendingFile } from "./pending-file.ts";
-import { noteHref, type StoredNote } from "@/lib/notes/model.ts";
+import { niceDate, noteHref, type StoredNote } from "@/lib/notes/model.ts";
 import { toast } from "@/components/toast/toast-store.ts";
 import { pickNote } from "@/components/picker-sheet/picker-sheet.tsx";
 import { queueFile, queueJournal } from "@/lib/sync/writes.ts";
@@ -57,5 +57,5 @@ export async function readTextFile(file: File): Promise<string | null> {
 }
 
 export function saveJournal(p: JournalPayload): Promise<boolean> {
-  return saveFlow(() => queueJournal(p), copy.toast.journalSaved);
+  return saveFlow(() => queueJournal(p), copy.toast.journalSaved(niceDate(p.date)));
 }

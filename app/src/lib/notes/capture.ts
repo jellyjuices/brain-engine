@@ -19,6 +19,16 @@ export function tagsInUse(notes: StoredNote[]): string[] {
   return [...n.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([t]) => t);
 }
 
+export function clip(text: string, max = 40): string {
+  const letters = Array.from(new Intl.Segmenter().segment(text), (part) => part.segment);
+  return letters.length > max
+    ? `${letters
+        .slice(0, max - 1)
+        .join("")
+        .trimEnd()}…`
+    : text;
+}
+
 export function isFiled(n: StoredNote): boolean {
   return isLive(n) && !n.path.startsWith("inbox/") && n.type !== "Capture";
 }

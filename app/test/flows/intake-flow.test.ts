@@ -16,6 +16,8 @@ vi.mock("@/lib/sync/sync.ts", () => ({
 }));
 vi.mock("@/components/toast/toast-store.ts", () => ({ toast: vi.fn() }));
 
+import { toast } from "@/components/toast/toast-store.ts";
+
 const question = {
   question: "What makes a week feel lighter?",
   lens: "wellbeing",
@@ -48,6 +50,15 @@ describe("saveIntakeAnswer", () => {
       raw: answer.trim(),
       by: "gemini-nano",
     });
+  });
+
+  it("the saved toast names the lens the answer went to", async () => {
+    summarize.mockResolvedValue(short);
+    const draft = await shortenAnswer(answer);
+
+    await saveIntakeAnswer(question, draft);
+
+    expect(toast).toHaveBeenCalledWith("Saved to wellbeing", {});
   });
 
   it("a summary the owner changed is saved as written by the owner", async () => {

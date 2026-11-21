@@ -1,11 +1,11 @@
 import { pickNote } from "@/components/picker-sheet/picker-sheet.tsx";
 import { sortSheet } from "@/components/sort-sheet/sort-sheet.tsx";
-import { inboxText } from "@/lib/notes/capture.ts";
+import { clip, inboxText } from "@/lib/notes/capture.ts";
 import { bestHome } from "@/lib/notes/home-guess.ts";
 import { SUBJECT_TYPES } from "@/lib/notes/types.ts";
 import { inboxSheet, type InboxStep } from "@/components/inbox-sheet/inbox-sheet.tsx";
 import { noteHref, type StoredNote } from "@/lib/notes/model.ts";
-import { putNotes } from "@/lib/storage/store.ts";
+import { getNote, putNotes } from "@/lib/storage/store.ts";
 import { go } from "@/lib/platform/router.ts";
 import { queueInboxDrop, queueSort } from "@/lib/sync/writes.ts";
 import { saveFlow } from "./save-flow.ts";
@@ -13,6 +13,15 @@ import { copy } from "@/content/index.ts";
 
 function bringBack(item: StoredNote) {
   return () => putNotes([item]);
+}
+
+function deletedText(item: StoredNote): string {
+  return copy.toast.changeDropped(clip(inboxText(item)));
+}
+
+async function sortedText(path: string): Promise<string> {
+  const into = await getNote(path);
+  return copy.sort.addedTo(into?.title ?? path.slice(path.lastIndexOf("/") + 1, -3));
 }
 
 export async function openInboxItem(item: StoredNote, start?: InboxStep): Promise<void> {
@@ -23,8 +32,12 @@ export async function openInboxItem(item: StoredNote, start?: InboxStep): Promis
     return;
   }
   if (r.kind === "sort")
-    await saveFlow(() => queueSort(item.path, r.into, r.when), copy.toast.sorted, true);
-  else await saveFlow(() => queueInboxDrop(item.path), copy.toast.archived, true, bringBack(item));
+    await saveFlow(
+      () => queueSort(item.path, r.into, r.when),
+      () => sortedText(r.into),
+      true,
+    );
+  else await saveFlow(() => queueInboxDrop(item.path), deletedText(item), true, bringBack(item));
 }
 
 export function archiveInboxItem(
@@ -36,7 +49,7 @@ export function archiveInboxItem(
       await collapse();
       return queueInboxDrop(item.path);
     },
-    { message: copy.toast.archived, tone: "deleted" },
+    { message: deletedText(item), tone: "deleted" },
     true,
     bringBack(item),
   );
@@ -52,7 +65,7 @@ export async function sortCapture(item: StoredNote, notes: StoredNote[]): Promis
     return;
   }
   if (choice === "archive") {
-    await saveFlow(() => queueInboxDrop(item.path), copy.toast.archived, true, bringBack(item));
+    await saveFlow(() => queueInboxDrop(item.path), deletedText(item), true, bringBack(item));
     return;
   }
   const into =
