@@ -54,7 +54,7 @@ The tab bar is **To-dos · Goals · + · Find · Brain**.
 
 1. **Simple beats clever.** One way to do each thing. If it gets convoluted, the owner stops using it.
 2. **Show where it went.** After any add or sort, name the subject and offer a fix.
-3. **No inbox screen.** Sorting happens for the owner. A rare leftover shows as an "Unsorted entries" banner.
+3. **Sorting is one tap, never automatic.** The brain suggests a subject. Nothing files itself. An add with no tap shows in an "Unsorted entries" banner, with its guess ready to tap.
 4. **Interrupted flows resume.** The owner can pick up any add, sort or builder where they left it.
 5. **Only real dates on Today.** A to-do with no date never shows as due.
 6. **Only the words are required.** Date, subject, people and goal are optional on a to-do.

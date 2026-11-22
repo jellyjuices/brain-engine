@@ -1,6 +1,6 @@
 # Intent: Helpers
 
-**Intent:** sorting happens so the owner never has to, and they can always see what moved and fix it.
+**Intent:** sorting takes one tap. The brain suggests where each add goes, nothing files itself, and the owner can always see what moved and fix it.
 
 ## Problem
 
@@ -10,9 +10,9 @@
 
 ## Outcomes
 
-1. A quick to-do or capture is sorted within minutes, with no AI: rules first, then fuzzy matching, then embeddings.
+1. While the owner types a to-do, the brain suggests subjects, with no AI: rules first, then fuzzy matching, then embeddings. A tap on a suggestion files it there. A guess never files itself, however sure it is. An add with no tap waits in Unsorted, with its best guess shown, until the owner taps.
 2. A journal entry or rant is split into bits in a Claude chat the owner starts. Each bit goes to the right place: a to-do, a fact, a feeling, or a decision bucket. A feeling keeps what it is about as `· about <their words>`.
-3. Leftovers are rare. They show as an "Unsorted entries" banner, never a pile.
+3. Adds that wait show as an "Unsorted entries" banner, never a pile. Each row shows its guess, and one tap files it.
 4. After a sort, the owner sees which subject each line went to, with Move and Undo.
 5. There is no Sort screen. To fix a line, the owner moves it or changes its tag where it lives.
 6. A line the sort was unsure of carries `· check` on the line.

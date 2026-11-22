@@ -44,7 +44,6 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | # | Task | Notes |
 | --- | --- | --- |
 | A | Make `~/.config/brain/privacy-words.txt` | Template: `ops/config/privacy-words.example.txt`. Without it the privacy scan checks nothing |
-| C | Should an add from the app with a sure guess file at once? | [helpers.md](../intent/helpers.md) aim 1 says sorted within minutes. Today every app add waits in Unsorted. Change the intent or the code |
 | F | When the server refuses a write, where does the owner's text go? | Pick: keep it in Unsorted with a "Didn't save" mark, so nothing is lost. Or keep it on the device with "Try again" and "Copy" |
 | D | Stage 6 of the intake points to `resources/values-list.md`, which does not exist | Write the list, or drop the file and let stage 6 ask without it |
 
@@ -78,8 +77,8 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 
 **Done when:**
 
-- An add with a sure guess lands in its subject with no sort by the owner. (Waits on C.)
-- An add with no sure guess waits in Unsorted. Its row shows the guess, and one tap files it there.
+- No add files itself, however sure the guess. It files only when the owner taps a suggested subject.
+- An add with no tap waits in Unsorted. Its row shows the guess, and one tap files it there.
 - The owner can clear all of Unsorted in one go: one tap accepts a guess, a second tap picks another subject.
 - A filed line can be moved to another subject or re-tagged from the app. The move is logged and can be undone.
 - After the owner moves a line, the next add with the same words goes to the new subject.
@@ -94,7 +93,8 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | S2 | Unsorted screen: guess per row, one-tap accept, pick another, clear all in one go, resume where left | Medium | `design-mock` first |
 | S3 | Learned moves: a move teaches the sorter | Medium | none |
 | S8 | App: Move and change tag on a filed line, from a note page and from the toast after a sort | Medium | S2 design |
-| S4 | Re-guess captures already in Unsorted | Small | C |
+| S4 | Re-guess captures already in Unsorted, so each row shows a fresh guess | Small | none |
+| S9 | `brain pull` still files adds from the relay by the guess (`saveItem` in `engine/src/capture/pull.ts`). Make them wait in Unsorted like app adds | Small | none |
 | S5 | Hit-rate check on the real brain | Small | owner runs it |
 | S6 | Meaning search on a device, once `embedQuery` is real | Medium | none |
 | S7 | Shared core: raise `MIN_NAME` in `engine/shared/sort/names.ts` from 2 to 3, to match the app chips | Small | owner yes |
