@@ -170,4 +170,5 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | E2 | Old repeat copies on note pages: check they read well | Small | none |
 | E3 | Repeat history line for a to-do in another note: link it to the subject | Small | none |
 | E4 | Dead code: 11 unused exports in `engine/` | Small | none |
+| E8 | Intake marks a whole existing note as `generated` when it adds a line (`intake/threads.ts:104,136`, `lens-answers.ts:72,123`), so the weekly review lists the owner's own notes as unverified. Use the per-line `· by` mark that split adds | Small | split commit |
 | E5 | Test cleanup. Skipped: `app/test/shell/shell-frame/shell-frame.test.tsx` (tab bar rows; Settings now sits in the To-dos header) and `app/test/shell/unsorted-banner/unsorted-banner.test.tsx` (the banner now sits in To-dos). Brittle: Add panel tests find the blob by part of a class name; `mention.test.tsx` no longer checks the look | Small | after the UI settles |
