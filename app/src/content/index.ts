@@ -10,6 +10,7 @@ import { report } from "./report.ts";
 import { toast } from "./toast.ts";
 import { settings } from "./settings.ts";
 import { sync } from "./sync.ts";
+import { states } from "./states.ts";
 import { today } from "./today.ts";
 import { todo } from "./todo.ts";
 import { todos } from "./todos.ts";
@@ -28,6 +29,7 @@ export const copy = {
   toast,
   settings,
   sync,
+  states,
   today,
   todo,
   todos,

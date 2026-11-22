@@ -9,6 +9,7 @@ export const report = {
   summaryFailed: "Couldn't summarize. Read the full report below.",
   offlineTitle: "Can't reach your home server",
   offlineBody: "Reports come from your home server. Try again soon.",
+  what: "this report",
   missingTitle: "No report here",
   missingBody: "This report does not exist.",
 };

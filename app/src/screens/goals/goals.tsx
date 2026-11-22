@@ -11,7 +11,7 @@ import styles from "./goals.module.css";
 import { copy } from "@/content/index.ts";
 
 export function GoalsScreen() {
-  const goals = useLoaded(fetchGoals, "goals");
+  const { loaded: goals, retry } = useLoaded(fetchGoals, "goals");
   const notes = useNotes();
   return (
     <>
@@ -24,8 +24,16 @@ export function GoalsScreen() {
         }
       />
       <div className={styles.body}>
-        {(goals.kind === "offline" || goals.kind === "missing") && (
-          <EmptyState title={copy.goals.offlineTitle} body={copy.goals.offlineBody} />
+        {goals.kind === "loading" && <EmptyState kind="loading" what={copy.goals.what} />}
+        {goals.kind === "offline" && (
+          <EmptyState
+            kind="offline"
+            title={copy.goals.offlineTitle}
+            body={copy.goals.offlineBody}
+          />
+        )}
+        {(goals.kind === "error" || goals.kind === "missing") && (
+          <EmptyState kind="error" what={copy.goals.what} onRetry={retry} />
         )}
         {goals.kind === "ready" && goals.data.length === 0 && (
           <EmptyState title={copy.goals.noGoalsTitle} body={copy.goals.noGoalsBody} />

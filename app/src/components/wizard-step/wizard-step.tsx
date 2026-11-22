@@ -4,6 +4,7 @@ import { ArrowLeftIcon } from "@phosphor-icons/react";
 import { ProgressBar } from "../progress-bar/progress-bar.tsx";
 import { Button } from "../button/button.tsx";
 import { PageHeader } from "../page-header/page-header.tsx";
+import { SyncStatus } from "../sync-status/sync-status.tsx";
 
 export type WizardStepProps = {
   title: string;
@@ -62,6 +63,7 @@ export const WizardStep = (props: WizardStepProps) => {
         }
       />
       {count > 1 && <ProgressBar label={stepLabel} done={step + 1} total={count} size="step" />}
+      <SyncStatus writes />
       <h2 id={headingId} ref={heading} tabIndex={-1} className={styles.questionText}>
         {question}
       </h2>

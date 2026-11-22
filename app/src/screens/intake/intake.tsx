@@ -15,7 +15,7 @@ import { IntakeAnswer } from "./intake-answer.tsx";
 import { IntakeCheck } from "./intake-check.tsx";
 
 export function IntakeScreen() {
-  const { result, current, finish } = useIntakeQuestions();
+  const { result, current, finish, retry } = useIntakeQuestions();
   const [answer, setAnswer] = useState("");
   const [draft, setDraft] = useState<IntakeDraft | null>(null);
   const [busy, setBusy] = useState(false);
@@ -40,8 +40,16 @@ export function IntakeScreen() {
   return (
     <>
       <PageHeader title={copy.nav.intake} fallback="/add" />
+      {!result && <EmptyState kind="loading" what={copy.intake.what} />}
       {result?.kind === "offline" && (
-        <EmptyState title={copy.intake.offlineTitle} body={copy.intake.offlineBody} />
+        <EmptyState
+          kind="offline"
+          title={copy.intake.offlineTitle}
+          body={copy.intake.offlineBody}
+        />
+      )}
+      {result?.kind === "error" && (
+        <EmptyState kind="error" what={copy.intake.what} onRetry={retry} />
       )}
       {result?.kind === "ready" && !current && (
         <EmptyState title={copy.intake.noneTitle} body={copy.intake.noneBody} />

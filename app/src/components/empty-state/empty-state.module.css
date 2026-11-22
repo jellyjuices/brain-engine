@@ -36,3 +36,18 @@
   font-family: var(--font-body);
   font-size: var(--font-size-body-lg);
 }
+
+.isLoading {
+  opacity: 0;
+  animation: state-in var(--motion-slow) var(--motion-easing) 400ms forwards;
+}
+
+.isLoading .title {
+  color: var(--text-secondary);
+}
+
+@keyframes state-in {
+  to {
+    opacity: 1;
+  }
+}

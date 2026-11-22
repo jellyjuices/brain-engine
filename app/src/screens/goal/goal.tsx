@@ -14,7 +14,7 @@ import { copy } from "@/content/index.ts";
 
 export function GoalScreen() {
   const { rest } = useRoute();
-  const goal = useLoaded(() => fetchGoal(rest), rest);
+  const { loaded: goal, retry } = useLoaded(() => fetchGoal(rest), rest);
   const notes = useNotes();
   return (
     <>
@@ -35,8 +35,12 @@ export function GoalScreen() {
           </div>
         )}
       </PageHeader>
+      {goal.kind === "loading" && <EmptyState kind="loading" what={copy.goals.whatOne} />}
       {goal.kind === "offline" && (
-        <EmptyState title={copy.goals.offlineTitle} body={copy.goals.offlineBody} />
+        <EmptyState kind="offline" title={copy.goals.offlineTitle} body={copy.goals.offlineBody} />
+      )}
+      {goal.kind === "error" && (
+        <EmptyState kind="error" what={copy.goals.whatOne} onRetry={retry} />
       )}
       {goal.kind === "missing" && (
         <EmptyState title={copy.goals.missingTitle} body={copy.goals.missingBody} />

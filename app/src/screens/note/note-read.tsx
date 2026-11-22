@@ -23,6 +23,7 @@ import { FileResults } from "./file-results.tsx";
 import { isFileNote } from "@/lib/notes/file-results.ts";
 import { NoteConflict } from "./note-conflict.tsx";
 import { NoteMissing } from "./note-missing.tsx";
+import { NoteLoading } from "./note-loading.tsx";
 import { useNoteStatus } from "./use-note-status.ts";
 import { copy } from "@/content/index.ts";
 
@@ -34,7 +35,7 @@ export function NoteRead({ path }: { path: string }) {
     void syncNow();
   }, [path]);
 
-  if (!notes || !status.loaded) return null;
+  if (!notes || !status.loaded) return <NoteLoading />;
   const note = notes.find((n) => n.path === path);
   if (!note) return <NoteMissing path={path} />;
   if (status.conflict) return <NoteConflict note={note} conflict={status.conflict} />;

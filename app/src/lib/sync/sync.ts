@@ -9,11 +9,12 @@ export interface SyncState {
   lastSync?: string;
   offline: boolean;
   syncing: boolean;
+  failed: boolean;
 }
 
 const DAY = 24 * 60 * 60 * 1000;
 const OVERLAP = 5000;
-const state: SyncState = { offline: false, syncing: false };
+const state: SyncState = { offline: false, syncing: false, failed: false };
 const listeners = new Set<() => void>();
 let running: Promise<SyncResult> | null = null;
 let loaded = false;
@@ -84,8 +85,11 @@ export function syncNow(opts: { full?: boolean } = {}): Promise<SyncResult> {
     try {
       await loadSyncState();
       await flush().catch(() => undefined);
-      return await pull(!!opts.full);
+      const result = await pull(!!opts.full);
+      state.failed = result === "error";
+      return result;
     } catch {
+      state.failed = true;
       return "error" as const;
     } finally {
       state.syncing = false;
@@ -122,6 +126,7 @@ export function resetSyncState() {
   state.lastSync = undefined;
   state.offline = false;
   state.syncing = false;
+  state.failed = false;
   loaded = false;
   running = null;
 }

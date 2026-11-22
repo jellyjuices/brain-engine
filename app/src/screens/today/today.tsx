@@ -5,7 +5,8 @@ import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { IconButton } from "@/components/icon-button/icon-button.tsx";
 import { PullToRefresh } from "@/components/pull-to-refresh/pull-to-refresh.tsx";
 import { SyncStatus } from "@/components/sync-status/sync-status.tsx";
-import { useNotes } from "@/hooks/use-notes.ts";
+import { useNotesState } from "@/hooks/use-notes-state.ts";
+import { NotesEmptyState } from "@/components/empty-state/notes-empty-state.tsx";
 import { useOutboxCount } from "@/hooks/use-outbox-count.ts";
 import { inboxItems } from "@/lib/notes/capture.ts";
 import { navigate } from "@/lib/platform/router.ts";
@@ -21,7 +22,7 @@ type Remote = { date: string; items: TodayItem[] } | null;
 
 export function TodayScreen() {
   const now = todayIso();
-  const notes = useNotes();
+  const { notes, state, retry } = useNotesState();
   const pending = useOutboxCount();
   const [remote, setRemote] = useState<Remote>(null);
 
@@ -39,7 +40,14 @@ export function TodayScreen() {
     setRemote(null);
   }, [notes]);
 
-  if (!notes) return null;
+  if (!notes) {
+    return (
+      <>
+        <PageHeader title={longDate(now)} />
+        <NotesEmptyState state="loading" onRetry={retry} />
+      </>
+    );
+  }
   const local = computeToday(notes, now);
   const data =
     remote && pending === 0 && remote.date === now
@@ -70,7 +78,9 @@ export function TodayScreen() {
       />
       <SyncStatus />
       <div>
-        {notes.length || data.items.length ? (
+        {state !== "ready" ? (
+          <NotesEmptyState state={state} onRetry={retry} />
+        ) : notes.length || data.items.length ? (
           <TodayList data={data} />
         ) : (
           <EmptyState title={copy.today.noNotesTitle} body={copy.today.noNotesBody} />

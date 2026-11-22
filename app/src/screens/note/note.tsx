@@ -4,6 +4,8 @@ import { useRoute } from "@/hooks/use-route.ts";
 import { noteHref } from "@/lib/notes/model.ts";
 import { go } from "@/lib/platform/router.ts";
 import { NoteEdit } from "./note-edit.tsx";
+import { NoteLoading } from "./note-loading.tsx";
+import { NoteMissing } from "./note-missing.tsx";
 import { NoteRead } from "./note-read.tsx";
 
 export function NoteScreen() {
@@ -18,5 +20,6 @@ export function NoteScreen() {
   }, [lost, path]);
 
   if (!editing) return <NoteRead path={path} />;
-  return note ? <NoteEdit key={path} note={note} /> : null;
+  if (note) return <NoteEdit key={path} note={note} />;
+  return notes ? <NoteMissing path={path} /> : <NoteLoading />;
 }

@@ -8,7 +8,8 @@ import { List } from "@/components/list/list.tsx";
 import { ListRow } from "@/components/list/list-row.tsx";
 import { SyncStatus } from "@/components/sync-status/sync-status.tsx";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
-import { useNotes } from "@/hooks/use-notes.ts";
+import { useNotesState } from "@/hooks/use-notes-state.ts";
+import { NotesEmptyState } from "@/components/empty-state/notes-empty-state.tsx";
 import { useOutboxItems } from "@/hooks/use-outbox-items.ts";
 import { inboxItems, inboxText } from "@/lib/notes/capture.ts";
 import { noteHref } from "@/lib/notes/model.ts";
@@ -19,7 +20,7 @@ import { EmptyState } from "@/components/empty-state/empty-state.tsx";
 import { copy } from "@/content/index.ts";
 
 export function InboxScreen() {
-  const notes = useNotes();
+  const { notes, state, retry } = useNotesState();
   useEffect(() => {
     void syncNow({ full: true });
   }, []);
@@ -29,7 +30,9 @@ export function InboxScreen() {
     <>
       <PageHeader title={copy.nav.inbox} onBack={() => back()} />
       <SyncStatus />
-      {notes && !items.length && !sending.length ? (
+      {state !== "ready" && !sending.length ? (
+        <NotesEmptyState state={state} onRetry={retry} />
+      ) : notes && !items.length && !sending.length ? (
         <EmptyState title={copy.inbox.empty} />
       ) : (
         <List>

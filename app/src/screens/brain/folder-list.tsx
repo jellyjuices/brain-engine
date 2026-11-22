@@ -4,7 +4,8 @@ import { List } from "@/components/list/list.tsx";
 import { ListRow } from "@/components/list/list-row.tsx";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { SyncStatus } from "@/components/sync-status/sync-status.tsx";
-import { useNotes } from "@/hooks/use-notes.ts";
+import { useNotesState } from "@/hooks/use-notes-state.ts";
+import { NotesEmptyState } from "@/components/empty-state/notes-empty-state.tsx";
 import { folderSummaries } from "@/lib/notes/folders.ts";
 import { copy } from "@/content/index.ts";
 import { folderLook } from "@/lib/notes/kinds.ts";
@@ -12,12 +13,13 @@ import { FOLDERS, type Folder } from "./folders.ts";
 import { OpenCountChip } from "./open-count-chip.tsx";
 
 export function FolderList() {
-  const notes = useNotes();
+  const { notes, state, retry } = useNotesState();
   const rows = notes ? folderSummaries(notes, FOLDERS) : [];
   return (
     <>
       <PageHeader title={copy.nav.brain} />
       <SyncStatus />
+      {state !== "ready" && <NotesEmptyState state={state} onRetry={retry} />}
       <List>
         {rows.map((f) => (
           <ListRow

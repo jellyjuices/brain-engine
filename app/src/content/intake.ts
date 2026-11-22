@@ -7,6 +7,7 @@ export const intake = {
   line: "Line to save",
   lineHint: "Fix it so it sounds like you.",
   shortening: "Making it short on this device",
+  what: "your questions",
   noneTitle: "No questions waiting",
   noneBody: "Run the intake on your home server to add more.",
   offlineTitle: "Can't reach your home server",

@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/empty-state/empty-state.tsx";
 import { GoalTodos } from "@/components/goal-todos/goal-todos.tsx";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { addTodosToGoal } from "@/flows/goal-link-flow.ts";
-import { useNotes } from "@/hooks/use-notes.ts";
+import { useNotesState } from "@/hooks/use-notes-state.ts";
 import { useRoute } from "@/hooks/use-route.ts";
 import { openTodoPicks, type TodoPick } from "@/lib/notes/goal-link.ts";
 import { goalHref } from "@/lib/notes/goals.ts";
@@ -13,10 +13,16 @@ import { copy } from "@/content/index.ts";
 
 export function GoalTodosScreen() {
   const { rest } = useRoute();
-  const notes = useNotes();
+  const { notes, state } = useNotesState();
   const [items, setItems] = useState<TodoPick[]>([]);
   const [busy, setBusy] = useState(false);
-  if (!notes) return null;
+  if (!notes)
+    return (
+      <>
+        <PageHeader title={copy.goals.addTodosTitle} fallback="/goals" />
+        <EmptyState kind="loading" what={copy.goals.what} />
+      </>
+    );
   const goal = notes.find((n) => n.path === rest && n.type === "Goal");
 
   async function add() {
@@ -29,7 +35,11 @@ export function GoalTodosScreen() {
     return (
       <>
         <PageHeader title={copy.goals.addTodosTitle} fallback="/goals" />
-        <EmptyState title={copy.goals.missingTitle} body={copy.goals.missingBody} />
+        {state === "offline" ? (
+          <EmptyState kind="offline" />
+        ) : (
+          <EmptyState title={copy.goals.missingTitle} body={copy.goals.missingBody} />
+        )}
       </>
     );
   return (

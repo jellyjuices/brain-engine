@@ -18,6 +18,8 @@ export const goals = {
   offlineBody: "Goals come from your home server. Try again soon.",
   missingTitle: "No goal here",
   missingBody: "This goal does not exist.",
+  what: "your goals",
+  whatOne: "this goal",
   linked: (count: number, goal: string) =>
     `Linked ${count} ${count === 1 ? "to-do" : "to-dos"} to ${goal}`,
   targetDone: (text: string) => `Done: ${text}`,

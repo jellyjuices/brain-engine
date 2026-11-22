@@ -3,18 +3,18 @@ import { useEffect, useRef, useState } from "react";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { SearchInput } from "@/components/field/search-input.tsx";
 import { SyncStatus } from "@/components/sync-status/sync-status.tsx";
-import { useNotes } from "@/hooks/use-notes.ts";
+import { useNotesState } from "@/hooks/use-notes-state.ts";
 import { rememberSearch } from "@/lib/notes/recent-searches.ts";
 import { fromServerSearch, type RemoteSearch } from "@/lib/notes/server-search.ts";
 import { api } from "@/lib/sync/api.ts";
-import { FindResults } from "./find-results.tsx";
+import { FindOutcome } from "./find-outcome.tsx";
 import { RecentChips } from "./recent-chips.tsx";
 import { copy } from "@/content/index.ts";
 
 const ASK_DELAY = 250;
 
 export function FindScreen() {
-  const notes = useNotes();
+  const { notes, state, retry } = useNotesState();
   const input = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState("");
   const [remote, setRemote] = useState<RemoteSearch | null>(null);
@@ -74,7 +74,7 @@ export function FindScreen() {
             }}
           />
         ) : (
-          notes && <FindResults q={q} notes={notes} remote={remote} />
+          <FindOutcome q={q} notes={notes} state={state} remote={remote} onRetry={retry} />
         )}
       </div>
     </>

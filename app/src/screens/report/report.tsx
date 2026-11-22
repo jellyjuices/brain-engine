@@ -12,14 +12,22 @@ const REPORT_PATH = ".reports/report.md";
 export function ReportScreen() {
   const { rest } = useRoute();
   const name = rest || "today";
-  const report = useReport(name);
+  const { report, retry } = useReport(name);
   const canSummarize = useCanSummarize("key-points");
 
   return (
     <>
       <PageHeader title={copy.nav.report} fallback="/brain" />
+      {!report && <EmptyState kind="loading" what={copy.report.what} />}
       {report?.kind === "offline" && (
-        <EmptyState title={copy.report.offlineTitle} body={copy.report.offlineBody} />
+        <EmptyState
+          kind="offline"
+          title={copy.report.offlineTitle}
+          body={copy.report.offlineBody}
+        />
+      )}
+      {report?.kind === "error" && (
+        <EmptyState kind="error" what={copy.report.what} onRetry={retry} />
       )}
       {report?.kind === "missing" && (
         <EmptyState title={copy.report.missingTitle} body={copy.report.missingBody} />

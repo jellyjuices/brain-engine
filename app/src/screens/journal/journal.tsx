@@ -7,6 +7,7 @@ import { PickField } from "@/components/field/pick-field.tsx";
 import { TextField } from "@/components/field/text-field.tsx";
 import { FilePicker } from "@/components/file-picker/file-picker.tsx";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
+import { SyncStatus } from "@/components/sync-status/sync-status.tsx";
 import { ToolbarButton } from "@/components/toolbar/toolbar-button.tsx";
 import { Toolbar } from "@/components/toolbar/toolbar.tsx";
 import { pickAbout, readTextFile, saveJournal } from "@/flows/create-flow.ts";
@@ -66,6 +67,7 @@ export function JournalScreen() {
   return (
     <>
       <PageHeader title={copy.nav.journal} fallback="/add" />
+      <SyncStatus writes />
       <TextField
         label={copy.add.writeTitleLabel}
         hideLabel

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { NotesEmptyState } from "@/components/empty-state/notes-empty-state.tsx";
+import { useNotesState } from "@/hooks/use-notes-state.ts";
 import { Button } from "@/components/button/button.tsx";
 import { PageHeader } from "@/components/page-header/page-header.tsx";
 import { ViewTabs } from "@/components/view-tabs/view-tabs.tsx";
@@ -30,6 +32,8 @@ const TABS = TODO_VIEW_TABS.map((v) => ({ value: v.id, label: v.label }));
 export function TodosScreen() {
   const [view, setView] = useState<TodoView>("today");
   const { now, items, noDate, refresh } = useTodoView(view);
+  const { state, retry } = useNotesState();
+  const shown = items ? state : "loading";
   const wide = useShellLayout() === "wide";
 
   return (
@@ -50,7 +54,11 @@ export function TodosScreen() {
       <UnsortedBanner />
       <SyncStatus />
       <div className={styles.body}>
-        {items && <TodosList view={view} items={items} now={now} empty={EMPTY[view]} />}
+        {items && shown === "ready" ? (
+          <TodosList view={view} items={items} now={now} empty={EMPTY[view]} />
+        ) : (
+          <NotesEmptyState state={shown} onRetry={retry} />
+        )}
         {view === "today" && noDate > 0 && (
           <div className={styles.more}>
             <Button variant="ghost" size="sm" onClick={() => setView("no-date")}>
