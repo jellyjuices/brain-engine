@@ -64,13 +64,12 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 
 **Limits:** design tokens only. Shared parts from `app/src/components/`. Owner words only.
 
-**Now:** the first three "Done when" lines are true in code. To-do rows take `surface` from every caller. Subject chips need a whole name of 3+ letters or a sure guess, and skip the word still being typed. Format buttons are ghost at rest and pressed while on. The owner has not yet checked them on a small screen. Data loss fixes are in: keeping the server's version of a note asks first; inbox delete and note edit have Undo that also restores the device's copy; an offline write keeps Undo. `saveFlow` shows Undo only when the server returns an undo id, or while the write is queued. Every toast names where the change went.
+**Now:** the first three "Done when" lines are true in code. To-do rows take `surface` from every caller. Subject chips need a whole name of 3+ letters or a sure guess, and skip the word still being typed. Format buttons are ghost at rest and pressed while on. The owner has not yet checked them on a small screen. Data loss fixes are in: keeping the server's version of a note asks first; inbox delete and note edit have Undo that also restores the device's copy; an offline write keeps Undo. `saveFlow` shows Undo only when the server returns an undo id, or while the write is queued. Every toast names where the change went. Every screen that reads data has loading, empty, error and offline states through one `EmptyState` part.
 
 | # | Step | Size | Needs |
 | --- | --- | --- | --- |
 | P4b | A write the server refuses is dropped from the outbox (`outbox.ts:140`), and the owner's text is lost | Small | F |
 | P4c | Ticking a goal target edits the note body (`goal-flow.ts:20`), so it has no Undo. Use the cross-off route from E1 | Small | E1 |
-| P4d | Screen states: no screen has a real loading or error state. Journal, add and file have no empty or offline state. Goals and goal use one message for offline and missing | Medium | none |
 | P5 | Visual sweep: the owner lists what looks off on a small screen, and agents fix it with `build-ui` | Small each | owner list |
 
 ## Track S: Sorting
@@ -127,13 +126,13 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 
 **Limits:** no paid AI. No background Claude runs. Privacy rules enforced in the server. A helper never speaks first.
 
-**Now:** 27 MCP tools at `/mcp`, tools only, agent token, rate limit. The intake runs as `brain intake` and `brain thread` in a Claude chat. The design is in [jobs-spec.md](../design/jobs-spec.md), with the owner's picks: file at once with `· check` and Undo, no follow-up questions in v1, jobs run at once, goal ideas at the end. Spec steps 1 and 2 are built in `engine/src/helper/`: config (off unless `BRAIN_HELPER_URL` and `BRAIN_HELPER_MODEL` are set, loopback only), the runner (OpenAI-compatible `/v1`, which honours `keep_alive` and `think: false`), the job store, one worker, and the job routes. No job kind does work yet. A kind returns a plan, and the worker writes it in one change only if the job was not stopped.
+**Now:** 27 MCP tools at `/mcp`, tools only, agent token, rate limit. The intake runs as `brain intake` and `brain thread` in a Claude chat. The design is in [jobs-spec.md](../design/jobs-spec.md), with the owner's picks: file at once with `· check` and Undo, no follow-up questions in v1, jobs run at once, goal ideas at the end. Spec steps 1 and 2 are built in `engine/src/helper/`: config (off unless `BRAIN_HELPER_URL` and `BRAIN_HELPER_MODEL` are set, loopback only), the runner (OpenAI-compatible `/v1`, which honours `keep_alive` and `think: false`), the job store, one worker, and the job routes. The `split` kind works. A kind returns a plan, and the worker writes it in one change only if the job was not stopped. Each helper line carries `· by <model>`, and an owner's note is never marked whole as `generated`. `setup.sh` asks about the home helper once, `docs/phone-setup.md` has its section, and `brain check` says why a non-loopback address keeps it off.
 
 | # | Step | Size | Needs |
 | --- | --- | --- | --- |
 | R1 | Tunnel check from outside | Small | owner says go |
-| R3 | Home helper job kinds: `split`, then `enrich` and `questions`, as plans in `KINDS` in `helper/worker.ts`. Spec steps 3 and 4 | Medium each | none |
-| R3b | `setup.sh` question, a "Home helper (optional)" section in `docs/phone-setup.md`, and `brain check` saying why a non-loopback URL keeps it off. Spec step 5 | Small | none |
+| R3 | Home helper job kinds `enrich` and `questions`, as plans in `KINDS` in `helper/worker.ts`. Reuse `keepQuoted` and the per-line `· by` mark from `split`. Spec step 4 | Medium | none |
+| R3c | A model per job: a small model kept loaded for quick jobs, the large one loaded on demand for split and enrich. Config lines, not code | Small | owner yes |
 | R4 | Intake in the app, on server steps, plus file page job states. Steps 6 to 8 of [jobs-spec.md](../design/jobs-spec.md) | Large | R3, D |
 | R5 | Remove `brain intake` and `brain thread`. Update `AGENTS.md`, `brain-cli.md`, CLI help; run `brain migrate` | Small | R4 |
 | R6 | Start the server on demand (optional) | Medium | owner wants it |
@@ -170,5 +169,5 @@ The "Done when" lists work like the rubrics in [Anthropic's guide to defining do
 | E2 | Old repeat copies on note pages: check they read well | Small | none |
 | E3 | Repeat history line for a to-do in another note: link it to the subject | Small | none |
 | E4 | Dead code: 11 unused exports in `engine/` | Small | none |
-| E8 | Intake marks a whole existing note as `generated` when it adds a line (`intake/threads.ts:104,136`, `lens-answers.ts:72,123`), so the weekly review lists the owner's own notes as unverified. Use the per-line `· by` mark that split adds | Small | split commit |
+| E8 | Intake marks a whole existing note as `generated` when it adds a line (`intake/threads.ts:104,136`, `lens-answers.ts:72,123`), so the weekly review lists the owner's own notes as unverified. Use the per-line `· by` mark that split adds | Small | none |
 | E5 | Test cleanup. Skipped: `app/test/shell/shell-frame/shell-frame.test.tsx` (tab bar rows; Settings now sits in the To-dos header) and `app/test/shell/unsorted-banner/unsorted-banner.test.tsx` (the banner now sits in To-dos). Brittle: Add panel tests find the blob by part of a class name; `mention.test.tsx` no longer checks the look | Small | after the UI settles |
