@@ -1,5 +1,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
+import { configValue } from "../core/home.ts";
+import { helperConfig } from "../helper/config.ts";
 import { folderOf, titleOf, type Note } from "../core/notes.ts";
 import { type Issue, loadSchema, type Schema, validate } from "../core/schema.ts";
 import { goalTreeIssues } from "../core/schema-kinds.ts";
@@ -27,9 +29,17 @@ function mentionMessage(m: Mention): string {
   return `${m.name} shows in ${m.notes.length} notes, no note. Make ${person ? "a Person" : "one"}?${person ? "" : " Who, where, doing, have, or know?"}`;
 }
 
+function helperIssues(): Found[] {
+  const url = configValue("BRAIN_HELPER_URL")?.trim();
+  const model = configValue("BRAIN_HELPER_MODEL")?.trim();
+  if (!url || !model || helperConfig()) return [];
+  return [["BRAIN_HELPER_URL", { level: "warn", message: "The home helper is off. Its address must be on this home server, like http://127.0.0.1:11434." }]];
+}
+
 export function allIssues(root: string, notes: Note[]): Found[] {
   const schema = loadSchema(root);
   return [
+    ...helperIssues(),
     ...notes.flatMap((note) => noteIssues(root, note, schema)),
     ...sameTitleIssues(notes),
     ...goalTreeIssues(root, notes),

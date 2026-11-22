@@ -108,6 +108,21 @@ write_config() {
   ok "Settings in $CONFIG/env"
 }
 
+ask_helper() {
+  if [ -n "$(config_value BRAIN_HELPER_URL)" ] && [ -n "$(config_value BRAIN_HELPER_MODEL)" ]; then ok "Home helper is already set"; return; fi
+  if [ "$DRY" = 1 ]; then would "ask about the home helper"; return; fi
+  [ -t 0 ] || return 0
+  local answer tag
+  read -r -p "Turn on the home helper? It needs Ollama and a model on this home server. [y/N] " answer || return 0
+  case "$answer" in y|Y|yes|YES) ;; *) return 0 ;; esac
+  read -r -p "Model tag (for example qwen3.6:35b-mlx) [qwen3.6:35b-mlx]: " tag || tag=""
+  tag="${tag:-qwen3.6:35b-mlx}"
+  local kept
+  kept="$(grep -v -E '^(BRAIN_HELPER_URL|BRAIN_HELPER_MODEL)=' "$CONFIG/env" || true)"
+  { [ -z "$kept" ] || printf '%s\n' "$kept"; printf 'BRAIN_HELPER_URL=%q\nBRAIN_HELPER_MODEL=%q\n' "http://127.0.0.1:11434" "$tag"; } > "$CONFIG/env"
+  ok "Home helper is on. Run: ollama pull $tag"
+}
+
 link_command() {
   if [ "$DRY" = 1 ]; then would "link brain to ~/.local/bin/brain and the global npm bin"; return; fi
   mkdir -p "$HOME/.local/bin"
@@ -176,6 +191,7 @@ check_node
 install_packages
 copy_starter
 write_config
+ask_helper
 link_command
 init_git
 if [ "$JOBS" = 1 ]; then install_jobs; link_swiftbar; else say "Skipped jobs and SwiftBar (--no-jobs)"; fi

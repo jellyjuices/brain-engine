@@ -29,6 +29,22 @@ The Worker can serve your to-dos with a due date, and your events, as a calendar
 
 Anyone with the URL can read your to-do titles. Keep it private. To turn it off, change or delete `CAL_TOKEN`. Google checks the feed only every few hours, and the home server must be on when it does. The feed is read only: marking an entry done in Google does not change your brain.
 
+## Home helper (optional)
+
+The home helper runs jobs on a local model on your home server, so the work stays on your own hardware. Nothing needs it. Without it, the app says "It waits for a helper".
+
+1. Install Ollama on the home server and run `ollama pull <tag>`, for example `ollama pull qwen3.6:35b-mlx`.
+2. Put two lines in `~/.config/brain/env`, or `ops/setup.sh` writes them when you say yes to "Turn on the home helper?":
+
+```
+BRAIN_HELPER_URL=http://127.0.0.1:11434
+BRAIN_HELPER_MODEL=qwen3.6:35b-mlx
+```
+
+An example setup is in [docs/design/local-models.md](design/local-models.md): one large model, `qwen3.6:35b-mlx`, and one small model, `qwen3.5:9b-mlx`.
+
+To turn it off, delete one of the two lines. The helper stays off when the address is not on the home server itself, such as `127.0.0.1` or `localhost`. `brain check` says so.
+
 ## The home server
 
 1. `~/.config/brain/relay.env` holds `RELAY_URL=https://<APP_HOST>` and `RELAY_TOKEN=<the same token>`. With it, `ops/setup.sh` loads the 5-minute pull job.
