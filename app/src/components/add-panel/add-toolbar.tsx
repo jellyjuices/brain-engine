@@ -1,6 +1,7 @@
 import styles from "./add-toolbar.module.css";
 import {
   AtIcon,
+  CalendarDotsIcon,
   HashIcon,
   ListBulletsIcon,
   TextBIcon,
@@ -15,6 +16,7 @@ export interface AddToolbarActions {
   italic: () => void;
   list: () => void;
   tag: () => void;
+  date: () => void;
   link: () => void;
 }
 
@@ -22,7 +24,10 @@ function keepFocus(e: SyntheticEvent) {
   e.preventDefault();
 }
 
-export type AddToolbarPressed = Record<"bold" | "italic" | "list" | "tag" | "mention", boolean>;
+export type AddToolbarPressed = Record<
+  "bold" | "italic" | "list" | "tag" | "date" | "mention",
+  boolean
+>;
 
 export function AddToolbar({
   journal,
@@ -66,6 +71,12 @@ export function AddToolbar({
           label={copy.common.tag}
           pressed={pressed.tag}
           onClick={actions.tag}
+        />
+        <AddToolbarButton
+          icon={CalendarDotsIcon}
+          label={copy.notes.insertDate}
+          pressed={pressed.date}
+          onClick={actions.date}
         />
         <AddToolbarButton
           icon={AtIcon}

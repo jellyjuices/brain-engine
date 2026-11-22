@@ -5,13 +5,12 @@ import {
   useRef,
   type CSSProperties,
   type KeyboardEvent,
-  type MouseEvent,
   type ReactNode,
 } from "react";
 import type { WhenChipProps } from "../when-chip/when-chip.tsx";
 import { TodoRowActions, type TodoRowAction } from "./todo-row-actions.tsx";
 import { TodoRowMeta, hasMeta } from "./todo-row-meta.tsx";
-import { useLongPress } from "./use-long-press.ts";
+import { useLongPress } from "@/hooks/use-long-press.ts";
 import { useSwipe } from "./use-swipe.ts";
 import styles from "./todo-row.module.css";
 
@@ -69,14 +68,8 @@ export function TodoRow(props: TodoRowProps) {
     if (e.key === "Escape") swipe.close();
     if (menu && isMenuKey(e)) {
       e.preventDefault();
-      menu();
+      hold.fire();
     }
-  }
-
-  function onContextMenu(e: MouseEvent<HTMLDivElement>) {
-    if (!menu) return;
-    e.preventDefault();
-    menu();
   }
 
   const s = swipe.handlers;
@@ -99,7 +92,7 @@ export function TodoRow(props: TodoRowProps) {
       )}
       style={style}
       onKeyDown={onKeyDown}
-      onContextMenu={onContextMenu}
+      onContextMenu={h.onContextMenu}
     >
       {swipeable && (
         <TodoRowActions actions={actions} ref={tray} onFocus={swipe.open} onRun={run} />

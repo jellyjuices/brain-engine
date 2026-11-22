@@ -48,7 +48,9 @@
 }
 
 .rail .addMain > :first-child,
-.addPanel:is([data-mode="todo"], [data-mode="journal"]) .addMain > :first-child {
+.addPanel:is([data-mode="todo"], [data-mode="journal"], [data-mode="note"])
+  .addMain
+  > :first-child {
   margin-top: 0;
 }
 

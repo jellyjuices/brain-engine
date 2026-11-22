@@ -9,11 +9,10 @@ import {
 } from "react";
 import { LIVE_CLASSES } from "@/components/add-input/live-classes.ts";
 import { useMentions } from "@/components/mention-suggestions/use-mentions.ts";
-import { mentionName, setWhenWord } from "@/lib/notes/capture.ts";
+import { setWhenWord } from "@/lib/notes/capture.ts";
 import type { Picked } from "@/lib/notes/live-marks.ts";
 import { NO_FORMATS, formatState, type FormatState } from "@/lib/notes/format-state.ts";
 import { insertTrigger, pasteText, prefixLines, pullTags, type Edit } from "@/lib/notes/markers.ts";
-import type { Suggestion } from "@/lib/notes/mention.ts";
 import { richSegments } from "@/lib/notes/rich-segments.ts";
 import {
   BOLD,
@@ -27,12 +26,15 @@ import {
 } from "@/lib/notes/rich-text.ts";
 import { editableField, editableText } from "@/lib/platform/editable.ts";
 import { placeLiveCaret, renderLive } from "@/lib/platform/live-render.ts";
+import { pickedText } from "./picked-text.ts";
+import { useAddDate } from "./use-add-date.ts";
 
 export type AddKind = "todo" | "journal";
 
 export interface Saved {
   text: string;
   tags: string[];
+  date: string | null;
 }
 
 interface Typing {
@@ -48,6 +50,7 @@ export function useAddText(box: RefObject<HTMLDivElement | null>, kind: AddKind,
   const picked = useRef<Picked>({ names: [], tags: [] });
   const rich = useRef(EMPTY_RICH);
   const typing = useRef<Typing | null>(null);
+  const when = useAddDate();
   const mentions = useMentions({
     area: field,
     from: "inbox/new.md",
@@ -55,20 +58,7 @@ export function useAddText(box: RefObject<HTMLDivElement | null>, kind: AddKind,
     setText: write,
     tags,
     setTags,
-    insert: (s: Suggestion) => {
-      if (s.kind === "tag") {
-        picked.current.tags.push(s.value);
-        return `#${s.value}`;
-      }
-      if (s.kind === "subject") {
-        const name = mentionName(s);
-        picked.current.names.push(name);
-        return `@${name}`;
-      }
-      return kind === "journal" ? s.value : "";
-    },
-    finish: (s, value) =>
-      s.kind === "date" && kind === "todo" ? setWhenWord(value, s.value) : value,
+    insert: (s) => pickedText(s, picked.current, when.set),
   });
 
   function paint() {
@@ -156,6 +146,7 @@ export function useAddText(box: RefObject<HTMLDivElement | null>, kind: AddKind,
     take(value);
     if (!(e.nativeEvent as InputEvent).isComposing) paint();
     setText(value);
+    when.close();
     mentions.track();
     syncFormats();
   }
@@ -182,11 +173,15 @@ export function useAddText(box: RefObject<HTMLDivElement | null>, kind: AddKind,
   function saved(): Saved {
     if (box.current) take(editableText(box.current));
     const value = richMarkdown(rich.current).trim();
-    return kind === "todo" ? pullTags(value, tags) : { text: value, tags: [] };
+    if (kind === "journal") return { text: value, tags: [], date: when.date };
+    const todo = pullTags(value, tags);
+    const dated = when.date && todo.text ? setWhenWord(todo.text, when.date) : todo.text;
+    return { text: dated, tags: todo.tags, date: null };
   }
 
   return {
     text,
+    when,
     mentions,
     formats,
     events: { onInput, onPaste, onSelect, onKeyDown },
@@ -195,6 +190,7 @@ export function useAddText(box: RefObject<HTMLDivElement | null>, kind: AddKind,
     italic: () => style(ITALIC),
     list: () => apply((v, s, e) => prefixLines(v, s, e, "- ")),
     tag: () => apply((v, s, e) => insertTrigger(v, s, e, "#")),
+    date: when.toggle,
     link: () => apply((v, s, e) => insertTrigger(v, s, e, "@")),
   };
 }

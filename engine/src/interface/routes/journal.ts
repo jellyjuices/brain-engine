@@ -34,7 +34,10 @@ export function addJournal(c: Ctx) {
   const prior = clientId && alreadyFiled(c.root, clientId) ? journalFor(c.root, phoneMark(clientId)) : undefined;
   if (prior) return { ...prior, created: false };
   const input = { text: body, day: date, at: text(c.body.created_at, "created_at", false), title: text(c.body.title, "title", false), about: aboutOf(c), ...(clientId && { tag: phoneMark(clientId) }) };
-  return afterWrite(c.root, () => addJournalNote(c.root, loadAll(c.root), input));
+  if (c.body.file_now !== undefined && typeof c.body.file_now !== "boolean") throw new HttpError(400, `"file_now" must be true or false.`);
+  const fileNow = c.body.file_now === true;
+  if (fileNow && !input.about) throw new HttpError(400, `"file_now" needs "about".`);
+  return afterWrite(c.root, () => addJournalNote(c.root, loadAll(c.root), { ...input, fileNow }));
 }
 
 export function sortJournalRoute(c: Ctx, raw: string, bits: SortBit[]) {

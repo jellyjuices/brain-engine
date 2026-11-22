@@ -34,15 +34,16 @@ Check list for hand-testing later slices. Paths are under `app/src/components/`.
 - Plus turns 45 degrees into a cross when open (`.addPanel.isOpen .addMain > :first-child > svg`), no turn while closing. `add-panel/add-panel.module.css`
 - Plus button squashes to 0.94 on press. `add-panel/add-panel.module.css`
 - Blob outline rotates 1 turn per 40s. `add-panel/add-panel.module.css`
-- Kind positions: three buttons on an arc. `add-menu/add-menu.module.css`
+- Kind positions: four buttons on an arc, 45 degrees apart: To-do, Journal, Note, Other. `add-menu/add-menu.module.css`
 
 ## States
 
-- Panel classes: `isClosed`, `isOpen`, `isClosing`, plus `data-mode` (`closed`, `open`, `todo`, `journal`) that the tab bar reads. `add-panel/add-panel.tsx`
+- Panel classes: `isClosed`, `isOpen`, `isClosing`, plus `data-mode` (`closed`, `open`, `todo`, `journal`, `note`) that the tab bar reads. `add-panel/add-panel.tsx`
 - Label "Add" hidden whenever not closed. `add-panel/add-panel.module.css`
 - Button label becomes Save when editing, Close when open. `add-panel/add-panel.tsx`
 - Blob shapes: add (cookie), todo (scallop), journal (house). `add-panel/add-panel.module.css`
 - Journal blob is 120vw; full screen makes it fill the height. `add-panel/add-panel.module.css`
+- Note uses the journal blob and box. Tap Note: a sheet asks "Add a note to which subject?" first. Close the sheet and the menu stays. A pick opens the box with the placeholder "Write a note for <name>". Save files it on that subject at once and the toast says "Added to <name>". `add-panel/use-add-panel.ts`, `flows/create-flow.ts`
 
 ## Click-away and keyboard
 

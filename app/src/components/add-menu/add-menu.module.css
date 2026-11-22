@@ -34,15 +34,19 @@
 }
 
 .addMenuPick1 {
-  transform: translate(calc(7rem * -0.87), calc(7rem * -0.5));
+  transform: translate(calc(7rem * -0.92), calc(7rem * -0.38));
 }
 
 .addMenuPick2 {
-  transform: translate(0, calc(7rem * -1));
+  transform: translate(calc(7rem * -0.38), calc(7rem * -0.92));
 }
 
 .addMenuPick3 {
-  transform: translate(calc(7rem * 0.87), calc(7rem * -0.5));
+  transform: translate(calc(7rem * 0.38), calc(7rem * -0.92));
+}
+
+.addMenuPick4 {
+  transform: translate(calc(7rem * 0.92), calc(7rem * -0.38));
 }
 
 @keyframes add-arc-pop {

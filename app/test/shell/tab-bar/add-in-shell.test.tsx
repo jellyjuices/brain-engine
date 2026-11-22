@@ -43,6 +43,7 @@ describe("Add in the shell", () => {
       expect(screen.getAllByRole("menuitem").map((item) => item.textContent)).toEqual([
         copy.add.todo,
         copy.add.journal,
+        copy.common.note,
         copy.add.other,
       ]);
     },

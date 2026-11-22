@@ -4,6 +4,8 @@ export const add = {
   todoHint: "Enter a to-do",
   journal: "Journal",
   journalHint: "A longer entry",
+  noteTitle: "Add a note to which subject?",
+  noteAbout: (name: string) => `Write a note for ${name}`,
   person: "Person",
   place: "Place",
   thing: "Thing",

@@ -4,12 +4,12 @@ import { useHoldToPick } from "./use-hold-to-pick.ts";
 import { onAddRequest, takeAddRequest, type AddRequest } from "./add-request.ts";
 import { useBackLayer } from "@/hooks/use-back-layer.ts";
 import { keepCaretInView } from "@/lib/platform/caret.ts";
-import { saveJournal } from "@/flows/create-flow.ts";
+import { pickSubject, saveJournal, saveNote } from "@/flows/create-flow.ts";
 import { addTodo } from "@/flows/add-flow.ts";
-import { todayIso } from "@/lib/notes/model.ts";
+import { todayIso, type StoredNote } from "@/lib/notes/model.ts";
 import { go } from "@/lib/platform/router.ts";
 
-export type Mode = "closed" | "open" | "todo" | "journal";
+export type Mode = "closed" | "open" | "todo" | "journal" | "note";
 
 function useAddRequests(onRequest: (request: AddRequest) => void) {
   const latest = useRef(onRequest);
@@ -47,9 +47,11 @@ export function useAddPanel() {
   const [closing, setClosing] = useState(false);
   const [full, setFull] = useState(false);
   const [target, setTarget] = useState<AddRequest | null>(null);
+  const [about, setAbout] = useState<StoredNote | null>(null);
+  const picking = useRef(false);
   const box = useRef<HTMLDivElement>(null);
   const reader = useRef<(() => EditorSaved) | null>(null);
-  const editing = mode === "todo" || mode === "journal";
+  const editing = mode === "todo" || mode === "journal" || mode === "note";
   const releaseBack = useBackLayer(mode !== "closed" && !closing, () => close());
   const hold = useHoldToPick(
     mode === "closed" && !busy,
@@ -69,21 +71,25 @@ export function useAddPanel() {
 
   useEscape(mode !== "closed", () => close());
 
-  function write(text: string, tags: string[], home: EditorSaved["home"]) {
-    return mode === "todo"
-      ? addTodo({ text, tags, into: target?.into, home })
-      : saveJournal({ title: "", text, date: todayIso() });
+  function write({ text, tags, date, home }: EditorSaved) {
+    if (mode === "todo") return addTodo({ text, tags, into: target?.into, home });
+    if (mode === "note" && about) return saveNote(text, about, date ?? todayIso());
+    return saveJournal({ title: "", text, date: date ?? todayIso() });
   }
 
   async function save() {
-    const { text, tags, home } = reader.current?.() ?? { text: "", tags: [], home: null };
-    if (!text) return close();
+    const saved = reader.current?.();
+    if (!saved?.text) return close();
     setBusy(true);
     try {
-      if (await write(text, tags, home)) close();
+      if (await write(saved)) close();
     } finally {
       setBusy(false);
     }
+  }
+
+  function submit() {
+    if (!busy) void save();
   }
 
   function close() {
@@ -103,7 +109,21 @@ export function useAddPanel() {
     setClosing(false);
     setFull(false);
     setTarget(null);
+    setAbout(null);
     setMode("closed");
+  }
+
+  async function note() {
+    if (picking.current) return;
+    picking.current = true;
+    try {
+      const picked = await pickSubject();
+      if (!picked) return;
+      setAbout(picked);
+      setMode((current) => (current === "open" ? "note" : current));
+    } finally {
+      picking.current = false;
+    }
   }
 
   function main() {
@@ -125,6 +145,7 @@ export function useAddPanel() {
     closing,
     full,
     target,
+    about,
     box,
     reader,
     editing,
@@ -132,6 +153,8 @@ export function useAddPanel() {
     close,
     closed,
     toggleFull,
+    submit,
+    note,
     main,
     other,
   };

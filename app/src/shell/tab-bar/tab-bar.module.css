@@ -17,6 +17,6 @@
   padding: 0 var(--space-sm);
 }
 
-[data-keyboard] .tabbar:not(:has([data-mode="todo"], [data-mode="journal"])) {
+[data-keyboard] .tabbar:not(:has([data-mode="todo"], [data-mode="journal"], [data-mode="note"])) {
   display: none;
 }

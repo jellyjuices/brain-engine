@@ -12,18 +12,24 @@ function iconOf(s: Suggestion) {
   return typeLook(s.type).icon;
 }
 
+const LABELS = {
+  tag: copy.notes.tagList,
+  mention: copy.notes.mentionList,
+  date: copy.notes.dateList,
+};
+
 export function MentionSuggestions({
   kind,
   suggestions,
   onPick,
 }: {
-  kind: TriggerKind;
+  kind: TriggerKind | "date";
   suggestions: Suggestion[];
   onPick: (s: Suggestion) => void;
 }) {
   return (
     <div className={styles.mentionSuggestions} onMouseDown={(e) => e.preventDefault()}>
-      <List variant="ghost" label={kind === "tag" ? copy.notes.tagList : copy.notes.mentionList}>
+      <List variant="ghost" label={LABELS[kind]}>
         {suggestions.map((s) => (
           <ListRow
             key={s.key}

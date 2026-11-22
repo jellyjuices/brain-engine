@@ -2,14 +2,14 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AddToolbar } from "./add-toolbar.tsx";
 
 function none() {}
-const rest = { bold: false, italic: false, list: false, tag: false, mention: false };
+const rest = { bold: false, italic: false, list: false, tag: false, date: false, mention: false };
 
 const meta = {
   title: "Components/Add toolbar",
   component: AddToolbar,
   args: {
     journal: true,
-    actions: { bold: none, italic: none, list: none, tag: none, link: none },
+    actions: { bold: none, italic: none, list: none, tag: none, date: none, link: none },
     pressed: rest,
     drawer: null,
     end: null,

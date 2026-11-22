@@ -31,6 +31,7 @@ export interface JournalInput {
   at?: string;
   title?: string;
   about?: { title: string; path: string };
+  fileNow?: boolean;
   by?: string;
   tag?: string;
 }
@@ -44,10 +45,14 @@ export function addJournalNote(root: string, notes: Note[], input: JournalInput)
   if (same) return { path: same.path, created: false, title: titleOf(same) };
   const title = input.title?.trim().replace(/\s+/g, " ").slice(0, 120) || titleFrom(text);
   const path = uniquePath(root, "journal", `${day}-${time.replace(":", "")}-${slugify(title, 40) || "journal"}`);
-  const meta: Meta = { type: JOURNAL, title, description: `Journal for ${day} ${time}.`, date: `${day}T${time}`, sorted: false };
+  const filedInto = input.fileNow ? input.about?.path : undefined;
+  const meta: Meta = { type: JOURNAL, title, description: `Journal for ${day} ${time}.`, date: `${day}T${time}`, sorted: filedInto ? today() : false };
   if (input.by && !isOwnerWriter(input.by)) meta.generated = { by: input.by, at };
   const related = input.about ? `\n\n# Related\n\n- [${input.about.title}](${posix.relative("journal", input.about.path)}) · about` : "";
-  changeFiles(root, [path], `journal ${path}${input.tag ? ` ${input.tag}` : ""}`, () => writeNote(root, path, meta, `${text}${related}\n`));
+  changeFiles(root, filedInto ? [path, filedInto] : [path], `journal ${path}${input.tag ? ` ${input.tag}` : ""}`, () => {
+    writeNote(root, path, meta, `${text}${related}\n`);
+    if (filedInto) fileInto(root, notes, filedInto, text.replace(/\s*\n\s*/g, " "), { kind: "note" }, { date: day, from: `[${title}](${posix.relative(posix.dirname(filedInto), path)})` });
+  });
   return { path, created: true, title };
 }
 

@@ -5,6 +5,7 @@ export const notes = {
   insertTodo: "To-do",
   mentionList: "Subjects and dates",
   tagList: "Tags",
+  dateList: "Dates",
   mentionHint: "Type @ for a person, place, thing or date. Type # for a tag.",
   editConflict: "This note changed on your home server. Choose which version to keep.",
   editWaiting: "Edit not synced yet",

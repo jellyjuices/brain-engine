@@ -41,6 +41,7 @@ export interface JournalPayload {
   text: string;
   date: string;
   about?: string;
+  file_now?: boolean;
 }
 export interface SubjectPayload {
   type: "Place" | "Thing";

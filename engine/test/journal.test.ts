@@ -97,3 +97,26 @@ test("journal: a plain capture is still deleted on sort", () => withApi(async (a
   assert.equal(existsSync(join(a.root, cap.data.path)), false);
   assert.doesNotMatch(file(a.root, SHED), /oil the hinges · .*from /);
 }));
+
+test("journal: a note filed now lands on the subject's timeline, is already sorted, and one undo reverses it", () => withApi(async (a) => {
+  const before = file(a.root, ALEX);
+  const r = await a.call("POST", "/api/journal", { date: "2026-11-14", text: "Likes tea,\nnot coffee.", created_at: "2026-11-14T09:30:00", about: ALEX, file_now: true });
+  assert.equal(r.status, 200);
+  const made = parse(file(a.root, r.data.path));
+  assert.match(String(made.meta.sorted), /^\d{4}-\d{2}-\d{2}$/);
+  assert.equal(file(a.root, ALEX).includes(`- 2026-11-14 · Likes tea, not coffee. · from [Likes tea, not coffee](../${r.data.path})`), true, file(a.root, ALEX));
+  assert.equal((await a.call("GET", "/api/unsorted")).data.count, 0);
+  assert.equal((await a.call("POST", "/api/undo", {})).status, 200);
+  assert.equal(file(a.root, ALEX), before);
+  assert.equal(existsSync(join(a.root, r.data.path)), false);
+}));
+
+test("journal: file_now without about is refused", () => withApi(async (a) => {
+  const r = await a.call("POST", "/api/journal", { date: "2026-11-14", text: "Alone.", file_now: true });
+  assert.equal(r.status, 400);
+}));
+
+test("journal: file_now that is not true or false is refused", () => withApi(async (a) => {
+  const r = await a.call("POST", "/api/journal", { date: "2026-11-14", text: "Alone.", about: ALEX, file_now: "true" });
+  assert.equal(r.status, 400);
+}));

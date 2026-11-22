@@ -25,14 +25,15 @@ The owner, on a small screen between tasks, or on a large one mid-work. Often ti
 
 - The + sits in the middle of the tab bar on every screen. It opens over the current screen. It is never the first screen.
 - + asks "What do you want to add?".
-- Quick choices: **To-do** (default), **Journal**, **Intake**.
+- Quick choices: **To-do** (default), **Journal**, **Note**, **Intake**.
+- A **Note** always belongs to one person or subject. The owner picks it first, in a sheet, and cannot write a note with none. The Note box says who it is for. A save files the note at once on that person's or subject's timeline, and keeps it whole as its own journal note that is already sorted. It never waits in Unsorted, because the owner named the place. The toast says "Added to <name>" and Undo takes it all back in one step. On the wire this is a journal add with `about` and `file_now: true`. `file_now` needs `about`, and only a new note is filed.
 - Step-by-step builders: **Goal**, **Decision**, **Event**, **Person**, **Project**, **Place or thing**, **File**.
 - About what? and When? are optional. About what? comes first.
 - The owner can still link a subject by hand. A suggestion never replaces their pick.
 - No title field. The first line is the title.
-- No blank note editor. The owner edits entries; they do not start notes from scratch.
+- No blank note editor with no subject. A note starts only from a person or subject. The owner edits entries; they do not start loose notes from scratch.
 - No voice feature in the app. The OS provides it.
-- Every to-do and journal entry added in the app waits in Unsorted first, even with a subject, tag or person picked. The owner sorts it there. Nothing is filed out of sight. See [helpers.md](helpers.md).
+- Every to-do and journal entry added in the app waits in Unsorted first, even with a subject, tag or person picked. A Note is the one exception. The owner sorts it there. Nothing is filed out of sight. See [helpers.md](helpers.md).
 - A helper's add (the `add` tool) still files at once when it names a subject, tag or person.
 - "Move" on the toast opens Unsorted. It never deletes the add. "Undo" is the only way to take an add back.
 - Each journal entry is its own journal note, kept whole and dated. A day can have many. Its title comes from its first words, and the owner can change it. Each sorted bit links back to it.

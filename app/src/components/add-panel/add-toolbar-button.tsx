@@ -25,7 +25,7 @@ export function AddToolbarButton({
       {pressed ? (
         <KindIcon name="other" icon={icon} variant="secondary" />
       ) : (
-        <span className={styles.addToolbarGhost}>
+        <span className={styles.inverseGhost}>
           <Icon icon={icon} />
         </span>
       )}

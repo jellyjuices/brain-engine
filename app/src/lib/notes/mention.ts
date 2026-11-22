@@ -76,13 +76,16 @@ export function mentionSuggestions(
       sub: n.type,
       value: referenceText(from, n).text,
     }));
-  const dates: Suggestion[] = quickChoices(now, ["today", "tomorrow", "friday", "nextWeek"])
+  return [...subjects, ...dateSuggestions(now, query)].slice(0, LIMIT);
+}
+
+export function dateSuggestions(now: string, query = ""): Suggestion[] {
+  return quickChoices(now, ["today", "tomorrow", "friday", "nextWeek"])
     .filter((c) => matches(c.label, query))
     .map((c) => {
       const iso = c.value === "today" ? now : c.value;
       return { key: `date:${c.id}`, kind: "date", title: c.label, sub: c.sub, value: iso };
     });
-  return [...subjects, ...dates].slice(0, LIMIT);
 }
 
 export function tagSuggestions(known: string[], taken: string[], query: string): Suggestion[] {

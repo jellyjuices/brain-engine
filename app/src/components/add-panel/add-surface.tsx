@@ -12,7 +12,7 @@ type AddSurfaceProps = {
 
 export function AddSurface({ panel, host }: AddSurfaceProps) {
   const { mode, full, target, closing } = panel;
-  const kind = mode === "todo" || mode === "journal" ? mode : null;
+  const kind = mode === "todo" ? "todo" : mode === "journal" || mode === "note" ? "journal" : null;
 
   function onAnimationEnd(e: AnimationEvent) {
     if (e.animationName === styles["add-deflate"]) panel.closed();
@@ -23,7 +23,7 @@ export function AddSurface({ panel, host }: AddSurfaceProps) {
       className={clsx(
         styles.addSurface,
         mode === "todo" && styles.addSurfaceTodo,
-        mode === "journal" && styles.addSurfaceJournal,
+        kind === "journal" && styles.addSurfaceJournal,
         full && styles.isFull,
       )}
       onAnimationEnd={onAnimationEnd}
@@ -32,13 +32,15 @@ export function AddSurface({ panel, host }: AddSurfaceProps) {
         <AddMenu
           onTodo={() => panel.setMode("todo")}
           onJournal={() => panel.setMode("journal")}
+          onNote={() => void panel.note()}
           onOther={panel.other}
         />
       )}
       {kind && (
         <AddEditor
-          key={`${kind}:${target?.into ?? ""}:${target?.text ?? ""}`}
+          key={`${mode}:${target?.into ?? ""}:${target?.text ?? ""}`}
           initial={target?.text}
+          about={mode === "note" ? panel.about?.title : undefined}
           box={panel.box}
           reader={panel.reader}
           kind={kind}
@@ -46,6 +48,7 @@ export function AddSurface({ panel, host }: AddSurfaceProps) {
           host={host}
           showBar={!closing}
           onToggleFull={panel.toggleFull}
+          onSubmit={panel.submit}
         />
       )}
     </div>
