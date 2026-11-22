@@ -100,7 +100,7 @@ test("the worker fails a kind that is not built yet and unloads the model after"
   t.after(fake.close);
   helperOn(fake.url);
   const root = apiBrain();
-  const note = seedFileNote(root, "shed-plan", ["split"]);
+  const note = seedFileNote(root, "shed-plan", ["enrich"]);
   startJobs(root);
   await idleJobs(root);
   const [job] = listJobs(root);

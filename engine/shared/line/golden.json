@@ -19,5 +19,6 @@
   {"line":"- [ ] Read the manual · re not a link","parsed":{"done":false,"text":"Read the manual","tokens":[{"raw":"re not a link"}]}},
   {"line":"- [ ] Oil the bike chain · from [2026-11-14 09:30](../journal/2026-11-14.md#0930)","parsed":{"done":false,"text":"Oil the bike chain","tokens":[{"key":"from","value":"[2026-11-14 09:30](../journal/2026-11-14.md#0930)"}]}},
   {"line":"- [x] Mail the postcard · due 2026-11-16 · done 2026-11-16 · from [2026-11-14 21:05](../journal/2026-11-14.md#2105-2)","parsed":{"done":true,"text":"Mail the postcard","tokens":[{"key":"due","value":"2026-11-16"},{"key":"done","value":"2026-11-16"},{"key":"from","value":"[2026-11-14 21:05](../journal/2026-11-14.md#2105-2)"}]}},
+  {"line":"- [ ] Mend the fence · check · by sample-model:7b · from [Fence notes](../resources/fence-notes.md)","parsed":{"done":false,"text":"Mend the fence","tokens":[{"key":"check"},{"key":"by","value":"sample-model:7b"},{"key":"from","value":"[Fence notes](../resources/fence-notes.md)"}]}},
   {"line":"- [ ] Rake the leaves · from the old list","parsed":{"done":false,"text":"Rake the leaves","tokens":[{"raw":"from the old list"}]}}
 ]

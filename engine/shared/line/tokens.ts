@@ -3,7 +3,7 @@ import { parseEvery } from "./every.ts";
 export const SEP = " · ";
 const OUTCOMES = ["today", "someday", "waiting"] as const;
 const LINK_KEYS = ["with", "re", "toward"] as const;
-const VALUE_KEYS = [...LINK_KEYS, "due", "every", "done", "about", "from"] as const;
+const VALUE_KEYS = [...LINK_KEYS, "due", "every", "done", "about", "by", "from"] as const;
 const BARE_KEYS = [...OUTCOMES, "dropped", "check"] as const;
 
 export type Outcome = (typeof OUTCOMES)[number];
@@ -47,6 +47,7 @@ const VALID: Record<ValueKey, (value: string) => boolean> = {
   done: isDate,
   every: isRule,
   about: hasWords,
+  by: hasWords,
   from: isLink,
 };
 

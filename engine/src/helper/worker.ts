@@ -6,6 +6,7 @@ import { JOB_KINDS, type Job, type JobKind } from "../interface/api-types-jobs.t
 import { helperConfig } from "./config.ts";
 import { type Plan, writePlan } from "./plan.ts";
 import { HelperError, REASONS, unload } from "./runner.ts";
+import { runSplit } from "./split.ts";
 import { ASK_KIND, askOf, findJob, nextJob, pairJob, pruneJobs, queueJob, recoverJobs, requeueJob, saveJob } from "./store.ts";
 
 export type KindRun = (root: string, job: Job, signal: AbortSignal) => Promise<Plan>;
@@ -14,7 +15,7 @@ const NOT_BUILT = "This kind is not built yet.";
 
 const notBuilt: KindRun = () => Promise.reject(new Error(NOT_BUILT));
 
-export const KINDS = Object.fromEntries(JOB_KINDS.map((k) => [k, notBuilt])) as Record<JobKind, KindRun>;
+export const KINDS = { ...Object.fromEntries(JOB_KINDS.map((k) => [k, notBuilt])), split: runSplit } as Record<JobKind, KindRun>;
 
 interface Worker {
   started: boolean;

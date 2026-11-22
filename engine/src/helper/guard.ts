@@ -23,6 +23,30 @@ function fitsString(v: unknown, s: Schema): boolean {
   return typeof s.maxLength !== "number" || v.length <= s.maxLength;
 }
 
+const MAX_QUOTE = 120;
+const flat = (s: string) => s.replace(/\s+/g, " ").trim();
+
+function quoted(source: string, from: string): boolean {
+  const quote = flat(from);
+  return quote.length > 0 && quote.length <= MAX_QUOTE && flat(source).includes(quote);
+}
+
+export interface Kept<T> {
+  kept: T[];
+  no_quote: number;
+  off_list: number;
+}
+
+export function keepQuoted<T extends { from: string; into: string }>(source: string, items: readonly T[], paths: ReadonlySet<string>): Kept<T> {
+  const out: Kept<T> = { kept: [], no_quote: 0, off_list: 0 };
+  for (const item of items) {
+    if (!quoted(source, item.from)) out.no_quote++;
+    else if (!paths.has(item.into)) out.off_list++;
+    else out.kept.push(item);
+  }
+  return out;
+}
+
 export function fits(v: unknown, s: Schema): boolean {
   if (Array.isArray(s.enum)) return s.enum.includes(v);
   switch (s.type) {

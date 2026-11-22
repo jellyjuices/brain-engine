@@ -11,6 +11,7 @@ export interface TodoFields {
   dropped?: boolean;
   check?: boolean;
   about?: string;
+  by?: string;
   from?: string;
   with?: string[];
   re?: string[];
@@ -22,7 +23,7 @@ export type TodoPatch = Partial<Omit<TodoFields, "unknown">>;
 type PatchKey = Exclude<keyof TodoPatch, "text" | "done">;
 
 const RANKED: PatchKey[] = ["with", "re", "toward", "due", "every", "outcome", "doneAt", "dropped"];
-const PATCH_ORDER: PatchKey[] = [...RANKED, "about", "check", "from"];
+const PATCH_ORDER: PatchKey[] = [...RANKED, "about", "check", "by", "from"];
 
 type ValueSetter = (fields: TodoFields, value: string) => void;
 
@@ -39,6 +40,7 @@ const VALUE_SETTERS: Record<ValueKey, ValueSetter> = {
   due: (f, v) => (f.due = v),
   every: (f, v) => (f.every = v),
   about: (f, v) => (f.about = v),
+  by: (f, v) => (f.by = v),
   from: (f, v) => (f.from = v),
   done: (f, v) => (f.doneAt = v),
 };
